@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const testimonials = [
   {
-    quote: "Voxanne cut our no-show rate by 40% and freed up 10 hours/week for our front desk staff.",
+    quote: "Barpel cut our no-show rate by 40% and freed up 10 hours/week for our front desk staff.",
     author: "Dr. Sarah Johnson",
     role: "Clear Skin Dermatology, Los Angeles",
     rating: 5,

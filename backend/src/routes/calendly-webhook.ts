@@ -95,7 +95,7 @@ async function sendConfirmationEmail(
   cancelUrl?: string,
   rescheduleUrl?: string
 ): Promise<void> {
-  const fromEmail = config.FROM_EMAIL || 'noreply@voxanne.ai';
+  const fromEmail = config.FROM_EMAIL || 'noreply@barpel.ai';
 
   const startDate = new Date(startTime);
   const endDate = new Date(endTime);
@@ -134,7 +134,7 @@ async function sendConfirmationEmail(
         </div>
         <div class="content">
           <p>Hi ${inviteeName},</p>
-          <p>Your appointment with Voxanne AI has been confirmed!</p>
+          <p>Your appointment with Barpel AI has been confirmed!</p>
 
           <h3>📅 Appointment Details:</h3>
           <ul>
@@ -156,8 +156,8 @@ async function sendConfirmationEmail(
           }
         </div>
         <div class="footer">
-          <p>Voxanne AI - Intelligent Voice Solutions</p>
-          <p>Need help? Contact us at support@voxanne.ai</p>
+          <p>Barpel AI - Intelligent Voice Solutions</p>
+          <p>Need help? Contact us at support@barpel.ai</p>
         </div>
       </div>
     </body>
@@ -176,7 +176,7 @@ async function sendConfirmationEmail(
     await resendClient.emails.send({
       from: fromEmail,
       to: inviteeEmail,
-      subject: '✅ Your Appointment with Voxanne AI is Confirmed',
+      subject: '✅ Your Appointment with Barpel AI is Confirmed',
       html,
     });
     log.info('Calendly', 'Confirmation email sent', { email: inviteeEmail });
@@ -199,8 +199,8 @@ async function sendSupportNotification(
   phone: string | undefined,
   startTime: string
 ): Promise<void> {
-  const supportEmail = 'support@voxanne.ai';
-  const fromEmail = config.FROM_EMAIL || 'noreply@voxanne.ai';
+  const supportEmail = 'support@barpel.ai';
+  const fromEmail = config.FROM_EMAIL || 'noreply@barpel.ai';
 
   const startDate = new Date(startTime);
   const formattedDateTime = startDate.toLocaleString('en-GB', {

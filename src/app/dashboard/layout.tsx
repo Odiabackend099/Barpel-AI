@@ -10,8 +10,8 @@ import { BackendStatusBanner } from '@/components/dashboard/BackendStatusBanner'
 import { EmailVerificationBanner } from '@/components/dashboard/EmailVerificationBanner';
 
 export const metadata: Metadata = {
-    title: "Voxanne AI - Voice Agent Dashboard",
-    description: "Manage and test your Voxanne AI voice agent",
+    title: "Barpel AI - Voice Agent Dashboard",
+    description: "Manage and test your Barpel AI voice agent",
 };
 
 export default async function DashboardLayout({
@@ -36,7 +36,7 @@ export default async function DashboardLayout({
         <DashboardGate>
             <DashboardWebSocketProvider>
                 <VoiceAgentProvider>
-                    <div className="flex h-screen overflow-hidden bg-clinical-bg">
+                    <div className="flex h-screen overflow-hidden bg-gray-50">
                         {/* Persistent Sidebar */}
                         <LeftSidebar />
 
@@ -46,7 +46,7 @@ export default async function DashboardLayout({
                             <CommandPalette />
                             <BackendStatusBanner />
 
-                            <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-4 pr-4 pb-4 bg-clinical-bg">
+                            <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-4 pr-4 pb-4 bg-gray-50">
                                 <EmailVerificationBanner />
                                 {children}
                             </main>

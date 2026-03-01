@@ -18,8 +18,8 @@ export class MFAService {
    */
   static async generateMFASecret(userId: string, email: string) {
     const secret = speakeasy.generateSecret({
-      name: `Voxanne AI (${email})`,
-      issuer: 'Voxanne AI',
+      name: `Barpel AI (${email})`,
+      issuer: 'Barpel AI',
       length: 32,
     });
 

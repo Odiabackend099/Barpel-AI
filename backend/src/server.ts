@@ -178,7 +178,7 @@ declare module 'http' {
 }
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 6001;
 
 // Trust reverse proxy headers (x-forwarded-proto/host). Required for correct absolute URL generation.
 // Set to 1 for single proxy (Render uses 1 proxy layer)
@@ -190,21 +190,18 @@ app.use(cors({
   origin: (origin, callback) => {
     // Default allowed origins (always include these)
     const defaultOrigins = [
+      'http://localhost:8000',   // Current frontend dev port
+      'http://localhost:8001',   // Current backend dev port
+      'http://localhost:6000',   // Legacy fallback
+      'http://localhost:6001',   // Legacy fallback
       'http://localhost:3000',
       'http://localhost:3001',
-      'http://localhost:5001',
-      'http://localhost:5002',
-      'https://voxanne.ai',
-      'https://www.voxanne.ai',
-      'https://callwaitingai.dev',
-      'https://www.callwaitingai.dev',
+      'https://barpel.ai',
+      'https://www.barpel.ai',
     ];
 
     // Allow any Vercel preview/production deployment for this project.
-    // Vercel assigns new per-deployment URLs on every push; hardcoding them
-    // would require a backend redeploy for every frontend deploy. Instead,
-    // we match the stable project-slug prefix via regex.
-    const vercelProjectPattern = /^https:\/\/callwaiting-ai-voxanne-2026(-[a-z0-9]+-odia-backends-projects)?\.vercel\.app$/;
+    const vercelProjectPattern = /^https:\/\/barpel(-[a-z0-9]+-odia-backends-projects)?\.vercel\.app$/;
 
     // Get additional origins from environment variable
     const envOrigins = (process.env.CORS_ORIGIN || '')
@@ -464,7 +461,7 @@ app.get('/health', async (req, res) => {
 // Root endpoint
 app.get('/', (req, res) => {
   res.json({
-    name: 'Voxanne Backend',
+    name: 'Barpel AI Backend',
     version: '1.0.0',
     endpoints: {
       health: '/health',
@@ -554,15 +551,12 @@ server.on('upgrade', (request, socket, head) => {
 
   // Validate origin for CORS security (allow localhost and production domains)
   const allowedOrigins = [
-    'http://localhost:5001',
-    'http://127.0.0.1:5001',
+    'http://localhost:6000',
+    'http://127.0.0.1:6000',
     'http://localhost:3000',
     'http://127.0.0.1:3000',
-    'https://voxanne.ai',
-    'https://www.voxanne.ai',
-    'https://voxanne-frontend-7c8wg3jiv-odia-backends-projects.vercel.app',
-    'https://callwaitingai.dev',
-    'https://www.callwaitingai.dev',
+    'https://barpel.ai',
+    'https://www.barpel.ai',
     process.env.FRONTEND_URL || ''
   ].filter(Boolean);
 
@@ -754,7 +748,7 @@ if (process.env.NODE_ENV !== 'test') {
 
     console.log(`
   ╔════════════════════════════════════════╗
-  ║    Voxanne Backend Server Started      ║
+  ║    Barpel AI Backend Started           ║
   ╚════════════════════════════════════════╝
 
   Port: ${PORT}
@@ -777,7 +771,7 @@ if (process.env.NODE_ENV !== 'test') {
     GET  /api/phone-numbers
     GET  /api/phone-numbers/:phoneNumberId
   
-    CallWaiting AI:
+    Barpel AI:
     GET  /api/founder-console/agent/config
     POST /api/founder-console/agent/config
     GET  /api/founder-console/leads

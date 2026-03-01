@@ -41,8 +41,8 @@ export default function HotLeadDashboard() {
         return (
             <div className="bg-white rounded-xl shadow-md p-6 border border-surgical-200">
                 <div className="flex items-center gap-2">
-                    <AlertCircle className="w-5 h-5 text-obsidian" />
-                    <p className="text-obsidian font-medium">Please log in to view hot leads</p>
+                    <AlertCircle className="w-5 h-5 text-barpel-slate" />
+                    <p className="text-barpel-slate font-medium">Please log in to view hot leads</p>
                 </div>
             </div>
         );
@@ -51,7 +51,7 @@ export default function HotLeadDashboard() {
     if (error) {
         return (
             <div className="bg-white p-6 rounded-2xl mb-8 border border-obsidian/20 shadow-md">
-                <div className="flex items-center gap-2 text-obsidian">
+                <div className="flex items-center gap-2 text-barpel-slate">
                     <AlertCircle className="w-5 h-5" />
                     <p className="font-medium">Error loading leads: {error.message || 'Unknown error'}</p>
                 </div>
@@ -84,8 +84,8 @@ export default function HotLeadDashboard() {
                         <Sparkles className="w-6 h-6" />
                     </div>
                     <div>
-                        <h3 className="font-bold text-obsidian">All Caught Up</h3>
-                        <p className="text-sm text-obsidian/60">No urgent leads requiring attention right now.</p>
+                        <h3 className="font-bold text-barpel-slate">All Caught Up</h3>
+                        <p className="text-sm text-barpel-slate/60">No urgent leads requiring attention right now.</p>
                     </div>
                 </div>
             </div>
@@ -95,22 +95,22 @@ export default function HotLeadDashboard() {
     return (
         <div className="bg-white p-6 rounded-2xl relative overflow-hidden group mb-8 border border-surgical-200 shadow-lg shadow-surgical-500/5">
             {/* Ambient Background Glow */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-surgical-600/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-barpel-teal/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
             <div className="flex justify-between items-end mb-6 relative z-10">
                 <div>
-                    <h2 className="text-2xl font-semibold text-obsidian flex items-center gap-2">
-                        <span className="p-2 rounded-lg bg-surgical-600/10 text-surgical-600">
+                    <h2 className="text-2xl font-semibold text-barpel-slate flex items-center gap-2">
+                        <span className="p-2 rounded-lg bg-barpel-teal/10 text-surgical-600">
                             <Flame className="w-6 h-6" />
                         </span>
                         Clinical Command Center
                     </h2>
-                    <p className="text-obsidian/60 text-sm mt-2 ml-12">High-priority opportunities ({criticalLeads.length})</p>
+                    <p className="text-barpel-slate/60 text-sm mt-2 ml-12">High-priority opportunities ({criticalLeads.length})</p>
                 </div>
-                <div className="px-3 py-1.5 rounded-full bg-surgical-600/10 border border-surgical-600/20 text-surgical-600 text-xs font-semibold flex items-center gap-2">
+                <div className="px-3 py-1.5 rounded-full bg-barpel-teal/10 border border-barpel-teal/20 text-surgical-600 text-xs font-semibold flex items-center gap-2">
                     <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-surgical-500 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-surgical-600"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-barpel-teal"></span>
                     </span>
                     Live Monitoring
                 </div>
@@ -121,39 +121,39 @@ export default function HotLeadDashboard() {
                     <div
                         key={lead.id}
                         className={`bg-white rounded-xl p-6 flex flex-col group/card border-l-4 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 ${lead.lead_temp === 'hot'
-                            ? 'border-l-surgical-600 shadow-surgical-600/5 hover:shadow-surgical-600/10'
+                            ? 'border-l-surgical-600 shadow-barpel-teal/5 hover:shadow-barpel-teal/10'
                             : 'border-l-surgical-500 shadow-surgical-500/5 hover:shadow-surgical-500/10'
                             }`}
                     >
                         <div className="flex justify-between items-start mb-4">
                             <span className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider shadow-sm ${lead.lead_temp === 'hot'
-                                ? "bg-surgical-600 text-white shadow-surgical-600/20"
+                                ? "bg-barpel-teal text-white shadow-barpel-teal/20"
                                 : "bg-surgical-500/10 text-surgical-500 border border-surgical-500/30"
                                 }`}>
                                 🔥 {lead.lead_temp}
                             </span>
-                            <span className="text-[10px] text-obsidian/40 font-medium uppercase tracking-wider">
+                            <span className="text-[10px] text-barpel-slate/40 font-medium uppercase tracking-wider">
                                 {new Date(lead.created_at).toLocaleDateString()}
                             </span>
                         </div>
 
-                        <h3 className="text-lg font-semibold text-obsidian mb-1 truncate group-hover/card:text-surgical-600 transition-colors">
+                        <h3 className="text-lg font-semibold text-barpel-slate mb-1 truncate group-hover/card:text-surgical-600 transition-colors">
                             {lead.contact_name || "Unknown Contact"}
                         </h3>
 
                         <div className="space-y-3 flex-1">
-                            <div className="flex items-center text-sm text-obsidian/60 font-medium">
+                            <div className="flex items-center text-sm text-barpel-slate/60 font-medium">
                                 <Zap className="mr-2 h-4 w-4 text-surgical-600 shrink-0" />
                                 <span className="truncate capitalize">{lead.lead_temp} Lead</span>
                             </div>
-                            <div className="flex items-center text-sm text-obsidian/60 font-medium">
-                                <Phone className="mr-2 h-4 w-4 shrink-0 text-obsidian/40" />
+                            <div className="flex items-center text-sm text-barpel-slate/60 font-medium">
+                                <Phone className="mr-2 h-4 w-4 shrink-0 text-barpel-slate/40" />
                                 {lead.phone_number}
                             </div>
 
                             {/* Call Summary */}
                             {lead.last_call_summary && (
-                                <div className="mt-2 flex items-center gap-2 text-xs text-obsidian/70 bg-surgical-200/10 p-2.5 rounded-lg border border-surgical-200/30">
+                                <div className="mt-2 flex items-center gap-2 text-xs text-barpel-slate/70 bg-surgical-200/10 p-2.5 rounded-lg border border-surgical-200/30">
                                     <AlertCircle className="w-3.5 h-3.5 shrink-0 text-surgical-500" />
                                     <span className="line-clamp-2 leading-relaxed">{lead.last_call_summary}</span>
                                 </div>
@@ -161,7 +161,7 @@ export default function HotLeadDashboard() {
                         </div>
 
                         <button
-                            className="w-full mt-6 flex items-center justify-center gap-2 bg-surgical-600 text-white py-2.5 rounded-xl hover:scale-105 active:scale-100 transition-all text-sm font-medium shadow-lg shadow-surgical-600/20 hover:shadow-xl hover:shadow-surgical-600/30 focus:outline-none focus:ring-2 focus:ring-surgical-600/50 focus:ring-offset-2"
+                            className="w-full mt-6 flex items-center justify-center gap-2 bg-barpel-teal text-white py-2.5 rounded-xl hover:scale-105 active:scale-100 transition-all text-sm font-medium shadow-lg shadow-barpel-teal/20 hover:shadow-xl hover:shadow-barpel-teal/30 focus:outline-none focus:ring-2 focus:ring-barpel-teal/50 focus:ring-offset-2"
                             onClick={() => window.location.href = `tel:${lead.phone_number}`}
                         >
                             Call Back Now <ArrowUpRight className="h-4 w-4" />

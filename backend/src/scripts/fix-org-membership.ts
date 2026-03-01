@@ -8,7 +8,7 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
 const ORG_ID = '46cf2995-2bee-44e3-838b-24151486fe4e';
-const USER_EMAIL = 'voxanne@demo.com';
+const USER_EMAIL = 'barpel@demo.com';
 
 async function fixMembership() {
     console.log(`🔧 Fixing Membership for ${USER_EMAIL} -> ${ORG_ID}\n`);

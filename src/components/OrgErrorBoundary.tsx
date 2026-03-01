@@ -48,13 +48,13 @@ export function OrgErrorBoundary({ children }: { children: React.ReactNode }) {
   // - Don't have an orgId yet (JWT not parsed)
   if (loading && !hasRenderedChildrenRef.current && !orgId) {
     return (
-      <div className="flex items-center justify-center h-screen bg-clinical-bg">
+      <div className="flex items-center justify-center h-screen bg-white">
         <div className="text-center">
           <div className="mb-6">
-            <div className="w-14 h-14 mx-auto border-4 border-surgical-200 border-t-surgical-600 rounded-full animate-spin"></div>
+            <div className="w-14 h-14 mx-auto border-4 border-[#E5E7EB] border-t-[#37A195] rounded-full animate-spin"></div>
           </div>
-          <h1 className="text-xl font-semibold text-obsidian mb-2 tracking-tight">Loading dashboard...</h1>
-          <p className="text-sm text-obsidian/60 tracking-tight">Setting up your workspace</p>
+          <h1 className="text-xl font-semibold text-[#102A33] mb-2 tracking-tight">Loading dashboard...</h1>
+          <p className="text-sm text-[#6B7280] tracking-tight">Setting up your workspace</p>
         </div>
       </div>
     );
@@ -68,7 +68,7 @@ export function OrgErrorBoundary({ children }: { children: React.ReactNode }) {
   // Show network error state: backend is unreachable, but user's auth is fine
   if (!loading && isNetworkError) {
     return (
-      <div className="flex items-center justify-center h-screen bg-clinical-bg">
+      <div className="flex items-center justify-center h-screen bg-white">
         <div className="max-w-md w-full mx-auto px-6 text-center">
           <div className="mb-6">
             <div className="w-16 h-16 mx-auto bg-amber-50 border border-amber-200 rounded-full flex items-center justify-center">
@@ -78,29 +78,29 @@ export function OrgErrorBoundary({ children }: { children: React.ReactNode }) {
             </div>
           </div>
 
-          <h1 className="text-2xl font-semibold text-obsidian mb-3 tracking-tight">Service Unavailable</h1>
+          <h1 className="text-2xl font-semibold text-[#102A33] mb-3 tracking-tight">Service Unavailable</h1>
 
-          <p className="text-sm text-obsidian/70 mb-6 leading-relaxed tracking-tight">
+          <p className="text-sm text-[#6B7280] mb-6 leading-relaxed tracking-tight">
             Unable to connect to the backend server. Your account is fine &mdash; the server may be starting up or temporarily unavailable.
           </p>
 
           <div className="space-y-3">
             <button
               onClick={() => window.location.reload()}
-              className="w-full px-4 py-3 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-xl transition-all shadow-sm tracking-tight"
+              className="w-full px-4 py-3 bg-[#37A195] hover:bg-[#2F8E88] text-white font-medium rounded-lg transition-all shadow-sm tracking-tight"
             >
               Retry Connection
             </button>
 
             <button
               onClick={() => signOut()}
-              className="w-full px-4 py-3 bg-white hover:bg-gray-50 border border-surgical-200 text-obsidian/60 font-medium rounded-xl transition-all tracking-tight text-sm"
+              className="w-full px-4 py-3 bg-white hover:bg-gray-50 border border-[#E5E7EB] text-[#6B7280] font-medium rounded-lg transition-all tracking-tight text-sm"
             >
               Sign Out
             </button>
           </div>
 
-          <p className="text-xs text-obsidian/40 mt-6 tracking-tight">
+          <p className="text-xs text-[#9CA3AF] mt-6 tracking-tight">
             Error ID: NETWORK_ERROR
           </p>
         </div>
@@ -113,7 +113,7 @@ export function OrgErrorBoundary({ children }: { children: React.ReactNode }) {
   // before the /login redirect fires from onAuthStateChange
   if (!loading && user && (!orgValid || orgError)) {
     return (
-      <div className="flex items-center justify-center h-screen bg-clinical-bg">
+      <div className="flex items-center justify-center h-screen bg-white">
         <div className="max-w-md w-full mx-auto px-6 text-center">
           <div className="mb-6">
             <div className="w-16 h-16 mx-auto bg-red-50 border border-red-200 rounded-full flex items-center justify-center">
@@ -123,23 +123,23 @@ export function OrgErrorBoundary({ children }: { children: React.ReactNode }) {
             </div>
           </div>
 
-          <h1 className="text-2xl font-semibold text-obsidian mb-3 tracking-tight">Account Setup Incomplete</h1>
+          <h1 className="text-2xl font-semibold text-[#102A33] mb-3 tracking-tight">Account Setup Incomplete</h1>
 
           {!orgId ? (
-            <p className="text-sm text-obsidian/70 mb-2 leading-relaxed tracking-tight">
+            <p className="text-sm text-[#6B7280] mb-2 leading-relaxed tracking-tight">
               Your account exists but has not been linked to an organization yet. This is a provisioning issue — signing out will not fix it.
             </p>
           ) : (
             orgError && (
-              <p className="text-sm text-obsidian/70 mb-2 leading-relaxed tracking-tight">
+              <p className="text-sm text-[#6B7280] mb-2 leading-relaxed tracking-tight">
                 {orgError}
               </p>
             )
           )}
 
-          <p className="text-sm text-obsidian/50 mb-6 leading-relaxed tracking-tight">
+          <p className="text-sm text-[#9CA3AF] mb-6 leading-relaxed tracking-tight">
             Contact your administrator and ask them to run{' '}
-            <code className="bg-surgical-50 border border-surgical-100 px-1.5 py-0.5 rounded text-xs font-mono text-surgical-700">
+            <code className="bg-gray-100 border border-[#E5E7EB] px-1.5 py-0.5 rounded text-xs font-mono text-[#37A195]">
               npm run verify:demo
             </code>{' '}
             on the backend to diagnose and repair your account.
@@ -148,20 +148,20 @@ export function OrgErrorBoundary({ children }: { children: React.ReactNode }) {
           <div className="space-y-3">
             <button
               onClick={() => window.location.reload()}
-              className="w-full px-4 py-3 bg-surgical-600 hover:bg-surgical-700 text-white font-medium rounded-xl transition-all shadow-sm tracking-tight"
+              className="w-full px-4 py-3 bg-[#37A195] hover:bg-[#2F8E88] text-white font-medium rounded-lg transition-all shadow-sm tracking-tight"
             >
               Retry
             </button>
 
             <button
               onClick={() => signOut()}
-              className="w-full px-4 py-3 bg-white hover:bg-gray-50 border border-surgical-200 text-obsidian/60 font-medium rounded-xl transition-all tracking-tight text-sm"
+              className="w-full px-4 py-3 bg-white hover:bg-gray-50 border border-[#E5E7EB] text-[#6B7280] font-medium rounded-lg transition-all tracking-tight text-sm"
             >
               Sign Out
             </button>
           </div>
 
-          <p className="text-xs text-obsidian/40 mt-6 tracking-tight">
+          <p className="text-xs text-[#9CA3AF] mt-6 tracking-tight">
             Error ID: {orgId ? 'VALIDATION_FAILED' : 'NO_ORG_ID'}
           </p>
         </div>

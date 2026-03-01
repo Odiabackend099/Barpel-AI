@@ -8,7 +8,7 @@ const testimonials = [
     {
         name: "Dr. Sarah Mitchell",
         role: "Dermatology Clinic Owner",
-        content: "Voxanne AI increased our appointment bookings by 40% in the first month. The AI sounds natural and patients love the instant responses.",
+        content: "Barpel AI increased our appointment bookings by 40% in the first month. The AI sounds natural and patients love the instant responses.",
         rating: 5,
         image: "👩‍⚕️",
     },
@@ -58,7 +58,7 @@ export default function TestimonialsRedesigned() {
                                 Loved by Clinic Owners
                             </h2>
                             <p className="text-lg text-obsidian/70 max-w-2xl mx-auto">
-                                See how Voxanne AI is transforming patient communication for aesthetic clinics.
+                                See how Barpel AI is transforming patient communication for aesthetic clinics.
                             </p>
                         </motion.div>
                     </div>
@@ -125,7 +125,7 @@ export default function TestimonialsRedesigned() {
                         <div className="grid md:grid-cols-4 gap-8 text-center">
                             <div>
                                 <p className="text-3xl font-bold text-surgical-900 mb-2">Growing</p>
-                                <p className="text-obsidian/70">Clinics Using Voxanne AI</p>
+                                <p className="text-obsidian/70">Clinics Using Barpel AI</p>
                             </div>
                             <div>
                                 <p className="text-3xl font-bold text-surgical-600 mb-2">24/7</p>

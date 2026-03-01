@@ -4,7 +4,7 @@
  * Automatically syncs when connection is restored
  */
 
-const DB_NAME = 'voxanne-offline-queue';
+const DB_NAME = 'barpel-offline-queue';
 const STORE_NAME = 'pending-submissions';
 const DB_VERSION = 1;
 

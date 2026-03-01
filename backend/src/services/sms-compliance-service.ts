@@ -21,7 +21,7 @@ export class SmsComplianceService {
                 log.warn('SmsComplianceService', 'Could not fetch org name, using default', { tenantId, error: error.message });
             }
 
-            const businessName = org?.name || 'CallWaiting AI';
+            const businessName = org?.name || 'Barpel AI';
 
             // 2. Get Twilio Creds
             // This will throw if not configured, which is correct

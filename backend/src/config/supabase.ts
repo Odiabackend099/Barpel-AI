@@ -41,7 +41,7 @@ export const supabaseAdmin: SupabaseClient = createClient(
     },
     global: {
       headers: {
-        'x-client-info': 'voxanne-backend-service', // For monitoring/debugging
+        'x-client-info': 'barpel-backend-service', // For monitoring/debugging
       },
     },
   }

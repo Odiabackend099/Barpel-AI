@@ -123,34 +123,34 @@ async function implementOrgSecurityFix() {
       console.log('⚠️  Error checking test org:', testOrgError.message);
     }
 
-    // Step 3: Check voxanne@demo.com profile
-    console.log('\nStep 3: Checking voxanne@demo.com user...');
-    let voxanneProfile: any = null;
-    let voxanneError: any = null;
+    // Step 3: Check barpel@demo.com profile
+    console.log('\nStep 3: Checking barpel@demo.com user...');
+    let barpelProfile: any = null;
+    let barpelError: any = null;
     try {
       const result = await supabase
         .from('profiles')
         .select('*')
-        .eq('email', 'voxanne@demo.com')
+        .eq('email', 'barpel@demo.com')
         .single();
-      voxanneProfile = result.data;
-      voxanneError = result.error;
+      barpelProfile = result.data;
+      barpelError = result.error;
     } catch (err) {
-      voxanneError = { code: 'PGRST116' };
+      barpelError = { code: 'PGRST116' };
     }
 
-    if (voxanneError?.code === 'PGRST116') {
-      console.log('❌ voxanne@demo.com profile MISSING');
-      report.recommendations.push('Create profile for voxanne@demo.com');
-    } else if (voxanneProfile) {
-      console.log('✅ voxanne@demo.com profile exists');
-      if (!voxanneProfile.org_id) {
+    if (barpelError?.code === 'PGRST116') {
+      console.log('❌ barpel@demo.com profile MISSING');
+      report.recommendations.push('Create profile for barpel@demo.com');
+    } else if (barpelProfile) {
+      console.log('✅ barpel@demo.com profile exists');
+      if (!barpelProfile.org_id) {
         console.log('   ⚠️  But org_id is NULL');
         report.recommendations.push(
-          'Link voxanne@demo.com to organization'
+          'Link barpel@demo.com to organization'
         );
       } else {
-        console.log(`   ✅ org_id: ${voxanneProfile.org_id}`);
+        console.log(`   ✅ org_id: ${barpelProfile.org_id}`);
       }
     }
 
@@ -208,7 +208,7 @@ async function implementOrgSecurityFix() {
           .from('organizations')
           .insert({
             id: 'a0000000-0000-0000-0000-000000000001',
-            name: 'Test Organization (voxanne@demo.com)',
+            name: 'Test Organization (barpel@demo.com)',
             status: 'active'
           });
 
@@ -259,18 +259,18 @@ async function implementOrgSecurityFix() {
         }
       }
 
-      // FIX 3: Ensure voxanne@demo.com is linked
-      if (voxanneProfile && !voxanneProfile.org_id) {
-        console.log('\nFixing: Linking voxanne@demo.com to test organization...');
+      // FIX 3: Ensure barpel@demo.com is linked
+      if (barpelProfile && !barpelProfile.org_id) {
+        console.log('\nFixing: Linking barpel@demo.com to test organization...');
         const { error: updateError } = await supabase
           .from('profiles')
           .update({ org_id: 'a0000000-0000-0000-0000-000000000001' })
-          .eq('id', voxanneProfile.id);
+          .eq('id', barpelProfile.id);
 
         if (updateError) {
           console.log(`   ❌ Failed: ${updateError.message}`);
         } else {
-          console.log('   ✅ voxanne@demo.com linked to test organization');
+          console.log('   ✅ barpel@demo.com linked to test organization');
         }
       }
 
@@ -309,22 +309,22 @@ async function implementOrgSecurityFix() {
       );
     }
 
-    // Verify voxanne@demo.com is linked
-    let verifyVoxanne: any = null;
+    // Verify barpel@demo.com is linked
+    let verifyBarpel: any = null;
     try {
       const result = await supabase
         .from('profiles')
         .select('*')
-        .eq('email', 'voxanne@demo.com')
+        .eq('email', 'barpel@demo.com')
         .single();
-      verifyVoxanne = result.data;
+      verifyBarpel = result.data;
     } catch (err) {
       // Ignore
     }
 
-    if (verifyVoxanne && verifyVoxanne.org_id) {
+    if (verifyBarpel && verifyBarpel.org_id) {
       console.log(
-        `✅ voxanne@demo.com linked to org: ${verifyVoxanne.org_id}`
+        `✅ barpel@demo.com linked to org: ${verifyBarpel.org_id}`
       );
     }
 
@@ -363,7 +363,7 @@ async function implementOrgSecurityFix() {
     console.log('3. Clear browser cache and test login:');
     console.log('   → Browser console: localStorage.clear()');
     console.log('   → Sign out completely');
-    console.log('   → Sign in with voxanne@demo.com / demo123');
+    console.log('   → Sign in with barpel@demo.com / demo123');
     console.log('   → Dashboard should load without 404 error\n');
 
     console.log('4. Verify new user signup works (trigger test):');
@@ -385,8 +385,8 @@ async function implementOrgSecurityFix() {
       console.log(
         `   - Linked ${report.orphanedProfiles} orphaned profiles to organizations`
       );
-    if (voxanneProfile && !voxanneProfile.org_id)
-      console.log('   - Linked voxanne@demo.com to test organization');
+    if (barpelProfile && !barpelProfile.org_id)
+      console.log('   - Linked barpel@demo.com to test organization');
     if (report.recommendations.length === 0 && !report.readyToFix) {
       console.log('   - System was already in good state');
     }

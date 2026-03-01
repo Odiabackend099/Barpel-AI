@@ -488,7 +488,7 @@ async function runTests(orgId: string) {
   console.log(`
 ╔════════════════════════════════════════════════════════════════╗
 ║     COMPREHENSIVE BILLING AUDIT TEST SUITE                    ║
-║     Voxanne AI - Multi-Tenant Cost Deduction System           ║
+║     Barpel AI - Multi-Tenant Cost Deduction System           ║
 ╚════════════════════════════════════════════════════════════════╝
   `);
 

@@ -3,10 +3,10 @@ export default function JsonLd() {
     const organizationSchema = {
         "@context": "https://schema.org",
         "@type": "Organization",
-        "name": "Voxanne AI",
-        "url": "https://voxanne.ai",
-        "logo": "https://voxanne.ai/Brand/3.png",
-        "description": "Voxanne is the AI voice receptionist that answers, qualifies, and books appointments 24/7 for clinics and med spas.",
+        "name": "Barpel AI",
+        "url": "https://barpel.ai",
+        "logo": "https://barpel.ai/Brand/3.png",
+        "description": "Barpel is the AI voice receptionist that answers, qualifies, and books appointments 24/7 for clinics and med spas.",
         "address": {
             "@type": "PostalAddress",
             "streetAddress": "Collage House, 2nd Floor, 17 King Edward Road",
@@ -19,7 +19,7 @@ export default function JsonLd() {
             "@type": "ContactPoint",
             "telephone": "+44-7424-038250",
             "contactType": "customer service",
-            "email": "support@voxanne.ai",
+            "email": "support@barpel.ai",
             "areaServed": ["GB", "US", "CA", "TR", "NG"],
             "availableLanguage": ["en"]
         },
@@ -36,7 +36,7 @@ export default function JsonLd() {
             }
         ],
         "sameAs": [
-            "https://www.linkedin.com/company/voxanne"
+            "https://www.linkedin.com/company/barpel"
         ],
         "hasOfferCatalog": {
             "@type": "OfferCatalog",
@@ -47,10 +47,10 @@ export default function JsonLd() {
                     "name": "Pay As You Go",
                     "priceCurrency": "GBP",
                     "priceValidUntil": "2027-12-31",
-                    "url": "https://voxanne.ai/start",
+                    "url": "https://barpel.ai/start",
                     "itemOffered": {
                         "@type": "SoftwareApplication",
-                        "name": "Voxanne AI",
+                        "name": "Barpel AI",
                         "applicationCategory": "BusinessApplication",
                         "operatingSystem": "Web",
                         "description": "AI voice receptionist for clinics — pay-as-you-go credit-based billing from $25, all features included, no setup fees, no contracts."
@@ -63,12 +63,12 @@ export default function JsonLd() {
     const localBusinessSchema = {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
-        "name": "Voxanne AI",
-        "url": "https://voxanne.ai",
-        "logo": "https://voxanne.ai/Brand/3.png",
+        "name": "Barpel AI",
+        "url": "https://barpel.ai",
+        "logo": "https://barpel.ai/Brand/3.png",
         "description": "AI-powered voice receptionist for healthcare clinics and med spas. Based in London, serving businesses in the UK, US, Canada, Turkey, and Nigeria.",
         "telephone": "+44-7424-038250",
-        "email": "support@voxanne.ai",
+        "email": "support@barpel.ai",
         "address": {
             "@type": "PostalAddress",
             "streetAddress": "Collage House, 2nd Floor, 17 King Edward Road",
@@ -93,42 +93,42 @@ export default function JsonLd() {
         "mainEntity": [
             {
                 "@type": "Question",
-                "name": "What is Voxanne AI?",
+                "name": "What is Barpel AI?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Voxanne AI is a Voice-as-a-Service (VaaS) platform that provides AI-powered voice receptionists for healthcare clinics and med spas. It answers calls 24/7, qualifies patients, books appointments, sends SMS confirmations, and syncs with Google Calendar — all autonomously."
+                    "text": "Barpel AI is a Voice-as-a-Service (VaaS) platform that provides AI-powered voice receptionists for healthcare clinics and med spas. It answers calls 24/7, qualifies patients, books appointments, sends SMS confirmations, and syncs with Google Calendar — all autonomously."
                 }
             },
             {
                 "@type": "Question",
-                "name": "How much does Voxanne AI cost?",
+                "name": "How much does Barpel AI cost?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Voxanne AI uses simple pay-as-you-go pricing. Top up your wallet from $25 and get credits. Credits are deducted based on call duration. All features are included — no setup fees, no monthly subscriptions, no lock-in."
+                    "text": "Barpel AI uses simple pay-as-you-go pricing. Top up your wallet from $25 and get credits. Credits are deducted based on call duration. All features are included — no setup fees, no monthly subscriptions, no lock-in."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Does Voxanne AI integrate with Google Calendar?",
+                "name": "Does Barpel AI integrate with Google Calendar?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Yes. Voxanne AI integrates directly with Google Calendar for real-time availability checking and appointment booking. When a patient calls and requests an appointment, the AI checks your calendar for open slots, books the appointment, and creates a Google Calendar event — all during the phone call."
+                    "text": "Yes. Barpel AI integrates directly with Google Calendar for real-time availability checking and appointment booking. When a patient calls and requests an appointment, the AI checks your calendar for open slots, books the appointment, and creates a Google Calendar event — all during the phone call."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Can Voxanne AI handle appointment bookings automatically?",
+                "name": "Can Barpel AI handle appointment bookings automatically?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Yes. Voxanne AI handles end-to-end appointment booking autonomously. It checks real-time availability, prevents double-bookings with database-level locking, books the appointment, sends an SMS confirmation to the patient, and syncs the event to your Google Calendar."
+                    "text": "Yes. Barpel AI handles end-to-end appointment booking autonomously. It checks real-time availability, prevents double-bookings with database-level locking, books the appointment, sends an SMS confirmation to the patient, and syncs the event to your Google Calendar."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Is Voxanne AI HIPAA compliant?",
+                "name": "Is Barpel AI HIPAA compliant?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Yes. Voxanne AI implements PHI (Protected Health Information) redaction, GDPR-compliant data retention policies, row-level security for multi-tenant data isolation, and encrypted credential storage. The platform is designed for healthcare organizations with strict compliance requirements."
+                    "text": "Yes. Barpel AI implements PHI (Protected Health Information) redaction, GDPR-compliant data retention policies, row-level security for multi-tenant data isolation, and encrypted credential storage. The platform is designed for healthcare organizations with strict compliance requirements."
                 }
             }
         ]

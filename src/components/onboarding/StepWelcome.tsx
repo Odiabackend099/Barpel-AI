@@ -7,16 +7,16 @@ import { useOnboardingStore } from '@/lib/store/onboardingStore';
 import { useOnboardingTelemetry } from '@/hooks/useOnboardingTelemetry';
 
 export default function StepWelcome() {
-  const { clinicName, setClinicName, nextStep } = useOnboardingStore();
+  const { businessName, setBusinessName, nextStep } = useOnboardingStore();
   const { track } = useOnboardingTelemetry();
-  const [localName, setLocalName] = useState(clinicName);
+  const [localName, setLocalName] = useState(businessName);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = localName.trim();
     if (!trimmed) return;
 
-    setClinicName(trimmed);
+    setBusinessName(trimmed);
     track('clinic_named', 0, { clinic_name: trimmed });
     nextStep();
   };
@@ -28,14 +28,14 @@ export default function StepWelcome() {
       transition={{ duration: 0.4, delay: 0.1 }}
       className="text-center"
     >
-      <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-surgical-50 border border-surgical-200 mb-6">
-        <Building2 className="w-8 h-8 text-surgical-600" />
+      <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-barpel-teal/10 border border-barpel-border mb-6">
+        <Building2 className="w-8 h-8 text-barpel-teal" />
       </div>
 
-      <h1 className="text-3xl font-bold text-obsidian tracking-tighter mb-3">
-        What is the name of your clinic?
+      <h1 className="text-3xl font-bold text-barpel-slate tracking-tighter mb-3">
+        What is the name of your business?
       </h1>
-      <p className="text-base text-obsidian/60 mb-8">
+      <p className="text-base text-barpel-slate/60 mb-8">
         We&apos;ll personalize your AI receptionist for your practice.
       </p>
 
@@ -44,8 +44,8 @@ export default function StepWelcome() {
           type="text"
           value={localName}
           onChange={(e) => setLocalName(e.target.value)}
-          placeholder="e.g. Bright Smile Dental"
-          className="w-full px-4 py-3 rounded-xl border border-surgical-200 bg-white text-obsidian placeholder:text-obsidian/40 focus:outline-none focus:ring-2 focus:ring-surgical-600/30 focus:border-surgical-400 transition-all text-center text-lg"
+          placeholder="e.g. Ace Auto Dealers"
+          className="w-full px-4 py-3 rounded-xl border border-barpel-border bg-white text-barpel-slate placeholder:text-barpel-slate/40 focus:outline-none focus:ring-2 focus:ring-barpel-teal/30 focus:border-barpel-teal/50 transition-all text-center text-lg"
           autoFocus
           maxLength={200}
         />
@@ -53,7 +53,7 @@ export default function StepWelcome() {
         <button
           type="submit"
           disabled={!localName.trim()}
-          className="mt-6 w-full px-6 py-3 rounded-xl bg-surgical-600 text-white font-medium shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-100 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-lg"
+          className="mt-6 w-full px-6 py-3 rounded-xl bg-barpel-teal text-white font-medium shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-100 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-lg"
         >
           Continue
         </button>

@@ -29,7 +29,7 @@ async function updateAllWebhooks() {
   // Validate environment variables
   if (!BACKEND_URL) {
     console.error('❌ ERROR: BACKEND_URL not configured in .env');
-    console.error('   Please set BACKEND_URL to your production URL (e.g., https://voxanne-backend.onrender.com)');
+    console.error('   Please set BACKEND_URL to your production URL (e.g., https://barpel-backend.onrender.com)');
     process.exit(1);
   }
 

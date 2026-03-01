@@ -4,8 +4,8 @@ import NavbarRedesigned from "@/components/NavbarRedesigned";
 import FooterRedesigned from "@/components/FooterRedesigned";
 
 export const metadata: Metadata = {
-  title: "Contact Us - Voxanne AI",
-  description: "Get in touch with Voxanne AI. Contact our support team or schedule a demo.",
+  title: "Contact Us - Barpel AI",
+  description: "Get in touch with Barpel AI. Contact our support team or schedule a demo.",
 };
 
 export default function ContactPage() {
@@ -20,7 +20,7 @@ export default function ContactPage() {
             Get in Touch
           </h1>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Have questions about Voxanne AI? We're here to help. Send us a message or reach out directly.
+            Have questions about Barpel AI? We're here to help. Send us a message or reach out directly.
           </p>
         </div>
 
@@ -140,10 +140,10 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-navy-900 mb-1">Email</h3>
                     <a
-                      href="mailto:support@voxanne.ai"
+                      href="mailto:support@barpel.ai"
                       className="text-slate-600 hover:text-surgical-600 transition-colors"
                     >
-                      support@voxanne.ai
+                      support@barpel.ai
                     </a>
                     <p className="text-sm text-slate-500 mt-1">For general inquiries</p>
                   </div>
@@ -224,7 +224,7 @@ export default function ContactPage() {
                   <span className="text-slate-400 group-hover:text-surgical-600">→</span>
                 </a>
                 <a
-                  href="mailto:security@voxanne.ai"
+                  href="mailto:security@barpel.ai"
                   className="flex items-center justify-between p-4 rounded-lg hover:bg-slate-50 transition-colors group"
                 >
                   <span className="text-slate-700 group-hover:text-surgical-600">Report Security Issue</span>
@@ -239,26 +239,26 @@ export default function ContactPage() {
               <div className="space-y-3 text-sm">
                 <p>
                   <strong className="text-slate-300">Security:</strong>{" "}
-                  <a href="mailto:security@voxanne.ai" className="hover:text-surgical-400 transition-colors">
-                    security@voxanne.ai
+                  <a href="mailto:security@barpel.ai" className="hover:text-surgical-400 transition-colors">
+                    security@barpel.ai
                   </a>
                 </p>
                 <p>
                   <strong className="text-slate-300">Careers:</strong>{" "}
-                  <a href="mailto:careers@voxanne.ai" className="hover:text-surgical-400 transition-colors">
-                    careers@voxanne.ai
+                  <a href="mailto:careers@barpel.ai" className="hover:text-surgical-400 transition-colors">
+                    careers@barpel.ai
                   </a>
                 </p>
                 <p>
                   <strong className="text-slate-300">Privacy:</strong>{" "}
-                  <a href="mailto:privacy@voxanne.ai" className="hover:text-surgical-400 transition-colors">
-                    privacy@voxanne.ai
+                  <a href="mailto:privacy@barpel.ai" className="hover:text-surgical-400 transition-colors">
+                    privacy@barpel.ai
                   </a>
                 </p>
                 <p>
                   <strong className="text-slate-300">Press:</strong>{" "}
-                  <a href="mailto:press@voxanne.ai" className="hover:text-surgical-400 transition-colors">
-                    press@voxanne.ai
+                  <a href="mailto:press@barpel.ai" className="hover:text-surgical-400 transition-colors">
+                    press@barpel.ai
                   </a>
                 </p>
               </div>

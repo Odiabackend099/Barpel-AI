@@ -907,17 +907,17 @@ export default function AgentConfigPage() {
     };
 
     return (
-        <div className="min-h-screen bg-clinical-bg pb-20">
+        <div className="min-h-screen bg-gray-50 pb-20">
             {/* Sticky Header */}
             <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-surgical-200">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                            <h1 className="text-2xl font-bold text-obsidian flex items-center gap-2">
+                            <h1 className="text-2xl font-bold text-barpel-slate flex items-center gap-2">
                                 <Bot className="w-6 h-6 text-surgical-600" />
                                 Agent Configuration
                             </h1>
-                            <p className="text-sm text-obsidian/60">
+                            <p className="text-sm text-barpel-slate/60">
                                 Configure behavior and settings for your AI agents
                             </p>
                         </div>
@@ -926,7 +926,7 @@ export default function AgentConfigPage() {
                             {activeTab === 'inbound' ? (
                                 <button
                                     onClick={handleTestInbound}
-                                    className="px-4 py-2 rounded-lg bg-surgical-50 text-obsidian/60 hover:bg-surgical-100 font-medium transition-colors flex items-center gap-2 text-sm"
+                                    className="px-4 py-2 rounded-lg bg-surgical-50 text-barpel-slate/60 hover:bg-surgical-100 font-medium transition-colors flex items-center gap-2 text-sm"
                                 >
                                     <Globe className="w-4 h-4" />
                                     Test in Browser
@@ -934,7 +934,7 @@ export default function AgentConfigPage() {
                             ) : (
                                 <button
                                     onClick={handleTestOutbound}
-                                    className="px-4 py-2 rounded-lg bg-surgical-50 text-obsidian/60 hover:bg-surgical-100 font-medium transition-colors flex items-center gap-2 text-sm"
+                                    className="px-4 py-2 rounded-lg bg-surgical-50 text-barpel-slate/60 hover:bg-surgical-100 font-medium transition-colors flex items-center gap-2 text-sm"
                                 >
                                     <Phone className="w-4 h-4" />
                                     Test Call
@@ -947,8 +947,8 @@ export default function AgentConfigPage() {
                                 className={`px-6 py-2 rounded-lg font-medium shadow-sm transition-all flex items-center gap-2 text-sm ${saveSuccess
                                     ? 'bg-surgical-50 text-surgical-600 border border-surgical-200'
                                     : hasActiveTabChanges()
-                                        ? 'bg-surgical-600 hover:bg-surgical-700 text-white shadow-surgical-500/20'
-                                        : 'bg-surgical-50 text-obsidian/40 cursor-not-allowed border border-surgical-200'
+                                        ? 'bg-barpel-teal hover:bg-barpel-teal-dark text-white shadow-surgical-500/20'
+                                        : 'bg-surgical-50 text-barpel-slate/40 cursor-not-allowed border border-surgical-200'
                                     }`}
                             >
                                 {isSaving ? (
@@ -1006,8 +1006,8 @@ export default function AgentConfigPage() {
                                 router.push('/dashboard/agent-config?agent=inbound');
                             }}
                             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${activeTab === 'inbound'
-                                ? 'border-surgical-600 text-surgical-600'
-                                : 'border-transparent text-obsidian/60 hover:text-obsidian'
+                                ? 'border-barpel-teal text-surgical-600'
+                                : 'border-transparent text-barpel-slate/60 hover:text-barpel-slate'
                                 }`}
                         >
                             <Phone className="w-4 h-4" />
@@ -1021,8 +1021,8 @@ export default function AgentConfigPage() {
                                 router.push('/dashboard/agent-config?agent=outbound');
                             }}
                             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${activeTab === 'outbound'
-                                ? 'border-surgical-600 text-surgical-600'
-                                : 'border-transparent text-obsidian/60 hover:text-obsidian'
+                                ? 'border-barpel-teal text-surgical-600'
+                                : 'border-transparent text-barpel-slate/60 hover:text-barpel-slate'
                                 }`}
                         >
                             <ArrowRight className="w-4 h-4" />
@@ -1110,13 +1110,13 @@ export default function AgentConfigPage() {
                             <div className="p-3 bg-red-50 rounded-full">
                                 <AlertCircle className="w-6 h-6 text-red-600" />
                             </div>
-                            <h3 className="text-xl font-bold text-obsidian">
+                            <h3 className="text-xl font-bold text-barpel-slate">
                                 Delete {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Agent
                             </h3>
                         </div>
 
                         <div className="mb-6 space-y-3">
-                            <p className="text-obsidian/60">
+                            <p className="text-barpel-slate/60">
                                 Are you sure you want to delete this agent? This action cannot be undone.
                             </p>
 
@@ -1132,10 +1132,10 @@ export default function AgentConfigPage() {
                             </div>
 
                             <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4 space-y-2">
-                                <p className="text-sm font-medium text-obsidian">
+                                <p className="text-sm font-medium text-barpel-slate">
                                     What will be preserved:
                                 </p>
-                                <ul className="text-sm text-obsidian/60 space-y-1 ml-4 list-disc">
+                                <ul className="text-sm text-barpel-slate/60 space-y-1 ml-4 list-disc">
                                     <li>Historical call logs (for compliance)</li>
                                     <li>Appointment records</li>
                                     <li>Contact database</li>
@@ -1147,7 +1147,7 @@ export default function AgentConfigPage() {
                             <button
                                 onClick={() => setShowDeleteModal(false)}
                                 disabled={isDeleting}
-                                className="flex-1 px-4 py-2 bg-surgical-100 text-obsidian/60 rounded-lg hover:bg-surgical-200 transition-colors disabled:opacity-50 font-medium"
+                                className="flex-1 px-4 py-2 bg-surgical-100 text-barpel-slate/60 rounded-lg hover:bg-surgical-200 transition-colors disabled:opacity-50 font-medium"
                             >
                                 Cancel
                             </button>

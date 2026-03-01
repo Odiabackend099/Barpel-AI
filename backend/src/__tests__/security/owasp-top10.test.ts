@@ -1,7 +1,7 @@
 /**
  * OWASP Top 10 Security Tests
  *
- * Validates that the Voxanne AI backend enforces critical security controls
+ * Validates that the Barpel AI backend enforces critical security controls
  * mapped to the OWASP Top 10 (2021) categories:
  *
  *   A01  Broken Access Control

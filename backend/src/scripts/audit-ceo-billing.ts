@@ -263,7 +263,7 @@ async function main(): Promise<void> {
   const now = new Date().toISOString().split('T')[0];
 
   console.log('========================================');
-  console.log('  VOXANNE AI - BILLING AUDIT REPORT');
+  console.log('  BARPEL AI - BILLING AUDIT REPORT');
   console.log(`  Target: ${TARGET_EMAIL}`);
   console.log(`  Date: ${now}`);
   console.log(`  Rate: $${(RATE / 100).toFixed(2)}/min (${RATE} cents)`);

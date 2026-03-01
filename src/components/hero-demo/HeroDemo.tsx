@@ -82,7 +82,7 @@ export default function HeroDemo() {
                         className="group relative px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-full shadow-lg transition-transform hover:scale-105 flex items-center gap-3"
                     >
                         <span className="text-xl">▶</span>
-                        <span>See Voxanne in Action</span>
+                        <span>See Barpel in Action</span>
                         <div className="absolute inset-0 rounded-full ring-2 ring-white/50 animate-ping opacity-50"></div>
                     </button>
                 </div>

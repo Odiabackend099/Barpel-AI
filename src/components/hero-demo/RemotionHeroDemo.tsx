@@ -52,7 +52,7 @@ export default function RemotionHeroDemo({ isActive, onToggle }: RemotionHeroDem
             <div className={cn("absolute inset-0 transition-opacity duration-500", isActive ? "opacity-100" : "opacity-0 pointer-events-none")}>
                 <video
                     ref={videoRef}
-                    src="/demo/voxanne-testimonial.mp4"
+                    src="/demo/barpel-testimonial.mp4"
                     className="w-full h-full object-cover"
                     controls={true}
                     playsInline

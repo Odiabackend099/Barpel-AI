@@ -49,7 +49,7 @@ export async function setupTestEnvironment(): Promise<TestEnvironment> {
     .from('organizations')
     .insert({
       name: `E2E Test Org ${timestamp}`,
-      email: `e2e-${timestamp}@voxanne-demo.ai`,
+      email: `e2e-${timestamp}@barpel-demo.ai`,
       timezone: 'America/New_York',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
@@ -70,7 +70,7 @@ export async function setupTestEnvironment(): Promise<TestEnvironment> {
       access_token: process.env.GOOGLE_TEST_ACCESS_TOKEN,
       refresh_token: process.env.GOOGLE_TEST_REFRESH_TOKEN,
       expiry_date: Date.now() + 3600000, // 1 hour from now
-      email: 'test@voxanne-demo.ai'
+      email: 'test@barpel-demo.ai'
     };
 
     // Store encrypted credentials
@@ -81,8 +81,8 @@ export async function setupTestEnvironment(): Promise<TestEnvironment> {
         provider: 'google_calendar',
         encrypted_config: JSON.stringify(googleCreds), // In production this would be encrypted
         is_active: true,
-        connected_calendar_email: 'test@voxanne-demo.ai',
-        metadata: { email: 'test@voxanne-demo.ai' },
+        connected_calendar_email: 'test@barpel-demo.ai',
+        metadata: { email: 'test@barpel-demo.ai' },
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       });

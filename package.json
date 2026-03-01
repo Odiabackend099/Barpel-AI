@@ -1,9 +1,9 @@
 {
-  "name": "roxan-frontend",
+  "name": "barpel-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3000",
+    "dev": "next dev -p 8000",
     "dev:all": "concurrently \"npm run dev\" \"cd backend && npm run dev\"",
     "build": "next build",
     "start": "next start",

@@ -99,7 +99,7 @@ export function GradientHeroSection() {
       className={`${createBrandGradient('navyDark', 'blueBright')} py-20 px-8 text-center rounded-lg`}
     >
       <h1 className="text-4xl font-bold mb-4" style={{ color: brandColors.offWhite }}>
-        Welcome to Voxanne AI
+        Welcome to Barpel AI
       </h1>
       <p className="text-lg mb-8" style={{ color: brandColors.blueSubtle }}>
         Surgical-grade AI receptionists for your business
@@ -374,7 +374,7 @@ export function BrandColorShowcase() {
     <div className="space-y-12 p-8" style={{ backgroundColor: brandColors.offWhite }}>
       <section>
         <h1 style={{ color: brandColors.navyDark, marginBottom: '24px', fontSize: '32px' }}>
-          Voxanne Brand Colors Showcase
+          Barpel Brand Colors Showcase
         </h1>
         <p style={{ color: brandColors.blueMedium, marginBottom: '32px', fontSize: '16px' }}>
           Production-ready examples of all brand color utilities

@@ -1,17 +1,17 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Sub-Processors | Voxanne AI",
-  description: "List of Voxanne AI sub-processors and third-party service providers. Transparency in data handling for GDPR and HIPAA compliance.",
+  title: "Sub-Processors | Barpel AI",
+  description: "List of Barpel AI sub-processors and third-party service providers. Transparency in data handling for GDPR and HIPAA compliance.",
   keywords: ["sub-processors", "third-party vendors", "data processors"],
   openGraph: {
-    title: "Sub-Processors | Voxanne AI",
-    url: 'https://voxanne.ai/sub-processors',
+    title: "Sub-Processors | Barpel AI",
+    url: 'https://barpel.ai/sub-processors',
     images: ['/og-image.png'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Sub-Processors | Voxanne AI",
+    title: "Sub-Processors | Barpel AI",
     images: ['/og-image.png'],
   },
   alternates: {

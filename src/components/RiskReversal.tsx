@@ -20,7 +20,7 @@ export default function RiskReversal() {
                         </h2>
 
                         <p className="text-obsidian/70 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
-                            Try Voxanne AI in your clinic for 30 days. If she doesn&apos;t capture at least <strong className="text-obsidian">one new patient booking</strong> that you would have otherwise missed, we will refund 100% of your subscription.
+                            Try Barpel AI in your clinic for 30 days. If she doesn&apos;t capture at least <strong className="text-obsidian">one new patient booking</strong> that you would have otherwise missed, we will refund 100% of your subscription.
                         </p>
 
                         <div className="flex flex-col md:flex-row items-center justify-center gap-6 text-sm text-obsidian/60">

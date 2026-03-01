@@ -21,7 +21,7 @@ const VALUE_PROPS = [
   {
     icon: CalendarCheck,
     stat: 'Direct booking',
-    label: 'Patients book without back-and-forth',
+    label: 'Customers book without back-and-forth',
   },
 ];
 
@@ -72,10 +72,10 @@ export default function StepPaywall() {
       transition={{ duration: 0.4, delay: 0.1 }}
       className="text-center"
     >
-      <h1 className="text-3xl font-bold text-obsidian tracking-tighter mb-2">
+      <h1 className="text-3xl font-bold text-barpel-slate tracking-tighter mb-2">
         Stop losing revenue to missed calls.
       </h1>
-      <p className="text-lg text-obsidian/60 mb-8">
+      <p className="text-lg text-barpel-slate/60 mb-8">
         Activate your 24/7 AI Receptionist.
       </p>
 
@@ -87,18 +87,18 @@ export default function StepPaywall() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.2 + i * 0.1 }}
-            className="p-4 rounded-xl border border-surgical-200 bg-white"
+            className="p-4 rounded-xl border border-barpel-border bg-white"
           >
-            <Icon className="w-5 h-5 text-surgical-600 mx-auto mb-2" />
-            <p className="text-lg font-bold text-obsidian">{stat}</p>
-            <p className="text-xs text-obsidian/50">{label}</p>
+            <Icon className="w-5 h-5 text-barpel-teal mx-auto mb-2" />
+            <p className="text-lg font-bold text-barpel-slate">{stat}</p>
+            <p className="text-xs text-barpel-slate/50">{label}</p>
           </motion.div>
         ))}
       </div>
 
       {/* Area code input */}
       <div className="max-w-xs mx-auto mb-6">
-        <label className="block text-sm font-medium text-obsidian/70 mb-2">
+        <label className="block text-sm font-medium text-barpel-slate/70 mb-2">
           Choose your local area code
         </label>
         <input
@@ -107,19 +107,19 @@ export default function StepPaywall() {
           onChange={(e) => setAreaCode(e.target.value)}
           placeholder="e.g. 415"
           maxLength={3}
-          className={`w-full px-4 py-3 rounded-xl border bg-white text-obsidian placeholder:text-obsidian/40 focus:outline-none focus:ring-2 transition-all text-center text-lg font-mono tracking-widest ${
+          className={`w-full px-4 py-3 rounded-xl border bg-white text-barpel-slate placeholder:text-barpel-slate/40 focus:outline-none focus:ring-2 transition-all text-center text-lg font-mono tracking-widest ${
             areaCodeInvalid
-              ? 'border-surgical-400 focus:ring-surgical-600/40 focus:border-surgical-500'
-              : 'border-surgical-200 focus:ring-surgical-600/30 focus:border-surgical-400'
+              ? 'border-surgical-400 focus:ring-barpel-teal/40 focus:border-barpel-teal'
+              : 'border-barpel-border focus:ring-barpel-teal/30 focus:border-barpel-teal/50'
           }`}
         />
         {areaCodeInvalid ? (
-          <p className="text-xs text-obsidian/70 mt-1">
+          <p className="text-xs text-barpel-slate/70 mt-1">
             Area codes are 3 digits — e.g. 415, 212, 310.
           </p>
         ) : (
-          <p className="text-xs text-obsidian/40 mt-1">
-            Your patients will see a local number they trust.
+          <p className="text-xs text-barpel-slate/40 mt-1">
+            Your customers will see a local number they trust.
           </p>
         )}
       </div>
@@ -128,7 +128,7 @@ export default function StepPaywall() {
       <button
         onClick={handleCheckout}
         disabled={loading || areaCodeInvalid}
-        className="w-full max-w-xs mx-auto block px-6 py-4 rounded-xl bg-surgical-600 text-white font-semibold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-100 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+        className="w-full max-w-xs mx-auto block px-6 py-4 rounded-xl bg-barpel-teal text-white font-semibold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-100 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
         {loading ? (
           <span className="flex items-center justify-center gap-2">
@@ -143,12 +143,12 @@ export default function StepPaywall() {
         )}
       </button>
 
-      <p className="text-xs text-obsidian/40 mt-3">
+      <p className="text-xs text-barpel-slate/40 mt-3">
         Starts at £25. Covers your first AI phone number + call credits.
       </p>
 
       {error && (
-        <p className="text-sm text-obsidian/70 mt-4 bg-surgical-50 border border-surgical-200 rounded-lg px-4 py-2">
+        <p className="text-sm text-barpel-slate/70 mt-4 bg-barpel-teal/10 border border-barpel-border rounded-lg px-4 py-2">
           {error}
         </p>
       )}

@@ -79,7 +79,7 @@ export function EmailVerificationBanner() {
             placeholder="6-digit code"
             value={otpCode}
             onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-            className="w-28 rounded-lg border border-amber-300 bg-white px-2.5 py-1.5 text-sm text-obsidian placeholder-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400 tracking-widest text-center"
+            className="w-28 rounded-lg border border-amber-300 bg-white px-2.5 py-1.5 text-sm text-barpel-slate placeholder-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400 tracking-widest text-center"
           />
           <button
             type="submit"

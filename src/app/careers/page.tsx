@@ -3,18 +3,18 @@ import NavbarRedesigned from '@/components/NavbarRedesigned';
 import FooterRedesigned from '@/components/FooterRedesigned';
 
 export const metadata: Metadata = {
-  title: "Careers at Voxanne AI | Join Our Team",
-  description: "Join Voxanne AI and help build the future of healthcare voice automation. Remote-first company with competitive compensation and benefits.",
-  keywords: ["careers", "jobs", "voxanne hiring", "remote jobs"],
+  title: "Careers at Barpel AI | Join Our Team",
+  description: "Join Barpel AI and help build the future of healthcare voice automation. Remote-first company with competitive compensation and benefits.",
+  keywords: ["careers", "jobs", "barpel hiring", "remote jobs"],
   openGraph: {
-    title: "Careers at Voxanne AI",
+    title: "Careers at Barpel AI",
     description: "Build the future of AI-powered healthcare communication.",
-    url: 'https://voxanne.ai/careers',
+    url: 'https://barpel.ai/careers',
     images: ['/og-image.png'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Careers at Voxanne AI",
+    title: "Careers at Barpel AI",
     description: "Build the future of AI-powered healthcare communication.",
     images: ['/og-image.png'],
   },
@@ -31,7 +31,7 @@ export default function CareersPage() {
       <section className="py-20 border-b border-slate-200">
         <div className="max-w-4xl mx-auto px-6 space-y-4">
           <p className="text-sm font-semibold text-slate-500 uppercase tracking-[0.2em]">Careers</p>
-          <h1 className="text-4xl font-bold text-slate-900 tracking-tight">Join the Voxanne AI team</h1>
+          <h1 className="text-4xl font-bold text-slate-900 tracking-tight">Join the Barpel AI team</h1>
           <p className="text-lg text-slate-600 leading-relaxed">
             We build conversational AI that keeps clinics responsive 24/7. If you love shipping secure,
             reliable products in healthcare, lets talk.
@@ -62,7 +62,7 @@ export default function CareersPage() {
                     <h3 className="text-lg font-semibold text-slate-900">{role.title}</h3>
                     <p className="text-sm text-slate-600">{role.location}</p>
                   </div>
-                  <a className="text-sm font-semibold text-slate-900 hover:underline" href="mailto:careers@voxanne.ai?subject=Application:%20{role.title}">
+                  <a className="text-sm font-semibold text-slate-900 hover:underline" href="mailto:careers@barpel.ai?subject=Application:%20{role.title}">
                     Apply
                   </a>
                 </div>

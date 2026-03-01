@@ -15,26 +15,44 @@ const config: Config = {
                 'safe-right': 'env(safe-area-inset-right)',
             },
             colors: {
-                // Clinical Trust Palette - Monochromatic Blue System
+                // Barpel Dim & Brandy Palette
                 obsidian: {
-                    DEFAULT: "#020412", // Primary Text Only
+                    DEFAULT: "#F3F4F6", // Light text on dark bg (intentionally inverted for Barpel)
                 },
                 surgical: {
-                    50: "#F0F9FF",   // Sterile Background
-                    100: "#E0F2FE",  // Hover states
-                    200: "#BFDBFE",  // Sky Mist (borders)
+                    50: "#2C2C2E",   // Dim surface
+                    100: "#E0F2FE",  // Hover states (unchanged)
+                    200: "#3C3C3E",  // Dim border
                     300: "#93c5fd",
                     400: "#60a5fa",
-                    500: "#3B82F6",  // Icons/Accents
-                    600: "#1D4ED8",  // Electric Cobalt (primary buttons)
-                    700: "#1e40af",
+                    500: "#B26A62",  // Brandy light
+                    600: "#8D4A43",  // Brandy primary
+                    700: "#6D3A33",  // Dark brandy — gradient endpoint (was #1e40af blue)
                     800: "#1e3a8a",
                     900: "#1e3a8a",
                 },
-                // Semantic Aliases for Clinical Trust
-                "clinical-bg": "#F0F9FF",      // Main app background
-                "clinical-surface": "#FFFFFF",  // Card backgrounds
-                "clinical-border": "#BFDBFE",   // Border color
+                // Semantic Aliases for Barpel (remapped from Clinical Trust)
+                "clinical-bg": "#1C1C1E",      // Dim background
+                "clinical-surface": "#2C2C2E", // Dim surface
+                "clinical-border": "#3C3C3E",  // Dim border
+                // New Barpel tokens (OLD - Dark theme, deprecated in favor of new teal system below)
+                "barpel-brandy": { DEFAULT: "#8D4A43", light: "#B26A62", dark: "#6D3A33" },
+                "barpel-dim": { bg: "#1C1C1E", surface: "#2C2C2E", border: "#3C3C3E", text: "#F3F4F6", muted: "#9CA3AF" },
+
+                // NEW Barpel Design System Colors (Teal & White, 2026)
+                // Primary brand color - use for buttons, highlights, active states
+                "barpel-teal": {
+                    DEFAULT: "#37A195",
+                    dark: "#2F8E88",
+                    darker: "#267F78",
+                    light: "#E8F5F2",
+                },
+                // Deep slate for headings and primary text
+                "barpel-slate": "#102A33",
+                // Muted gray for body text, subtitles, helper text
+                "barpel-gray": "#6B7280",
+                // Light gray for borders, dividers, subtle separation
+                "barpel-border": "#E5E7EB",
                 // Fix orphan color references (474 broken classes)
                 "sterile-wash": "#F0F9FF",
                 "deep-obsidian": "#020412",

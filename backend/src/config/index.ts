@@ -83,10 +83,10 @@ export const config = {
   // CORE APPLICATION SETTINGS
   // ========================================================================
   NODE_ENV: getOptional('NODE_ENV', 'development'),
-  PORT: getNumber('PORT', 5002),
+  PORT: getNumber('PORT', 6001),
   LOG_LEVEL: getOptional('LOG_LEVEL', 'info'),
-  COMPANY_NAME: getOptional('COMPANY_NAME', 'CallWaiting AI'),
-  CLINIC_NAME: getOptional('CLINIC_NAME', 'VoxAnne'),
+  COMPANY_NAME: getOptional('COMPANY_NAME', 'Barpel AI'),
+  CLINIC_NAME: getOptional('CLINIC_NAME', 'Barpel'),
 
   // ========================================================================
   // SUPABASE CONFIGURATION
@@ -320,7 +320,7 @@ export const config = {
         console.error('\n' + '='.repeat(80));
         console.error('WHY TWILIO IS REQUIRED:');
         console.error('='.repeat(80));
-        console.error('\nVoxanne AI provisions phone numbers for clients.');
+        console.error('\nBarpel AI provisions phone numbers for clients.');
         console.error('Twilio credentials are needed to buy/manage numbers via Vapi.');
         console.error('Without Twilio, clients cannot get phone numbers.\n');
       }

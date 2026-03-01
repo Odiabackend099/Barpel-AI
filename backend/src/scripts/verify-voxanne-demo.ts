@@ -1,8 +1,8 @@
 #!/usr/bin/env ts-node
 /**
- * Voxanne Demo Org Feature Verification
+ * Barpel Demo Org Feature Verification
  *
- * Tests the 5 critical demo features using the real Voxanne Demo org:
+ * Tests the 5 critical demo features using the real Barpel Demo org:
  * 1. Real-Time Availability (Google Calendar API)
  * 2. Atomic Booking (Google → DB)
  * 3. Live SMS Confirmation (Twilio)
@@ -10,7 +10,7 @@
  * 5. Zero-Hallucination RAG (pgvector)
  *
  * Usage:
- *   npm run test:voxanne-demo
+ *   npm run test:barpel-demo
  */
 
 import { checkAvailability, bookAppointment } from '../utils/google-calendar';
@@ -23,7 +23,7 @@ import * as path from 'path';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
-const VOXANNE_DEMO_ORG_ID = '46cf2995-2bee-44e3-838b-24151486fe4e';
+const BARPEL_DEMO_ORG_ID = '46cf2995-2bee-44e3-838b-24151486fe4e';
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -60,7 +60,7 @@ async function testRealTimeAvailability(): Promise<TestResult> {
     endTime.setHours(11, 0, 0, 0);
 
     const result = await checkAvailability(
-      VOXANNE_DEMO_ORG_ID,
+      BARPEL_DEMO_ORG_ID,
       tomorrow.toISOString(),
       endTime.toISOString()
     );
@@ -182,7 +182,7 @@ async function testZeroHallucinationRAG(): Promise<TestResult> {
     console.log('   → Test 1: In-scope query (general services)...');
     const start1 = performance.now();
 
-    const result1 = await getRagContext('What services do you offer?', VOXANNE_DEMO_ORG_ID);
+    const result1 = await getRagContext('What services do you offer?', BARPEL_DEMO_ORG_ID);
 
     const duration1 = performance.now() - start1;
     durations.push(duration1);
@@ -197,7 +197,7 @@ async function testZeroHallucinationRAG(): Promise<TestResult> {
     console.log('   → Test 2: Out-of-scope query (brain surgery)...');
     const start2 = performance.now();
 
-    const result2 = await getRagContext('Do you offer brain surgery?', VOXANNE_DEMO_ORG_ID);
+    const result2 = await getRagContext('Do you offer brain surgery?', BARPEL_DEMO_ORG_ID);
 
     const duration2 = performance.now() - start2;
     durations.push(duration2);
@@ -231,23 +231,23 @@ async function testZeroHallucinationRAG(): Promise<TestResult> {
 }
 
 async function runAllTests() {
-  console.log('🚀 Starting Voxanne Demo Feature Verification\n');
+  console.log('🚀 Starting Barpel Demo Feature Verification\n');
   console.log('='.repeat(70) + '\n');
 
   const results: TestResult[] = [];
   const startTime = Date.now();
 
-  // Verify Voxanne Demo org exists
-  console.log('⚙️  Verifying Voxanne Demo org exists...');
+  // Verify Barpel Demo org exists
+  console.log('⚙️  Verifying Barpel Demo org exists...');
   const { data: org, error } = await supabase
     .from('organizations')
     .select('id, name, email')
-    .eq('id', VOXANNE_DEMO_ORG_ID)
+    .eq('id', BARPEL_DEMO_ORG_ID)
     .single();
 
   if (error || !org) {
-    console.error('❌ Voxanne Demo org not found!');
-    console.error('   Expected ID:', VOXANNE_DEMO_ORG_ID);
+    console.error('❌ Barpel Demo org not found!');
+    console.error('   Expected ID:', BARPEL_DEMO_ORG_ID);
     process.exit(1);
   }
 

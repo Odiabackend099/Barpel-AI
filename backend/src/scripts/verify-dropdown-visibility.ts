@@ -9,7 +9,7 @@ import { supabaseAdmin } from '../config/supabase';
 import { EncryptionService } from '../services/encryption';
 
 async function verifyDropdownVisibility() {
-  const orgId = '46cf2995-2bee-44e3-838b-24151486fe4e'; // voxanne@demo.com
+  const orgId = '46cf2995-2bee-44e3-838b-24151486fe4e'; // barpel@demo.com
 
   console.log('🔍 Simulating /api/integrations/vapi/numbers endpoint...\n');
 

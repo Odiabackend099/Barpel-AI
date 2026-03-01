@@ -1,7 +1,7 @@
 import { ContactFormInput, OnboardingFormInput } from './validation-schemas';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const SUPPORT_EMAIL = 'support@voxanne.ai';
+const SUPPORT_EMAIL = 'support@barpel.ai';
 
 interface EmailResponse {
   success: boolean;
@@ -103,9 +103,9 @@ async function sendUserConfirmationEmail({
       Authorization: `Bearer ${RESEND_API_KEY}`,
     },
     body: JSON.stringify({
-      from: `Voxanne AI <noreply@voxanne.ai>`,
+      from: `Barpel AI <noreply@barpel.ai>`,
       to: userEmail,
-      subject: 'Thank you for contacting Voxanne AI',
+      subject: 'Thank you for contacting Barpel AI',
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333;">
           <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -122,15 +122,15 @@ async function sendUserConfirmationEmail({
 
             <p>In the meantime, feel free to:</p>
             <ul>
-              <li><a href="https://voxanne.ai" style="color: #1e40af; text-decoration: none;">Visit our website</a></li>
-              <li><a href="https://voxanne.ai/docs" style="color: #1e40af; text-decoration: none;">Check our documentation</a></li>
+              <li><a href="https://barpel.ai" style="color: #1e40af; text-decoration: none;">Visit our website</a></li>
+              <li><a href="https://barpel.ai/docs" style="color: #1e40af; text-decoration: none;">Check our documentation</a></li>
               <li>Reply to this email with any additional questions</li>
             </ul>
 
             <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 14px; color: #666;">
-              <strong>Voxanne AI</strong><br />
+              <strong>Barpel AI</strong><br />
               The #1 AI Receptionist for Clinics<br />
-              <a href="https://voxanne.ai" style="color: #1e40af; text-decoration: none;">voxanne.ai</a>
+              <a href="https://barpel.ai" style="color: #1e40af; text-decoration: none;">barpel.ai</a>
             </p>
           </div>
         </div>
@@ -170,7 +170,7 @@ async function sendSupportNotificationEmail({
       Authorization: `Bearer ${RESEND_API_KEY}`,
     },
     body: JSON.stringify({
-      from: `Voxanne AI <noreply@voxanne.ai>`,
+      from: `Barpel AI <noreply@barpel.ai>`,
       to: SUPPORT_EMAIL,
       subject: `${isUrgent ? '🚨 URGENT - ' : ''}New Contact Form Submission: ${subject}`,
       html: `
@@ -223,13 +223,13 @@ async function sendOnboardingUserConfirmationEmail({
       Authorization: `Bearer ${RESEND_API_KEY}`,
     },
     body: JSON.stringify({
-      from: `Voxanne AI <noreply@voxanne.ai>`,
+      from: `Barpel AI <noreply@barpel.ai>`,
       to: userEmail,
-      subject: 'Welcome to Voxanne AI - Your AI Receptionist Awaits',
+      subject: 'Welcome to Barpel AI - Your AI Receptionist Awaits',
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333;">
           <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-            <h1 style="color: #1e40af; margin-bottom: 20px;">Welcome to Voxanne AI! 🎉</h1>
+            <h1 style="color: #1e40af; margin-bottom: 20px;">Welcome to Barpel AI! 🎉</h1>
 
             <p>Hi ${companyName},</p>
 
@@ -251,8 +251,8 @@ async function sendOnboardingUserConfirmationEmail({
 
             <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
               <p style="font-size: 14px; color: #666;">
-                Questions? <a href="mailto:support@voxanne.ai" style="color: #1e40af; text-decoration: none;">Contact our team</a><br />
-                <strong>Voxanne AI</strong> - The #1 AI Receptionist for Clinics
+                Questions? <a href="mailto:support@barpel.ai" style="color: #1e40af; text-decoration: none;">Contact our team</a><br />
+                <strong>Barpel AI</strong> - The #1 AI Receptionist for Clinics
               </p>
             </div>
           </div>
@@ -291,7 +291,7 @@ async function sendOnboardingSupportNotificationEmail({
       Authorization: `Bearer ${RESEND_API_KEY}`,
     },
     body: JSON.stringify({
-      from: `Voxanne AI <noreply@voxanne.ai>`,
+      from: `Barpel AI <noreply@barpel.ai>`,
       to: SUPPORT_EMAIL,
       subject: `New Onboarding Submission: ${company}`,
       html: `

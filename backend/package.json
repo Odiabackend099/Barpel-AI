@@ -1,7 +1,7 @@
 {
-  "name": "voxanne-backend",
+  "name": "barpel-backend",
   "version": "1.0.0",
-  "description": "Voxanne AI backend for Vapi integration",
+  "description": "Barpel AI backend for Vapi integration",
   "main": "src/server.ts",
   "scripts": {
     "validate-env": "npx tsx scripts/validate-env.ts",

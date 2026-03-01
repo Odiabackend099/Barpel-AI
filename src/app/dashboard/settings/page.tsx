@@ -21,9 +21,9 @@ export default function SettingsPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <Settings className="w-8 h-8 text-surgical-600" />
-          <h1 className="text-3xl font-bold text-obsidian">Settings</h1>
+          <h1 className="text-3xl font-bold text-barpel-slate">Settings</h1>
         </div>
-        <p className="text-obsidian/60">Configure your account, team, and integrations</p>
+        <p className="text-barpel-slate/60">Configure your account, team, and integrations</p>
       </div>
 
       {/* Tabs */}
@@ -31,8 +31,8 @@ export default function SettingsPage() {
         <button
           onClick={() => setActiveTab('general')}
           className={`px-4 py-3 font-medium border-b-2 transition ${activeTab === 'general'
-            ? 'border-surgical-600 text-surgical-600'
-            : 'border-transparent text-obsidian/60 hover:text-obsidian'
+            ? 'border-barpel-teal text-surgical-600'
+            : 'border-transparent text-barpel-slate/60 hover:text-barpel-slate'
             }`}
         >
           <div className="flex items-center gap-2">
@@ -43,8 +43,8 @@ export default function SettingsPage() {
         <button
           onClick={() => setActiveTab('organization')}
           className={`px-4 py-3 font-medium border-b-2 transition ${activeTab === 'organization'
-            ? 'border-surgical-600 text-surgical-600'
-            : 'border-transparent text-obsidian/60 hover:text-obsidian'
+            ? 'border-barpel-teal text-surgical-600'
+            : 'border-transparent text-barpel-slate/60 hover:text-barpel-slate'
             }`}
         >
           <div className="flex items-center gap-2">
@@ -55,8 +55,8 @@ export default function SettingsPage() {
         <button
           onClick={() => setActiveTab('team')}
           className={`px-4 py-3 font-medium border-b-2 transition ${activeTab === 'team'
-            ? 'border-surgical-600 text-surgical-600'
-            : 'border-transparent text-obsidian/60 hover:text-obsidian'
+            ? 'border-barpel-teal text-surgical-600'
+            : 'border-transparent text-barpel-slate/60 hover:text-barpel-slate'
             }`}
         >
           <div className="flex items-center gap-2">
@@ -70,7 +70,7 @@ export default function SettingsPage() {
         <div className="space-y-6">
           <PreFlightChecklist />
 
-          <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4 text-obsidian text-sm">
+          <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4 text-barpel-slate text-sm">
             <p><strong>Note:</strong> Integrations configuration has moved to the <a href="/dashboard/integrations" className="underline font-medium hover:text-surgical-600">Integrations</a> page. Please use that page to configure Vapi, Twilio, and other providers.</p>
           </div>
         </div>

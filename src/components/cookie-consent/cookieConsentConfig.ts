@@ -47,7 +47,7 @@ export const COOKIE_CATEGORIES: Record<CookieCategory, CookieCategoryConfig> = {
 
   analytics: {
     name: 'Analytics Cookies',
-    description: 'Help us understand how you use Voxanne AI so we can improve our website and services.',
+    description: 'Help us understand how you use Barpel AI so we can improve our website and services.',
     required: false,
     defaultConsent: false,
     cookies: [

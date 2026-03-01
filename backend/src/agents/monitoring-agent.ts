@@ -38,7 +38,7 @@ export class MonitoringAgent {
   async monitor(task: string): Promise<void> {
     // Print header
     console.log("\n" + "=".repeat(70));
-    console.log("MONITORING AGENT - VOXANNE VOICE AI (Groq-Powered)");
+    console.log("MONITORING AGENT - BARPEL VOICE AI (Groq-Powered)");
     console.log("=".repeat(70));
     console.log(`Task: ${task}\n`);
 

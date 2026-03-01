@@ -3,10 +3,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
-  Smile,
-  Sparkles,
-  Activity,
-  Heart,
+  Car,
+  Home,
+  Scale,
+  Scissors,
+  ShoppingBag,
   Stethoscope,
   MoreHorizontal,
 } from 'lucide-react';
@@ -14,11 +15,12 @@ import { useOnboardingStore } from '@/lib/store/onboardingStore';
 import { useOnboardingTelemetry } from '@/hooks/useOnboardingTelemetry';
 
 const SPECIALTIES = [
-  { id: 'dental', label: 'Dental', icon: Smile },
-  { id: 'medspa', label: 'Med Spa', icon: Sparkles },
-  { id: 'chiropractic', label: 'Chiropractic', icon: Activity },
-  { id: 'physio', label: 'Physio', icon: Heart },
-  { id: 'dermatology', label: 'Dermatology', icon: Stethoscope },
+  { id: 'auto_dealer', label: 'Auto Dealer', icon: Car },
+  { id: 'real_estate', label: 'Real Estate', icon: Home },
+  { id: 'legal', label: 'Legal', icon: Scale },
+  { id: 'salon_spa', label: 'Salon / Spa', icon: Scissors },
+  { id: 'medical', label: 'Medical Clinic', icon: Stethoscope },
+  { id: 'retail', label: 'Retail', icon: ShoppingBag },
   { id: 'other', label: 'Other', icon: MoreHorizontal },
 ] as const;
 
@@ -51,10 +53,10 @@ export default function StepSpecialty() {
       transition={{ duration: 0.4, delay: 0.1 }}
       className="text-center"
     >
-      <h1 className="text-3xl font-bold text-obsidian tracking-tighter mb-3">
-        What is your specialty?
+      <h1 className="text-3xl font-bold text-barpel-slate tracking-tighter mb-3">
+        What type of business are you?
       </h1>
-      <p className="text-base text-obsidian/60 mb-8">
+      <p className="text-base text-barpel-slate/60 mb-8">
         This helps us tailor your AI&apos;s knowledge and tone.
       </p>
 
@@ -71,19 +73,19 @@ export default function StepSpecialty() {
                 flex flex-col items-center justify-center gap-2 p-5 rounded-xl border-2 cursor-pointer transition-all
                 ${
                   isSelected
-                    ? 'border-surgical-600 bg-surgical-50 shadow-md'
-                    : 'border-surgical-200 bg-white hover:border-surgical-300 hover:shadow-sm'
+                    ? 'border-barpel-teal bg-barpel-teal/10 shadow-md'
+                    : 'border-barpel-border bg-white hover:border-surgical-300 hover:shadow-sm'
                 }
               `}
             >
               <Icon
                 className={`w-7 h-7 ${
-                  isSelected ? 'text-surgical-600' : 'text-obsidian/50'
+                  isSelected ? 'text-barpel-teal' : 'text-barpel-slate/50'
                 }`}
               />
               <span
                 className={`text-sm font-medium ${
-                  isSelected ? 'text-surgical-600' : 'text-obsidian/70'
+                  isSelected ? 'text-barpel-teal' : 'text-barpel-slate/70'
                 }`}
               >
                 {label}

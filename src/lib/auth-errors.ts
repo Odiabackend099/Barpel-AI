@@ -16,7 +16,7 @@
 // Email enumeration: 'invalid_credentials' and 'user not found' intentionally
 // map to the same message. Never hint whether the email exists — HIPAA-relevant.
 
-const SUPPORT_EMAIL = 'support@voxanne.ai';
+const SUPPORT_EMAIL = 'support@barpel.ai';
 
 // Stable Supabase AuthError.code values → user-friendly messages.
 // These are the preferred match path (SDK contract, not human text).

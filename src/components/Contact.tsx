@@ -61,7 +61,7 @@ export default function Contact() {
         } catch (error) {
             console.error('Contact form submission error:', error);
             setStatus("idle");
-            showErrorToast('Failed to send message. Please try again or email support@voxanne.ai directly.');
+            showErrorToast('Failed to send message. Please try again or email support@barpel.ai directly.');
         }
     };
 
@@ -76,7 +76,7 @@ export default function Contact() {
                             <span className="font-sans font-semibold text-surgical-600">clinic&apos;s front desk?</span>
                         </h2>
                         <p className="text-lg text-obsidian/50 mb-12">
-                            Get in touch with our team to see how Voxanne can help you capture more patients and reduce admin work.
+                            Get in touch with our team to see how Barpel can help you capture more patients and reduce admin work.
                         </p>
 
                         <div className="space-y-8">
@@ -86,7 +86,7 @@ export default function Contact() {
                                 </div>
                                 <div>
                                     <h3 className="font-semibold text-obsidian">Email us</h3>
-                                    <p className="text-obsidian/70">support@voxanne.ai</p>
+                                    <p className="text-obsidian/70">support@barpel.ai</p>
                                 </div>
                             </div>
 

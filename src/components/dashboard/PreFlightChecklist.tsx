@@ -61,9 +61,9 @@ export default function PreFlightChecklist() {
     const getOverallStatusColor = (health: string) => {
         switch (health) {
             case 'healthy': return 'bg-surgical-50 text-surgical-600 border-surgical-200';
-            case 'degraded': return 'bg-surgical-50 text-obsidian/70 border-surgical-200';
+            case 'degraded': return 'bg-surgical-50 text-barpel-slate/70 border-surgical-200';
             case 'critical': return 'bg-red-50 text-red-700 border-red-200';
-            default: return 'bg-surgical-50 text-obsidian border-surgical-200';
+            default: return 'bg-surgical-50 text-barpel-slate border-surgical-200';
         }
     };
 
@@ -71,17 +71,17 @@ export default function PreFlightChecklist() {
         <div className="bg-white shadow sm:rounded-lg overflow-hidden border border-surgical-200">
             <div className="px-4 py-5 sm:px-6 flex justify-between items-center bg-surgical-50 border-b border-surgical-200">
                 <div>
-                    <h3 className="text-lg leading-6 font-medium text-obsidian">
+                    <h3 className="text-lg leading-6 font-medium text-barpel-slate">
                         System Pre-Flight Checklist
                     </h3>
-                    <p className="mt-1 max-w-2xl text-sm text-obsidian/60">
+                    <p className="mt-1 max-w-2xl text-sm text-barpel-slate/60">
                         Verify all critical integrations before going live.
                     </p>
                 </div>
                 <button
                     onClick={runVerification}
                     disabled={loading}
-                    className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-surgical-500 ${loading ? 'bg-surgical-400 cursor-not-allowed' : 'bg-surgical-600 hover:bg-surgical-700'
+                    className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-surgical-500 ${loading ? 'bg-surgical-400 cursor-not-allowed' : 'bg-barpel-teal hover:bg-barpel-teal-dark'
                         }`}
                 >
                     {loading ? (
@@ -116,7 +116,7 @@ export default function PreFlightChecklist() {
                 )}
 
                 {!status && !loading && !error && (
-                    <div className="text-center py-12 text-obsidian/60">
+                    <div className="text-center py-12 text-barpel-slate/60">
                         <p>Click &quot;Run Checks&quot; to verify system health.</p>
                     </div>
                 )}
@@ -161,7 +161,7 @@ export default function PreFlightChecklist() {
                                     </div>
 
                                     <div>
-                                        <h4 className="text-base font-semibold text-obsidian capitalize mb-1">
+                                        <h4 className="text-base font-semibold text-barpel-slate capitalize mb-1">
                                             {check.step} Integration
                                         </h4>
                                         <p className={`text-sm ${check.success ? 'text-surgical-600' : 'text-red-700'}`}>
@@ -175,8 +175,8 @@ export default function PreFlightChecklist() {
                                             <dl className="space-y-1">
                                                 {Object.entries(check.details).map(([key, value]) => (
                                                     <div key={key} className="flex justify-between text-xs">
-                                                        <dt className="text-obsidian/60 font-medium capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}:</dt>
-                                                        <dd className="text-obsidian font-mono truncate max-w-[120px]" title={String(value)}>
+                                                        <dt className="text-barpel-slate/60 font-medium capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}:</dt>
+                                                        <dd className="text-barpel-slate font-mono truncate max-w-[120px]" title={String(value)}>
                                                             {String(value)}
                                                         </dd>
                                                     </div>

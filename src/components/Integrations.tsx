@@ -102,7 +102,7 @@ export default function Integrations() {
                         <span className="font-sans font-semibold text-surgical-600">existing stack</span>
                     </h2>
                     <p className="text-lg text-obsidian/50">
-                        No rip-and-replace. Voxanne connects to the tools you already use.
+                        No rip-and-replace. Barpel connects to the tools you already use.
                     </p>
                 </motion.div>
 

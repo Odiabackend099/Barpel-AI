@@ -146,15 +146,15 @@ const EscalationRulesPage = () => {
                 {/* Header */}
                 <div className="flex justify-between items-center mb-6">
                     <div>
-                        <h1 className="text-3xl font-bold text-obsidian">Escalation Rules</h1>
-                        <p className="text-obsidian/60 mt-2">Manage call transfer rules and escalation triggers</p>
+                        <h1 className="text-3xl font-bold text-barpel-slate">Escalation Rules</h1>
+                        <p className="text-barpel-slate/60 mt-2">Manage call transfer rules and escalation triggers</p>
                     </div>
                     <button
                         onClick={() => {
                             setEditingRule(null);
                             setShowRuleModal(true);
                         }}
-                        className="bg-surgical-600 text-white px-4 py-2 rounded-lg hover:bg-surgical-700 flex items-center gap-2"
+                        className="bg-barpel-teal text-white px-4 py-2 rounded-lg hover:bg-barpel-teal-dark flex items-center gap-2"
                     >
                         <Plus className="w-5 h-5" />
                         Create Rule
@@ -187,7 +187,7 @@ const EscalationRulesPage = () => {
                         </div>
                     ) : rules.length === 0 ? (
                         <div className="p-8 text-center">
-                            <p className="text-obsidian/60 mb-4">No escalation rules created yet</p>
+                            <p className="text-barpel-slate/60 mb-4">No escalation rules created yet</p>
                             <button
                                 onClick={() => {
                                     setEditingRule(null);
@@ -202,22 +202,22 @@ const EscalationRulesPage = () => {
                         <table className="w-full divide-y divide-surgical-200">
                             <thead className="bg-surgical-50">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-obsidian/60 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-barpel-slate/60 uppercase tracking-wider">
                                         Name
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-obsidian/60 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-barpel-slate/60 uppercase tracking-wider">
                                         Trigger
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-obsidian/60 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-barpel-slate/60 uppercase tracking-wider">
                                         Transfer Number
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-obsidian/60 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-barpel-slate/60 uppercase tracking-wider">
                                         Priority
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-obsidian/60 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-barpel-slate/60 uppercase tracking-wider">
                                         Status
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-obsidian/60 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-barpel-slate/60 uppercase tracking-wider">
                                         Actions
                                     </th>
                                 </tr>
@@ -226,25 +226,25 @@ const EscalationRulesPage = () => {
                                 {rules.map(rule => (
                                     <tr key={rule.id} className="hover:bg-surgical-50">
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className="font-medium text-obsidian">{rule.name}</span>
+                                            <span className="font-medium text-barpel-slate">{rule.name}</span>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className="px-3 py-1 bg-surgical-50 text-surgical-600 rounded-full text-sm">
                                                 {getTriggerLabel(rule.trigger_type)}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-obsidian/60">
+                                        <td className="px-6 py-4 whitespace-nowrap text-barpel-slate/60">
                                             {rule.transfer_number}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className="font-medium text-obsidian">{rule.priority}</span>
+                                            <span className="font-medium text-barpel-slate">{rule.priority}</span>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <button
                                                 onClick={() => handleToggleEnabled(rule)}
                                                 className={`px-3 py-1 rounded-full text-sm font-medium ${rule.enabled
                                                         ? 'bg-green-50 text-green-700 hover:bg-green-100'
-                                                        : 'bg-surgical-50 text-obsidian/60 hover:bg-surgical-100'
+                                                        : 'bg-surgical-50 text-barpel-slate/60 hover:bg-surgical-100'
                                                     }`}
                                             >
                                                 {rule.enabled ? 'Enabled' : 'Disabled'}
@@ -281,16 +281,16 @@ const EscalationRulesPage = () => {
                 {rules.length > 0 && (
                     <div className="mt-6 grid grid-cols-3 gap-4">
                         <div className="bg-white p-4 rounded-lg shadow border border-surgical-200">
-                            <p className="text-obsidian/60 text-sm">Total Rules</p>
-                            <p className="text-2xl font-bold text-obsidian">{rules.length}</p>
+                            <p className="text-barpel-slate/60 text-sm">Total Rules</p>
+                            <p className="text-2xl font-bold text-barpel-slate">{rules.length}</p>
                         </div>
                         <div className="bg-white p-4 rounded-lg shadow border border-surgical-200">
-                            <p className="text-obsidian/60 text-sm">Enabled</p>
+                            <p className="text-barpel-slate/60 text-sm">Enabled</p>
                             <p className="text-2xl font-bold text-green-700">{rules.filter(r => r.enabled).length}</p>
                         </div>
                         <div className="bg-white p-4 rounded-lg shadow border border-surgical-200">
-                            <p className="text-obsidian/60 text-sm">Disabled</p>
-                            <p className="text-2xl font-bold text-obsidian/60">{rules.filter(r => !r.enabled).length}</p>
+                            <p className="text-barpel-slate/60 text-sm">Disabled</p>
+                            <p className="text-2xl font-bold text-barpel-slate/60">{rules.filter(r => !r.enabled).length}</p>
                         </div>
                     </div>
                 )}
@@ -299,7 +299,7 @@ const EscalationRulesPage = () => {
                 {showRuleModal && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                         <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 border border-surgical-200">
-                            <h2 className="text-2xl font-bold mb-4 text-obsidian">
+                            <h2 className="text-2xl font-bold mb-4 text-barpel-slate">
                                 {editingRule ? 'Edit Rule' : 'Create New Rule'}
                             </h2>
                             <RuleForm

@@ -38,10 +38,10 @@ export const PromptCheckpointModal: React.FC<PromptCheckpointModalProps> = ({
             <AlertCircle className="w-5 h-5 text-surgical-600" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-obsidian">
+            <h3 className="text-lg font-bold text-barpel-slate">
               Review Prompt Before Saving
             </h3>
-            <p className="text-sm text-obsidian/60 mt-1">
+            <p className="text-sm text-barpel-slate/60 mt-1">
               Review your agent's personality and behavior settings. Make sure
               they align with your business goals.
             </p>
@@ -52,10 +52,10 @@ export const PromptCheckpointModal: React.FC<PromptCheckpointModalProps> = ({
         <div className="p-6 space-y-6">
           {/* Agent Name */}
           <div className="bg-surgical-50 rounded-lg p-4 border border-surgical-200">
-            <p className="text-xs font-semibold text-obsidian/60 uppercase tracking-wide mb-1">
+            <p className="text-xs font-semibold text-barpel-slate/60 uppercase tracking-wide mb-1">
               Agent Name
             </p>
-            <p className="text-base font-medium text-obsidian">{agentName}</p>
+            <p className="text-base font-medium text-barpel-slate">{agentName}</p>
           </div>
 
           {/* System Prompt Preview */}
@@ -66,15 +66,15 @@ export const PromptCheckpointModal: React.FC<PromptCheckpointModalProps> = ({
               className="flex items-center justify-between w-full text-left mb-2"
             >
               <div>
-                <p className="text-xs font-semibold text-obsidian/60 uppercase tracking-wide">
+                <p className="text-xs font-semibold text-barpel-slate/60 uppercase tracking-wide">
                   System Prompt (Core Personality)
                 </p>
-                <p className="text-xs text-obsidian/40 mt-1">
+                <p className="text-xs text-barpel-slate/40 mt-1">
                   The instructions that define your AI agent's behavior
                 </p>
               </div>
               <span
-                className={`text-obsidian/40 transition-transform ${
+                className={`text-barpel-slate/40 transition-transform ${
                   expandedPrompt ? 'rotate-180' : ''
                 }`}
               >
@@ -86,7 +86,7 @@ export const PromptCheckpointModal: React.FC<PromptCheckpointModalProps> = ({
                 expandedPrompt ? 'max-h-96' : 'max-h-24'
               }`}
             >
-              <div className="bg-obsidian/5 rounded-lg p-4 border border-surgical-200 font-mono text-sm text-obsidian/80 leading-relaxed break-words whitespace-pre-wrap">
+              <div className="bg-obsidian/5 rounded-lg p-4 border border-surgical-200 font-mono text-sm text-barpel-slate/80 leading-relaxed break-words whitespace-pre-wrap">
                 {systemPrompt || '(No system prompt set)'}
               </div>
             </div>
@@ -100,15 +100,15 @@ export const PromptCheckpointModal: React.FC<PromptCheckpointModalProps> = ({
               className="flex items-center justify-between w-full text-left mb-2"
             >
               <div>
-                <p className="text-xs font-semibold text-obsidian/60 uppercase tracking-wide">
+                <p className="text-xs font-semibold text-barpel-slate/60 uppercase tracking-wide">
                   First Message
                 </p>
-                <p className="text-xs text-obsidian/40 mt-1">
+                <p className="text-xs text-barpel-slate/40 mt-1">
                   What your agent says when the call connects
                 </p>
               </div>
               <span
-                className={`text-obsidian/40 transition-transform ${
+                className={`text-barpel-slate/40 transition-transform ${
                   expandedFirstMessage ? 'rotate-180' : ''
                 }`}
               >
@@ -120,7 +120,7 @@ export const PromptCheckpointModal: React.FC<PromptCheckpointModalProps> = ({
                 expandedFirstMessage ? 'max-h-32' : 'max-h-16'
               }`}
             >
-              <div className="bg-obsidian/5 rounded-lg p-4 border border-surgical-200 font-mono text-sm text-obsidian/80 leading-relaxed break-words whitespace-pre-wrap">
+              <div className="bg-obsidian/5 rounded-lg p-4 border border-surgical-200 font-mono text-sm text-barpel-slate/80 leading-relaxed break-words whitespace-pre-wrap">
                 {firstMessage || '(No first message set)'}
               </div>
             </div>
@@ -143,7 +143,7 @@ export const PromptCheckpointModal: React.FC<PromptCheckpointModalProps> = ({
           <button
             onClick={onCancel}
             disabled={isLoading}
-            className="px-4 py-2 rounded-lg font-medium text-obsidian/60 hover:bg-surgical-50 transition-colors disabled:opacity-50"
+            className="px-4 py-2 rounded-lg font-medium text-barpel-slate/60 hover:bg-surgical-50 transition-colors disabled:opacity-50"
           >
             Cancel
           </button>
@@ -158,7 +158,7 @@ export const PromptCheckpointModal: React.FC<PromptCheckpointModalProps> = ({
           <button
             onClick={onConfirm}
             disabled={isLoading}
-            className="px-6 py-2 rounded-lg font-medium text-white bg-surgical-600 hover:bg-surgical-700 transition-colors flex items-center gap-2 disabled:opacity-50 shadow-sm shadow-surgical-500/20"
+            className="px-6 py-2 rounded-lg font-medium text-white bg-barpel-teal hover:bg-barpel-teal-dark transition-colors flex items-center gap-2 disabled:opacity-50 shadow-sm shadow-surgical-500/20"
           >
             <Check className="w-4 h-4" />
             {isLoading ? 'Saving...' : 'Confirm & Save'}

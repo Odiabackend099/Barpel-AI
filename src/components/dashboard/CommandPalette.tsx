@@ -232,7 +232,7 @@ export default function CommandPalette() {
       {/* Command Palette Trigger - Keyboard Shortcut Hint */}
       {!open && (
         <div
-          className="hidden md:fixed md:bottom-6 md:right-6 md:flex items-center gap-2 px-3 py-2 rounded-lg bg-surgical-50 text-obsidian/60 text-sm cursor-pointer hover:bg-surgical-100 transition-colors z-40"
+          className="hidden md:fixed md:bottom-6 md:right-6 md:flex items-center gap-2 px-3 py-2 rounded-lg bg-surgical-50 text-barpel-slate/60 text-sm cursor-pointer hover:bg-surgical-100 transition-colors z-40"
           onClick={() => {
             setOpen(true);
             setSearch('');
@@ -257,7 +257,7 @@ export default function CommandPalette() {
           >
             {/* Search Input */}
             <div className="flex items-center gap-3 px-4 py-4 border-b border-surgical-200">
-              <Search className="w-5 h-5 text-obsidian/40" />
+              <Search className="w-5 h-5 text-barpel-slate/40" />
               <input
                 ref={inputRef}
                 type="text"
@@ -273,20 +273,20 @@ export default function CommandPalette() {
                 onClick={() => setOpen(false)}
                 className="p-1 rounded hover:bg-surgical-50 transition-colors"
               >
-                <X className="w-5 h-5 text-obsidian/40" />
+                <X className="w-5 h-5 text-barpel-slate/40" />
               </button>
             </div>
 
             {/* Commands List */}
             <div ref={listRef} className="overflow-y-auto flex-1">
               {groupedCommands.length === 0 ? (
-                <div className="px-4 py-8 text-center text-obsidian/60">
+                <div className="px-4 py-8 text-center text-barpel-slate/60">
                   No commands found
                 </div>
               ) : (
                 groupedCommands.map((group) => (
                   <div key={group.category}>
-                    <div className="px-4 py-2 text-xs font-semibold text-obsidian/60 uppercase tracking-wider bg-surgical-50 sticky top-0">
+                    <div className="px-4 py-2 text-xs font-semibold text-barpel-slate/60 uppercase tracking-wider bg-surgical-50 sticky top-0">
                       {group.category}
                     </div>
                     {group.commands.map((cmd, idx) => {
@@ -302,16 +302,16 @@ export default function CommandPalette() {
                               : 'hover:bg-surgical-50'
                           }`}
                         >
-                          <div className="text-obsidian/60">
+                          <div className="text-barpel-slate/60">
                             {cmd.icon}
                           </div>
                           <div className="flex-1">
-                            <div className="text-sm font-medium text-obsidian">
+                            <div className="text-sm font-medium text-barpel-slate">
                               {cmd.title}
                             </div>
                           </div>
                           {cmd.shortcut && (
-                            <span className="text-xs text-obsidian/40 bg-surgical-50 px-2 py-1 rounded">
+                            <span className="text-xs text-barpel-slate/40 bg-surgical-50 px-2 py-1 rounded">
                               {cmd.shortcut}
                             </span>
                           )}
@@ -324,7 +324,7 @@ export default function CommandPalette() {
             </div>
 
             {/* Footer Help */}
-            <div className="px-4 py-3 border-t border-surgical-200 flex justify-between text-xs text-obsidian/60">
+            <div className="px-4 py-3 border-t border-surgical-200 flex justify-between text-xs text-barpel-slate/60">
               <div className="flex gap-4">
                 <span>↑↓ Navigate</span>
                 <span>⏎ Select</span>

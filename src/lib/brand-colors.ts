@@ -1,7 +1,7 @@
 /**
- * @fileoverview Voxanne AI Brand Colors Utility
+ * @fileoverview Barpel AI Brand Colors Utility
  *
- * Centralized color palette management for the Voxanne platform.
+ * Centralized color palette management for the Barpel platform.
  * All colors are sourced from the official brand guidelines (9.png).
  *
  * Usage:
@@ -22,7 +22,7 @@
  */
 
 /**
- * ✅ APPROVED Voxanne AI Clinical Trust Palette
+ * ✅ APPROVED Barpel AI Clinical Trust Palette
  *
  * Based on official approved color palette (Brand/9.png)
  * Updated: 2026-01-29

@@ -7,7 +7,7 @@ import { ToastContainer } from "@/components/ToastContainer";
 import DevSwCleanup from "@/components/DevSwCleanup";
 import { CookieConsentBanner } from "@/components/cookie-consent/CookieConsentBanner";
 import { GoogleAnalyticsLoader } from "@/components/GoogleAnalyticsLoader";
-import VoxanneChatWidget from "@/components/VoxanneChatWidget";
+
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -17,12 +17,12 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Voxanne AI | The #1 AI Receptionist for Clinics & Spas",
-  description: "Voxanne is the AI voice receptionist that answers, qualifies, and books appointments 24/7 for clinics and med spas.",
+  title: "Barpel AI | AI Receptionist for Your Business",
+  description: "Barpel AI handles your business calls 24/7 — qualifying leads, booking appointments, and routing conversations automatically.",
   keywords: [
     "AI receptionist",
-    "Voxanne AI",
-    "Voxanne",
+    "Barpel AI",
+    "Barpel",
     "medical answering service",
     "virtual receptionist",
     "clinic automation",
@@ -31,26 +31,26 @@ export const metadata: Metadata = {
     "appointment booking AI",
     "24/7 call answering"
   ],
-  authors: [{ name: "Voxanne AI" }],
-  creator: "Voxanne AI",
+  authors: [{ name: "Barpel AI" }],
+  creator: "Barpel AI",
   category: 'Medical Technology',
-  metadataBase: new URL('https://voxanne.ai'),
+  metadataBase: new URL('https://barpel.ai'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: "Voxanne AI | The #1 AI Receptionist for Clinics",
+    title: "Barpel AI | The #1 AI Receptionist for Clinics",
     description: "Replace your missed calls with revenue. The AI receptionist that books appointments for you.",
-    url: 'https://voxanne.ai',
-    siteName: 'Voxanne AI',
+    url: 'https://barpel.ai',
+    siteName: 'Barpel AI',
     locale: 'en_US',
     type: 'website',
     // OG image auto-generated from /src/app/opengraph-image.tsx
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Voxanne AI | The #1 AI Receptionist for Clinics",
-    description: "Don't let missed calls cost you money. Switch to Voxanne AI.",
+    title: "Barpel AI | The #1 AI Receptionist for Clinics",
+    description: "Don't let missed calls cost you money. Switch to Barpel AI.",
     // Twitter image auto-generated from /src/app/opengraph-image.tsx
   },
   robots: {
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
     'mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'black-translucent',
-    'apple-mobile-web-app-title': 'Voxanne',
+    'apple-mobile-web-app-title': 'Barpel',
   },
 };
 
@@ -103,7 +103,6 @@ export default function RootLayout({
           {children}
           <ToastContainer />
           <CookieConsentBanner />
-          <VoxanneChatWidget />
         </AuthProvider>
       </body>
     </html>

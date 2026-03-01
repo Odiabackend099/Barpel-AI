@@ -22,7 +22,7 @@ export default function HIPAACompliancePage() {
                         </div>
                     </div>
                     <p className="text-surgical-50 text-lg leading-relaxed">
-                        Voxanne AI is designed from the ground up to meet HIPAA (Health Insurance Portability and Accountability Act)
+                        Barpel AI is designed from the ground up to meet HIPAA (Health Insurance Portability and Accountability Act)
                         requirements, ensuring your patient data is protected with industry-leading security measures.
                     </p>
                 </div>
@@ -87,7 +87,7 @@ export default function HIPAACompliancePage() {
 
                             <h3 className="text-2xl font-semibold text-slate-800 mt-8 mb-4">Our Commitment to HIPAA Compliance</h3>
                             <p className="text-slate-700 leading-relaxed">
-                                Voxanne AI is committed to full HIPAA compliance. We understand the critical importance of protecting
+                                Barpel AI is committed to full HIPAA compliance. We understand the critical importance of protecting
                                 patient health information and have implemented comprehensive security measures across our entire platform.
                                 We work exclusively with HIPAA-compliant infrastructure providers and are prepared to sign Business Associate
                                 Agreements with all covered entities and healthcare providers.
@@ -100,7 +100,7 @@ export default function HIPAACompliancePage() {
                                         <p className="font-semibold text-slate-900 mb-2">Enterprise BAA Available</p>
                                         <p className="text-slate-700 text-sm">
                                             Business Associate Agreements are available for all enterprise customers. Contact our sales team
-                                            at <a href="mailto:sales@voxanne.ai" className="text-surgical-600 hover:underline">sales@voxanne.ai</a> to
+                                            at <a href="mailto:sales@barpel.ai" className="text-surgical-600 hover:underline">sales@barpel.ai</a> to
                                             request a BAA.
                                         </p>
                                     </div>
@@ -168,9 +168,9 @@ export default function HIPAACompliancePage() {
                                 </div>
                             </div>
 
-                            <h3 className="text-2xl font-semibold text-slate-800 mt-8 mb-4">How Voxanne AI Handles PHI</h3>
+                            <h3 className="text-2xl font-semibold text-slate-800 mt-8 mb-4">How Barpel AI Handles PHI</h3>
                             <p className="text-slate-700 leading-relaxed mb-4">
-                                Voxanne AI processes and stores the following types of PHI on behalf of healthcare providers:
+                                Barpel AI processes and stores the following types of PHI on behalf of healthcare providers:
                             </p>
                             <ul className="space-y-3 text-slate-700">
                                 <li>
@@ -198,7 +198,7 @@ export default function HIPAACompliancePage() {
                                     <div>
                                         <p className="font-semibold text-slate-900 mb-2">Important: PHI Redaction</p>
                                         <p className="text-slate-700 text-sm">
-                                            Voxanne AI automatically redacts certain types of PHI (such as Social Security numbers, credit card
+                                            Barpel AI automatically redacts certain types of PHI (such as Social Security numbers, credit card
                                             numbers, and explicit diagnoses) from stored transcripts to minimize risk. However, you should
                                             configure your AI agent to avoid asking for highly sensitive information unless necessary.
                                         </p>
@@ -216,7 +216,7 @@ export default function HIPAACompliancePage() {
 
                             <p className="text-slate-700 leading-relaxed mb-6">
                                 HIPAA requires covered entities and business associates to implement administrative, physical, and technical
-                                safeguards to protect PHI. Voxanne AI adheres to all three categories of safeguards:
+                                safeguards to protect PHI. Barpel AI adheres to all three categories of safeguards:
                             </p>
 
                             <h3 className="text-2xl font-semibold text-slate-800 mt-8 mb-4">Administrative Safeguards</h3>
@@ -266,7 +266,7 @@ export default function HIPAACompliancePage() {
                             </div>
 
                             <p className="text-slate-700 leading-relaxed mb-6">
-                                Encryption is one of the most critical technical safeguards for protecting PHI. Voxanne AI uses
+                                Encryption is one of the most critical technical safeguards for protecting PHI. Barpel AI uses
                                 industry-leading encryption standards to protect data both at rest and in transit.
                             </p>
 
@@ -335,7 +335,7 @@ export default function HIPAACompliancePage() {
 
                             <p className="text-slate-700 leading-relaxed mb-6">
                                 Access controls ensure that only authorized individuals can access PHI, and only to the extent necessary
-                                for their job functions. Voxanne AI implements multiple layers of access control:
+                                for their job functions. Barpel AI implements multiple layers of access control:
                             </p>
 
                             <h3 className="text-2xl font-semibold text-slate-800 mt-8 mb-4">Role-Based Access Control (RBAC)</h3>
@@ -432,7 +432,7 @@ export default function HIPAACompliancePage() {
                             <h3 className="text-2xl font-semibold text-slate-800 mt-8 mb-4">What is a Business Associate Agreement?</h3>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 A Business Associate Agreement (BAA) is a written contract required by HIPAA between a covered entity
-                                (healthcare provider) and a business associate (service provider like Voxanne AI) that creates, receives,
+                                (healthcare provider) and a business associate (service provider like Barpel AI) that creates, receives,
                                 maintains, or transmits PHI on behalf of the covered entity.
                             </p>
 
@@ -451,7 +451,7 @@ export default function HIPAACompliancePage() {
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 A BAA is required whenever a business associate will create, receive, maintain, or transmit PHI on behalf
                                 of a covered entity. If you are a healthcare provider (doctor, dentist, chiropractor, therapist, etc.)
-                                using Voxanne AI to handle patient calls and appointments, <strong>you must have a signed BAA with us</strong>.
+                                using Barpel AI to handle patient calls and appointments, <strong>you must have a signed BAA with us</strong>.
                             </p>
 
                             <h3 className="text-2xl font-semibold text-slate-800 mt-8 mb-4">How to Request a BAA</h3>
@@ -461,7 +461,7 @@ export default function HIPAACompliancePage() {
                                     To request a BAA:
                                 </p>
                                 <ol className="space-y-2 text-slate-700 list-decimal list-inside">
-                                    <li>Contact our sales team at <a href="mailto:sales@voxanne.ai" className="text-surgical-600 hover:underline font-semibold">sales@voxanne.ai</a></li>
+                                    <li>Contact our sales team at <a href="mailto:sales@barpel.ai" className="text-surgical-600 hover:underline font-semibold">sales@barpel.ai</a></li>
                                     <li>Provide your practice name, contact information, and intended use case</li>
                                     <li>Review our standard BAA template (we can accommodate reasonable modifications)</li>
                                     <li>Sign electronically via DocuSign or wet signature</li>
@@ -472,7 +472,7 @@ export default function HIPAACompliancePage() {
                             <h3 className="text-2xl font-semibold text-slate-800 mt-8 mb-4">Our BAA with Infrastructure Providers</h3>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 As a business associate, we are also required to have BAAs with our subcontractors that handle PHI.
-                                Voxanne AI has signed BAAs with the following infrastructure providers:
+                                Barpel AI has signed BAAs with the following infrastructure providers:
                             </p>
                             <ul className="space-y-2 text-slate-700">
                                 <li><strong>Supabase:</strong> Database and authentication provider (SOC 2 Type II certified, HIPAA-compliant infrastructure)</li>
@@ -488,7 +488,7 @@ export default function HIPAACompliancePage() {
                                         <p className="font-semibold text-slate-900 mb-2">Important: Wallet Funding Requirement</p>
                                         <p className="text-slate-700 text-sm">
                                             BAAs require an active, funded account. If you are a healthcare provider subject to HIPAA,
-                                            ensure your wallet is funded before processing PHI. Contact sales@voxanne.ai to discuss
+                                            ensure your wallet is funded before processing PHI. Contact sales@barpel.ai to discuss
                                             BAA execution and compliance requirements.
                                         </p>
                                     </div>
@@ -578,13 +578,13 @@ export default function HIPAACompliancePage() {
                             <h3 className="text-2xl font-semibold text-slate-800 mt-8 mb-4">Contact Us for Security Incidents</h3>
                             <div className="bg-red-50 border border-red-200 p-6 rounded-lg mb-6">
                                 <p className="text-slate-700 leading-relaxed mb-4">
-                                    If you suspect a security incident or breach involving Voxanne AI, please contact us immediately:
+                                    If you suspect a security incident or breach involving Barpel AI, please contact us immediately:
                                 </p>
                                 <div className="flex flex-col gap-2 text-sm">
                                     <div className="flex items-center gap-2">
                                         <Mail className="h-4 w-4 text-red-600" />
                                         <span className="font-semibold">Email:</span>
-                                        <a href="mailto:security@voxanne.ai" className="text-surgical-600 hover:underline">security@voxanne.ai</a>
+                                        <a href="mailto:security@barpel.ai" className="text-surgical-600 hover:underline">security@barpel.ai</a>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Phone className="h-4 w-4 text-red-600" />
@@ -620,7 +620,7 @@ export default function HIPAACompliancePage() {
                                     </p>
                                     <p className="text-sm text-slate-600">
                                         <strong>Note:</strong> Patients should make access requests directly to their healthcare provider,
-                                        not to Voxanne AI. The covered entity is responsible for fulfilling access requests.
+                                        not to Barpel AI. The covered entity is responsible for fulfilling access requests.
                                     </p>
                                 </div>
 
@@ -675,7 +675,7 @@ export default function HIPAACompliancePage() {
                             </div>
 
                             <p className="text-slate-700 leading-relaxed mb-6">
-                                Voxanne AI and our infrastructure providers maintain industry-leading security certifications:
+                                Barpel AI and our infrastructure providers maintain industry-leading security certifications:
                             </p>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -686,7 +686,7 @@ export default function HIPAACompliancePage() {
                                         effective controls for security, availability, processing integrity, confidentiality, and privacy.
                                     </p>
                                     <p className="text-xs text-slate-600">
-                                        Voxanne AI is currently undergoing SOC 2 Type II audit (expected completion: Q2 2026).
+                                        Barpel AI is currently undergoing SOC 2 Type II audit (expected completion: Q2 2026).
                                     </p>
                                 </div>
 
@@ -694,7 +694,7 @@ export default function HIPAACompliancePage() {
                                     <h3 className="text-lg font-semibold text-slate-900 mb-3">HIPAA Compliance</h3>
                                     <p className="text-sm text-slate-700 mb-3">
                                         All infrastructure providers have signed BAAs and maintain HIPAA-compliant infrastructure.
-                                        Voxanne AI adheres to all HIPAA Security Rule and Privacy Rule requirements.
+                                        Barpel AI adheres to all HIPAA Security Rule and Privacy Rule requirements.
                                     </p>
                                     <p className="text-xs text-slate-600">
                                         Annual security assessments conducted to verify ongoing compliance.
@@ -747,8 +747,8 @@ export default function HIPAACompliancePage() {
                                     <div className="space-y-2 text-sm text-slate-700">
                                         <div className="flex items-center gap-2">
                                             <Mail className="h-4 w-4 text-surgical-600" />
-                                            <a href="mailto:security@voxanne.ai" className="text-surgical-600 hover:underline">
-                                                security@voxanne.ai
+                                            <a href="mailto:security@barpel.ai" className="text-surgical-600 hover:underline">
+                                                security@barpel.ai
                                             </a>
                                         </div>
                                         <p className="text-xs text-slate-600">
@@ -762,8 +762,8 @@ export default function HIPAACompliancePage() {
                                     <div className="space-y-2 text-sm text-slate-700">
                                         <div className="flex items-center gap-2">
                                             <Mail className="h-4 w-4 text-surgical-600" />
-                                            <a href="mailto:privacy@voxanne.ai" className="text-surgical-600 hover:underline">
-                                                privacy@voxanne.ai
+                                            <a href="mailto:privacy@barpel.ai" className="text-surgical-600 hover:underline">
+                                                privacy@barpel.ai
                                             </a>
                                         </div>
                                         <p className="text-xs text-slate-600">
@@ -777,8 +777,8 @@ export default function HIPAACompliancePage() {
                                     <div className="space-y-2 text-sm text-slate-700">
                                         <div className="flex items-center gap-2">
                                             <Mail className="h-4 w-4 text-surgical-600" />
-                                            <a href="mailto:sales@voxanne.ai" className="text-surgical-600 hover:underline">
-                                                sales@voxanne.ai
+                                            <a href="mailto:sales@barpel.ai" className="text-surgical-600 hover:underline">
+                                                sales@barpel.ai
                                             </a>
                                         </div>
                                         <p className="text-xs text-slate-600">
@@ -792,8 +792,8 @@ export default function HIPAACompliancePage() {
                                     <div className="space-y-2 text-sm text-slate-700">
                                         <div className="flex items-center gap-2">
                                             <Mail className="h-4 w-4 text-surgical-600" />
-                                            <a href="mailto:support@voxanne.ai" className="text-surgical-600 hover:underline">
-                                                support@voxanne.ai
+                                            <a href="mailto:support@barpel.ai" className="text-surgical-600 hover:underline">
+                                                support@barpel.ai
                                             </a>
                                         </div>
                                         <p className="text-xs text-slate-600">
@@ -806,7 +806,7 @@ export default function HIPAACompliancePage() {
                             <div className="mt-8 p-6 bg-slate-50 border border-slate-200 rounded-lg">
                                 <h3 className="text-lg font-semibold text-slate-900 mb-3">Mailing Address</h3>
                                 <p className="text-slate-700 text-sm">
-                                    <strong>Voxanne AI</strong><br />
+                                    <strong>Barpel AI</strong><br />
                                     A product of Call Waiting AI Ltd.<br />
                                     Collage House, 2nd Floor<br />
                                     17 King Edward Road<br />
@@ -820,7 +820,7 @@ export default function HIPAACompliancePage() {
                         <div className="bg-gradient-to-br from-surgical-600 to-surgical-800 text-white p-8 rounded-xl shadow-lg mt-12">
                             <h3 className="text-2xl font-bold mb-4">Ready to Get Started?</h3>
                             <p className="text-surgical-50 mb-6">
-                                Join hundreds of healthcare providers using Voxanne AI to automate patient communications while
+                                Join hundreds of healthcare providers using Barpel AI to automate patient communications while
                                 maintaining HIPAA compliance.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4">

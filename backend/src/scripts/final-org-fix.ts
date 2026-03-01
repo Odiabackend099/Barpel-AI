@@ -3,7 +3,7 @@
  *
  * This script completes the organization security fix by:
  * 1. Creating test organization if missing
- * 2. Creating voxanne@demo.com profile linked to test org
+ * 2. Creating barpel@demo.com profile linked to test org
  * 3. Linking all orphaned profiles to organizations
  * 4. Verifying the fix
  *
@@ -52,9 +52,9 @@ async function finalOrgFix() {
         .from('organizations')
         .insert({
           id: testOrgId,
-          name: 'Test Organization (voxanne@demo.com)',
+          name: 'Test Organization (barpel@demo.com)',
           status: 'active',
-          email: 'voxanne@demo.com'  // Set email to satisfy NOT NULL constraint
+          email: 'barpel@demo.com'  // Set email to satisfy NOT NULL constraint
         })
         .select()
         .single();
@@ -69,45 +69,45 @@ async function finalOrgFix() {
     }
 
     // ====================================================================
-    // STEP 2: Ensure voxanne@demo.com profile exists
+    // STEP 2: Ensure barpel@demo.com profile exists
     // ====================================================================
-    console.log('\nSTEP 2: Ensuring voxanne@demo.com profile exists...');
+    console.log('\nSTEP 2: Ensuring barpel@demo.com profile exists...');
 
-    let voxanneProfile: any = null;
+    let barpelProfile: any = null;
 
     try {
       const result = await supabase
         .from('profiles')
         .select('*')
-        .eq('email', 'voxanne@demo.com')
+        .eq('email', 'barpel@demo.com')
         .single();
-      voxanneProfile = result.data;
+      barpelProfile = result.data;
     } catch (err) {
       // Doesn't exist, will create
     }
 
-    if (!voxanneProfile) {
-      console.log('  Creating voxanne@demo.com profile...');
+    if (!barpelProfile) {
+      console.log('  Creating barpel@demo.com profile...');
 
       // First, check if auth user exists
-      let voxanneAuthUser: any = null;
+      let barpelAuthUser: any = null;
       try {
         // Try to get user from auth table via admin API
         const { data: users, error } = await supabase.auth.admin.listUsers();
         if (!error && users) {
-          voxanneAuthUser = users.users.find(u => u.email === 'voxanne@demo.com');
+          barpelAuthUser = users.users.find(u => u.email === 'barpel@demo.com');
         }
       } catch (err) {
         console.log('  Note: Could not check auth users');
       }
 
-      if (voxanneAuthUser) {
+      if (barpelAuthUser) {
         // Create profile for existing auth user
         const { data: newProfile, error } = await supabase
           .from('profiles')
           .insert({
-            id: voxanneAuthUser.id,
-            email: 'voxanne@demo.com',
+            id: barpelAuthUser.id,
+            email: 'barpel@demo.com',
             org_id: testOrgId,
             role: 'owner'
           })
@@ -117,25 +117,25 @@ async function finalOrgFix() {
         if (error && error.code !== 'PGRST103') { // 23505 is duplicate
           console.log(`  ❌ Error: ${error.message}`);
         } else {
-          console.log(`  ✅ Created profile for voxanne@demo.com`);
+          console.log(`  ✅ Created profile for barpel@demo.com`);
         }
       } else {
-        console.log('  ⚠️  voxanne@demo.com not found in auth users');
+        console.log('  ⚠️  barpel@demo.com not found in auth users');
         console.log('     Note: Ensure user is created in Supabase Auth first');
       }
     } else {
-      console.log(`  ✅ voxanne@demo.com profile exists`);
-      if (!voxanneProfile.org_id || voxanneProfile.org_id === testOrgId) {
+      console.log(`  ✅ barpel@demo.com profile exists`);
+      if (!barpelProfile.org_id || barpelProfile.org_id === testOrgId) {
         // Update org_id if missing or different
         const { error } = await supabase
           .from('profiles')
           .update({ org_id: testOrgId })
-          .eq('email', 'voxanne@demo.com');
+          .eq('email', 'barpel@demo.com');
 
         if (error) {
           console.log(`  ❌ Error updating org_id: ${error.message}`);
         } else {
-          console.log(`  ✅ Updated org_id for voxanne@demo.com`);
+          console.log(`  ✅ Updated org_id for barpel@demo.com`);
         }
       }
     }
@@ -208,20 +208,20 @@ async function finalOrgFix() {
       console.log(`  ❌ Test organization not found`);
     }
 
-    // Check voxanne profile
+    // Check barpel profile
     try {
       const result = await supabase
         .from('profiles')
         .select('*')
-        .eq('email', 'voxanne@demo.com')
+        .eq('email', 'barpel@demo.com')
         .single();
       if (result.data) {
         console.log(
-          `  ✅ voxanne@demo.com profile linked to: ${result.data.org_id}`
+          `  ✅ barpel@demo.com profile linked to: ${result.data.org_id}`
         );
       }
     } catch (err) {
-      console.log(`  ⚠️  voxanne@demo.com profile not found or error`);
+      console.log(`  ⚠️  barpel@demo.com profile not found or error`);
     }
 
     // Count remaining orphaned
@@ -249,7 +249,7 @@ async function finalOrgFix() {
     console.log('  ');
     console.log('  Go to Supabase Dashboard:');
     console.log('  1. Authentication → Users');
-    console.log('  2. Find voxanne@demo.com');
+    console.log('  2. Find barpel@demo.com');
     console.log('  3. Click to edit User');
     console.log('  4. Scroll to "App metadata"');
     console.log('  5. Add or update this JSON:');
@@ -268,15 +268,15 @@ async function finalOrgFix() {
 
     console.log('✅ DATABASE CHANGES:');
     console.log('   - Test organization created/verified');
-    console.log('   - voxanne@demo.com profile created/verified');
+    console.log('   - barpel@demo.com profile created/verified');
     console.log('   - Orphaned profiles linked to organizations');
     console.log('');
 
     console.log('⚠️  REQUIRED MANUAL STEPS:');
-    console.log('   1. Update voxanne@demo.com JWT app_metadata (see above)');
+    console.log('   1. Update barpel@demo.com JWT app_metadata (see above)');
     console.log('   2. Clear browser cache: localStorage.clear()');
     console.log('   3. Sign out completely');
-    console.log('   4. Sign back in with voxanne@demo.com / demo123');
+    console.log('   4. Sign back in with barpel@demo.com / demo123');
     console.log('');
 
     console.log('✅ SECURITY MEASURES IN PLACE:');

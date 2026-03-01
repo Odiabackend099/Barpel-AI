@@ -72,7 +72,7 @@ async function test2_createTestOrg(): Promise<{ result: TestResult; orgId?: stri
       .from('organizations')
       .insert({
         name: `Test Org Debt Limit ${timestamp}`,
-        email: `test-debt-limit-${timestamp}@voxanne.test`,
+        email: `test-debt-limit-${timestamp}@barpel.test`,
         plan: 'prepaid',
         wallet_balance_pence: 100, // £0.10 balance
         debt_limit_pence: 500, // $5.00 debt limit

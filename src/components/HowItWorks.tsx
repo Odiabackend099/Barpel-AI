@@ -27,7 +27,7 @@ export default function HowItWorks() {
         {
             number: "02",
             title: "AI Receptionist Answers",
-            description: "Voxanne answers professionally and qualifies the lead",
+            description: "Barpel answers professionally and qualifies the lead",
             icon: Bot,
             animation: "AI engages caller, asks qualifying questions, gathers info",
             details: ["Asks about services", "Qualifies lead value", "Gathers contact info"]
@@ -69,11 +69,11 @@ export default function HowItWorks() {
                         </div>
 
                         <h2 className="text-4xl md:text-6xl font-bold text-obsidian mb-6 font-display tracking-tight">
-                            How Voxanne Works
+                            How Barpel Works
                         </h2>
 
                         <p className="text-obsidian/70 max-w-2xl mx-auto text-lg font-body">
-                            From call to booked appointment in seconds. Watch how Voxanne captures every lead.
+                            From call to booked appointment in seconds. Watch how Barpel captures every lead.
                         </p>
                     </FadeIn>
                 </div>

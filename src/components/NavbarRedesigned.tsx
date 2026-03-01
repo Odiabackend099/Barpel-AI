@@ -36,10 +36,10 @@ export default function NavbarRedesigned() {
             <div className="section-container flex items-center justify-between">
                 {/* ✅ UPDATED: Use icon-only logo variant (Netflix-style) - Brand/3.png */}
                 <Logo
-                    variant="icon-blue"
-                    size="xl"
-                    href="/"
-                    priority
+                    variant="dark"
+                    width={120} height={32}
+                    
+                    
                     showText={true}
                     className="transition-opacity hover:opacity-80"
                 />

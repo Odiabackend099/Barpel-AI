@@ -9,7 +9,7 @@ const ALLOWED_PATTERNS = [
   "127.0.0.1",
   "render.com",
   "internal",
-  "voxanne-dashboard",
+  "barpel-dashboard",
 ];
 
 /**

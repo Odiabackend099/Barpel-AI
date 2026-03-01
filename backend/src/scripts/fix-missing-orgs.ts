@@ -192,7 +192,7 @@ CREATE TRIGGER on_auth_user_created
     console.log('\n========================================');
     console.log('✅ FIX COMPLETE\n');
     console.log('NEXT STEPS:');
-    console.log('1. Sign in with your test account (voxanne@demo.com)');
+    console.log('1. Sign in with your test account (barpel@demo.com)');
     console.log('2. The org_id will be added to JWT on next auth refresh');
     console.log('3. Dashboard will validate org and redirect appropriately');
     console.log('\nIf still seeing 404:');

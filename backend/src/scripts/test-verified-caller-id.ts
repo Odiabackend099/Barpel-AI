@@ -24,7 +24,7 @@ dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const BACKEND_URL = 'http://localhost:3001'; // Force localhost for testing
 const TEST_PHONE = '+2348141995397'; // Nigerian number
-const ORG_ID = '46cf2995-2bee-44e3-838b-24151486fe4e'; // Voxanne Demo Clinic
+const ORG_ID = '46cf2995-2bee-44e3-838b-24151486fe4e'; // Barpel Demo Clinic
 
 const supabase = createClient(
   process.env.SUPABASE_URL || 'https://lbjymlodxprzqgtyqtcq.supabase.co',
@@ -33,7 +33,7 @@ const supabase = createClient(
 
 async function getTestUserToken(): Promise<string> {
   // Get or create test user
-  const testEmail = 'test@voxanne.ai';
+  const testEmail = 'test@barpel.ai';
 
   // Try to sign in
   const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({

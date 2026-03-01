@@ -48,7 +48,7 @@ export default function TranscriptView({ currentTime, script }: TranscriptViewPr
                         >
                             <div className={`text-xs font-bold mb-1 uppercase tracking-wider ${line.speaker_id === 'ai_lisa' ? 'text-blue-400' : 'text-purple-400'
                                 }`}>
-                                {line.speaker_id === 'ai_lisa' ? 'Voxanne AI' : 'Anna (Caller)'}
+                                {line.speaker_id === 'ai_lisa' ? 'Barpel AI' : 'Anna (Caller)'}
                             </div>
                             <p className={`text-lg leading-relaxed ${isActive ? 'text-white font-medium' : 'text-gray-300'}`}>
                                 {line.text}

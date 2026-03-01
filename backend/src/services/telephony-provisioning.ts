@@ -192,7 +192,7 @@ export class TelephonyProvisioningService {
       });
 
       // Step 4: Purchase the number with webhook configuration
-      const backendUrl = process.env.BACKEND_URL || 'https://api.voxanne.ai';
+      const backendUrl = process.env.BACKEND_URL || 'https://api.barpel.ai';
       const webhookUrl = `${backendUrl}/api/vapi/webhook`;
 
       const purchaseResult = await safeCall<any>(
@@ -201,7 +201,7 @@ export class TelephonyProvisioningService {
             phoneNumber: selectedNumber,
             voiceUrl: webhookUrl,
             voiceMethod: 'POST',
-            friendlyName: `Voxanne AI - Org ${orgId.substring(0, 8)}`,
+            friendlyName: `Barpel AI - Org ${orgId.substring(0, 8)}`,
             smsUrl: `${backendUrl}/api/webhooks/sms`,
             smsMethod: 'POST',
           }),

@@ -19,7 +19,7 @@ if (!supabaseUrl || !supabaseServiceKey) {
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-const TARGET_EMAIL = 'callwaitingai@gmail.com';
+const TARGET_EMAIL = 'hello@barpel.ai';
 
 async function main() {
     console.log(`\n🚨 STARTING TENANT RESET FOR: ${TARGET_EMAIL} 🚨`);
@@ -89,7 +89,7 @@ async function main() {
 
         if (!orgId) {
             console.warn('WARNING: No organization found via membership/ownership.');
-            console.warn('Assuming fallback to Default CallWaiting AI Org: a0000000-0000-0000-0000-000000000001');
+            console.warn('Assuming fallback to Default Barpel AI Org: a0000000-0000-0000-0000-000000000001');
             orgId = 'a0000000-0000-0000-0000-000000000001';
         }
 

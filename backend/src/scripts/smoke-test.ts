@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Smoke Test Suite - Voxanne AI
+ * Smoke Test Suite - Barpel AI
  *
  * Verifies core application functionality without crashing.
  * Tests: health checks, authentication, API endpoints, error handling.
@@ -48,7 +48,7 @@ async function runTests() {
   const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001';
   const AUTH_TOKEN = process.env.TEST_AUTH_TOKEN;
 
-  log(colors.blue, '━━━ VOXANNE AI SMOKE TEST ━━━');
+  log(colors.blue, '━━━ BARPEL AI SMOKE TEST ━━━');
   console.log(`Backend: ${BACKEND_URL}`);
   console.log(`Auth token: ${AUTH_TOKEN ? '✓ present' : '⚠ missing (some tests skipped)'}`);
   console.log('');

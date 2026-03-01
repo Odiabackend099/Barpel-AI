@@ -4,7 +4,7 @@ import { ImageResponse } from 'next/og'
 export const runtime = 'edge'
 
 // Image metadata
-export const alt = 'Voxanne AI - The #1 AI Receptionist for Clinics & Spas'
+export const alt = 'Barpel AI - The #1 AI Receptionist for Clinics & Spas'
 export const size = {
   width: 1200,
   height: 630,
@@ -14,8 +14,8 @@ export const contentType = 'image/png'
 
 // Image generation
 export default async function Image() {
-  // Fetch the Voxanne logo (required for Edge Runtime)
-  const logoUrl = new URL('/Brand/1.png', 'https://voxanne.ai').toString()
+  // Fetch the Barpel logo (required for Edge Runtime)
+  const logoUrl = new URL('/Brand/1.png', 'https://barpel.ai').toString()
   const logoResponse = await fetch(logoUrl)
   const logoArrayBuffer = await logoResponse.arrayBuffer()
   const logoBase64 = Buffer.from(logoArrayBuffer).toString('base64')
@@ -63,7 +63,7 @@ export default async function Image() {
             zIndex: 1,
           }}
         >
-          {/* Voxanne Logo - Actual brand logo */}
+          {/* Barpel Logo - Actual brand logo */}
           <div
             style={{
               display: 'flex',
@@ -78,7 +78,7 @@ export default async function Image() {
           >
             <img
               src={logoDataUrl}
-              alt="Voxanne AI"
+              alt="Barpel AI"
               width="400"
               height="100"
               style={{

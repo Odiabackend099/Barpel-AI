@@ -5,12 +5,12 @@
  * This function is for reference only - DO NOT rely on automatic webhook creation
  *
  * PRODUCTION CONFIGURATION (2026-02-16):
- * - Frontend: Vercel at voxanne.ai
- * - Backend: Render at voxanneai.onrender.com
- * - Stripe Webhook URL: https://voxanneai.onrender.com/api/webhooks/stripe
+ * - Frontend: Vercel at barpel.ai
+ * - Backend: Render at barpel.onrender.com
+ * - Stripe Webhook URL: https://barpel.onrender.com/api/webhooks/stripe
  * - Webhook Secret: Stored in Render environment variable STRIPE_WEBHOOK_SECRET
  *
- * IMPORTANT: DO NOT use api.voxanne.ai - this domain does not exist!
+ * IMPORTANT: DO NOT use api.barpel.ai - this domain does not exist!
  */
 
 export function getWebhookUrlForEnvironment(): string {
@@ -24,14 +24,14 @@ export function getWebhookUrlForEnvironment(): string {
 
   // Staging environment
   if (nodeEnv === 'staging') {
-    const stagingDomain = process.env.STAGING_DOMAIN || 'staging-api.voxanne.ai';
+    const stagingDomain = process.env.STAGING_DOMAIN || 'staging-api.barpel.ai';
     return `https://${stagingDomain}/api/webhooks/stripe`;
   }
 
   // Production environment
   // CRITICAL: Updated 2026-02-16 to correct production URL
-  // Old incorrect default was: 'api.voxanne.ai' (domain doesn't exist)
-  const productionDomain = process.env.PRODUCTION_DOMAIN || 'voxanneai.onrender.com';
+  // Old incorrect default was: 'api.barpel.ai' (domain doesn't exist)
+  const productionDomain = process.env.PRODUCTION_DOMAIN || 'barpel.onrender.com';
   return `https://${productionDomain}/api/webhooks/stripe`;
 }
 

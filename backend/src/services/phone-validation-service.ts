@@ -3,7 +3,7 @@
  * Enforces per-direction number limits for managed telephony.
  *
  * Rule: Each organization may have at most ONE inbound and ONE outbound
- * managed (Voxanne-provisioned) number. BYOC numbers are only checked
+ * managed (Barpel-provisioned) number. BYOC numbers are only checked
  * against the inbound direction (BYOC inbound + managed outbound is allowed).
  *
  * Error policy: checkDirectionStatus is fail-open — on DB error it returns
@@ -101,7 +101,7 @@ export class PhoneValidationService {
           phoneNumberType: phoneType,
           phoneNumber: twilioCreds.phoneNumber,
           details: credential.is_managed
-            ? 'Active managed number (Voxanne-provisioned)'
+            ? 'Active managed number (Barpel-provisioned)'
             : 'BYOC Twilio account connected',
         };
       } catch (decryptError: any) {

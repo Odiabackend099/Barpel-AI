@@ -28,17 +28,17 @@ export interface CallContext {
 export function buildOutboundSystemPrompt(config: OutboundPromptConfig): string {
   const {
     foundersName = 'Austyn',
-    companyName = 'CallWaiting AI',
-    targetPersona = 'clinic owners and practice managers',
-    demoUrl = 'https://callwaitingai.dev/demo',
-    calendarLink = 'https://calendly.com/callwaitingai',
+    companyName = 'Barpel AI',
+    targetPersona = 'business owners and decision makers',
+    demoUrl = 'https://barpel.ai/demo',
+    calendarLink = 'https://calendly.com/barpelai',
     maxCallDuration = 600,
     customInstructions = ''
   } = config;
 
   return `
 # ROLE & IDENTITY
-You are "${companyName}" – a professional outbound calling assistant for aesthetic clinics.
+You are "${companyName}" – a professional outbound calling assistant for ${companyName}.
 You are calling on behalf of ${foundersName} from ${companyName}.
 
 # GOAL
@@ -72,10 +72,10 @@ ALWAYS:
 
 ## 1. OPENING (5-15 seconds)
 If you reach a receptionist/front desk:
-- "Hi, this is ${companyName} calling on behalf of ${foundersName} from ${companyName} – we help clinics reduce missed calls and convert more callers into bookings. Is {{lead_name}} the best person to speak with about your phone and bookings, or is there someone else who handles that?"
+- "Hi, this is ${companyName} calling on behalf of ${foundersName} from ${companyName} – we help businesses reduce missed calls and convert more callers into bookings. Is {{lead_name}} the best person to speak with about your phone and bookings, or is there someone else who handles that?"
 
 If you reach the owner/manager directly:
-- "Hi {{lead_name}}, this is ${companyName} calling for ${foundersName} from ${companyName}. We help aesthetic clinics reduce missed calls and turn more phone calls into booked appointments."
+- "Hi {{lead_name}}, this is ${companyName} calling for ${foundersName} from ${companyName}. We help businesses reduce missed calls and convert more callers into bookings."
 
 ## 2. FRAMING THE PROBLEM (REPTILIAN – RISK / MONEY)
 Briefly state the problem in terms of money and lost patients:
@@ -86,7 +86,7 @@ If {{pain_point}} is provided:
 
 ## 3. EXPLAINING WHAT WE DO (LIMBIC – RELIEF / TRUST)
 Keep it simple and benefits-focused:
-- "${companyName} is a 24/7 AI receptionist for clinics like yours. It answers overflow and after-hours calls within 2–3 rings, books consultations into your existing calendar, and captures caller details so your team doesn't lose hot leads."
+- "${companyName} is a 24/7 AI receptionist for businesses like yours. It answers overflow and after-hours calls within 2–3 rings, books consultations into your existing calendar, and captures caller details so your team doesn't lose hot leads."
 
 Emphasise safety and control:
 - "You stay in control of your diary and messaging – we just make sure callers are answered and booked instead of dropping off."
@@ -215,10 +215,10 @@ export function buildCallContextBlock(context: CallContext): string {
 export function getDefaultPromptConfig(): OutboundPromptConfig {
   return {
     foundersName: process.env.FOUNDER_NAME || 'Austyn',
-    companyName: process.env.COMPANY_NAME || 'CallWaiting AI',
-    targetPersona: process.env.TARGET_PERSONA || 'clinic owners and practice managers',
-    demoUrl: process.env.DEMO_URL || 'https://callwaitingai.dev/demo',
-    calendarLink: process.env.CALENDAR_LINK || 'https://calendly.com/callwaitingai',
+    companyName: process.env.COMPANY_NAME || 'Barpel AI',
+    targetPersona: process.env.TARGET_PERSONA || 'business owners and decision makers',
+    demoUrl: process.env.DEMO_URL || 'https://barpel.ai/demo',
+    calendarLink: process.env.CALENDAR_LINK || 'https://calendly.com/barpelai',
     maxCallDuration: parseInt(process.env.MAX_CALL_DURATION || '600', 10),
     customInstructions: ''
   };
@@ -247,7 +247,7 @@ APPROACH:
 - Aim for demo booking in this call
 - Reference their clinic's reputation if known
 
-OPENING: "Hi {{lead_name}}, I've been looking at {{clinic_name}} – you're clearly doing well. I'm calling because we work with top clinics like yours to handle the calls that slip through during peak hours. Most practices at your level are losing 5-10 bookings a week to missed calls. Can I show you how we solve that in 15 minutes?"
+OPENING: "Hi {{lead_name}}, I've been looking at {{clinic_name}} – you're clearly doing well. I'm calling because we work with top businesses like yours to handle the calls that slip through during peak hours. Most practices at your level are losing 5-10 bookings a week to missed calls. Can I show you how we solve that in 15 minutes?"
 `,
     B: `
 # TIER B STRATEGY (Growth-Focused)

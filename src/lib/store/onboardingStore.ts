@@ -9,7 +9,7 @@ export interface OnboardingState {
   direction: 1 | -1;
 
   // User data
-  clinicName: string;
+  businessName: string;
   specialty: string | null;
   areaCode: string;
 
@@ -24,7 +24,7 @@ export interface OnboardingState {
   sessionId: string;
 
   // Actions
-  setClinicName: (name: string) => void;
+  setBusinessName: (name: string) => void;
   setSpecialty: (specialty: string) => void;
   setAreaCode: (code: string) => void;
   nextStep: () => void;
@@ -47,7 +47,7 @@ export const useOnboardingStore = create<OnboardingState>()(
     (set) => ({
       currentStep: 0,
       direction: 1 as 1 | -1,
-      clinicName: '',
+      businessName: '',
       specialty: null,
       areaCode: '',
       paymentComplete: false,
@@ -55,7 +55,7 @@ export const useOnboardingStore = create<OnboardingState>()(
       provisioningInProgress: false,
       sessionId: generateSessionId(),
 
-      setClinicName: (name) => set({ clinicName: name }),
+      setBusinessName: (name) => set({ businessName: name }),
       setSpecialty: (specialty) => set({ specialty }),
       setAreaCode: (code) => set({ areaCode: code.replace(/\D/g, '').slice(0, 3) }),
 
@@ -85,7 +85,7 @@ export const useOnboardingStore = create<OnboardingState>()(
         set({
           currentStep: 0,
           direction: 1,
-          clinicName: '',
+          businessName: '',
           specialty: null,
           areaCode: '',
           paymentComplete: false,
@@ -95,15 +95,15 @@ export const useOnboardingStore = create<OnboardingState>()(
         }),
     }),
     {
-      name: 'voxanne-onboarding',
+      name: 'barpel-onboarding',
       // sessionStorage clears when the browser tab closes — appropriate for a one-time wizard.
-      // This persists clinicName/specialty/areaCode across the Stripe redirect so step 4
-      // can personalise the Aha Moment screen with the correct clinic name.
+      // This persists businessName/specialty/areaCode across the Stripe redirect so step 4
+      // can personalise the Aha Moment screen with the correct business name.
       storage: createJSONStorage(() => sessionStorage),
       // Partialize excludes function references and provisioningInProgress (ephemeral UI state)
       partialize: (state) => ({
         currentStep: state.currentStep,
-        clinicName: state.clinicName,
+        businessName: state.businessName,
         specialty: state.specialty,
         areaCode: state.areaCode,
         paymentComplete: state.paymentComplete,

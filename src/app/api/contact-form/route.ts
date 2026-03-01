@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to process your submission. Please try again or email support@voxanne.ai directly.',
+        error: 'Failed to process your submission. Please try again or email support@barpel.ai directly.',
       },
       { status: 500 }
     );

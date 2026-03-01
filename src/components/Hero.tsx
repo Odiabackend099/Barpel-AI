@@ -82,7 +82,7 @@ export default function Hero() {
                             ) : (
                                 <>
                                     <Play className="mr-2 h-5 w-5 fill-current" />
-                                    Hear Voxanne in Action
+                                    Hear Barpel in Action
                                 </>
                             )}
                         </Button>

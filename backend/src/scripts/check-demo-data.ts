@@ -29,14 +29,14 @@ async function checkData() {
       console.log(JSON.stringify(allOrgs, null, 2));
     }
 
-    // Check if voxanne@demo.com profile exists
+    // Check if barpel@demo.com profile exists
     const { data: profile } = await supabase
       .from('profiles')
       .select('id, email, org_id')
-      .eq('email', 'voxanne@demo.com')
+      .eq('email', 'barpel@demo.com')
       .single();
 
-    console.log('\n=== Profile for voxanne@demo.com ===');
+    console.log('\n=== Profile for barpel@demo.com ===');
     console.log(JSON.stringify(profile, null, 2));
 
     if (profile?.org_id) {

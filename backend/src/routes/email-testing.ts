@@ -26,8 +26,8 @@ router.get('/config', (req: Request, res: Response) => {
   const config = {
     email_service: {
       resend_configured: !!process.env.RESEND_API_KEY,
-      from_email: process.env.FROM_EMAIL || 'noreply@voxanne.ai',
-      support_email: process.env.SUPPORT_EMAIL || 'support@voxanne.ai',
+      from_email: process.env.FROM_EMAIL || 'noreply@barpel.ai',
+      support_email: process.env.SUPPORT_EMAIL || 'support@barpel.ai',
     },
     environment: process.env.NODE_ENV,
     timestamp: new Date().toISOString(),
@@ -96,9 +96,9 @@ router.post('/send-test-email', async (req: Request, res: Response) => {
     log.info('EmailTesting', 'Sending test email', { to: recipient_email });
 
     const result = await resend.emails.send({
-      from: process.env.FROM_EMAIL || 'noreply@voxanne.ai',
+      from: process.env.FROM_EMAIL || 'noreply@barpel.ai',
       to: recipient_email,
-      subject: subject || '🧪 Test Email from Voxanne AI',
+      subject: subject || '🧪 Test Email from Barpel AI',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <h1 style="color: #3498db;">🧪 Email Testing</h1>
@@ -106,7 +106,7 @@ router.post('/send-test-email', async (req: Request, res: Response) => {
           
           <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0;">
             <p><strong>Sent at:</strong> ${new Date().toISOString()}</p>
-            <p><strong>From:</strong> ${process.env.FROM_EMAIL || 'noreply@voxanne.ai'}</p>
+            <p><strong>From:</strong> ${process.env.FROM_EMAIL || 'noreply@barpel.ai'}</p>
             <p><strong>To:</strong> ${recipient_email}</p>
           </div>
 
@@ -194,7 +194,7 @@ router.get('/verify-submission/:email', async (req: Request, res: Response) => {
         status: latestSubmission.status,
         emails_sent: {
           confirmation: `✅ Confirmation email sent to ${email}`,
-          support: `✅ Notification sent to ${process.env.SUPPORT_EMAIL || 'support@voxanne.ai'}`,
+          support: `✅ Notification sent to ${process.env.SUPPORT_EMAIL || 'support@barpel.ai'}`,
           slack: `✅ Slack alert sent (if configured)`,
         },
         next_steps: [
@@ -262,9 +262,9 @@ router.post('/resend-confirmation', async (req: Request, res: Response) => {
     log.info('EmailTesting', 'Resending confirmation email', { email });
 
     const result = await resend.emails.send({
-      from: 'Voxanne AI <noreply@voxanne.ai>',
+      from: 'Barpel AI <noreply@barpel.ai>',
       to: email,
-      subject: 'Thank you for your submission - Voxanne AI [RESENT]',
+      subject: 'Thank you for your submission - Barpel AI [RESENT]',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h1 style="color: #3498db;">Thank You for Your Submission!</h1>
@@ -286,12 +286,12 @@ router.post('/resend-confirmation', async (req: Request, res: Response) => {
           <hr style="border: 1px solid #eee; margin: 30px 0;">
 
           <p style="color: #7f8c8d; font-size: 14px;">
-            If you have any questions, reply to this email or contact us at ${process.env.SUPPORT_EMAIL || 'support@voxanne.ai'}
+            If you have any questions, reply to this email or contact us at ${process.env.SUPPORT_EMAIL || 'support@barpel.ai'}
           </p>
 
           <p style="color: #7f8c8d; font-size: 14px;">
             Best regards,<br>
-            The Voxanne AI Team
+            The Barpel AI Team
           </p>
         </div>
       `,

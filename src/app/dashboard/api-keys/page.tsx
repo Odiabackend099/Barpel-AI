@@ -321,17 +321,17 @@ export default function ApiKeysPage() {
     return (
         <div className="max-w-4xl mx-auto px-6 py-8">
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-obsidian mb-2">API Keys & Integrations</h1>
-                <p className="text-obsidian/60">Manage your Vapi and Twilio credentials securely.</p>
+                <h1 className="text-3xl font-bold text-barpel-slate mb-2">API Keys & Integrations</h1>
+                <p className="text-barpel-slate/60">Manage your Vapi and Twilio credentials securely.</p>
             </div>
 
             <div className="space-y-8">
 
                 {/* Calendar Integration */}
                 <div className="bg-white border border-surgical-200 rounded-2xl p-6">
-                    <h3 className="text-lg font-semibold text-obsidian mb-2">Calendar Integration</h3>
-                    <p className="text-sm text-obsidian/60 mb-6">
-                        Authorize Voxanne to manage your clinic&apos;s schedule.
+                    <h3 className="text-lg font-semibold text-barpel-slate mb-2">Calendar Integration</h3>
+                    <p className="text-sm text-barpel-slate/60 mb-6">
+                        Authorize Barpel to manage your clinic&apos;s schedule.
                     </p>
 
                     {/* Success Message */}
@@ -375,10 +375,10 @@ export default function ApiKeysPage() {
                                     }`} />
                             </div>
                             <div>
-                                <p className="text-sm font-medium text-obsidian">Google Calendar</p>
+                                <p className="text-sm font-medium text-barpel-slate">Google Calendar</p>
                                 <p className={`text-xs ${calendarStatus.connected
                                     ? 'text-surgical-600'
-                                    : 'text-obsidian/60'
+                                    : 'text-barpel-slate/60'
                                     }`}>
                                     {calendarStatus.connected
                                         ? (calendarStatus.email ? `Connected as ${calendarStatus.email}` : 'Connected')

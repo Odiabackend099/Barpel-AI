@@ -198,14 +198,14 @@ export default function CarrierForwardingInstructions({ managedNumber, savedConf
       {/* ── Step 1: Select Country ─────────────────────────────────────────── */}
       <div>
         <div className="flex items-center gap-2 mb-3">
-          <div className="w-6 h-6 rounded-full bg-surgical-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">
+          <div className="w-6 h-6 rounded-full bg-barpel-teal text-white flex items-center justify-center text-xs font-bold flex-shrink-0">
             1
           </div>
-          <label className="text-sm font-semibold text-obsidian">
+          <label className="text-sm font-semibold text-barpel-slate">
             Select Your Country
           </label>
         </div>
-        <p className="text-xs text-obsidian/60 mb-3 ml-8">
+        <p className="text-xs text-barpel-slate/60 mb-3 ml-8">
           Choose the country of the phone number you want to forward calls from.
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 ml-8">
@@ -217,13 +217,13 @@ export default function CarrierForwardingInstructions({ managedNumber, savedConf
                 onClick={() => handleCountrySelect(code)}
                 className={`flex items-center gap-2 px-4 py-3 rounded-xl border-2 text-left transition-all ${
                   selectedCountry === code
-                    ? 'border-surgical-600 bg-surgical-50 ring-1 ring-surgical-600'
+                    ? 'border-barpel-teal bg-surgical-50 ring-1 ring-surgical-600'
                     : 'border-surgical-200 bg-white hover:border-surgical-300'
                 }`}
               >
                 <span className="text-xl leading-none">{c.flag}</span>
                 <span className={`text-sm font-medium truncate ${
-                  selectedCountry === code ? 'text-surgical-700' : 'text-obsidian/70'
+                  selectedCountry === code ? 'text-surgical-700' : 'text-barpel-slate/70'
                 }`}>
                   {c.name}
                 </span>
@@ -237,14 +237,14 @@ export default function CarrierForwardingInstructions({ managedNumber, savedConf
       {country && (
         <div className="animate-in fade-in slide-in-from-top-2 duration-300">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-6 h-6 rounded-full bg-surgical-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">
+            <div className="w-6 h-6 rounded-full bg-barpel-teal text-white flex items-center justify-center text-xs font-bold flex-shrink-0">
               2
             </div>
-            <label className="text-sm font-semibold text-obsidian">
+            <label className="text-sm font-semibold text-barpel-slate">
               Select Your Carrier
             </label>
           </div>
-          <p className="text-xs text-obsidian/60 mb-3 ml-8">
+          <p className="text-xs text-barpel-slate/60 mb-3 ml-8">
             Choose your mobile carrier in {country.name}.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 ml-8">
@@ -254,8 +254,8 @@ export default function CarrierForwardingInstructions({ managedNumber, savedConf
                 onClick={() => handleCarrierSelect(c.id)}
                 className={`px-4 py-3 rounded-xl border-2 text-sm font-medium transition-all ${
                   selectedCarrierId === c.id
-                    ? 'border-surgical-600 bg-surgical-50 text-surgical-700 ring-1 ring-surgical-600'
-                    : 'border-surgical-200 bg-white text-obsidian/70 hover:border-surgical-300'
+                    ? 'border-barpel-teal bg-surgical-50 text-surgical-700 ring-1 ring-surgical-600'
+                    : 'border-surgical-200 bg-white text-barpel-slate/70 hover:border-surgical-300'
                 }`}
               >
                 {c.name}
@@ -269,10 +269,10 @@ export default function CarrierForwardingInstructions({ managedNumber, savedConf
       {carrier && (
         <div className="animate-in fade-in slide-in-from-top-2 duration-300">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-6 h-6 rounded-full bg-surgical-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">
+            <div className="w-6 h-6 rounded-full bg-barpel-teal text-white flex items-center justify-center text-xs font-bold flex-shrink-0">
               3
             </div>
-            <label className="text-sm font-semibold text-obsidian">
+            <label className="text-sm font-semibold text-barpel-slate">
               Choose Forwarding Mode
             </label>
           </div>
@@ -282,23 +282,23 @@ export default function CarrierForwardingInstructions({ managedNumber, savedConf
               onClick={() => setForwardingMode('total_ai')}
               className={`relative p-4 rounded-xl border-2 text-left transition-all ${
                 forwardingMode === 'total_ai'
-                  ? 'border-surgical-600 bg-surgical-50 ring-1 ring-surgical-600'
+                  ? 'border-barpel-teal bg-surgical-50 ring-1 ring-surgical-600'
                   : 'border-surgical-200 bg-white hover:border-surgical-300'
               }`}
             >
               <div className="flex items-start gap-3">
                 <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                  forwardingMode === 'total_ai' ? 'bg-surgical-600 text-white' : 'bg-surgical-100 text-surgical-500'
+                  forwardingMode === 'total_ai' ? 'bg-barpel-teal text-white' : 'bg-surgical-100 text-surgical-500'
                 }`}>
                   <Zap className="w-5 h-5" />
                 </div>
                 <div>
                   <p className={`text-sm font-semibold ${
-                    forwardingMode === 'total_ai' ? 'text-surgical-700' : 'text-obsidian'
+                    forwardingMode === 'total_ai' ? 'text-surgical-700' : 'text-barpel-slate'
                   }`}>
                     Full AI Managed
                   </p>
-                  <p className="text-xs text-obsidian/60 mt-1">
+                  <p className="text-xs text-barpel-slate/60 mt-1">
                     AI answers ALL incoming calls immediately
                   </p>
                 </div>
@@ -327,11 +327,11 @@ export default function CarrierForwardingInstructions({ managedNumber, savedConf
                 </div>
                 <div>
                   <p className={`text-sm font-semibold ${
-                    forwardingMode === 'safety_net' ? 'text-amber-700' : 'text-obsidian'
+                    forwardingMode === 'safety_net' ? 'text-amber-700' : 'text-barpel-slate'
                   }`}>
                     Safety Net
                   </p>
-                  <p className="text-xs text-obsidian/60 mt-1">
+                  <p className="text-xs text-barpel-slate/60 mt-1">
                     AI answers only when you&apos;re busy or don&apos;t pick up
                   </p>
                 </div>
@@ -362,10 +362,10 @@ export default function CarrierForwardingInstructions({ managedNumber, savedConf
         <div className="animate-in fade-in slide-in-from-top-2 duration-300">
           <div className="bg-surgical-50 border border-surgical-200 rounded-xl p-6">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-6 h-6 rounded-full bg-surgical-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">
+              <div className="w-6 h-6 rounded-full bg-barpel-teal text-white flex items-center justify-center text-xs font-bold flex-shrink-0">
                 4
               </div>
-              <h3 className="text-lg font-semibold text-obsidian">
+              <h3 className="text-lg font-semibold text-barpel-slate">
                 Activate Call Forwarding
               </h3>
             </div>
@@ -374,7 +374,7 @@ export default function CarrierForwardingInstructions({ managedNumber, savedConf
             <div className="bg-white border border-surgical-200 rounded-lg p-4 mb-4 ml-8">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-obsidian/60 mb-1">
+                  <p className="text-xs text-barpel-slate/60 mb-1">
                     Dial this code on your {country?.name} phone ({carrier.name}):
                   </p>
                   <p className="text-2xl font-mono font-bold text-surgical-600 break-all">
@@ -383,7 +383,7 @@ export default function CarrierForwardingInstructions({ managedNumber, savedConf
                 </div>
                 <button
                   onClick={handleCopy}
-                  className="px-4 py-2 bg-surgical-600 text-white rounded-lg hover:bg-surgical-700 transition-colors flex items-center gap-2 font-medium flex-shrink-0 ml-4"
+                  className="px-4 py-2 bg-barpel-teal text-white rounded-lg hover:bg-barpel-teal-dark transition-colors flex items-center gap-2 font-medium flex-shrink-0 ml-4"
                 >
                   {copied ? (
                     <>
@@ -442,19 +442,19 @@ export default function CarrierForwardingInstructions({ managedNumber, savedConf
           onClick={() => setShowDeactivation(!showDeactivation)}
           className="w-full px-6 py-4 bg-white hover:bg-surgical-50 transition-colors flex items-center justify-between"
         >
-          <span className="text-sm font-semibold text-obsidian">
+          <span className="text-sm font-semibold text-barpel-slate">
             How to Deactivate Call Forwarding
           </span>
           {showDeactivation ? (
-            <ChevronUp className="w-5 h-5 text-obsidian/60" />
+            <ChevronUp className="w-5 h-5 text-barpel-slate/60" />
           ) : (
-            <ChevronDown className="w-5 h-5 text-obsidian/60" />
+            <ChevronDown className="w-5 h-5 text-barpel-slate/60" />
           )}
         </button>
 
         {showDeactivation && (
           <div className="border-t border-surgical-200 bg-surgical-50/50">
-            <p className="px-6 pt-4 pb-2 text-xs text-obsidian/60">
+            <p className="px-6 pt-4 pb-2 text-xs text-barpel-slate/60">
               Dial the code for your carrier on your phone to stop forwarding calls to AI.
             </p>
 
@@ -462,13 +462,13 @@ export default function CarrierForwardingInstructions({ managedNumber, savedConf
               const c = countryData[code];
               return (
                 <div key={code} className="px-6 py-3 border-t border-surgical-100 first:border-t-0">
-                  <p className="text-xs font-semibold text-obsidian/80 mb-2">
+                  <p className="text-xs font-semibold text-barpel-slate/80 mb-2">
                     {c.flag} {c.name}
                   </p>
                   <div className="overflow-x-auto">
                     <table className="w-full text-xs">
                       <thead>
-                        <tr className="text-obsidian/50">
+                        <tr className="text-barpel-slate/50">
                           <th className="text-left font-medium pr-4 pb-1">Carrier</th>
                           <th className="text-left font-medium pr-4 pb-1">Full AI</th>
                           <th className="text-left font-medium pb-1">Safety Net</th>
@@ -477,11 +477,11 @@ export default function CarrierForwardingInstructions({ managedNumber, savedConf
                       <tbody>
                         {c.carriers.map((carr) => (
                           <tr key={carr.id}>
-                            <td className="pr-4 py-1 text-obsidian/70">{carr.name}</td>
-                            <td className="pr-4 py-1 font-mono font-semibold text-obsidian">
+                            <td className="pr-4 py-1 text-barpel-slate/70">{carr.name}</td>
+                            <td className="pr-4 py-1 font-mono font-semibold text-barpel-slate">
                               {carr.codes.total_ai.deactivationCode}
                             </td>
-                            <td className="py-1 font-mono font-semibold text-obsidian">
+                            <td className="py-1 font-mono font-semibold text-barpel-slate">
                               {carr.codes.safety_net.deactivationCode}
                             </td>
                           </tr>
@@ -494,7 +494,7 @@ export default function CarrierForwardingInstructions({ managedNumber, savedConf
             })}
 
             <div className="px-6 py-3 border-t border-surgical-100">
-              <p className="text-xs text-obsidian/50">
+              <p className="text-xs text-barpel-slate/50">
                 After dialing, calls will ring your original phone number normally.
               </p>
             </div>
@@ -508,10 +508,10 @@ export default function CarrierForwardingInstructions({ managedNumber, savedConf
 function InstructionStep({ number, text }: { number: number; text: string }) {
   return (
     <div className="flex gap-3">
-      <div className="w-6 h-6 rounded-full bg-surgical-600/20 text-surgical-700 flex items-center justify-center text-xs font-bold flex-shrink-0">
+      <div className="w-6 h-6 rounded-full bg-barpel-teal/20 text-surgical-700 flex items-center justify-center text-xs font-bold flex-shrink-0">
         {number}
       </div>
-      <p className="text-sm text-obsidian pt-0.5">{text}</p>
+      <p className="text-sm text-barpel-slate pt-0.5">{text}</p>
     </div>
   );
 }

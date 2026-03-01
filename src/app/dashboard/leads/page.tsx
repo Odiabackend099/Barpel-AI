@@ -254,11 +254,11 @@ const LeadsDashboardContent = () => {
 
     const getLeadScoreBadge = (score: number) => {
         if (score >= 80) {
-            return { label: 'Hot', icon: '🔥', color: 'bg-white border border-surgical-200 text-obsidian' };
+            return { label: 'Hot', icon: '🔥', color: 'bg-white border border-surgical-200 text-barpel-slate' };
         } else if (score >= 50) {
-            return { label: 'Warm', icon: '⭐', color: 'bg-white border border-surgical-200 text-obsidian' };
+            return { label: 'Warm', icon: '⭐', color: 'bg-white border border-surgical-200 text-barpel-slate' };
         } else {
-            return { label: 'Cold', icon: '❄️', color: 'bg-white border border-surgical-200 text-obsidian' };
+            return { label: 'Cold', icon: '❄️', color: 'bg-white border border-surgical-200 text-barpel-slate' };
         }
     };
 
@@ -267,10 +267,10 @@ const LeadsDashboardContent = () => {
             case 'new': return 'bg-surgical-50 text-surgical-600 border-surgical-200';
             case 'contacted': return 'bg-surgical-50 text-surgical-500 border-surgical-200';
             case 'qualified': return 'bg-surgical-50 text-surgical-600 border-surgical-200';
-            case 'booked': return 'bg-surgical-600 text-white border-surgical-600';
-            case 'converted': return 'bg-surgical-600 text-white border-surgical-600';
-            case 'lost': return 'bg-white text-obsidian/40 border-surgical-200';
-            default: return 'bg-white text-obsidian/60 border-surgical-200';
+            case 'booked': return 'bg-barpel-teal text-white border-barpel-teal';
+            case 'converted': return 'bg-barpel-teal text-white border-barpel-teal';
+            case 'lost': return 'bg-white text-barpel-slate/40 border-surgical-200';
+            default: return 'bg-white text-barpel-slate/60 border-surgical-200';
         }
     };
 
@@ -299,8 +299,8 @@ const LeadsDashboardContent = () => {
         <div className="max-w-7xl mx-auto px-6 py-8">
             {/* Header */}
             <div className="mb-8">
-                <h1 className="text-4xl font-bold text-obsidian mb-2">Live Leads (Real-Time)</h1>
-                <p className="text-obsidian/60">Manage and track all active leads with real-time scoring</p>
+                <h1 className="text-4xl font-bold text-barpel-slate mb-2">Live Leads (Real-Time)</h1>
+                <p className="text-barpel-slate/60">Manage and track all active leads with real-time scoring</p>
             </div>
 
             {/* Error Message */}
@@ -313,7 +313,7 @@ const LeadsDashboardContent = () => {
             {/* Filters */}
             <div className="mb-6 flex gap-4 flex-wrap">
                 <div className="flex-1 min-w-64 relative">
-                    <Search className="absolute left-3 top-2.5 w-4 h-4 text-obsidian/40" />
+                    <Search className="absolute left-3 top-2.5 w-4 h-4 text-barpel-slate/40" />
                     <input
                         type="text"
                         placeholder="Search by name or phone..."
@@ -322,7 +322,7 @@ const LeadsDashboardContent = () => {
                             setSearchQuery(e.target.value);
                             setCurrentPage(1);
                         }}
-                        className="w-full pl-10 pr-4 py-2 border border-surgical-200 rounded-lg text-sm bg-white text-obsidian focus:outline-none focus:ring-2 focus:ring-surgical-500"
+                        className="w-full pl-10 pr-4 py-2 border border-surgical-200 rounded-lg text-sm bg-white text-barpel-slate focus:outline-none focus:ring-2 focus:ring-surgical-500"
                     />
                 </div>
 
@@ -332,7 +332,7 @@ const LeadsDashboardContent = () => {
                         setFilterScore(e.target.value);
                         setCurrentPage(1);
                     }}
-                    className="px-4 py-2 border border-surgical-200 rounded-lg text-sm bg-white text-obsidian focus:outline-none focus:ring-2 focus:ring-surgical-500"
+                    className="px-4 py-2 border border-surgical-200 rounded-lg text-sm bg-white text-barpel-slate focus:outline-none focus:ring-2 focus:ring-surgical-500"
                 >
                     <option value="">All Scores</option>
                     <option value="hot">Hot (80+)</option>
@@ -347,7 +347,7 @@ const LeadsDashboardContent = () => {
                     className="p-2 border border-surgical-200 rounded-lg hover:bg-surgical-50 transition-colors"
                     title="Refresh"
                 >
-                    <RotateCw className="w-4 h-4 text-obsidian/60" />
+                    <RotateCw className="w-4 h-4 text-barpel-slate/60" />
                 </button>
             </div>
 
@@ -357,14 +357,14 @@ const LeadsDashboardContent = () => {
                     <div className="bg-white border border-surgical-200 rounded-2xl p-12">
                         <div className="flex flex-col items-center gap-3">
                             <div className="w-8 h-8 border-4 border-surgical-200 border-t-surgical-600 rounded-full animate-spin" />
-                            <p className="text-obsidian/60">Loading leads...</p>
+                            <p className="text-barpel-slate/60">Loading leads...</p>
                         </div>
                     </div>
                 ) : leads.length === 0 ? (
                     <div className="bg-white border border-surgical-200 rounded-2xl p-12">
                         <div className="flex flex-col items-center gap-4">
-                            <AlertCircle className="w-12 h-12 text-obsidian/40" />
-                            <p className="text-obsidian/60">No leads found</p>
+                            <AlertCircle className="w-12 h-12 text-barpel-slate/40" />
+                            <p className="text-barpel-slate/60">No leads found</p>
                         </div>
                     </div>
                 ) : (
@@ -387,15 +387,15 @@ const LeadsDashboardContent = () => {
                                                 {lead.lead_status && ['hot','warm','cold'].includes(lead.lead_status.toLowerCase()) ? (lead.lead_status.charAt(0).toUpperCase() + lead.lead_status.slice(1).toLowerCase()) : 'New'}
                                             </span>
                                         </div>
-                                        <h3 className="text-lg font-bold text-obsidian">{lead.contact_name}</h3>
-                                        <p className="text-sm text-obsidian/60 flex items-center gap-2 mt-1">
+                                        <h3 className="text-lg font-bold text-barpel-slate">{lead.contact_name}</h3>
+                                        <p className="text-sm text-barpel-slate/60 flex items-center gap-2 mt-1">
                                             <Phone className="w-3 h-3" />
                                             {lead.phone_number}
                                         </p>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-xs text-obsidian/60 font-medium">Last Contact</p>
-                                        <p className="text-sm font-bold text-obsidian">{formatTimeAgo(lead.last_contact_time)}</p>
+                                        <p className="text-xs text-barpel-slate/60 font-medium">Last Contact</p>
+                                        <p className="text-sm font-bold text-barpel-slate">{formatTimeAgo(lead.last_contact_time)}</p>
                                     </div>
                                 </div>
 
@@ -405,13 +405,13 @@ const LeadsDashboardContent = () => {
                                         {lead.services_interested.slice(0, 3).map((service, idx) => (
                                             <span
                                                 key={idx}
-                                                className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-surgical-50 text-obsidian/70"
+                                                className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-surgical-50 text-barpel-slate/70"
                                             >
                                                 {service}
                                             </span>
                                         ))}
                                         {lead.services_interested.length > 3 && (
-                                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium text-obsidian/60">
+                                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium text-barpel-slate/60">
                                                 +{lead.services_interested.length - 3} more
                                             </span>
                                         )}
@@ -429,8 +429,8 @@ const LeadsDashboardContent = () => {
                                             disabled={callingLeadId === lead.id}
                                             className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-xs font-medium ${
                                                 callingLeadId === lead.id
-                                                    ? 'bg-surgical-100 border border-surgical-200 text-obsidian/50 cursor-not-allowed'
-                                                    : 'bg-white border border-surgical-200 text-obsidian hover:bg-surgical-50'
+                                                    ? 'bg-surgical-100 border border-surgical-200 text-barpel-slate/50 cursor-not-allowed'
+                                                    : 'bg-white border border-surgical-200 text-barpel-slate hover:bg-surgical-50'
                                             }`}
                                         >
                                             {callingLeadId === lead.id ? (
@@ -450,7 +450,7 @@ const LeadsDashboardContent = () => {
                                                 e.stopPropagation();
                                                 handleSendSMS(lead.id);
                                             }}
-                                            className="flex items-center gap-2 px-3 py-2 bg-white border border-surgical-200 text-obsidian rounded-lg hover:bg-surgical-50 transition-colors text-xs font-medium"
+                                            className="flex items-center gap-2 px-3 py-2 bg-white border border-surgical-200 text-barpel-slate rounded-lg hover:bg-surgical-50 transition-colors text-xs font-medium"
                                         >
                                             <MessageCircle className="w-3.5 h-3.5" />
                                             SMS
@@ -463,7 +463,7 @@ const LeadsDashboardContent = () => {
                                                     e.stopPropagation();
                                                     handleMarkBooked(lead.id);
                                                 }}
-                                                className="flex items-center gap-1 px-3 py-2 bg-white border border-surgical-200 text-obsidian rounded-lg hover:bg-surgical-50 transition-colors text-xs font-medium"
+                                                className="flex items-center gap-1 px-3 py-2 bg-white border border-surgical-200 text-barpel-slate rounded-lg hover:bg-surgical-50 transition-colors text-xs font-medium"
                                             >
                                                 <CheckCircle className="w-3.5 h-3.5" />
                                                 Book
@@ -475,7 +475,7 @@ const LeadsDashboardContent = () => {
                                                     e.stopPropagation();
                                                     handleMarkLost(lead.id);
                                                 }}
-                                                className="flex items-center gap-1 px-3 py-2 bg-white border border-surgical-200 text-obsidian rounded-lg hover:bg-surgical-50 transition-colors text-xs font-medium"
+                                                className="flex items-center gap-1 px-3 py-2 bg-white border border-surgical-200 text-barpel-slate rounded-lg hover:bg-surgical-50 transition-colors text-xs font-medium"
                                             >
                                                 <XCircle className="w-3.5 h-3.5" />
                                                 Lost
@@ -491,14 +491,14 @@ const LeadsDashboardContent = () => {
                 {/* Pagination */}
                 {totalPages > 1 && (
                     <div className="flex items-center justify-between mt-8 px-6 py-4">
-                        <div className="text-sm text-obsidian/70">
+                        <div className="text-sm text-barpel-slate/70">
                             Showing {(currentPage - 1) * leadsPerPage + 1} to {Math.min(currentPage * leadsPerPage, totalLeads)} of {totalLeads} leads
                         </div>
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                                 disabled={currentPage === 1}
-                                className="px-3 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-obsidian/70 hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+                                className="px-3 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/70 hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
                             >
                                 <ChevronLeft className="w-4 h-4" />
                                 Previous
@@ -520,8 +520,8 @@ const LeadsDashboardContent = () => {
                                             key={pageNum}
                                             onClick={() => setCurrentPage(pageNum)}
                                             className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${currentPage === pageNum
-                                                ? 'bg-surgical-600 text-white'
-                                                : 'border border-surgical-200 text-obsidian/70 hover:bg-surgical-50'
+                                                ? 'bg-barpel-teal text-white'
+                                                : 'border border-surgical-200 text-barpel-slate/70 hover:bg-surgical-50'
                                                 }`}
                                         >
                                             {pageNum}
@@ -532,7 +532,7 @@ const LeadsDashboardContent = () => {
                             <button
                                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                                 disabled={currentPage === totalPages}
-                                className="px-3 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-obsidian/70 hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+                                className="px-3 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/70 hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
                             >
                                 Next
                                 <ChevronRight className="w-4 h-4" />
@@ -551,14 +551,14 @@ const LeadsDashboardContent = () => {
                             {/* Modal Header */}
                             <div className="sticky top-0 bg-white border-b border-surgical-200 px-6 py-4 flex items-center justify-between">
                                 <div>
-                                    <h2 className="text-2xl font-bold text-obsidian">{selectedLead.contact_name}</h2>
-                                    <p className="text-sm text-obsidian/60">{selectedLead.phone_number}</p>
+                                    <h2 className="text-2xl font-bold text-barpel-slate">{selectedLead.contact_name}</h2>
+                                    <p className="text-sm text-barpel-slate/60">{selectedLead.phone_number}</p>
                                 </div>
                                 <button
                                     onClick={() => setShowDetailModal(false)}
                                     className="p-2 hover:bg-surgical-50 rounded-lg transition-colors"
                                 >
-                                    <X className="w-6 h-6 text-obsidian/60" />
+                                    <X className="w-6 h-6 text-barpel-slate/60" />
                                 </button>
                             </div>
 
@@ -567,14 +567,14 @@ const LeadsDashboardContent = () => {
                                 {/* Lead Score and Status */}
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <p className="text-xs text-obsidian/60 font-medium uppercase mb-2">Lead Score</p>
+                                        <p className="text-xs text-barpel-slate/60 font-medium uppercase mb-2">Lead Score</p>
                                         <div className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold border ${getLeadScoreBadge(selectedLead.lead_score).color}`}>
                                             {getLeadScoreBadge(selectedLead.lead_score).icon}
                                             {getLeadScoreBadge(selectedLead.lead_score).label} ({selectedLead.lead_score})
                                         </div>
                                     </div>
                                     <div>
-                                        <p className="text-xs text-obsidian/60 font-medium uppercase mb-2">Status</p>
+                                        <p className="text-xs text-barpel-slate/60 font-medium uppercase mb-2">Status</p>
                                         <div className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold border ${getLeadStatusColor(selectedLead.lead_status || 'new')}`}>
                                             {selectedLead.lead_status ? (selectedLead.lead_status.charAt(0).toUpperCase() + selectedLead.lead_status.slice(1)) : 'New'}
                                         </div>
@@ -583,16 +583,16 @@ const LeadsDashboardContent = () => {
 
                                 {/* Contact Info */}
                                 <div className="bg-surgical-50 rounded-lg p-4">
-                                    <p className="text-sm font-bold text-obsidian mb-3">Contact Information</p>
+                                    <p className="text-sm font-bold text-barpel-slate mb-3">Contact Information</p>
                                     <div className="space-y-2">
                                         <div className="flex items-center gap-2">
-                                            <Phone className="w-4 h-4 text-obsidian/40" />
-                                            <span className="text-sm text-obsidian">{selectedLead.phone_number}</span>
+                                            <Phone className="w-4 h-4 text-barpel-slate/40" />
+                                            <span className="text-sm text-barpel-slate">{selectedLead.phone_number}</span>
                                         </div>
                                         {selectedLead.email && (
                                             <div className="flex items-center gap-2">
-                                                <MessageSquare className="w-4 h-4 text-obsidian/40" />
-                                                <span className="text-sm text-obsidian">{selectedLead.email}</span>
+                                                <MessageSquare className="w-4 h-4 text-barpel-slate/40" />
+                                                <span className="text-sm text-barpel-slate">{selectedLead.email}</span>
                                             </div>
                                         )}
                                     </div>
@@ -601,12 +601,12 @@ const LeadsDashboardContent = () => {
                                 {/* Services Interested */}
                                 {selectedLead.services_interested && selectedLead.services_interested.length > 0 && (
                                     <div className="bg-white border border-surgical-200 rounded-lg p-4">
-                                        <p className="text-sm font-bold text-obsidian mb-3">Services Interested</p>
+                                        <p className="text-sm font-bold text-barpel-slate mb-3">Services Interested</p>
                                         <div className="flex flex-wrap gap-2">
                                             {selectedLead.services_interested.map((service, idx) => (
                                                 <span
                                                     key={idx}
-                                                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white text-obsidian/70 border border-surgical-200"
+                                                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white text-barpel-slate/70 border border-surgical-200"
                                                 >
                                                     {service}
                                                 </span>
@@ -618,12 +618,12 @@ const LeadsDashboardContent = () => {
                                 {/* Call History */}
                                 {selectedLead.call_history && selectedLead.call_history.length > 0 && (
                                     <div className="bg-surgical-50 rounded-lg p-4">
-                                        <p className="text-sm font-bold text-obsidian mb-3">Call History (Last 5)</p>
+                                        <p className="text-sm font-bold text-barpel-slate mb-3">Call History (Last 5)</p>
                                         <div className="space-y-3">
                                             {selectedLead.call_history.slice(0, 5).map((call) => (
                                                 <div key={call.id} className="bg-white rounded-lg p-3 border border-surgical-200">
                                                     <div className="flex items-start justify-between mb-2">
-                                                        <p className="text-xs text-obsidian/60 font-medium">
+                                                        <p className="text-xs text-barpel-slate/60 font-medium">
                                                             {new Date(call.call_date).toLocaleString('en-GB', {
                                                                 day: '2-digit',
                                                                 month: 'short',
@@ -631,12 +631,12 @@ const LeadsDashboardContent = () => {
                                                                 minute: '2-digit'
                                                             })}
                                                         </p>
-                                                        <span className="text-xs text-obsidian/60 font-medium">
+                                                        <span className="text-xs text-barpel-slate/60 font-medium">
                                                             {Math.floor(call.duration_seconds / 60)}m {call.duration_seconds % 60}s
                                                         </span>
                                                     </div>
                                                     {call.transcript_preview && (
-                                                        <p className="text-xs text-obsidian/70 italic">{call.transcript_preview}...</p>
+                                                        <p className="text-xs text-barpel-slate/70 italic">{call.transcript_preview}...</p>
                                                     )}
                                                 </div>
                                             ))}
@@ -647,13 +647,13 @@ const LeadsDashboardContent = () => {
                                 {/* Appointment History */}
                                 {selectedLead.appointment_history && selectedLead.appointment_history.length > 0 && (
                                     <div className="bg-surgical-50 rounded-lg p-4">
-                                        <p className="text-sm font-bold text-obsidian mb-3">Appointment History</p>
+                                        <p className="text-sm font-bold text-barpel-slate mb-3">Appointment History</p>
                                         <div className="space-y-2">
                                             {selectedLead.appointment_history.map((apt) => (
                                                 <div key={apt.id} className="flex items-start justify-between text-sm py-2 border-b border-surgical-200 last:border-0">
                                                     <div>
-                                                        <p className="font-medium text-obsidian">{apt.service_type}</p>
-                                                        <p className="text-xs text-obsidian/60">
+                                                        <p className="font-medium text-barpel-slate">{apt.service_type}</p>
+                                                        <p className="text-xs text-barpel-slate/60">
                                                             {new Date(apt.scheduled_time).toLocaleString('en-GB')}
                                                         </p>
                                                     </div>
@@ -670,7 +670,7 @@ const LeadsDashboardContent = () => {
                                 {selectedLead.notes && (
                                     <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4">
                                         <p className="text-sm font-bold text-surgical-600 mb-2">Notes</p>
-                                        <p className="text-sm text-obsidian/70">{selectedLead.notes}</p>
+                                        <p className="text-sm text-barpel-slate/70">{selectedLead.notes}</p>
                                     </div>
                                 )}
                             </div>
@@ -686,7 +686,7 @@ const LeadsDashboardContent = () => {
                                     className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-sm font-medium ${
                                         callingLeadId === selectedLead.id
                                             ? 'bg-surgical-300 cursor-not-allowed text-white'
-                                            : 'bg-surgical-600 hover:bg-surgical-700 text-white'
+                                            : 'bg-barpel-teal hover:bg-barpel-teal-dark text-white'
                                     }`}
                                 >
                                     {callingLeadId === selectedLead.id ? (
@@ -703,7 +703,7 @@ const LeadsDashboardContent = () => {
                                 </button>
                                 <button
                                     onClick={() => setShowDetailModal(false)}
-                                    className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-obsidian/70 hover:bg-surgical-50 transition-colors"
+                                    className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/70 hover:bg-surgical-50 transition-colors"
                                 >
                                     Close
                                 </button>
@@ -718,21 +718,21 @@ const LeadsDashboardContent = () => {
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
                         <div className="border-b border-surgical-200 p-6">
-                            <h2 className="text-xl font-bold text-obsidian">Send SMS to Lead</h2>
+                            <h2 className="text-xl font-bold text-barpel-slate">Send SMS to Lead</h2>
                         </div>
                         <div className="p-6 space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-obsidian/70 mb-2">
+                                <label className="block text-sm font-medium text-barpel-slate/70 mb-2">
                                     Message
                                 </label>
                                 <textarea
                                     value={smsMessage}
                                     onChange={(e) => setSMSMessage(e.target.value)}
                                     placeholder="Enter your SMS message..."
-                                    className="w-full px-3 py-2 border border-surgical-200 rounded-lg bg-white text-obsidian placeholder-obsidian/40 focus:outline-none focus:ring-2 focus:ring-surgical-500"
+                                    className="w-full px-3 py-2 border border-surgical-200 rounded-lg bg-white text-barpel-slate placeholder-obsidian/40 focus:outline-none focus:ring-2 focus:ring-surgical-500"
                                     rows={4}
                                 />
-                                <p className="text-xs text-obsidian/60 mt-2">
+                                <p className="text-xs text-barpel-slate/60 mt-2">
                                     {smsMessage.length} characters
                                 </p>
                             </div>
@@ -744,14 +744,14 @@ const LeadsDashboardContent = () => {
                                     setSMSMessage('');
                                     setSmsSendingLeadId(null);
                                 }}
-                                className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-obsidian/70 hover:bg-surgical-50 transition-colors"
+                                className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/70 hover:bg-surgical-50 transition-colors"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleSubmitSMS}
                                 disabled={!smsMessage.trim()}
-                                className="px-4 py-2 bg-surgical-600 hover:bg-surgical-700 disabled:bg-obsidian/30 text-white rounded-lg transition-colors text-sm font-medium"
+                                className="px-4 py-2 bg-barpel-teal hover:bg-barpel-teal-dark disabled:bg-obsidian/30 text-white rounded-lg transition-colors text-sm font-medium"
                             >
                                 Send
                             </button>
@@ -767,7 +767,7 @@ const LeadsDashboardContent = () => {
                         <div className="sticky top-0 bg-white border-b border-surgical-200 px-6 py-4 flex items-center justify-between rounded-t-2xl">
                             <div className="flex items-center gap-3">
                                 <AlertCircle className="w-6 h-6 text-amber-600" />
-                                <h2 className="text-xl font-bold text-obsidian">Configuration Required</h2>
+                                <h2 className="text-xl font-bold text-barpel-slate">Configuration Required</h2>
                             </div>
                             <button
                                 onClick={() => {
@@ -776,43 +776,43 @@ const LeadsDashboardContent = () => {
                                 }}
                                 className="p-2 hover:bg-surgical-50 rounded-lg transition-colors"
                             >
-                                <X className="w-5 h-5 text-obsidian/60" />
+                                <X className="w-5 h-5 text-barpel-slate/60" />
                             </button>
                         </div>
 
                         <div className="p-6 space-y-4">
                             {configGuideType === 'outbound_agent' && (
                                 <>
-                                    <p className="text-obsidian/80 text-sm leading-relaxed">
+                                    <p className="text-barpel-slate/80 text-sm leading-relaxed">
                                         To make outbound calls, you need to set up an outbound agent first. Follow these steps:
                                     </p>
                                     <div className="bg-surgical-50 rounded-lg p-4 space-y-3">
                                         <div className="flex gap-3">
-                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-surgical-600 text-white flex items-center justify-center text-xs font-bold">1</div>
+                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-barpel-teal text-white flex items-center justify-center text-xs font-bold">1</div>
                                             <div>
-                                                <p className="text-sm font-semibold text-obsidian">Go to Agent Configuration</p>
-                                                <p className="text-xs text-obsidian/60 mt-1">Find it in the sidebar navigation</p>
+                                                <p className="text-sm font-semibold text-barpel-slate">Go to Agent Configuration</p>
+                                                <p className="text-xs text-barpel-slate/60 mt-1">Find it in the sidebar navigation</p>
                                             </div>
                                         </div>
                                         <div className="flex gap-3">
-                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-surgical-600 text-white flex items-center justify-center text-xs font-bold">2</div>
+                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-barpel-teal text-white flex items-center justify-center text-xs font-bold">2</div>
                                             <div>
-                                                <p className="text-sm font-semibold text-obsidian">Click &quot;Outbound&quot; tab</p>
-                                                <p className="text-xs text-obsidian/60 mt-1">Configure your outbound calling agent</p>
+                                                <p className="text-sm font-semibold text-barpel-slate">Click &quot;Outbound&quot; tab</p>
+                                                <p className="text-xs text-barpel-slate/60 mt-1">Configure your outbound calling agent</p>
                                             </div>
                                         </div>
                                         <div className="flex gap-3">
-                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-surgical-600 text-white flex items-center justify-center text-xs font-bold">3</div>
+                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-barpel-teal text-white flex items-center justify-center text-xs font-bold">3</div>
                                             <div>
-                                                <p className="text-sm font-semibold text-obsidian">Configure agent settings</p>
-                                                <p className="text-xs text-obsidian/60 mt-1">Set name, voice, system prompt, and tools</p>
+                                                <p className="text-sm font-semibold text-barpel-slate">Configure agent settings</p>
+                                                <p className="text-xs text-barpel-slate/60 mt-1">Set name, voice, system prompt, and tools</p>
                                             </div>
                                         </div>
                                         <div className="flex gap-3">
-                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-surgical-600 text-white flex items-center justify-center text-xs font-bold">4</div>
+                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-barpel-teal text-white flex items-center justify-center text-xs font-bold">4</div>
                                             <div>
-                                                <p className="text-sm font-semibold text-obsidian">Click &quot;Save Agent&quot;</p>
-                                                <p className="text-xs text-obsidian/60 mt-1">Wait for confirmation message</p>
+                                                <p className="text-sm font-semibold text-barpel-slate">Click &quot;Save Agent&quot;</p>
+                                                <p className="text-xs text-barpel-slate/60 mt-1">Wait for confirmation message</p>
                                             </div>
                                         </div>
                                     </div>
@@ -821,36 +821,36 @@ const LeadsDashboardContent = () => {
 
                             {configGuideType === 'phone_number' && (
                                 <>
-                                    <p className="text-obsidian/80 text-sm leading-relaxed">
+                                    <p className="text-barpel-slate/80 text-sm leading-relaxed">
                                         To make outbound calls, you need to import your Twilio phone number:
                                     </p>
                                     <div className="bg-surgical-50 rounded-lg p-4 space-y-3">
                                         <div className="flex gap-3">
-                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-surgical-600 text-white flex items-center justify-center text-xs font-bold">1</div>
+                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-barpel-teal text-white flex items-center justify-center text-xs font-bold">1</div>
                                             <div>
-                                                <p className="text-sm font-semibold text-obsidian">Go to Settings → Telephony</p>
-                                                <p className="text-xs text-obsidian/60 mt-1">Navigate to telephony settings</p>
+                                                <p className="text-sm font-semibold text-barpel-slate">Go to Settings → Telephony</p>
+                                                <p className="text-xs text-barpel-slate/60 mt-1">Navigate to telephony settings</p>
                                             </div>
                                         </div>
                                         <div className="flex gap-3">
-                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-surgical-600 text-white flex items-center justify-center text-xs font-bold">2</div>
+                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-barpel-teal text-white flex items-center justify-center text-xs font-bold">2</div>
                                             <div>
-                                                <p className="text-sm font-semibold text-obsidian">Click &quot;Import Twilio Number&quot;</p>
-                                                <p className="text-xs text-obsidian/60 mt-1">Or &quot;Connect Twilio&quot; if available</p>
+                                                <p className="text-sm font-semibold text-barpel-slate">Click &quot;Import Twilio Number&quot;</p>
+                                                <p className="text-xs text-barpel-slate/60 mt-1">Or &quot;Connect Twilio&quot; if available</p>
                                             </div>
                                         </div>
                                         <div className="flex gap-3">
-                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-surgical-600 text-white flex items-center justify-center text-xs font-bold">3</div>
+                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-barpel-teal text-white flex items-center justify-center text-xs font-bold">3</div>
                                             <div>
-                                                <p className="text-sm font-semibold text-obsidian">Enter Twilio credentials</p>
-                                                <p className="text-xs text-obsidian/60 mt-1">Account SID, Auth Token, and Phone Number from Twilio console</p>
+                                                <p className="text-sm font-semibold text-barpel-slate">Enter Twilio credentials</p>
+                                                <p className="text-xs text-barpel-slate/60 mt-1">Account SID, Auth Token, and Phone Number from Twilio console</p>
                                             </div>
                                         </div>
                                         <div className="flex gap-3">
-                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-surgical-600 text-white flex items-center justify-center text-xs font-bold">4</div>
+                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-barpel-teal text-white flex items-center justify-center text-xs font-bold">4</div>
                                             <div>
-                                                <p className="text-sm font-semibold text-obsidian">Re-save your outbound agent</p>
-                                                <p className="text-xs text-obsidian/60 mt-1">Go back to Agent Configuration and save the outbound agent again</p>
+                                                <p className="text-sm font-semibold text-barpel-slate">Re-save your outbound agent</p>
+                                                <p className="text-xs text-barpel-slate/60 mt-1">Go back to Agent Configuration and save the outbound agent again</p>
                                             </div>
                                         </div>
                                     </div>
@@ -859,12 +859,12 @@ const LeadsDashboardContent = () => {
 
                             {configGuideType === 'phone_format' && (
                                 <>
-                                    <p className="text-obsidian/80 text-sm leading-relaxed">
+                                    <p className="text-barpel-slate/80 text-sm leading-relaxed">
                                         This contact&apos;s phone number must be in E.164 format for outbound calls to work:
                                     </p>
                                     <div className="bg-surgical-50 rounded-lg p-4 space-y-3">
                                         <div>
-                                            <p className="text-sm font-semibold text-obsidian mb-2">Required Format (E.164):</p>
+                                            <p className="text-sm font-semibold text-barpel-slate mb-2">Required Format (E.164):</p>
                                             <div className="flex items-center gap-2 mb-1">
                                                 <CheckCircle className="w-4 h-4 text-green-600" />
                                                 <code className="text-xs bg-white px-2 py-1 rounded border border-surgical-200 text-green-700">+12125551234</code>
@@ -879,7 +879,7 @@ const LeadsDashboardContent = () => {
                                             </div>
                                         </div>
                                         <div>
-                                            <p className="text-sm font-semibold text-obsidian mb-2">Invalid Formats:</p>
+                                            <p className="text-sm font-semibold text-barpel-slate mb-2">Invalid Formats:</p>
                                             <div className="flex items-center gap-2 mb-1">
                                                 <XCircle className="w-4 h-4 text-red-600" />
                                                 <code className="text-xs bg-white px-2 py-1 rounded border border-surgical-200 text-red-700">(212) 555-1234</code>
@@ -894,7 +894,7 @@ const LeadsDashboardContent = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <p className="text-xs text-obsidian/60 mt-3">
+                                    <p className="text-xs text-barpel-slate/60 mt-3">
                                         💡 Tip: Edit the contact&apos;s phone number to add the country code (e.g., +1 for US) at the beginning.
                                     </p>
                                 </>
@@ -909,7 +909,7 @@ const LeadsDashboardContent = () => {
                                         setConfigGuideType(null);
                                         router.push('/dashboard/agent-configuration');
                                     }}
-                                    className="px-4 py-2 bg-surgical-600 hover:bg-surgical-700 text-white rounded-lg transition-colors text-sm font-medium"
+                                    className="px-4 py-2 bg-barpel-teal hover:bg-barpel-teal-dark text-white rounded-lg transition-colors text-sm font-medium"
                                 >
                                     Go to Agent Configuration
                                 </button>
@@ -919,7 +919,7 @@ const LeadsDashboardContent = () => {
                                     setShowConfigGuide(false);
                                     setConfigGuideType(null);
                                 }}
-                                className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-obsidian/70 hover:bg-surgical-50 transition-colors"
+                                className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/70 hover:bg-surgical-50 transition-colors"
                             >
                                 Close
                             </button>
@@ -937,7 +937,7 @@ export default function LeadsPage() {
             <div className="min-h-screen bg-surgical-50 flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
                     <div className="w-8 h-8 border-4 border-surgical-200 border-t-surgical-600 rounded-full animate-spin" />
-                    <p className="text-obsidian/60">Loading...</p>
+                    <p className="text-barpel-slate/60">Loading...</p>
                 </div>
             </div>
         }>

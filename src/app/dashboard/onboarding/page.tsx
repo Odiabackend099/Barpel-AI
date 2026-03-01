@@ -78,8 +78,8 @@ function OnboardingPageInner() {
   const StepComponent = STEP_COMPONENTS[currentStep];
 
   return (
-    // Fix 13: bg-clinical-bg design token instead of hardcoded #F0F9FF
-    <div className="fixed inset-0 z-50 bg-clinical-bg flex flex-col">
+    // Light background for onboarding
+    <div className="fixed inset-0 z-50 bg-gray-50 flex flex-col">
       {/* Progress bar at top */}
       <div className="pt-8 px-4">
         <OnboardingProgress currentStep={currentStep} totalSteps={TOTAL_STEPS} />

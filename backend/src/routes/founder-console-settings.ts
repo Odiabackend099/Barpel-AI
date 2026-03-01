@@ -1,5 +1,5 @@
 /**
- * CallWaiting AI Settings Routes
+ * Barpel AI Settings Routes
  * 
  * Manages Vapi/Twilio integration credentials and configuration.
  * Keys are stored encrypted in the database, never exposed to frontend.
@@ -250,7 +250,7 @@ router.post('/settings', async (req: Request, res: Response): Promise<void> => {
               : 'You are a professional sales development representative. You are persuasive, friendly, and professional. Your goal is to schedule consultations.';
 
             const created = await vapi.createAssistant({
-              name: role === 'inbound' ? 'Voxanne (Inbound Coordinator)' : 'Voxanne (Outbound SDR)',
+              name: role === 'inbound' ? 'Barpel (Inbound Coordinator)' : 'Barpel (Outbound SDR)',
               systemPrompt: agentRow?.system_prompt?.trim() || defaultSystemPrompt,
               voiceProvider: 'vapi',
               voiceId: agentRow?.voice || (role === 'inbound' ? 'Kylie' : 'jennifer'),

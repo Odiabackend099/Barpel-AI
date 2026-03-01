@@ -1420,7 +1420,7 @@ vapiWebhookRouter.post('/webhook', webhookLimiter, async (req: Request, res: Res
 
                 return res.status(402).json({
                   error: 'Insufficient credits to authorize call',
-                  message: 'Please top up your account at your Voxanne dashboard to make calls.',
+                  message: 'Please top up your account at your Barpel dashboard to make calls.',
                   currentBalance: reservation.balancePence || 0,
                   effectiveBalance: reservation.effectiveBalancePence || 0,
                 });
@@ -1447,7 +1447,7 @@ vapiWebhookRouter.post('/webhook', webhookLimiter, async (req: Request, res: Res
 
                 return res.status(402).json({
                   error: 'Insufficient credits to authorize call',
-                  message: 'Please top up your account at your Voxanne dashboard to make calls.',
+                  message: 'Please top up your account at your Barpel dashboard to make calls.',
                   currentBalance: balance?.balancePence || 0,
                   requiredBalance: MIN_BALANCE_FOR_CALL,
                 });

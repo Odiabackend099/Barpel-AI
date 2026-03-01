@@ -36,7 +36,7 @@ const ALLOWED_COMMANDS = [
   "sort",
 ];
 
-const PROJECT_ROOT = "/Users/mac/Desktop/voxanne-dashboard/backend";
+const PROJECT_ROOT = "/Users/mac/Desktop/barpel-dashboard/backend";
 
 /**
  * Validates if a command is safe to execute

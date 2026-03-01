@@ -31,7 +31,7 @@ export default function WorkflowDemo() {
       id: 2,
       label: 'AI Answers',
       icon: <MessageSquare className="w-8 h-8" />,
-      description: 'Voxanne AI responds instantly',
+      description: 'Barpel AI responds instantly',
       startTime: 2000,
       endTime: 3500,
     },
@@ -135,7 +135,7 @@ export default function WorkflowDemo() {
             transition={{ duration: 0.6 }}
             className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
           >
-            See Voxanne AI In Action
+            See Barpel AI In Action
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -258,7 +258,7 @@ export default function WorkflowDemo() {
                       animate={{ opacity: 1, y: 0 }}
                       className="mt-8 text-2xl font-semibold text-gray-800"
                     >
-                      Voxanne AI Answers
+                      Barpel AI Answers
                     </motion.p>
                     <p className="text-gray-600 mt-2">Instant response, zero wait time</p>
                   </motion.div>
@@ -315,7 +315,7 @@ export default function WorkflowDemo() {
                             <MessageSquare className="w-5 h-5 text-white" />
                           </div>
                           <div>
-                            <p className="font-medium text-white mb-1">Voxanne AI</p>
+                            <p className="font-medium text-white mb-1">Barpel AI</p>
                             <p className="text-white text-lg">
                               "Yes! I have 2:00 PM and 4:00 PM available tomorrow. Which time works best for you?"
                             </p>

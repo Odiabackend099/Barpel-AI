@@ -118,7 +118,7 @@ $trigger$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;`,
     console.log('\n🎯 Copy the SQL above and apply in Supabase SQL Editor:');
     console.log('   https://app.supabase.com/project/lbjymlodxprzqgtyqtcq/sql\n');
 
-    console.log('✅ Once applied, voxanne@demo.com can sign in and access dashboard\n');
+    console.log('✅ Once applied, barpel@demo.com can sign in and access dashboard\n');
 
   } catch (error: any) {
     console.error('❌ Error:', error.message);

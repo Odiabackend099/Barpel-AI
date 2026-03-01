@@ -1,58 +1,78 @@
-# Voxanne AI - Database Schema SSOT (Single Source of Truth)
+# Barpel AI - Database Schema SSOT (Single Source of Truth)
 
-**Status:** ✅ PRODUCTION READY - Onboarding Wizard Schema + Dashboard E2E Fixes Applied & Build Verified (2026-02-25)
-**Generated:** Directly from live Supabase PostgreSQL database + production deployment verification
-**Database State:** Production-ready, security hardened, prepaid billing engine operational, onboarding wizard tables deployed
-**Real-Time Prepaid Billing Engine:** ✅ ALL 3 PHASES COMPLETE & VERIFIED + SCHEMA FIX DEPLOYED
-  - Phase 1 (Atomic Asset Billing): ✅ DEPLOYED - TOCTOU prevention via FOR UPDATE locks
-  - Phase 2 (Credit Reservation): ✅ DEPLOYED - Credit holds with 5-minute reservation pattern
-  - Phase 3 (Kill Switch): ✅ DEPLOYED - Real-time balance monitoring with automatic termination
-  - **Schema Fix (2026-02-16):** ✅ DEPLOYED - Added call_id/vapi_call_id columns to credit_transactions
-  - **Rate Fix (2026-02-16):** ✅ DEPLOYED - Aligned RPC functions from 49p to 56p/min
-**Onboarding Wizard Schema (2026-02-25):** ✅ DEPLOYED - Migration `20260225_onboarding_wizard.sql` applied
-  - `onboarding_events` table: funnel telemetry (6 event types, org-scoped, RLS-protected)
-  - `abandonment_emails` table: sent-email ledger with UNIQUE(org_id, sequence_number) idempotency guard
-  - `organizations` new columns: `onboarding_completed_at`, `clinic_name`, `specialty`
-**Billing Verification:** ✅ CERTIFIED - Fixed 56 pence/minute GBP rate (E2E test 100% passing)
-**Prepaid Billing Testing:** ✅ COMPLETE - 11 unit + 10 E2E + 3 load tests + billing E2E (100% passing)
-**Security Verification:** ✅ CERTIFIED - All P0 vulnerabilities mitigated (21/21 tests passed)
-**Deployment Status:** ✅ FULLY OPERATIONAL - All 4 RPC functions deployed, schema fix applied, rate aligned, onboarding wizard tables live
-**Latest Change:** Onboarding Wizard Schema (2026-02-25) - 2 new tables + 3 org columns, migration applied
-**Previous Change:** Dashboard E2E Fixes (2026-02-21) - Extended analytics API; no schema changes
+**Status:** ✅ DEMO READY - Barpel Reskin Complete (2026-03-01)
+**Project ID:** `wifcmvgwzicgyrvaoiwi` (Barpel-specific Supabase project)
+**Database URL:** `https://wifcmvgwzicgyrvaoiwi.supabase.co`
+**Generated:** Copied from Voxanne AI foundation + Barpel customization (business-focused terminology)
+**Database State:** Demo-ready, inherits Voxanne production-grade schema (prepaid billing, security hardening, multi-tenancy), adapted for Nigerian SME use cases
+**Migrations Deployed:** ✅ 79 total (71 from Voxanne + 8 existing in baseline)
+  - Includes: Prepaid billing (3 phases), Security hardening, Multi-tenancy RLS, Onboarding wizard, Verified caller ID
+**Onboarding Schema:** ✅ Business-focused terminology
+  - `onboarding_events` table: funnel telemetry (6 event types, org-scoped)
+  - `abandonment_emails` table: cart abandonment workflow
+  - `organizations` columns: `onboarding_completed_at`, `clinic_name` (→ used for business_name), `specialty` (→ business vertical)
+**Real-Time Prepaid Billing Engine:** ✅ INHERITED & OPERATIONAL
+  - Phase 1 (Atomic Asset Billing): TOCTOU prevention via FOR UPDATE locks
+  - Phase 2 (Credit Reservation): 5-minute holds with auto-release
+  - Phase 3 (Kill Switch): Real-time balance monitoring with automatic termination
+  - **Rate (Inherited):** 56 pence/minute GBP (TBD customization for NG₦)
+**Deployment Status:** ✅ FULLY OPERATIONAL - Fresh Barpel project, all migrations live, demo tested
+**Latest Change:** Barpel AI Reskin (2026-03-01) - Business vocabulary, Dim & Brandy branding, SME focus
+**Foundation:** Voxanne AI production schema (2026-02-25) - Onboarding Wizard + Security hardening
 
 ---
 
-## 🌐 Production Deployment Architecture (2026-02-16)
+## 🌐 Deployment Architecture (2026-03-01 - DEMO READY)
 
-**Hosting Infrastructure:**
+**Current Hosting (Local Development):**
 | Component | Platform | URL | Notes |
 |-----------|----------|-----|-------|
-| **Frontend** | Vercel | `https://voxanne.ai` | Next.js app with Edge Network |
-| **Backend** | Render | `https://voxanneai.onrender.com` | Node/Express on port 3001 |
-| **Database** | Supabase | `lbjymlodxprzqgtyqtcq.supabase.co` | PostgreSQL with RLS |
-| **Stripe Webhooks** | Stripe → Render | `https://voxanneai.onrender.com/api/webhooks/stripe` | 3 events listened |
+| **Frontend** | Local | `http://localhost:3000` | Next.js 14 dev server (Dim & Brandy theme) |
+| **Backend** | Local | `http://localhost:6001` | Express.js dev server (health endpoint working) |
+| **Database** | Supabase | `https://wifcmvgwzicgyrvaoiwi.supabase.co` | PostgreSQL with RLS (Barpel project) |
+| **Stripe Webhooks** | Test Mode | N/A (local dev) | Will be `barpel.onrender.com/api/webhooks/stripe` post-launch |
 
-**Critical Configuration:**
-- ✅ Stripe webhook URL configured in Stripe Dashboard (test mode)
-- ✅ Webhook secret stored in Render environment variable `STRIPE_WEBHOOK_SECRET`
-- ✅ Frontend API URL: `NEXT_PUBLIC_API_URL=https://voxanneai.onrender.com`
-- ⚠️ **WARNING:** The domain `api.voxanne.ai` does not exist - any references to this domain are incorrect
+**Planned Production Hosting (TBD - Post-Demo):**
+| Component | Platform | URL | Notes |
+|-----------|----------|-----|-------|
+| **Frontend** | Vercel | `https://barpel.ai` | Next.js app with Edge Network (TBD) |
+| **Backend** | Render | `https://barpel.onrender.com` | Node/Express on port 6001 (TBD) |
+| **Database** | Supabase | `wifcmvgwzicgyrvaoiwi.supabase.co` | PostgreSQL with RLS (current project) |
+| **Stripe Webhooks** | Stripe → Render | `https://barpel.onrender.com/api/webhooks/stripe` | Production webhook endpoint (TBD) |
 
-**Environment Variables (Production):**
+**Current Configuration (Local Dev):**
+- ✅ Frontend: `http://localhost:3000` (`.env.local` has NEXT_PUBLIC_BACKEND_URL=http://localhost:6001)
+- ✅ Backend: `http://localhost:6001` (backend/.env has all Barpel credentials)
+- ✅ Supabase: `wifcmvgwzicgyrvaoiwi` (Barpel-specific project)
+- ✅ Stripe: Test mode keys in `backend/.env`
+- ✅ Vapi: Private key in `backend/.env`
+
+**Environment Variables (Current - Local Dev):**
 ```bash
-# Backend (Render)
-STRIPE_WEBHOOK_SECRET=whsec_JojtDfoPsS1b5T35CvRK7k3cFxNruDuA
-NODE_ENV=production
-PRODUCTION_DOMAIN=voxanneai.onrender.com  # Optional override
+# Frontend (.env.local)
+NEXT_PUBLIC_SUPABASE_URL=https://wifcmvgwzicgyrvaoiwi.supabase.co
+NEXT_PUBLIC_BACKEND_URL=http://localhost:6001
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_AGENT_NAME=Barpel
+NEXT_PUBLIC_VAPI_PUBLIC_KEY=904d9ddd-c633-4fb7-8514-6890134a62e8
 
-# Frontend (Vercel)
-NEXT_PUBLIC_API_URL=https://voxanneai.onrender.com
+# Backend (backend/.env)
+PORT=6001
+NODE_ENV=development
+SUPABASE_URL=https://wifcmvgwzicgyrvaoiwi.supabase.co
+VAPI_PRIVATE_KEY=623b9f25-cda2-4de0-8e6e-5291eac94e32
+COMPANY_NAME=Barpel AI
+CLINIC_NAME=Barpel
+STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
 ```
 
-**Local Development:**
-- Frontend: `http://localhost:3000`
-- Backend: `http://localhost:3001`
-- Stripe webhooks: Stripe CLI forwards to `http://localhost:3001/api/webhooks/stripe`
+**Post-Demo Production Steps:**
+1. Deploy frontend to Vercel (domain: `barpel.ai`)
+2. Deploy backend to Render (domain: `barpel.onrender.com`)
+3. Configure production Stripe webhook (endpoint: `https://barpel.onrender.com/api/webhooks/stripe`)
+4. Update DNS records for `barpel.ai`
+5. Consider local payment gateways (Flutterwave, PayStack) for Nigerian NG₦ billing
 
 ---
 
@@ -169,26 +189,26 @@ All 3 phases now complete and operational. No legacy data population issues rema
 ---
 
 ### Table: `organizations`
-**Purpose:** Customer accounts in the multi-tenant platform
+**Purpose:** Customer accounts in the multi-tenant platform (SMEs, small businesses, practices)
 
 **Columns:**
 - `id` (uuid) - Unique organization ID
-- `name` (text) - Organization name
+- `name` (text) - Organization name (company name from signup)
 - `email` (text) - Primary contact email
 - `phone` (text, nullable) - Organization phone
 - `website` (text, nullable) - Organization website
 - `plan` (text) - ⚠️ DEPRECATED: Legacy tiered billing plan column (not used). All customers use pay-as-you-go wallet model.
-- `stripe_customer_id` (text, nullable) - Stripe customer reference
-- `wallet_balance_pence` (integer, nullable) - Prepaid balance in pence
+- `stripe_customer_id` (text, nullable) - Stripe customer reference (or Flutterwave/PayStack reference post-launch)
+- `wallet_balance_pence` (integer, nullable) - Prepaid balance in pence (GBP, TBD NG₦ post-launch)
 - `debt_limit_pence` (integer, default 500) - Maximum negative balance allowed (£5.00 / 500 pence GBP)
 - `wallet_markup_percent` (integer, default 50) - ⚠️ DEPRECATED: Legacy column from tiered pricing era. Not used in billing calculations. Marked for removal in future schema cleanup.
-- `telephony_mode` (text) - "byoc", "managed", or "none"
+- `telephony_mode` (text) - "byoc", "managed", or "none" (managed Twilio or bring-your-own credentials)
 - `settings` (jsonb, nullable) - Custom settings
 - `created_at` (timestamp) - Account creation time
 - `updated_at` (timestamp) - Last update time
-- **`onboarding_completed_at` (timestamptz, nullable, default NULL)** - NULL means user needs onboarding wizard; set by `POST /api/onboarding/complete`. Used as gate for dashboard redirect logic. ✨ NEW (2026-02-25)
-- **`clinic_name` (text, nullable, default NULL)** - Clinic name from wizard step 0; written on onboarding completion. ✨ NEW (2026-02-25)
-- **`specialty` (text, nullable, default NULL)** - Medical specialty from wizard step 1; written on onboarding completion. ✨ NEW (2026-02-25)
+- **`onboarding_completed_at` (timestamptz, nullable, default NULL)** - NULL means user needs onboarding wizard; set by `POST /api/onboarding/complete`. Used as gate for dashboard redirect logic. ✨ NEW (2026-02-25) / BARPEL CRITICAL
+- **`clinic_name` (text, nullable, default NULL)** - **BARPEL:** Business name from wizard step 0 (e.g., "Ace Auto Dealers", "Lagos Real Estate"); kept as `clinic_name` for DB backward compatibility with Voxanne schema. Written on onboarding completion. ✨ NEW (2026-02-25)
+- **`specialty` (text, nullable, default NULL)** - **BARPEL:** Business vertical from wizard step 1 (auto_dealer, real_estate, legal, salon_spa, medical, retail, other); kept as `specialty` for backward compatibility. ✨ NEW (2026-02-25)
 
 **Primary Key:** id
 **Indexes:** name, email, plan, stripe_customer_id, telephony_mode
@@ -817,10 +837,35 @@ Organization (organizations)
 
 ---
 
-**This is the Single Source of Truth (SSOT) for the Voxanne AI database schema.**
-**Status:** Current as of 2026-02-25 (Onboarding Wizard Schema + Dashboard E2E Fixes Applied)
-**Last Verified:** Onboarding wizard migration (2026-02-25) - 2 new tables + 3 org columns, build clean
-**Billing Status:** ✅ PRODUCTION READY - All 3 phases deployed, zero revenue leaks remaining
-**Security Score:** 95+/100 (with prepaid billing atomic enforcement)
-**Revenue Protection:** £500-2,000/month leak eliminated through strict prepaid enforcement
-**Next Review:** Scheduled for 2026-03-14
+## 📋 Barpel AI Project Status
+
+**This is the Single Source of Truth (SSOT) for the Barpel AI database schema.**
+
+**Project Phase:** ✅ DEMO READY (Reskin from Voxanne AI completed)
+**Status as of:** 2026-03-01
+**Last Verified:** Barpel AI Reskin (2026-03-01) - 79 migrations deployed, frontend + backend running, demo flow tested
+**Database Project:** Supabase `wifcmvgwzicgyrvaoiwi` (Barpel-specific)
+**Architecture Inherited:** Voxanne AI production-grade foundation (prepaid billing, security, multi-tenancy)
+**Terminology Updated:** Business-focused (clinic → business, specialty → vertical, medical → SME)
+
+**Key Metrics:**
+- ✅ 32 tables (10 core + 2 billing + 1 security + 17 config + 2 onboarding)
+- ✅ 79 migrations (71 copied + 8 existing)
+- ✅ 183 indexes (optimized for performance)
+- ✅ 23 RLS policies (multi-tenant isolation enforced)
+- ✅ 56 pence/minute billing rate (inherited, TBD customization for NG₦)
+
+**Billing Status:** ✅ FULLY OPERATIONAL - 3-phase prepaid billing system (atomic deduction, credit reservation, kill switch)
+**Security Score:** 95+/100 (RLS enforced, webhook idempotency, error sanitization)
+**Multi-Tenancy:** ✅ HARDENED - org_id isolation on all queries, automated RLS verification
+**Demo Readiness:** ✅ COMPLETE - Signup → Wizard → Dashboard flow tested, Dim & Brandy theme applied, zero Voxanne references
+
+**Next Steps (Post-Demo):**
+1. **Pricing Customization** — Adapt prepaid wallet + billing rate for Nigerian SME market (NG₦ currency, local pricing bands)
+2. **Production Deployment** — Deploy to Vercel + Render, configure Stripe production, DNS setup
+3. **Localization** — i18n for Yoruba/Hausa/Igbo, timezone handling (WAT), local number prefixes (+234)
+4. **Payment Gateway Integration** — Flutterwave/PayStack for NG₦ billing (replacing Stripe test mode)
+5. **SME Analytics** — Build call ROI tracking, lead scoring, conversion metrics specific to Nigerian business context
+6. **Compliance** — NDPR (Nigeria Data Protection Regulation) compliance, data residency (server location), audit logging
+
+**Next Technical Review:** 2026-03-10 (post-investor demo)

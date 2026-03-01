@@ -64,7 +64,7 @@ async function runTest(
 
 async function main() {
   console.log('\n========================================');
-  console.log('  VOXANNE MONITORING VERIFICATION');
+  console.log('  BARPEL MONITORING VERIFICATION');
   console.log('========================================\n');
 
   // Initialize services

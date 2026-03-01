@@ -3,8 +3,8 @@ import NavbarRedesigned from '@/components/NavbarRedesigned';
 import FooterRedesigned from '@/components/FooterRedesigned';
 
 export const metadata = {
-    title: 'Privacy Policy | Voxanne AI',
-    description: 'Privacy Policy for Voxanne AI. Learn how we handle your data, voice recordings, and compliance with HIPAA, GDPR, and CCPA.',
+    title: 'Privacy Policy | Barpel AI',
+    description: 'Privacy Policy for Barpel AI. Learn how we handle your data, voice recordings, and compliance with HIPAA, GDPR, and CCPA.',
 };
 
 export default function PrivacyPage() {
@@ -45,7 +45,7 @@ export default function PrivacyPage() {
                         <section id="introduction" className="mb-12">
                             <h2 className="text-3xl font-bold text-deep-obsidian mb-6">1. Introduction</h2>
                             <p className="mb-4">
-                                Welcome to Voxanne AI, a product of Call Waiting AI Ltd. (&quot;Voxanne AI,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;).
+                                Welcome to Barpel AI, a product of Call Waiting AI Ltd. (&quot;Barpel AI,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;).
                                 We are committed to protecting your privacy and ensuring the security of your personal data.
                             </p>
                             <p className="mb-4">
@@ -60,7 +60,7 @@ export default function PrivacyPage() {
                             </p>
                             <div className="bg-blue-50 border-l-4 border-clinical-blue p-4 my-6">
                                 <p className="text-sm text-blue-800">
-                                    <strong>Healthcare Organizations:</strong> If you are a healthcare provider using Voxanne AI
+                                    <strong>Healthcare Organizations:</strong> If you are a healthcare provider using Barpel AI
                                     to handle patient communications, please also review Section 8 (Healthcare Compliance) and our{' '}
                                     <a href="/hipaa-compliance" className="text-clinical-blue hover:text-surgical-blue underline">
                                         Healthcare Compliance Page
@@ -73,7 +73,7 @@ export default function PrivacyPage() {
                         <section id="uk-gdpr" className="mb-12">
                             <h2 className="text-3xl font-bold text-deep-obsidian mb-6">2. UK GDPR Compliance (Primary Framework)</h2>
                             <p className="mb-4">
-                                <strong>Voxanne AI is a UK-based company operating under UK GDPR as our primary compliance framework.</strong> We are committed to protecting the rights of individuals in the UK and EU in accordance with the UK General Data Protection Regulation (UK GDPR).
+                                <strong>Barpel AI is a UK-based company operating under UK GDPR as our primary compliance framework.</strong> We are committed to protecting the rights of individuals in the UK and EU in accordance with the UK General Data Protection Regulation (UK GDPR).
                             </p>
 
                             <h3 className="text-xl font-semibold text-deep-obsidian mb-4 mt-8">2.1 Data Controller Information</h3>
@@ -108,7 +108,7 @@ export default function PrivacyPage() {
                             </ul>
                             <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-6">
                                 <p className="text-sm text-yellow-800">
-                                    <strong>Important:</strong> If you are a healthcare organization, please ensure you have appropriate consents from patients before processing their health data through Voxanne AI. Review our <a href="/hipaa-compliance" className="text-clinical-blue hover:text-surgical-blue underline">Healthcare Compliance Page</a> for healthcare-specific requirements.
+                                    <strong>Important:</strong> If you are a healthcare organization, please ensure you have appropriate consents from patients before processing their health data through Barpel AI. Review our <a href="/hipaa-compliance" className="text-clinical-blue hover:text-surgical-blue underline">Healthcare Compliance Page</a> for healthcare-specific requirements.
                                 </p>
                             </div>
 
@@ -136,17 +136,17 @@ export default function PrivacyPage() {
                                         <tr>
                                             <td className="border border-slate-300 px-4 py-2 font-semibold">Right to Access (Article 15)</td>
                                             <td className="border border-slate-300 px-4 py-2">Request copy of your personal data</td>
-                                            <td className="border border-slate-300 px-4 py-2">Email privacy@voxanne.ai or use data export API</td>
+                                            <td className="border border-slate-300 px-4 py-2">Email privacy@barpel.ai or use data export API</td>
                                         </tr>
                                         <tr className="bg-slate-50">
                                             <td className="border border-slate-300 px-4 py-2 font-semibold">Right to Rectification (Article 16)</td>
                                             <td className="border border-slate-300 px-4 py-2">Correct inaccurate personal data</td>
-                                            <td className="border border-slate-300 px-4 py-2">Update via dashboard or email privacy@voxanne.ai</td>
+                                            <td className="border border-slate-300 px-4 py-2">Update via dashboard or email privacy@barpel.ai</td>
                                         </tr>
                                         <tr>
                                             <td className="border border-slate-300 px-4 py-2 font-semibold">Right to Erasure (Article 17)</td>
                                             <td className="border border-slate-300 px-4 py-2">Request deletion of personal data</td>
-                                            <td className="border border-slate-300 px-4 py-2">Use data deletion API or email privacy@voxanne.ai (30-day process)</td>
+                                            <td className="border border-slate-300 px-4 py-2">Use data deletion API or email privacy@barpel.ai (30-day process)</td>
                                         </tr>
                                         <tr className="bg-slate-50">
                                             <td className="border border-slate-300 px-4 py-2 font-semibold">Right to Portability (Article 20)</td>
@@ -156,12 +156,12 @@ export default function PrivacyPage() {
                                         <tr>
                                             <td className="border border-slate-300 px-4 py-2 font-semibold">Right to Object (Article 21)</td>
                                             <td className="border border-slate-300 px-4 py-2">Object to processing based on legitimate interests</td>
-                                            <td className="border border-slate-300 px-4 py-2">Email privacy@voxanne.ai with objection details</td>
+                                            <td className="border border-slate-300 px-4 py-2">Email privacy@barpel.ai with objection details</td>
                                         </tr>
                                         <tr className="bg-slate-50">
                                             <td className="border border-slate-300 px-4 py-2 font-semibold">Right to Restrict (Article 18)</td>
                                             <td className="border border-slate-300 px-4 py-2">Limit how we process your data</td>
-                                            <td className="border border-slate-300 px-4 py-2">Email privacy@voxanne.ai with restriction request</td>
+                                            <td className="border border-slate-300 px-4 py-2">Email privacy@barpel.ai with restriction request</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -332,7 +332,7 @@ export default function PrivacyPage() {
                             <ul className="list-disc ml-6 mb-6 space-y-2">
                                 <li>Comply with applicable law, regulation, or legal process</li>
                                 <li>Respond to lawful requests from public authorities</li>
-                                <li>Protect the rights, property, or safety of Voxanne AI, our users, or the public</li>
+                                <li>Protect the rights, property, or safety of Barpel AI, our users, or the public</li>
                                 <li>Enforce our Terms of Service</li>
                             </ul>
 
@@ -380,7 +380,7 @@ export default function PrivacyPage() {
                                 and use the Service to process Protected Health Information (PHI):
                             </p>
                             <ul className="list-disc ml-6 mb-6 space-y-2">
-                                <li>You must execute a Business Associate Agreement (BAA) with Voxanne AI</li>
+                                <li>You must execute a Business Associate Agreement (BAA) with Barpel AI</li>
                                 <li>We act as a Business Associate under HIPAA</li>
                                 <li>We implement administrative, physical, and technical safeguards as required by the HIPAA Security Rule</li>
                                 <li>We apply PHI redaction to stored transcripts (8 pattern types including SSN, credit cards, diagnoses)</li>
@@ -388,8 +388,8 @@ export default function PrivacyPage() {
                             </ul>
                             <p className="mb-4">
                                 To request a BAA, email{' '}
-                                <a href="mailto:legal@voxanne.ai" className="text-clinical-blue hover:text-surgical-blue underline">
-                                    legal@voxanne.ai
+                                <a href="mailto:legal@barpel.ai" className="text-clinical-blue hover:text-surgical-blue underline">
+                                    legal@barpel.ai
                                 </a>{' '}
                                 with subject &quot;BAA Request.&quot; For full details, see our{' '}
                                 <a href="/hipaa-compliance" className="text-clinical-blue hover:text-surgical-blue underline">
@@ -459,8 +459,8 @@ export default function PrivacyPage() {
                             </ul>
                             <p className="mb-4">
                                 To exercise any of these rights, contact us at{' '}
-                                <a href="mailto:privacy@voxanne.ai" className="text-clinical-blue hover:text-surgical-blue underline">
-                                    privacy@voxanne.ai
+                                <a href="mailto:privacy@barpel.ai" className="text-clinical-blue hover:text-surgical-blue underline">
+                                    privacy@barpel.ai
                                 </a>. We will respond within 30 days (or sooner as required by law).
                             </p>
                         </section>
@@ -482,7 +482,7 @@ export default function PrivacyPage() {
 
                             <h3 className="text-xl font-semibold text-deep-obsidian mb-4 mt-8">10.2 Data Controller</h3>
                             <p className="mb-4">
-                                Voxanne AI (Call Waiting AI Ltd.) is the data controller for personal data collected through
+                                Barpel AI (Call Waiting AI Ltd.) is the data controller for personal data collected through
                                 the Service. Our registered address is:
                             </p>
                             <div className="bg-slate-100 p-4 rounded-lg my-4 text-sm">
@@ -496,8 +496,8 @@ export default function PrivacyPage() {
                             <h3 className="text-xl font-semibold text-deep-obsidian mb-4 mt-8">10.3 Data Protection Officer</h3>
                             <p className="mb-4">
                                 For GDPR-related inquiries, contact our Data Protection Officer at{' '}
-                                <a href="mailto:privacy@voxanne.ai" className="text-clinical-blue hover:text-surgical-blue underline">
-                                    privacy@voxanne.ai
+                                <a href="mailto:privacy@barpel.ai" className="text-clinical-blue hover:text-surgical-blue underline">
+                                    privacy@barpel.ai
                                 </a>.
                             </p>
 
@@ -526,8 +526,8 @@ export default function PrivacyPage() {
                             </ul>
                             <p className="mb-4">
                                 To exercise CCPA rights, contact us at{' '}
-                                <a href="mailto:privacy@voxanne.ai" className="text-clinical-blue hover:text-surgical-blue underline">
-                                    privacy@voxanne.ai
+                                <a href="mailto:privacy@barpel.ai" className="text-clinical-blue hover:text-surgical-blue underline">
+                                    privacy@barpel.ai
                                 </a>{' '}
                                 or call +44 7424 038250.
                             </p>
@@ -564,8 +564,8 @@ export default function PrivacyPage() {
                             </p>
                             <p className="mb-4">
                                 If you believe a child has provided us with personal information, please contact us at{' '}
-                                <a href="mailto:privacy@voxanne.ai" className="text-clinical-blue hover:text-surgical-blue underline">
-                                    privacy@voxanne.ai
+                                <a href="mailto:privacy@barpel.ai" className="text-clinical-blue hover:text-surgical-blue underline">
+                                    privacy@barpel.ai
                                 </a>.
                             </p>
                         </section>
@@ -611,7 +611,7 @@ export default function PrivacyPage() {
                                 please contact us:
                             </p>
                             <div className="bg-clinical-blue/5 border border-clinical-blue/20 rounded-lg p-6 mt-6">
-                                <h3 className="font-semibold text-deep-obsidian mb-4">Voxanne AI</h3>
+                                <h3 className="font-semibold text-deep-obsidian mb-4">Barpel AI</h3>
                                 <p className="text-slate-600 mb-2">A product of Call Waiting AI Ltd.</p>
                                 <p className="text-slate-600 mb-4">
                                     Collage House, 2nd Floor<br />
@@ -622,26 +622,26 @@ export default function PrivacyPage() {
                                 <div className="space-y-2">
                                     <p className="text-slate-600">
                                         <strong>General Support:</strong>{' '}
-                                        <a href="mailto:support@voxanne.ai" className="text-clinical-blue hover:text-surgical-blue underline">
-                                            support@voxanne.ai
+                                        <a href="mailto:support@barpel.ai" className="text-clinical-blue hover:text-surgical-blue underline">
+                                            support@barpel.ai
                                         </a>
                                     </p>
                                     <p className="text-slate-600">
                                         <strong>Privacy Inquiries:</strong>{' '}
-                                        <a href="mailto:privacy@voxanne.ai" className="text-clinical-blue hover:text-surgical-blue underline">
-                                            privacy@voxanne.ai
+                                        <a href="mailto:privacy@barpel.ai" className="text-clinical-blue hover:text-surgical-blue underline">
+                                            privacy@barpel.ai
                                         </a>
                                     </p>
                                     <p className="text-slate-600">
                                         <strong>Legal Matters:</strong>{' '}
-                                        <a href="mailto:legal@voxanne.ai" className="text-clinical-blue hover:text-surgical-blue underline">
-                                            legal@voxanne.ai
+                                        <a href="mailto:legal@barpel.ai" className="text-clinical-blue hover:text-surgical-blue underline">
+                                            legal@barpel.ai
                                         </a>
                                     </p>
                                     <p className="text-slate-600">
                                         <strong>Security Issues:</strong>{' '}
-                                        <a href="mailto:security@voxanne.ai" className="text-clinical-blue hover:text-surgical-blue underline">
-                                            security@voxanne.ai
+                                        <a href="mailto:security@barpel.ai" className="text-clinical-blue hover:text-surgical-blue underline">
+                                            security@barpel.ai
                                         </a>
                                     </p>
                                 </div>
@@ -657,7 +657,7 @@ export default function PrivacyPage() {
                             </p>
                             <p className="text-sm text-slate-600 mt-4">
                                 By using the Service, you acknowledge that you have read and understood this Privacy Policy.
-                                Thank you for trusting Voxanne AI with your data.
+                                Thank you for trusting Barpel AI with your data.
                             </p>
                         </div>
                     </div>

@@ -20,7 +20,7 @@ export default function DemoWorkflowPage() {
         </ParallaxBackground>
         <div className="container relative z-10 text-center">
           <HeroTextReveal 
-            text="Voxanne in Action" 
+            text="Barpel in Action" 
             mode="words" 
             variant="fadeUp" 
             stagger={0.05}
@@ -42,12 +42,12 @@ export default function DemoWorkflowPage() {
             <div className="p-8 bg-gray-50 rounded-2xl shadow-lg">
               <h3 className="text-2xl font-bold text-gray-900">1. Answering Calls</h3>
               <p className="text-gray-600 mt-4">
-                Voxanne answers calls instantly, 24/7, with a natural and professional voice.
+                Barpel answers calls instantly, 24/7, with a natural and professional voice.
               </p>
             </div>
             <ParallaxImage 
               src="/demo/call-answering.png" 
-              alt="Voxanne answering a call"
+              alt="Barpel answering a call"
               offset={30}
               shouldAnimate={shouldAnimate}
             />
@@ -59,7 +59,7 @@ export default function DemoWorkflowPage() {
           <div className="container grid grid-cols-1 lg:grid-cols-2 gap-12">
             <ParallaxImage 
               src="/demo/booking.png" 
-              alt="Voxanne booking a meeting"
+              alt="Barpel booking a meeting"
               offset={30}
               shouldAnimate={shouldAnimate}
             />
@@ -78,12 +78,12 @@ export default function DemoWorkflowPage() {
             <div className="p-8 bg-gray-50 rounded-2xl shadow-lg">
               <h3 className="text-2xl font-bold text-gray-900">3. HIPAA Compliance</h3>
               <p className="text-gray-600 mt-4">
-                Voxanne ensures all interactions are HIPAA compliant and secure.
+                Barpel ensures all interactions are HIPAA compliant and secure.
               </p>
             </div>
             <ParallaxImage 
               src="/demo/compliance.png" 
-              alt="Voxanne ensuring compliance"
+              alt="Barpel ensuring compliance"
               offset={30}
               shouldAnimate={shouldAnimate}
             />
@@ -95,7 +95,7 @@ export default function DemoWorkflowPage() {
           <div className="container grid grid-cols-1 lg:grid-cols-2 gap-12">
             <ParallaxImage 
               src="/demo/sms.png" 
-              alt="Voxanne sending SMS confirmation"
+              alt="Barpel sending SMS confirmation"
               offset={30}
               shouldAnimate={shouldAnimate}
             />
@@ -119,7 +119,7 @@ export default function DemoWorkflowPage() {
             </div>
             <ParallaxImage 
               src="/demo/crm.png" 
-              alt="Voxanne logging into CRM"
+              alt="Barpel logging into CRM"
               offset={30}
               shouldAnimate={shouldAnimate}
             />

@@ -38,10 +38,10 @@ export async function handleCalendlyWebhook(req: Request, res: Response) {
     const icsContent = generateICSFile({
       startTime,
       endTime,
-      summary: 'Voxanne AI Demo',
-      description: 'Personalized demo of Voxanne AI voice agents. We\'ll show you how our AI can transform your business communications.',
+      summary: 'Barpel AI Demo',
+      description: 'Personalized demo of Barpel AI voice agents. We\'ll show you how our AI can transform your business communications.',
       location: scheduled_event.location || 'Zoom (link sent separately)',
-      organizerEmail: process.env.FROM_EMAIL || 'hello@voxanne.ai',
+      organizerEmail: process.env.FROM_EMAIL || 'hello@barpel.ai',
       attendeeEmail: email,
       attendeeName: name
     });
@@ -221,10 +221,10 @@ export async function sendAppointmentReminder(appointmentData: {
     const icsContent = generateICSFile({
       startTime: appointmentTime,
       endTime,
-      summary: 'Voxanne AI Demo Reminder',
-      description: `Reminder: Your Voxanne AI demo is tomorrow!\n\n${meetingLink ? `Meeting Link: ${meetingLink}` : ''}`,
+      summary: 'Barpel AI Demo Reminder',
+      description: `Reminder: Your Barpel AI demo is tomorrow!\n\n${meetingLink ? `Meeting Link: ${meetingLink}` : ''}`,
       location: meetingLink || 'Virtual',
-      organizerEmail: process.env.FROM_EMAIL || 'hello@voxanne.ai',
+      organizerEmail: process.env.FROM_EMAIL || 'hello@barpel.ai',
       attendeeEmail: customerEmail,
       attendeeName: customerName
     });

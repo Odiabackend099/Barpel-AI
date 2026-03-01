@@ -10,27 +10,27 @@ import {
 
 const faqs = [
     {
-        question: "What is Voxanne AI?",
-        answer: "Voxanne AI is a voice-as-a-service platform that acts as an autonomous receptionist for your clinic. It answers calls, books appointments, and handles patient inquiries 24/7 using natural-sounding AI.",
+        question: "What is Barpel AI?",
+        answer: "Barpel AI is a voice-as-a-service platform that acts as an autonomous receptionist for your clinic. It answers calls, books appointments, and handles patient inquiries 24/7 using natural-sounding AI.",
     },
     {
-        question: "How is Voxanne different from traditional IVR systems?",
-        answer: "Unlike robotic 'press 1 for appointments' systems, Voxanne understands natural language. Patients can speak normally, ask complex questions, and have a real conversation, just like they would with a human receptionist.",
+        question: "How is Barpel different from traditional IVR systems?",
+        answer: "Unlike robotic 'press 1 for appointments' systems, Barpel understands natural language. Patients can speak normally, ask complex questions, and have a real conversation, just like they would with a human receptionist.",
     },
     {
-        question: "Is Voxanne compliant with data protection regulations?",
-        answer: "Yes, Voxanne is fully UK GDPR and HIPAA compliant. All patient data is encrypted at rest and in transit. We provide Data Processing Agreements (DPA) for UK/EU customers and sign Business Associate Agreements (BAA) with US healthcare clients.",
+        question: "Is Barpel compliant with data protection regulations?",
+        answer: "Yes, Barpel is fully UK GDPR and HIPAA compliant. All patient data is encrypted at rest and in transit. We provide Data Processing Agreements (DPA) for UK/EU customers and sign Business Associate Agreements (BAA) with US healthcare clients.",
     },
     {
-        question: "Can Voxanne integrate with my existing calendar system?",
-        answer: "Absolutely. Voxanne integrates with Google Calendar to check availability and book appointments in real-time. More calendar integrations are on our roadmap.",
+        question: "Can Barpel integrate with my existing calendar system?",
+        answer: "Absolutely. Barpel integrates with Google Calendar to check availability and book appointments in real-time. More calendar integrations are on our roadmap.",
     },
     {
-        question: "What industries does Voxanne serve?",
-        answer: "While we specialize in healthcare (clinics, med spas, dental practices), Voxanne can be customized for any appointment-based business.",
+        question: "What industries does Barpel serve?",
+        answer: "While we specialize in healthcare (clinics, med spas, dental practices), Barpel can be customized for any appointment-based business.",
     },
     {
-        question: "How much does Voxanne AI cost?",
+        question: "How much does Barpel AI cost?",
         answer: "Top up your wallet from $25 and get credits. Credits are deducted based on call duration. No monthly subscriptions, no setup fees, and no lock-in. Every customer gets access to every feature.",
     },
     {
@@ -53,7 +53,7 @@ export default function FAQ() {
                             Frequently Asked <span className="font-sans font-semibold">Questions</span>
                         </h2>
                         <p className="text-lg text-obsidian/50">
-                            Everything you need to know about Voxanne AI.
+                            Everything you need to know about Barpel AI.
                         </p>
                     </div>
                 </FadeIn>

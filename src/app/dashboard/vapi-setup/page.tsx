@@ -89,16 +89,16 @@ export default function VapiSetupPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <Settings className="w-8 h-8 text-surgical-600" />
-          <h1 className="text-3xl font-bold text-obsidian">Vapi Webhook Setup</h1>
+          <h1 className="text-3xl font-bold text-barpel-slate">Vapi Webhook Setup</h1>
         </div>
-        <p className="text-obsidian/60">Configure your Vapi assistant to use the Knowledge Base RAG system</p>
+        <p className="text-barpel-slate/60">Configure your Vapi assistant to use the Knowledge Base RAG system</p>
       </div>
 
       {/* Status Card */}
       {loading ? (
         <div className="bg-white rounded-lg shadow p-8 flex items-center justify-center gap-3">
           <Loader2 className="w-5 h-5 animate-spin text-surgical-600" />
-          <span className="text-obsidian/60">Checking Vapi configuration status...</span>
+          <span className="text-barpel-slate/60">Checking Vapi configuration status...</span>
         </div>
       ) : (
         <>
@@ -106,7 +106,7 @@ export default function VapiSetupPage() {
           <div className="bg-white rounded-lg shadow p-6 mb-6">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <h2 className="text-lg font-semibold text-obsidian mb-2">Current Status</h2>
+                <h2 className="text-lg font-semibold text-barpel-slate mb-2">Current Status</h2>
                 <div className="flex items-center gap-2">
                   {status?.configured ? (
                     <>
@@ -126,19 +126,19 @@ export default function VapiSetupPage() {
             {status?.configured && (
               <div className="space-y-3 text-sm">
                 <div>
-                  <label className="text-obsidian/60 block mb-1">Assistant ID</label>
-                  <code className="bg-surgical-50 px-3 py-2 rounded block text-obsidian font-mono">
+                  <label className="text-barpel-slate/60 block mb-1">Assistant ID</label>
+                  <code className="bg-surgical-50 px-3 py-2 rounded block text-barpel-slate font-mono">
                     {status.assistantId}
                   </code>
                 </div>
                 <div>
-                  <label className="text-obsidian/60 block mb-1">Assistant Name</label>
-                  <p className="text-obsidian">{status.assistantName}</p>
+                  <label className="text-barpel-slate/60 block mb-1">Assistant Name</label>
+                  <p className="text-barpel-slate">{status.assistantName}</p>
                 </div>
                 <div>
-                  <label className="text-obsidian/60 block mb-1">Webhook URL</label>
+                  <label className="text-barpel-slate/60 block mb-1">Webhook URL</label>
                   <div className="flex gap-2">
-                    <code className="bg-surgical-50 px-3 py-2 rounded flex-1 text-obsidian font-mono text-xs overflow-auto">
+                    <code className="bg-surgical-50 px-3 py-2 rounded flex-1 text-barpel-slate font-mono text-xs overflow-auto">
                       {status.webhookUrl}
                     </code>
                     <button
@@ -160,8 +160,8 @@ export default function VapiSetupPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="text-obsidian/60 block mb-1">System Prompt Updated</label>
-                  <p className="text-obsidian">
+                  <label className="text-barpel-slate/60 block mb-1">System Prompt Updated</label>
+                  <p className="text-barpel-slate">
                     {status.systemPromptUpdated ? 'Yes' : 'No'}
                   </p>
                 </div>
@@ -178,10 +178,10 @@ export default function VapiSetupPage() {
           {/* Configuration Section */}
           {!status?.configured && (
             <div className="bg-white rounded-lg shadow p-6 mb-6">
-              <h2 className="text-lg font-semibold text-obsidian mb-4">Configure Webhook</h2>
+              <h2 className="text-lg font-semibold text-barpel-slate mb-4">Configure Webhook</h2>
 
               <div className="bg-surgical-50 border border-surgical-200 rounded p-4 mb-6">
-                <p className="text-sm text-obsidian/70">
+                <p className="text-sm text-barpel-slate/70">
                   <strong>What this does:</strong> Configures your Vapi assistant to call the Knowledge Base RAG webhook before generating responses. This enables the AI to use your uploaded documents to answer questions accurately.
                 </p>
               </div>
@@ -189,7 +189,7 @@ export default function VapiSetupPage() {
               <button
                 onClick={handleConfigureWebhook}
                 disabled={configuring}
-                className="w-full px-6 py-3 bg-surgical-600 hover:bg-surgical-700 disabled:bg-surgical-100 text-white font-medium rounded-lg transition flex items-center justify-center gap-2"
+                className="w-full px-6 py-3 bg-barpel-teal hover:bg-barpel-teal-dark disabled:bg-surgical-100 text-white font-medium rounded-lg transition flex items-center justify-center gap-2"
               >
                 {configuring ? (
                   <>
@@ -230,7 +230,7 @@ export default function VapiSetupPage() {
 
           {/* How It Works */}
           <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold text-obsidian mb-4">How It Works</h2>
+            <h2 className="text-lg font-semibold text-barpel-slate mb-4">How It Works</h2>
 
             <div className="space-y-4">
               <div className="flex gap-4">
@@ -238,8 +238,8 @@ export default function VapiSetupPage() {
                   1
                 </div>
                 <div>
-                  <h3 className="font-medium text-obsidian">Upload Documents</h3>
-                  <p className="text-sm text-obsidian/60 mt-1">Go to Knowledge Base and upload your documents (pricing, services, objections, etc.)</p>
+                  <h3 className="font-medium text-barpel-slate">Upload Documents</h3>
+                  <p className="text-sm text-barpel-slate/60 mt-1">Go to Knowledge Base and upload your documents (pricing, services, objections, etc.)</p>
                 </div>
               </div>
 
@@ -248,8 +248,8 @@ export default function VapiSetupPage() {
                   2
                 </div>
                 <div>
-                  <h3 className="font-medium text-obsidian">Auto-Chunk & Embed</h3>
-                  <p className="text-sm text-obsidian/60 mt-1">Documents are automatically chunked and embedded into vectors for semantic search</p>
+                  <h3 className="font-medium text-barpel-slate">Auto-Chunk & Embed</h3>
+                  <p className="text-sm text-barpel-slate/60 mt-1">Documents are automatically chunked and embedded into vectors for semantic search</p>
                 </div>
               </div>
 
@@ -258,8 +258,8 @@ export default function VapiSetupPage() {
                   3
                 </div>
                 <div>
-                  <h3 className="font-medium text-obsidian">Configure Webhook</h3>
-                  <p className="text-sm text-obsidian/60 mt-1">Click the button above to configure Vapi to use the RAG webhook</p>
+                  <h3 className="font-medium text-barpel-slate">Configure Webhook</h3>
+                  <p className="text-sm text-barpel-slate/60 mt-1">Click the button above to configure Vapi to use the RAG webhook</p>
                 </div>
               </div>
 
@@ -268,8 +268,8 @@ export default function VapiSetupPage() {
                   4
                 </div>
                 <div>
-                  <h3 className="font-medium text-obsidian">AI Uses Knowledge Base</h3>
-                  <p className="text-sm text-obsidian/60 mt-1">When customers call, Vapi retrieves relevant chunks and uses them to answer questions accurately</p>
+                  <h3 className="font-medium text-barpel-slate">AI Uses Knowledge Base</h3>
+                  <p className="text-sm text-barpel-slate/60 mt-1">When customers call, Vapi retrieves relevant chunks and uses them to answer questions accurately</p>
                 </div>
               </div>
             </div>

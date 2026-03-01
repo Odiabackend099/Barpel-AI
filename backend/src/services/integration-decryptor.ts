@@ -1031,7 +1031,7 @@ export class IntegrationDecryptor {
       accountSid,
       authToken,
       phoneNumber,
-      managedByVoxanne: source === 'managed', // Flag to distinguish managed vs BYOC
+      managedByBarpel: source === 'managed', // Flag to distinguish managed vs BYOC
       vapiPhoneId: vapiPhoneId || undefined,
       vapiCredentialId: vapiCredentialId || undefined,
     });

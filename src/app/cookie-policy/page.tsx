@@ -22,7 +22,7 @@ export default function CookiePolicyPage() {
                         </div>
                     </div>
                     <p className="text-amber-50 text-lg leading-relaxed">
-                        This Cookie Policy explains how Voxanne AI uses cookies and similar tracking technologies to improve your
+                        This Cookie Policy explains how Barpel AI uses cookies and similar tracking technologies to improve your
                         experience on our website and services.
                     </p>
                 </div>
@@ -79,7 +79,7 @@ export default function CookiePolicyPage() {
 
                             <ul className="space-y-2 text-slate-700 mb-6">
                                 <li><strong>Cookie Name:</strong> A unique identifier for the cookie</li>
-                                <li><strong>Domain:</strong> The website that set the cookie (e.g., voxanne.ai)</li>
+                                <li><strong>Domain:</strong> The website that set the cookie (e.g., barpel.ai)</li>
                                 <li><strong>Expiration Date:</strong> How long the cookie remains on your device</li>
                                 <li><strong>Value:</strong> Data associated with the cookie (e.g., user preferences, session ID)</li>
                             </ul>
@@ -125,7 +125,7 @@ export default function CookiePolicyPage() {
                             </div>
 
                             <p className="text-slate-700 leading-relaxed mb-6">
-                                <strong>Voxanne AI is subject to the Privacy and Electronic Communications Regulations (PECR)</strong>, which works alongside UK GDPR to regulate electronic communications, including cookies. The Information Commissioner's Office (ICO) enforces PECR in the UK.
+                                <strong>Barpel AI is subject to the Privacy and Electronic Communications Regulations (PECR)</strong>, which works alongside UK GDPR to regulate electronic communications, including cookies. The Information Commissioner's Office (ICO) enforces PECR in the UK.
                             </p>
 
                             <h3 className="text-2xl font-semibold text-slate-800 mt-8 mb-4">PECR Requirements We Follow</h3>
@@ -484,7 +484,7 @@ export default function CookiePolicyPage() {
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3">Session</td>
-                                            <td className="px-4 py-3">Voxanne AI</td>
+                                            <td className="px-4 py-3">Barpel AI</td>
                                         </tr>
                                         <tr className="border-b bg-green-50">
                                             <td className="px-4 py-3 font-mono text-xs">session_id</td>
@@ -495,7 +495,7 @@ export default function CookiePolicyPage() {
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3">Session</td>
-                                            <td className="px-4 py-3">Voxanne AI</td>
+                                            <td className="px-4 py-3">Barpel AI</td>
                                         </tr>
 
                                         {/* Analytics Cookies */}
@@ -543,7 +543,7 @@ export default function CookiePolicyPage() {
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3">1 year</td>
-                                            <td className="px-4 py-3">Voxanne AI</td>
+                                            <td className="px-4 py-3">Barpel AI</td>
                                         </tr>
                                         <tr className="border-b bg-amber-50">
                                             <td className="px-4 py-3 font-mono text-xs">language</td>
@@ -554,7 +554,7 @@ export default function CookiePolicyPage() {
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3">1 year</td>
-                                            <td className="px-4 py-3">Voxanne AI</td>
+                                            <td className="px-4 py-3">Barpel AI</td>
                                         </tr>
 
                                         {/* Third-Party Cookies */}
@@ -805,13 +805,13 @@ export default function CookiePolicyPage() {
                                 <div className="space-y-2 text-slate-700">
                                     <p>
                                         <strong>Email:</strong>{' '}
-                                        <a href="mailto:privacy@voxanne.ai" className="text-amber-600 hover:underline">
-                                            privacy@voxanne.ai
+                                        <a href="mailto:privacy@barpel.ai" className="text-amber-600 hover:underline">
+                                            privacy@barpel.ai
                                         </a>
                                     </p>
                                     <p>
                                         <strong>Mailing Address:</strong><br />
-                                        Voxanne AI<br />
+                                        Barpel AI<br />
                                         A product of Call Waiting AI Ltd.<br />
                                         Collage House, 2nd Floor<br />
                                         17 King Edward Road<br />

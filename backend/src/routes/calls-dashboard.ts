@@ -764,7 +764,7 @@ callsRouter.post('/', async (req: Request, res: Response) => {
       status: z.enum(['completed', 'missed', 'transferred', 'failed']),
       recording_url: z.string().optional(),
       transcript: z.array(z.object({
-        speaker: z.enum(['caller', 'voxanne']),
+        speaker: z.enum(['caller', 'barpel']),
         text: z.string(),
         timestamp: z.number().optional(),
         sentiment: z.string().optional()
@@ -1026,7 +1026,7 @@ This is an automated message. Please do not reply to this email.
     try {
       const emailResult = await withResendRetry(() =>
         resendClient.emails.send({
-          from: 'noreply@voxanne.ai',
+          from: 'noreply@barpel.ai',
           to: parsed.email,
           subject: subject,
           text: emailContent

@@ -53,7 +53,7 @@ beforeAll(async () => {
       first_name: 'Calendar',
       last_name: 'Tester',
       phone: uniquePhone(),
-      email: `calendar.tester.${randomUUID().substring(0, 8)}@voxanne.test`,
+      email: `calendar.tester.${randomUUID().substring(0, 8)}@barpel.test`,
     })
     .select('id')
     .single();

@@ -25,7 +25,7 @@
   "rewrites": [
     {
       "source": "/frontend/stream",
-      "destination": "https://voxanneai.onrender.com/frontend/stream"
+      "destination": "https://barpel.onrender.com/frontend/stream"
     }
   ],
   "redirects": [

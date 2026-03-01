@@ -8,7 +8,7 @@ const steps = [
     {
         number: "01",
         title: "Patient Calls",
-        description: "A patient dials your clinic number. Voxanne AI answers on the first ring — every time, 24/7.",
+        description: "A patient dials your clinic number. Barpel AI answers on the first ring — every time, 24/7.",
         icon: Phone,
         accent: "#3B82F6",
         glow: "rgba(59,130,246,0.4)",

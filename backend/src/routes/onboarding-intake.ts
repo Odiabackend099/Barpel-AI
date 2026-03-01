@@ -137,9 +137,9 @@ router.post('/', upload.single('pricing_pdf'), handleMulterError, async (req, re
     try {
       log.info('OnboardingIntake', 'Sending confirmation email to user', { email });
       const userEmailResult = await resend.emails.send({
-        from: 'Voxanne AI <noreply@voxanne.ai>',
+        from: 'Barpel AI <noreply@barpel.ai>',
         to: email,
-        subject: 'Thank you for your submission - Voxanne AI',
+        subject: 'Thank you for your submission - Barpel AI',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h1 style="color: #3498db;">Thank You for Your Submission!</h1>
@@ -160,12 +160,12 @@ router.post('/', upload.single('pricing_pdf'), handleMulterError, async (req, re
             <hr style="border: 1px solid #eee; margin: 30px 0;">
 
             <p style="color: #7f8c8d; font-size: 14px;">
-              If you have any questions, reply to this email or contact us at support@voxanne.ai
+              If you have any questions, reply to this email or contact us at support@barpel.ai
             </p>
 
             <p style="color: #7f8c8d; font-size: 14px;">
               Best regards,<br>
-              The Voxanne AI Team
+              The Barpel AI Team
             </p>
           </div>
         `,
@@ -183,8 +183,8 @@ router.post('/', upload.single('pricing_pdf'), handleMulterError, async (req, re
     // 2. Send detailed notification to SUPPORT TEAM
     log.info('OnboardingIntake', 'Sending notification to support team');
     const supportEmailResult = await resend.emails.send({
-      from: 'Voxanne AI <noreply@voxanne.ai>',
-      to: 'support@voxanne.ai',
+      from: 'Barpel AI <noreply@barpel.ai>',
+      to: 'support@barpel.ai',
       subject: `🔔 New Onboarding: ${company}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto;">

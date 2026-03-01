@@ -71,15 +71,15 @@ export default function StepCelebration() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.5, delay: 0.2, type: 'spring', stiffness: 200 }}
-          className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-surgical-50 border border-surgical-200 mb-6"
+          className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-barpel-teal/10 border border-barpel-border mb-6"
         >
-          <PartyPopper className="w-10 h-10 text-surgical-600" />
+          <PartyPopper className="w-10 h-10 text-barpel-teal" />
         </motion.div>
 
-        <h1 className="text-3xl font-bold text-obsidian tracking-tighter mb-3">
+        <h1 className="text-3xl font-bold text-barpel-slate tracking-tighter mb-3">
           Your AI Receptionist is officially hired!
         </h1>
-        <p className="text-base text-obsidian/60 mb-8">
+        <p className="text-base text-barpel-slate/60 mb-8">
           {provisioningInProgress
             ? 'Setting up your phone number...'
             : provisionError
@@ -93,7 +93,7 @@ export default function StepCelebration() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             onClick={nextStep}
-            className="px-8 py-3 rounded-xl bg-surgical-600 text-white font-medium shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-100 transition-all"
+            className="px-8 py-3 rounded-xl bg-barpel-teal text-white font-medium shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-100 transition-all"
           >
             Continue
           </motion.button>

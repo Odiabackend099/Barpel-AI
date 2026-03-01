@@ -156,8 +156,8 @@ export default function Step3Confirmation({
         <p className="text-sm font-medium text-obsidian mb-2">Need to reschedule?</p>
         <p className="text-xs text-obsidian/60">
           Contact us at{' '}
-          <a href="mailto:support@voxanne.ai" className="text-surgical-600 hover:underline">
-            support@voxanne.ai
+          <a href="mailto:support@barpel.ai" className="text-surgical-600 hover:underline">
+            support@barpel.ai
           </a>{' '}
           or call{' '}
           <a href="tel:+442074240382" className="text-surgical-600 hover:underline">

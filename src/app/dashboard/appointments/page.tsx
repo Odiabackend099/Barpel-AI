@@ -229,13 +229,13 @@ const AppointmentsDashboardContent = () => {
             case 'in_progress':
                 return 'bg-blue-50 text-blue-700 border-blue-200';
             case 'completed':
-                return 'bg-surgical-50 text-obsidian/60 border-surgical-200';
+                return 'bg-surgical-50 text-barpel-slate/60 border-surgical-200';
             case 'cancelled':
                 return 'bg-red-50 text-red-700 border-red-200';
             case 'no_show':
                 return 'bg-yellow-50 text-yellow-700 border-yellow-200';
             default:
-                return 'bg-surgical-50 text-obsidian/60 border-surgical-200';
+                return 'bg-surgical-50 text-barpel-slate/60 border-surgical-200';
         }
     };
 
@@ -265,7 +265,7 @@ const AppointmentsDashboardContent = () => {
             <div className="min-h-screen bg-surgical-50 flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
                     <div className="w-8 h-8 border-4 border-surgical-200 border-t-surgical-600 rounded-full animate-spin" />
-                    <p className="text-obsidian/60">Loading...</p>
+                    <p className="text-barpel-slate/60">Loading...</p>
                 </div>
             </div>
         );
@@ -278,8 +278,8 @@ const AppointmentsDashboardContent = () => {
             <div className="max-w-7xl mx-auto px-6 py-8">
                 {/* Header */}
                 <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-obsidian mb-2">Appointments</h1>
-                    <p className="text-obsidian/60">Manage and track all scheduled appointments</p>
+                    <h1 className="text-4xl font-bold text-barpel-slate mb-2">Appointments</h1>
+                    <p className="text-barpel-slate/60">Manage and track all scheduled appointments</p>
                 </div>
 
                 {/* Error Message */}
@@ -292,7 +292,7 @@ const AppointmentsDashboardContent = () => {
                 {/* Filters */}
                 <div className="mb-6 flex gap-4 flex-wrap">
                     <div className="flex-1 min-w-64 relative">
-                        <Search className="absolute left-3 top-2.5 w-4 h-4 text-obsidian/40" />
+                        <Search className="absolute left-3 top-2.5 w-4 h-4 text-barpel-slate/40" />
                         <input
                             type="text"
                             placeholder="Search by contact name or phone..."
@@ -301,7 +301,7 @@ const AppointmentsDashboardContent = () => {
                                 setSearchQuery(e.target.value);
                                 setCurrentPage(1);
                             }}
-                            className="w-full pl-10 pr-4 py-2 border border-surgical-200 rounded-lg text-sm bg-white text-obsidian focus:outline-none focus:ring-2 focus:ring-surgical-500"
+                            className="w-full pl-10 pr-4 py-2 border border-surgical-200 rounded-lg text-sm bg-white text-barpel-slate focus:outline-none focus:ring-2 focus:ring-surgical-500"
                         />
                     </div>
 
@@ -311,7 +311,7 @@ const AppointmentsDashboardContent = () => {
                             setFilterStatus(e.target.value);
                             setCurrentPage(1);
                         }}
-                        className="px-4 py-2 border border-surgical-200 rounded-lg text-sm bg-white text-obsidian focus:outline-none focus:ring-2 focus:ring-surgical-500"
+                        className="px-4 py-2 border border-surgical-200 rounded-lg text-sm bg-white text-barpel-slate focus:outline-none focus:ring-2 focus:ring-surgical-500"
                     >
                         <option value="">All Status</option>
                         <option value="pending">Pending</option>
@@ -328,7 +328,7 @@ const AppointmentsDashboardContent = () => {
                             setFilterDate(e.target.value);
                             setCurrentPage(1);
                         }}
-                        className="px-4 py-2 border border-surgical-200 rounded-lg text-sm bg-white text-obsidian focus:outline-none focus:ring-2 focus:ring-surgical-500"
+                        className="px-4 py-2 border border-surgical-200 rounded-lg text-sm bg-white text-barpel-slate focus:outline-none focus:ring-2 focus:ring-surgical-500"
                     >
                         <option value="">All Time</option>
                         <option value="week">This Week</option>
@@ -340,7 +340,7 @@ const AppointmentsDashboardContent = () => {
                         className="p-2 border border-surgical-200 rounded-lg hover:bg-surgical-50 transition-colors"
                         title="Refresh"
                     >
-                        <RotateCw className="w-4 h-4 text-obsidian/60" />
+                        <RotateCw className="w-4 h-4 text-barpel-slate/60" />
                     </button>
                 </div>
 
@@ -350,13 +350,13 @@ const AppointmentsDashboardContent = () => {
                         <table className="w-full">
                             <thead className="bg-surgical-50 border-b border-surgical-200">
                                 <tr>
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-obsidian/60 uppercase">Date & Time</th>
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-obsidian/60 uppercase">Service</th>
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-obsidian/60 uppercase">Contact</th>
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-obsidian/60 uppercase">Duration</th>
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-obsidian/60 uppercase">Status</th>
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-obsidian/60 uppercase">Outcome</th>
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-obsidian/60 uppercase">Actions</th>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/60 uppercase">Date & Time</th>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/60 uppercase">Service</th>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/60 uppercase">Contact</th>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/60 uppercase">Duration</th>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/60 uppercase">Status</th>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/60 uppercase">Outcome</th>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/60 uppercase">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-surgical-200">
@@ -365,15 +365,15 @@ const AppointmentsDashboardContent = () => {
                                         <td colSpan={7} className="px-6 py-12 text-center">
                                             <div className="flex flex-col items-center gap-3">
                                                 <div className="w-8 h-8 border-4 border-surgical-200 border-t-surgical-600 rounded-full animate-spin" />
-                                                <p className="text-obsidian/60">Loading appointments...</p>
+                                                <p className="text-barpel-slate/60">Loading appointments...</p>
                                             </div>
                                         </td>
                                     </tr>
                                 ) : appointments.length === 0 ? (
                                     <tr>
                                         <td colSpan={7} className="px-6 py-12 text-center">
-                                            <Calendar className="w-12 h-12 text-obsidian/40 mx-auto mb-4" />
-                                            <p className="text-obsidian/60">No appointments scheduled</p>
+                                            <Calendar className="w-12 h-12 text-barpel-slate/40 mx-auto mb-4" />
+                                            <p className="text-barpel-slate/60">No appointments scheduled</p>
                                         </td>
                                     </tr>
                                 ) : (
@@ -384,24 +384,24 @@ const AppointmentsDashboardContent = () => {
                                             onClick={() => fetchAppointmentDetail(apt.id)}
                                         >
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center gap-2 text-sm text-obsidian font-medium">
-                                                    <Calendar className="w-4 h-4 text-obsidian/40" />
+                                                <div className="flex items-center gap-2 text-sm text-barpel-slate font-medium">
+                                                    <Calendar className="w-4 h-4 text-barpel-slate/40" />
                                                     {formatDateTime(apt.scheduled_time)}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <span className="text-sm font-medium text-obsidian">{apt.service_type}</span>
+                                                <span className="text-sm font-medium text-barpel-slate">{apt.service_type}</span>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm font-medium text-obsidian">{apt.contact_name}</div>
-                                                <div className="text-xs text-obsidian/60 flex items-center gap-1">
+                                                <div className="text-sm font-medium text-barpel-slate">{apt.contact_name}</div>
+                                                <div className="text-xs text-barpel-slate/60 flex items-center gap-1">
                                                     <Phone className="w-3 h-3" />
                                                     {apt.phone_number}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center gap-2 text-sm text-obsidian font-medium">
-                                                    <Clock className="w-4 h-4 text-obsidian/40" />
+                                                <div className="flex items-center gap-2 text-sm text-barpel-slate font-medium">
+                                                    <Clock className="w-4 h-4 text-barpel-slate/40" />
                                                     {apt.duration_minutes} min
                                                 </div>
                                             </td>
@@ -425,11 +425,11 @@ const AppointmentsDashboardContent = () => {
                                             </td>
                                             <td className="px-6 py-4">
                                                 {apt.outcome_summary ? (
-                                                    <p className="text-xs text-obsidian/70 line-clamp-2 leading-relaxed max-w-xs">
+                                                    <p className="text-xs text-barpel-slate/70 line-clamp-2 leading-relaxed max-w-xs">
                                                         {apt.outcome_summary}
                                                     </p>
                                                 ) : (
-                                                    <span className="text-xs text-obsidian/40">&mdash;</span>
+                                                    <span className="text-xs text-barpel-slate/40">&mdash;</span>
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
@@ -475,14 +475,14 @@ const AppointmentsDashboardContent = () => {
                     {/* Pagination */}
                     {totalPages > 1 && (
                         <div className="px-6 py-4 border-t border-surgical-200 flex items-center justify-between">
-                            <div className="text-sm text-obsidian/60">
+                            <div className="text-sm text-barpel-slate/60">
                                 Showing {(currentPage - 1) * appointmentsPerPage + 1} to {Math.min(currentPage * appointmentsPerPage, totalAppointments)} of {totalAppointments} appointments
                             </div>
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                                     disabled={currentPage === 1}
-                                    className="px-3 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-obsidian/60 hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+                                    className="px-3 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/60 hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
                                 >
                                     <ChevronLeft className="w-4 h-4" />
                                     Previous
@@ -504,8 +504,8 @@ const AppointmentsDashboardContent = () => {
                                                 key={pageNum}
                                                 onClick={() => setCurrentPage(pageNum)}
                                                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${currentPage === pageNum
-                                                    ? 'bg-surgical-600 text-white'
-                                                    : 'border border-surgical-200 text-obsidian/60 hover:bg-surgical-50'
+                                                    ? 'bg-barpel-teal text-white'
+                                                    : 'border border-surgical-200 text-barpel-slate/60 hover:bg-surgical-50'
                                                     }`}
                                             >
                                                 {pageNum}
@@ -516,7 +516,7 @@ const AppointmentsDashboardContent = () => {
                                 <button
                                     onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                                     disabled={currentPage === totalPages}
-                                    className="px-3 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-obsidian/60 hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+                                    className="px-3 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/60 hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
                                 >
                                     Next
                                     <ChevronRight className="w-4 h-4" />
@@ -537,14 +537,14 @@ const AppointmentsDashboardContent = () => {
                                 <div className="sticky top-0 bg-white border-b border-surgical-200 px-6 py-4 flex items-center justify-between">
                                     <div>
                                         <p className="text-xs font-semibold text-surgical-600 uppercase tracking-wider mb-1">Appointment Details</p>
-                                        <h2 className="text-2xl font-bold text-obsidian">{selectedAppointment.contact_name}</h2>
-                                        <p className="text-sm text-obsidian/60">{selectedAppointment.service_type}</p>
+                                        <h2 className="text-2xl font-bold text-barpel-slate">{selectedAppointment.contact_name}</h2>
+                                        <p className="text-sm text-barpel-slate/60">{selectedAppointment.service_type}</p>
                                     </div>
                                     <button
                                         onClick={() => setShowDetailModal(false)}
                                         className="p-2 hover:bg-surgical-50 rounded-lg transition-colors"
                                     >
-                                        <X className="w-6 h-6 text-obsidian/60" />
+                                        <X className="w-6 h-6 text-barpel-slate/60" />
                                     </button>
                                 </div>
 
@@ -553,38 +553,38 @@ const AppointmentsDashboardContent = () => {
                                     {/* Appointment Details */}
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
-                                            <p className="text-xs text-obsidian/60 font-medium uppercase mb-1">Scheduled Time</p>
-                                            <p className="text-lg font-bold text-obsidian">{formatDateTime(selectedAppointment.scheduled_time)}</p>
+                                            <p className="text-xs text-barpel-slate/60 font-medium uppercase mb-1">Scheduled Time</p>
+                                            <p className="text-lg font-bold text-barpel-slate">{formatDateTime(selectedAppointment.scheduled_time)}</p>
                                         </div>
                                         <div>
-                                            <p className="text-xs text-obsidian/60 font-medium uppercase mb-1">Duration</p>
-                                            <p className="text-lg font-bold text-obsidian">{selectedAppointment.duration_minutes} minutes</p>
+                                            <p className="text-xs text-barpel-slate/60 font-medium uppercase mb-1">Duration</p>
+                                            <p className="text-lg font-bold text-barpel-slate">{selectedAppointment.duration_minutes} minutes</p>
                                         </div>
                                         <div>
-                                            <p className="text-xs text-obsidian/60 font-medium uppercase mb-1">Status</p>
+                                            <p className="text-xs text-barpel-slate/60 font-medium uppercase mb-1">Status</p>
                                             <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold border ${getStatusBadgeColor(selectedAppointment.status)}`}>
                                                 {getStatusIcon(selectedAppointment.status)}
                                                 {selectedAppointment.status.charAt(0).toUpperCase() + selectedAppointment.status.slice(1)}
                                             </span>
                                         </div>
                                         <div>
-                                            <p className="text-xs text-obsidian/60 font-medium uppercase mb-1">Type</p>
-                                            <p className="text-sm font-medium text-obsidian">{selectedAppointment.is_virtual ? 'Virtual' : 'In-Person'}</p>
+                                            <p className="text-xs text-barpel-slate/60 font-medium uppercase mb-1">Type</p>
+                                            <p className="text-sm font-medium text-barpel-slate">{selectedAppointment.is_virtual ? 'Virtual' : 'In-Person'}</p>
                                         </div>
                                     </div>
 
                                     {/* Contact Information */}
                                     <div className="bg-surgical-50 rounded-lg p-4">
-                                        <p className="text-sm font-bold text-obsidian mb-3">Contact Information</p>
+                                        <p className="text-sm font-bold text-barpel-slate mb-3">Contact Information</p>
                                         <div className="space-y-2">
                                             <div className="flex items-center gap-2">
-                                                <Phone className="w-4 h-4 text-obsidian/40" />
-                                                <span className="text-sm text-obsidian">{selectedAppointment.phone_number}</span>
+                                                <Phone className="w-4 h-4 text-barpel-slate/40" />
+                                                <span className="text-sm text-barpel-slate">{selectedAppointment.phone_number}</span>
                                             </div>
                                             {selectedAppointment.location && (
                                                 <div className="flex items-start gap-2">
-                                                    <AlertCircle className="w-4 h-4 text-obsidian/40 mt-0.5" />
-                                                    <span className="text-sm text-obsidian">{selectedAppointment.location}</span>
+                                                    <AlertCircle className="w-4 h-4 text-barpel-slate/40 mt-0.5" />
+                                                    <span className="text-sm text-barpel-slate">{selectedAppointment.location}</span>
                                                 </div>
                                             )}
                                         </div>
@@ -593,11 +593,11 @@ const AppointmentsDashboardContent = () => {
                                     {/* Linked Call */}
                                     {selectedAppointment.call_id && (
                                         <div className="bg-surgical-50 rounded-lg p-4">
-                                            <p className="text-sm font-bold text-obsidian mb-3">Linked Call</p>
+                                            <p className="text-sm font-bold text-barpel-slate mb-3">Linked Call</p>
                                             <div className="space-y-2">
                                                 <div className="flex items-center gap-2">
-                                                    <Phone className="w-4 h-4 text-obsidian/40" />
-                                                    <span className="text-sm text-obsidian">Call ID: {selectedAppointment.call_id}</span>
+                                                    <Phone className="w-4 h-4 text-barpel-slate/40" />
+                                                    <span className="text-sm text-barpel-slate">Call ID: {selectedAppointment.call_id}</span>
                                                 </div>
                                                 {selectedAppointment.call_direction && (
                                                     <div className="flex items-center gap-2">
@@ -612,7 +612,7 @@ const AppointmentsDashboardContent = () => {
                                                             {selectedAppointment.call_direction === 'inbound' ? 'Inbound' : 'Outbound'} Call
                                                         </span>
                                                         {selectedAppointment.call_duration_seconds != null && (
-                                                            <span className="text-xs text-obsidian/60">({Math.floor(selectedAppointment.call_duration_seconds / 60)}m {selectedAppointment.call_duration_seconds % 60}s)</span>
+                                                            <span className="text-xs text-barpel-slate/60">({Math.floor(selectedAppointment.call_duration_seconds / 60)}m {selectedAppointment.call_duration_seconds % 60}s)</span>
                                                         )}
                                                     </div>
                                                 )}
@@ -632,8 +632,8 @@ const AppointmentsDashboardContent = () => {
                                     {/* Notes */}
                                     {selectedAppointment.notes && (
                                         <div className="bg-surgical-50 rounded-lg p-4">
-                                            <p className="text-sm font-bold text-obsidian mb-2">Notes</p>
-                                            <p className="text-sm text-obsidian">{selectedAppointment.notes}</p>
+                                            <p className="text-sm font-bold text-barpel-slate mb-2">Notes</p>
+                                            <p className="text-sm text-barpel-slate">{selectedAppointment.notes}</p>
                                         </div>
                                     )}
 
@@ -649,12 +649,12 @@ const AppointmentsDashboardContent = () => {
                                 {/* Inline Reschedule Form */}
                                 {showRescheduleForm && (
                                     <div className="border-t border-surgical-200 px-6 py-4 space-y-3">
-                                        <p className="text-sm font-medium text-obsidian">New date and time</p>
+                                        <p className="text-sm font-medium text-barpel-slate">New date and time</p>
                                         <input
                                             type="datetime-local"
                                             value={rescheduleDate}
                                             onChange={(e) => { setRescheduleDate(e.target.value); setRescheduleError(null); }}
-                                            className="w-full border border-surgical-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-surgical-600/30"
+                                            className="w-full border border-surgical-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-barpel-teal/30"
                                             aria-label="New date"
                                         />
                                         {rescheduleError && (
@@ -663,13 +663,13 @@ const AppointmentsDashboardContent = () => {
                                         <div className="flex gap-2">
                                             <button
                                                 onClick={handleRescheduleSubmit}
-                                                className="px-4 py-2 bg-surgical-600 text-white rounded-lg text-sm font-medium hover:bg-surgical-700 transition-colors"
+                                                className="px-4 py-2 bg-barpel-teal text-white rounded-lg text-sm font-medium hover:bg-barpel-teal-dark transition-colors"
                                             >
                                                 Save
                                             </button>
                                             <button
                                                 onClick={() => setShowRescheduleForm(false)}
-                                                className="px-4 py-2 border border-surgical-200 rounded-lg text-sm font-medium text-obsidian/60 hover:bg-surgical-50 transition-colors"
+                                                className="px-4 py-2 border border-surgical-200 rounded-lg text-sm font-medium text-barpel-slate/60 hover:bg-surgical-50 transition-colors"
                                             >
                                                 Cancel
                                             </button>
@@ -708,7 +708,7 @@ const AppointmentsDashboardContent = () => {
                                     )}
                                     <button
                                         onClick={() => setShowDetailModal(false)}
-                                        className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-obsidian/60 hover:bg-surgical-50 transition-colors"
+                                        className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/60 hover:bg-surgical-50 transition-colors"
                                     >
                                         Close
                                     </button>
@@ -743,7 +743,7 @@ export default function AppointmentsPage() {
             <div className="min-h-screen bg-surgical-50 flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
                     <div className="w-8 h-8 border-4 border-surgical-200 border-t-surgical-600 rounded-full animate-spin" />
-                    <p className="text-obsidian/60">Loading...</p>
+                    <p className="text-barpel-slate/60">Loading...</p>
                 </div>
             </div>
         }>

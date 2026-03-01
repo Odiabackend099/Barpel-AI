@@ -6,15 +6,15 @@ import { existsSync } from "fs";
  * Only these logs can be read for security
  */
 const LOG_PATHS: Record<string, string> = {
-  app: "/Users/mac/Desktop/voxanne-dashboard/backend/logs/app.log",
+  app: "/Users/mac/Desktop/barpel-dashboard/backend/logs/app.log",
   backend:
-    "/Users/mac/Desktop/voxanne-dashboard/backend/logs/backend.log",
+    "/Users/mac/Desktop/barpel-dashboard/backend/logs/backend.log",
   error:
-    "/Users/mac/Desktop/voxanne-dashboard/backend/logs/error.log",
+    "/Users/mac/Desktop/barpel-dashboard/backend/logs/error.log",
   nginx: "/var/log/nginx/error.log",
   system: "/var/log/system.log",
   database:
-    "/Users/mac/Desktop/voxanne-dashboard/backend/logs/db.log",
+    "/Users/mac/Desktop/barpel-dashboard/backend/logs/db.log",
 };
 
 /**

@@ -97,7 +97,7 @@ CREATE TRIGGER on_auth_user_created
 
       console.log('📝 Test it now:');
       console.log('   1. Go to http://localhost:3000/login');
-      console.log('   2. Sign in: voxanne@demo.com / demo123');
+      console.log('   2. Sign in: barpel@demo.com / demo123');
       console.log('   3. Dashboard loads ✅\n');
 
     } else {

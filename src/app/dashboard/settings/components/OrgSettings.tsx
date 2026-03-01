@@ -98,7 +98,7 @@ export function OrgSettings() {
     return (
       <div className="p-6 rounded-2xl bg-white backdrop-blur-md border border-surgical-200">
         <div className="flex items-center justify-center py-8">
-          <Loader className="w-5 h-5 animate-spin text-obsidian/40" />
+          <Loader className="w-5 h-5 animate-spin text-barpel-slate/40" />
         </div>
       </div>
     );
@@ -107,7 +107,7 @@ export function OrgSettings() {
   if (!isAdmin) {
     return (
       <div className="p-6 rounded-2xl bg-surgical-50 backdrop-blur-md border border-surgical-200">
-        <p className="text-sm text-obsidian/60 tracking-tight">
+        <p className="text-sm text-barpel-slate/60 tracking-tight">
           Only administrators can modify organization settings.
         </p>
       </div>
@@ -121,7 +121,7 @@ export function OrgSettings() {
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
           <Building2 className="w-5 h-5 text-surgical-500" />
-          <h2 className="text-lg font-semibold text-obsidian tracking-tight">Organization</h2>
+          <h2 className="text-lg font-semibold text-barpel-slate tracking-tight">Organization</h2>
         </div>
 
         {/* Error */}
@@ -144,7 +144,7 @@ export function OrgSettings() {
         <div className="space-y-4">
           {/* Name Input */}
           <div>
-            <label className="block text-xs font-medium text-obsidian/40 tracking-tight mb-2 uppercase">
+            <label className="block text-xs font-medium text-barpel-slate/40 tracking-tight mb-2 uppercase">
               Organization Name
             </label>
             <input
@@ -153,30 +153,30 @@ export function OrgSettings() {
               onChange={(e) => setFormData({ name: e.target.value })}
               placeholder="Enter organization name"
               disabled={saving}
-              className="w-full px-4 py-2 rounded-lg bg-surgical-50 border border-surgical-200 text-obsidian placeholder-obsidian/40 text-sm tracking-tight focus:outline-none focus:border-surgical-500 focus:ring-1 focus:ring-surgical-500 transition-all duration-200 disabled:opacity-50"
+              className="w-full px-4 py-2 rounded-lg bg-surgical-50 border border-surgical-200 text-barpel-slate placeholder-obsidian/40 text-sm tracking-tight focus:outline-none focus:border-surgical-500 focus:ring-1 focus:ring-surgical-500 transition-all duration-200 disabled:opacity-50"
             />
-            <p className="text-xs text-obsidian/60 mt-2 tracking-tight">
+            <p className="text-xs text-barpel-slate/60 mt-2 tracking-tight">
               {formData.name.length}/100 characters
             </p>
           </div>
 
           {/* Status (Read-Only) */}
           <div>
-            <label className="block text-xs font-medium text-obsidian/40 tracking-tight mb-2 uppercase">
+            <label className="block text-xs font-medium text-barpel-slate/40 tracking-tight mb-2 uppercase">
               Status
             </label>
-            <div className="px-4 py-2 rounded-lg bg-surgical-50 border border-surgical-200 text-obsidian/60 text-sm tracking-tight capitalize flex items-center justify-between">
+            <div className="px-4 py-2 rounded-lg bg-surgical-50 border border-surgical-200 text-barpel-slate/60 text-sm tracking-tight capitalize flex items-center justify-between">
               <span>{org?.status || 'active'}</span>
-              <span className="text-xs text-obsidian/40">(managed by support)</span>
+              <span className="text-xs text-barpel-slate/40">(managed by support)</span>
             </div>
           </div>
 
           {/* Org ID (Read-Only) */}
           <div>
-            <label className="block text-xs font-medium text-obsidian/40 tracking-tight mb-2 uppercase">
+            <label className="block text-xs font-medium text-barpel-slate/40 tracking-tight mb-2 uppercase">
               Organization ID
             </label>
-            <div className="px-4 py-2 rounded-lg bg-surgical-50 border border-surgical-200 text-obsidian/60 text-xs tracking-tight font-mono">
+            <div className="px-4 py-2 rounded-lg bg-surgical-50 border border-surgical-200 text-barpel-slate/60 text-xs tracking-tight font-mono">
               {orgId}
             </div>
           </div>
@@ -185,7 +185,7 @@ export function OrgSettings() {
           <button
             onClick={handleSave}
             disabled={saving || !formData.name.trim()}
-            className="w-full mt-6 px-4 py-2 rounded-lg bg-surgical-600 hover:bg-surgical-700 disabled:bg-surgical-100 text-white font-medium text-sm tracking-tight transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full mt-6 px-4 py-2 rounded-lg bg-barpel-teal hover:bg-barpel-teal-dark disabled:bg-surgical-100 text-white font-medium text-sm tracking-tight transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? <Loader className="w-4 h-4 animate-spin" /> : null}
             {saving ? 'Saving...' : 'Save Changes'}

@@ -83,7 +83,7 @@ export default function OfficeLocation() {
                             allowFullScreen
                             loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"
-                            title="Voxanne AI Office Location"
+                            title="Barpel AI Office Location"
                             className="grayscale"
                         ></iframe>
 

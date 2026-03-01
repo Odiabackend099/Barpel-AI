@@ -37,6 +37,6 @@ export default function robots(): MetadataRoute.Robots {
                 allow: '/',
             },
         ],
-        sitemap: 'https://voxanne.ai/sitemap.xml',
+        sitemap: 'https://barpel.ai/sitemap.xml',
     }
 }

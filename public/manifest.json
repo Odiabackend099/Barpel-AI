@@ -1,11 +1,11 @@
 {
-  "name": "Voxanne AI - Voice Automation Platform",
-  "short_name": "Voxanne AI",
-  "description": "Enterprise voice automation platform for healthcare and SMBs. AI-powered receptionist for autonomous inbound/outbound calling, appointment booking, and customer service automation.",
+  "name": "Barpel AI",
+  "short_name": "Barpel",
+  "description": "AI Receptionist for Your Business",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#020412",
-  "theme_color": "#1D4ED8",
+  "background_color": "#FFFFFF",
+  "theme_color": "#37A195",
   "orientation": "portrait-primary",
   "scope": "/",
   "icons": [

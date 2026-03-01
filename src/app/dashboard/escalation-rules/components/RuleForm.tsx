@@ -181,7 +181,7 @@ export const RuleForm: React.FC<RuleFormProps> = ({ rule, onClose, onSuccess }) 
 
             {/* Rule Name */}
             <div>
-                <label className="block text-sm font-medium text-obsidian/70 mb-1">Rule Name *</label>
+                <label className="block text-sm font-medium text-barpel-slate/70 mb-1">Rule Name *</label>
                 <input
                     type="text"
                     name="name"
@@ -195,7 +195,7 @@ export const RuleForm: React.FC<RuleFormProps> = ({ rule, onClose, onSuccess }) 
 
             {/* Agent Selection */}
             <div>
-                <label className="block text-sm font-medium text-obsidian/70 mb-1">Agent (Optional)</label>
+                <label className="block text-sm font-medium text-barpel-slate/70 mb-1">Agent (Optional)</label>
                 <select
                     name="agent_id"
                     value={formData.agent_id || ''}
@@ -210,12 +210,12 @@ export const RuleForm: React.FC<RuleFormProps> = ({ rule, onClose, onSuccess }) 
                         </option>
                     ))}
                 </select>
-                <p className="text-xs text-obsidian/60 mt-1">Leave empty to apply to all agents</p>
+                <p className="text-xs text-barpel-slate/60 mt-1">Leave empty to apply to all agents</p>
             </div>
 
             {/* Trigger Type */}
             <div>
-                <label className="block text-sm font-medium text-obsidian/70 mb-2">Trigger Type *</label>
+                <label className="block text-sm font-medium text-barpel-slate/70 mb-2">Trigger Type *</label>
                 <div className="space-y-2">
                     {(['wait_time', 'sentiment', 'ai_request', 'manual'] as const).map(trigger => (
                         <label key={trigger} className="flex items-center">
@@ -242,7 +242,7 @@ export const RuleForm: React.FC<RuleFormProps> = ({ rule, onClose, onSuccess }) 
             {/* Conditional: Wait Time */}
             {formData.trigger_type === 'wait_time' && (
                 <div>
-                    <label className="block text-sm font-medium text-obsidian/70 mb-1">Max Wait Time (seconds) *</label>
+                    <label className="block text-sm font-medium text-barpel-slate/70 mb-1">Max Wait Time (seconds) *</label>
                     <input
                         type="number"
                         name="max_wait_seconds"
@@ -254,14 +254,14 @@ export const RuleForm: React.FC<RuleFormProps> = ({ rule, onClose, onSuccess }) 
                         className="w-full px-3 py-2 border border-surgical-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-surgical-500"
                         disabled={isSubmitting}
                     />
-                    <p className="text-xs text-obsidian/60 mt-1">60-600 seconds (1-10 minutes)</p>
+                    <p className="text-xs text-barpel-slate/60 mt-1">60-600 seconds (1-10 minutes)</p>
                 </div>
             )}
 
             {/* Conditional: Sentiment Threshold */}
             {formData.trigger_type === 'sentiment' && (
                 <div>
-                    <label className="block text-sm font-medium text-obsidian/70 mb-1">Sentiment Threshold *</label>
+                    <label className="block text-sm font-medium text-barpel-slate/70 mb-1">Sentiment Threshold *</label>
                     <input
                         type="range"
                         name="sentiment_threshold"
@@ -273,12 +273,12 @@ export const RuleForm: React.FC<RuleFormProps> = ({ rule, onClose, onSuccess }) 
                         className="w-full"
                         disabled={isSubmitting}
                     />
-                    <div className="flex justify-between text-xs text-obsidian/60 mt-1">
+                    <div className="flex justify-between text-xs text-barpel-slate/60 mt-1">
                         <span>Positive (0)</span>
                         <span className="font-medium">{(formData.sentiment_threshold || 0.5).toFixed(1)}</span>
                         <span>Negative (1)</span>
                     </div>
-                    <p className="text-xs text-obsidian/60 mt-2">
+                    <p className="text-xs text-barpel-slate/60 mt-2">
                         Transfer if sentiment score is higher than {(formData.sentiment_threshold || 0.5).toFixed(1)}
                     </p>
                 </div>
@@ -286,7 +286,7 @@ export const RuleForm: React.FC<RuleFormProps> = ({ rule, onClose, onSuccess }) 
 
             {/* Transfer Number */}
             <div>
-                <label className="block text-sm font-medium text-obsidian/70 mb-1">Transfer To (Phone Number) *</label>
+                <label className="block text-sm font-medium text-barpel-slate/70 mb-1">Transfer To (Phone Number) *</label>
                 <input
                     type="tel"
                     name="transfer_number"
@@ -296,12 +296,12 @@ export const RuleForm: React.FC<RuleFormProps> = ({ rule, onClose, onSuccess }) 
                     className="w-full px-3 py-2 border border-surgical-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-surgical-500"
                     disabled={isSubmitting}
                 />
-                <p className="text-xs text-obsidian/60 mt-1">E.164 format: +1-XXX-XXX-XXXX</p>
+                <p className="text-xs text-barpel-slate/60 mt-1">E.164 format: +1-XXX-XXX-XXXX</p>
             </div>
 
             {/* Priority */}
             <div>
-                <label className="block text-sm font-medium text-obsidian/70 mb-1">Priority (1-100) *</label>
+                <label className="block text-sm font-medium text-barpel-slate/70 mb-1">Priority (1-100) *</label>
                 <input
                     type="number"
                     name="priority"
@@ -312,7 +312,7 @@ export const RuleForm: React.FC<RuleFormProps> = ({ rule, onClose, onSuccess }) 
                     className="w-full px-3 py-2 border border-surgical-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-surgical-500"
                     disabled={isSubmitting}
                 />
-                <p className="text-xs text-obsidian/60 mt-1">Lower number = higher priority</p>
+                <p className="text-xs text-barpel-slate/60 mt-1">Lower number = higher priority</p>
             </div>
 
             {/* Enabled Toggle */}
@@ -325,7 +325,7 @@ export const RuleForm: React.FC<RuleFormProps> = ({ rule, onClose, onSuccess }) 
                     className="w-4 h-4 text-surgical-600 rounded focus:ring-surgical-500"
                     disabled={isSubmitting}
                 />
-                <label className="ml-2 text-sm font-medium text-obsidian/70">Enabled</label>
+                <label className="ml-2 text-sm font-medium text-barpel-slate/70">Enabled</label>
             </div>
 
             {/* Buttons */}
@@ -333,7 +333,7 @@ export const RuleForm: React.FC<RuleFormProps> = ({ rule, onClose, onSuccess }) 
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 bg-surgical-600 text-white px-4 py-2 rounded-lg hover:bg-surgical-700 disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="flex-1 bg-barpel-teal text-white px-4 py-2 rounded-lg hover:bg-barpel-teal-dark disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                     {isSubmitting && <Loader className="w-4 h-4 animate-spin" />}
                     {isSubmitting ? 'Saving...' : rule ? 'Update Rule' : 'Create Rule'}
@@ -342,7 +342,7 @@ export const RuleForm: React.FC<RuleFormProps> = ({ rule, onClose, onSuccess }) 
                     type="button"
                     onClick={onClose}
                     disabled={isSubmitting}
-                    className="flex-1 bg-surgical-100 text-obsidian px-4 py-2 rounded-lg hover:bg-surgical-50 disabled:opacity-50"
+                    className="flex-1 bg-surgical-100 text-barpel-slate px-4 py-2 rounded-lg hover:bg-surgical-50 disabled:opacity-50"
                 >
                     Cancel
                 </button>

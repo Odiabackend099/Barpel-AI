@@ -111,7 +111,7 @@ async function runTests() {
       log('\n⚠️  WARNING: No JWT token provided!', 'yellow');
       log('Please set TEST_JWT environment variable.', 'yellow');
       log('\nTo get a JWT token:', 'cyan');
-      log('1. Login to http://localhost:3000 as voxanne@demo.com', 'cyan');
+      log('1. Login to http://localhost:3000 as barpel@demo.com', 'cyan');
       log('2. Open browser DevTools > Application > Local Storage', 'cyan');
       log('3. Copy the token from Supabase auth', 'cyan');
       log('4. Run: TEST_JWT="your-token-here" NODE_ENV=production npx ts-node src/scripts/test-agent-save.ts\n', 'cyan');
@@ -128,8 +128,8 @@ async function runTests() {
     {
       outbound: {
         name: 'Test Sales Agent',
-        systemPrompt: 'You are a helpful sales assistant at Voxanne AI. Be professional and friendly.',
-        firstMessage: 'Hello! Thanks for calling Voxanne AI. How can I assist you today?',
+        systemPrompt: 'You are a helpful sales assistant at Barpel AI. Be professional and friendly.',
+        firstMessage: 'Hello! Thanks for calling Barpel AI. How can I assist you today?',
         voiceId: 'en-US-JennyNeural',
         voiceProvider: 'azure',
         language: 'en-US',

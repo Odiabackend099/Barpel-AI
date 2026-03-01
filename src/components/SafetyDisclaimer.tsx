@@ -14,10 +14,10 @@ export function SafetyDisclaimer() {
             <div className="flex flex-col sm:flex-row items-center gap-3 text-sm text-slate-300 bg-white/5 border border-white/10 px-4 py-3 rounded-2xl backdrop-blur">
                 <div className="flex items-center gap-2 font-semibold text-white">
                     <Shield className="w-4 h-4 text-cyan-300" />
-                    Voxanne • Safe & Compliant
+                    Barpel • Safe & Compliant
                 </div>
                 <p className="text-xs sm:text-sm text-slate-300 text-center sm:text-left flex-1">
-                    Voxanne does not provide medical advice, diagnosis, or treatment. Clinical questions are routed to licensed staff.
+                    Barpel does not provide medical advice, diagnosis, or treatment. Clinical questions are routed to licensed staff.
                     UK GDPR & HIPAA certified with DPA and BAA included.
                 </p>
                 <div className="flex items-center gap-4 text-[11px] uppercase tracking-wide text-slate-400">

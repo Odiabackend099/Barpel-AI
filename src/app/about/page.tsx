@@ -4,18 +4,18 @@ import NavbarRedesigned from '@/components/NavbarRedesigned';
 import FooterRedesigned from '@/components/FooterRedesigned';
 
 export const metadata: Metadata = {
-  title: "About Voxanne AI | The Voice of Your Practice",
+  title: "About Barpel AI | The Voice of Your Practice",
   description: "Meet the team building the #1 AI receptionist for clinics. HIPAA-compliant voice automation trusted by healthcare practices worldwide. Built for modern clinics.",
-  keywords: ["about voxanne", "ai receptionist team", "voice automation company", "healthcare ai"],
+  keywords: ["about barpel", "ai receptionist team", "voice automation company", "healthcare ai"],
   openGraph: {
-    title: "About Voxanne AI | The Voice of Your Practice",
+    title: "About Barpel AI | The Voice of Your Practice",
     description: "HIPAA-compliant AI receptionist designed for healthcare. 24/7 call answering, appointment booking, and patient qualification.",
-    url: 'https://voxanne.ai/about',
+    url: 'https://barpel.ai/about',
     images: ['/og-image.png'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: "About Voxanne AI | The Voice of Your Practice",
+    title: "About Barpel AI | The Voice of Your Practice",
     description: "HIPAA-compliant AI receptionist designed for healthcare. 24/7 call answering, appointment booking, and patient qualification.",
     images: ['/og-image.png'],
   },
@@ -36,7 +36,7 @@ export default function AboutPage() {
       name: "Austyn Eguale",
       role: "Co-Founder & CTO",
       image: "/images/team/austyn-eguale.png",
-      bio: "Technical architect behind Voxanne's intelligent voice platform."
+      bio: "Technical architect behind Barpel's intelligent voice platform."
     },
     {
       name: "Ndi",
@@ -55,7 +55,7 @@ export default function AboutPage() {
           <p className="text-sm font-semibold text-slate-500 uppercase tracking-[0.2em]">About</p>
           <h1 className="text-4xl font-bold text-slate-900 tracking-tight">Built for modern clinics</h1>
           <p className="text-lg text-slate-600 leading-relaxed max-w-3xl">
-            Voxanne AI is a voice-first receptionist designed for healthcare. We answer calls instantly,
+            Barpel AI is a voice-first receptionist designed for healthcare. We answer calls instantly,
             qualify patients with natural language, book appointments into your calendar, and keep
             your front desk available 24/7 without adding headcount.
           </p>
@@ -85,7 +85,7 @@ export default function AboutPage() {
       <section className="py-16 border-b border-slate-200">
         <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-8 items-start">
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-slate-900">Why clinics choose Voxanne</h2>
+            <h2 className="text-2xl font-bold text-slate-900">Why clinics choose Barpel</h2>
             <ul className="space-y-3 text-slate-700 text-sm leading-relaxed list-disc list-inside">
               <li>AI that sounds human, understands intent, and follows clinical scripts.</li>
               <li>Native integration with Google Calendar for real-time scheduling.</li>

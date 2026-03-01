@@ -21,7 +21,7 @@ async function debugRpcCall() {
   const { data: orgs } = await supabase
     .from('organizations')
     .select('id')
-    .or('name.ilike.%voxanne%,email.ilike.%voxanne@demo.com%')
+    .or('name.ilike.%barpel%,email.ilike.%barpel@demo.com%')
     .limit(1);
 
   const orgId = orgs?.[0]?.id;

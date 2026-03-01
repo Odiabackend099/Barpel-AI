@@ -43,7 +43,7 @@ function looksLikeUuid(value: string): boolean {
 }
 
 function getInMemoryLeads(): StartCallLead[] {
-  return (((globalThis as any).__VOXANNE_IN_MEMORY_LEADS__ as StartCallLead[]) || [])
+  return (((globalThis as any).__BARPEL_IN_MEMORY_LEADS__ as StartCallLead[]) || [])
     .filter(Boolean);
 }
 

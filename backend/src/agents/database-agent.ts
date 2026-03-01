@@ -36,7 +36,7 @@ export class DatabaseAgent {
   async execute(task: string): Promise<void> {
     // Print header
     console.log("\n" + "=".repeat(70));
-    console.log("DATABASE AGENT - VOXANNE VOICE AI (Groq-Powered)");
+    console.log("DATABASE AGENT - BARPEL VOICE AI (Groq-Powered)");
     console.log("=".repeat(70));
     console.log(`Task: ${task}\n`);
 

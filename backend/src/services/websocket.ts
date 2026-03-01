@@ -1,5 +1,5 @@
 /**
- * WebSocket Service for CallWaiting AI
+ * WebSocket Service for Barpel AI
  * Handles real-time call monitoring and transcript streaming
  */
 

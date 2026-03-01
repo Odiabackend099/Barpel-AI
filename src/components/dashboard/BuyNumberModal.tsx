@@ -312,12 +312,12 @@ export function BuyNumberModal({ onClose, onSuccess, currentMode, defaultDirecti
                 <Phone className="w-5 h-5 text-surgical-600" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-obsidian">Buy a Phone Number</h2>
-                <p className="text-sm text-obsidian/60">Get a managed number for your AI agent</p>
+                <h2 className="text-lg font-semibold text-barpel-slate">Buy a Phone Number</h2>
+                <p className="text-sm text-barpel-slate/60">Get a managed number for your AI agent</p>
               </div>
             </div>
             <button onClick={onClose} className="p-2 hover:bg-surgical-50 rounded-lg transition-colors">
-              <X className="w-5 h-5 text-obsidian/40" />
+              <X className="w-5 h-5 text-barpel-slate/40" />
             </button>
           </div>
 
@@ -373,7 +373,7 @@ export function BuyNumberModal({ onClose, onSuccess, currentMode, defaultDirecti
 
                 {/* Direction selector */}
                 <div>
-                  <label className="block text-sm font-medium text-obsidian/70 mb-2">Number Purpose</label>
+                  <label className="block text-sm font-medium text-barpel-slate/70 mb-2">Number Purpose</label>
                   <div className="flex gap-2">
                     {([
                       { value: 'inbound' as const, label: 'Inbound', desc: 'Receive Calls (AI Receptionist)' },
@@ -395,7 +395,7 @@ export function BuyNumberModal({ onClose, onSuccess, currentMode, defaultDirecti
                             ? opt.value === 'inbound'
                               ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
                               : 'bg-blue-50 text-blue-700 border-blue-300'
-                            : 'bg-white text-obsidian/60 border-surgical-200 hover:border-surgical-300'
+                            : 'bg-white text-barpel-slate/60 border-surgical-200 hover:border-surgical-300'
                         }`}
                       >
                         <div className="font-semibold">{opt.label}</div>
@@ -407,14 +407,14 @@ export function BuyNumberModal({ onClose, onSuccess, currentMode, defaultDirecti
 
                 {/* Country selector */}
                 <div>
-                  <label className="block text-sm font-medium text-obsidian/70 mb-2">Country</label>
+                  <label className="block text-sm font-medium text-barpel-slate/70 mb-2">Country</label>
                   <select
                     value={country}
                     onChange={e => {
                       setCountry(e.target.value);
                       setAreaCode(''); // Reset area code when country changes
                     }}
-                    className="w-full px-4 py-2.5 border border-surgical-200 rounded-lg text-obsidian focus:outline-none focus:ring-2 focus:ring-surgical-500 focus:border-transparent bg-white"
+                    className="w-full px-4 py-2.5 border border-surgical-200 rounded-lg text-barpel-slate focus:outline-none focus:ring-2 focus:ring-surgical-500 focus:border-transparent bg-white"
                   >
                     {COUNTRIES.map(c => (
                       <option key={c.code} value={c.code}>
@@ -422,9 +422,9 @@ export function BuyNumberModal({ onClose, onSuccess, currentMode, defaultDirecti
                       </option>
                     ))}
                   </select>
-                  <p className="text-xs text-obsidian/50 mt-2">
+                  <p className="text-xs text-barpel-slate/50 mt-2">
                     More countries coming soon. Need a different region?{' '}
-                    <a href="mailto:support@voxanne.ai" className="text-surgical-600 hover:underline">
+                    <a href="mailto:support@barpel.ai" className="text-surgical-600 hover:underline">
                       Contact us
                     </a>
                   </p>
@@ -461,7 +461,7 @@ export function BuyNumberModal({ onClose, onSuccess, currentMode, defaultDirecti
 
                 {/* Number type selector */}
                 <div>
-                  <label className="block text-sm font-medium text-obsidian/70 mb-2">Number Type</label>
+                  <label className="block text-sm font-medium text-barpel-slate/70 mb-2">Number Type</label>
                   <div className="flex gap-2">
                     {(['local', 'toll_free'] as const).map(type => (
                       <button
@@ -469,8 +469,8 @@ export function BuyNumberModal({ onClose, onSuccess, currentMode, defaultDirecti
                         onClick={() => setNumberType(type)}
                         className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${
                           numberType === type
-                            ? 'bg-surgical-600 text-white border-surgical-600'
-                            : 'bg-white text-obsidian/70 border-surgical-200 hover:border-surgical-400'
+                            ? 'bg-barpel-teal text-white border-barpel-teal'
+                            : 'bg-white text-barpel-slate/70 border-surgical-200 hover:border-surgical-400'
                         }`}
                       >
                         {type === 'local' ? 'Local' : 'Toll-Free'}
@@ -486,8 +486,8 @@ export function BuyNumberModal({ onClose, onSuccess, currentMode, defaultDirecti
 
                   return areaCodeRequired ? (
                     <div>
-                      <label className="block text-sm font-medium text-obsidian/70 mb-2">
-                        Area Code <span className="text-obsidian/40">(optional)</span>
+                      <label className="block text-sm font-medium text-barpel-slate/70 mb-2">
+                        Area Code <span className="text-barpel-slate/40">(optional)</span>
                       </label>
                       <input
                         type="text"
@@ -496,9 +496,9 @@ export function BuyNumberModal({ onClose, onSuccess, currentMode, defaultDirecti
                           e.target.value.replace(/\D/g, '').slice(0, selectedCountry.areaCodeLength)
                         )}
                         placeholder={selectedCountry.areaCodeFormat}
-                        className="w-full px-4 py-2.5 border border-surgical-200 rounded-lg text-obsidian placeholder:text-obsidian/30 focus:outline-none focus:ring-2 focus:ring-surgical-500 focus:border-transparent"
+                        className="w-full px-4 py-2.5 border border-surgical-200 rounded-lg text-barpel-slate placeholder:text-barpel-slate/30 focus:outline-none focus:ring-2 focus:ring-surgical-500 focus:border-transparent"
                       />
-                      <p className="mt-1.5 text-xs text-obsidian/50">
+                      <p className="mt-1.5 text-xs text-barpel-slate/50">
                         Format: {selectedCountry.areaCodeFormat}
                       </p>
                     </div>
@@ -518,7 +518,7 @@ export function BuyNumberModal({ onClose, onSuccess, currentMode, defaultDirecti
                       className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-colors ${
                         isDisabled
                           ? 'bg-surgical-300 text-white opacity-50 cursor-not-allowed'
-                          : 'bg-surgical-600 text-white hover:bg-surgical-700'
+                          : 'bg-barpel-teal text-white hover:bg-barpel-teal-dark'
                       }`}
                     >
                       {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
@@ -543,9 +543,9 @@ export function BuyNumberModal({ onClose, onSuccess, currentMode, defaultDirecti
                         }}
                         className="w-full flex items-center justify-between px-4 py-3 border border-surgical-200 rounded-lg hover:border-surgical-400 hover:bg-surgical-50 transition-colors"
                       >
-                        <span className="font-mono text-obsidian">{num.phoneNumber}</span>
+                        <span className="font-mono text-barpel-slate">{num.phoneNumber}</span>
                         {num.locality && (
-                          <span className="text-sm text-obsidian/50">{num.locality}, {num.region}</span>
+                          <span className="text-sm text-barpel-slate/50">{num.locality}, {num.region}</span>
                         )}
                       </button>
                     ))}
@@ -557,15 +557,15 @@ export function BuyNumberModal({ onClose, onSuccess, currentMode, defaultDirecti
             {step === 'confirm' && selectedNumber && (
               <div className="space-y-4">
                 <div className="text-center py-4">
-                  <p className="text-sm text-obsidian/60 mb-2">You are about to purchase:</p>
-                  <p className="text-2xl font-mono font-bold text-obsidian">{selectedNumber}</p>
-                  <p className="text-sm text-obsidian/50 mt-2">{PHONE_NUMBER_PRICING.costDisplay} {PHONE_NUMBER_PRICING.costType} + usage</p>
+                  <p className="text-sm text-barpel-slate/60 mb-2">You are about to purchase:</p>
+                  <p className="text-2xl font-mono font-bold text-barpel-slate">{selectedNumber}</p>
+                  <p className="text-sm text-barpel-slate/50 mt-2">{PHONE_NUMBER_PRICING.costDisplay} {PHONE_NUMBER_PRICING.costType} + usage</p>
                 </div>
 
                 <div className="flex gap-3">
                   <button
                     onClick={() => setStep('search')}
-                    className="flex-1 px-4 py-2.5 border border-surgical-200 text-obsidian/70 rounded-lg font-medium hover:bg-surgical-50 transition-colors"
+                    className="flex-1 px-4 py-2.5 border border-surgical-200 text-barpel-slate/70 rounded-lg font-medium hover:bg-surgical-50 transition-colors"
                   >
                     Back
                   </button>
@@ -575,7 +575,7 @@ export function BuyNumberModal({ onClose, onSuccess, currentMode, defaultDirecti
                     className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-colors ${
                       provisioning
                         ? 'bg-surgical-300 text-white opacity-50 cursor-not-allowed'
-                        : 'bg-surgical-600 text-white hover:bg-surgical-700'
+                        : 'bg-barpel-teal text-white hover:bg-barpel-teal-dark'
                     }`}
                   >
                     {provisioning ? <Loader2 className="w-4 h-4 animate-spin" /> : <Phone className="w-4 h-4" />}
@@ -591,7 +591,7 @@ export function BuyNumberModal({ onClose, onSuccess, currentMode, defaultDirecti
                   <Check className="w-8 h-8 text-green-600" />
                 </div>
                 <div>
-                  <p className="text-lg font-semibold text-obsidian">Number Provisioned</p>
+                  <p className="text-lg font-semibold text-barpel-slate">Number Provisioned</p>
                   <p className="text-2xl font-mono font-bold text-surgical-600 mt-2">{provisionedNumber}</p>
                 </div>
                 {warning && (
@@ -601,7 +601,7 @@ export function BuyNumberModal({ onClose, onSuccess, currentMode, defaultDirecti
                 )}
                 <button
                   onClick={onClose}
-                  className="px-6 py-2.5 bg-surgical-600 text-white rounded-lg font-medium hover:bg-surgical-700 transition-colors"
+                  className="px-6 py-2.5 bg-barpel-teal text-white rounded-lg font-medium hover:bg-barpel-teal-dark transition-colors"
                 >
                   Done
                 </button>

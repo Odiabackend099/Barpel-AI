@@ -392,7 +392,7 @@ export default function PhoneSettingsPage() {
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin text-surgical-600 mx-auto" />
           {recovering && (
-            <p className="text-sm text-obsidian/60 mt-3">Checking pending verification...</p>
+            <p className="text-sm text-barpel-slate/60 mt-3">Checking pending verification...</p>
           )}
         </div>
       </div>
@@ -407,10 +407,10 @@ export default function PhoneSettingsPage() {
           <Phone className="w-6 h-6 text-surgical-600" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-obsidian">
+          <h1 className="text-2xl font-bold text-barpel-slate">
             Phone Settings
           </h1>
-          <p className="text-obsidian/60">
+          <p className="text-barpel-slate/60">
             Configure how you <strong>receive</strong> calls (inbound) and how customers <strong>see</strong> your calls (outbound)
           </p>
         </div>
@@ -446,10 +446,10 @@ export default function PhoneSettingsPage() {
                 <Smartphone className="w-5 h-5 text-surgical-600" />
               </div>
               <div className="flex-1">
-                <h2 className="text-lg font-semibold text-obsidian">
+                <h2 className="text-lg font-semibold text-barpel-slate">
                   Inbound Calls
                 </h2>
-                <p className="text-sm text-obsidian/60 mt-1">
+                <p className="text-sm text-barpel-slate/60 mt-1">
                   Forward calls TO your AI receptionist
                 </p>
               </div>
@@ -457,7 +457,7 @@ export default function PhoneSettingsPage() {
           </div>
 
           <div className="flex items-center gap-2 mb-4">
-            <h3 className="text-base font-semibold text-obsidian">
+            <h3 className="text-base font-semibold text-barpel-slate">
               Your AI Phone Number
             </h3>
           </div>
@@ -475,7 +475,7 @@ export default function PhoneSettingsPage() {
                       <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                         status.inbound.forwardingConfig.forwardingType === 'total_ai'
                           ? 'bg-surgical-100 text-surgical-700 border border-surgical-200'
-                          : 'bg-surgical-50 text-obsidian/70 border border-surgical-200'
+                          : 'bg-surgical-50 text-barpel-slate/70 border border-surgical-200'
                       }`}>
                         {status.inbound.forwardingConfig.forwardingType === 'total_ai' ? 'AI Handles All Calls' : 'AI + Human Backup'}
                       </span>
@@ -485,15 +485,15 @@ export default function PhoneSettingsPage() {
                     </span>
                   </div>
                 </div>
-                <p className="text-xs text-obsidian/60">
-                  {status.inbound.countryCode} • Hosted by CallWaiting AI
+                <p className="text-xs text-barpel-slate/60">
+                  {status.inbound.countryCode} • Hosted by Barpel AI
                 </p>
               </div>
 
               {/* What happens next */}
               <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-3">
-                <p className="text-xs font-medium text-obsidian mb-1">✓ Number active and ready</p>
-                <p className="text-xs text-obsidian/60">Forward your office calls to this number using the carrier code below</p>
+                <p className="text-xs font-medium text-barpel-slate mb-1">✓ Number active and ready</p>
+                <p className="text-xs text-barpel-slate/60">Forward your office calls to this number using the carrier code below</p>
               </div>
 
               <CarrierForwardingInstructions
@@ -504,11 +504,11 @@ export default function PhoneSettingsPage() {
               {/* Agent Linking */}
               {agents.inbound && (
                 <div className="bg-white border border-surgical-200 rounded-lg p-3">
-                  <p className="text-xs text-obsidian/60 mb-2 font-medium">Linked Agent</p>
+                  <p className="text-xs text-barpel-slate/60 mb-2 font-medium">Linked Agent</p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4 text-surgical-600" />
-                      <p className="text-sm font-medium text-obsidian">{agents.inbound.name}</p>
+                      <p className="text-sm font-medium text-barpel-slate">{agents.inbound.name}</p>
                     </div>
                     <button
                       onClick={() => handleLinkAgent('inbound')}
@@ -539,20 +539,20 @@ export default function PhoneSettingsPage() {
               <div className="w-16 h-16 rounded-full bg-surgical-50 mx-auto flex items-center justify-center mb-4 border border-surgical-200">
                 <Smartphone className="w-8 h-8 text-surgical-400" />
               </div>
-              <h3 className="text-lg font-semibold text-obsidian mb-2">
+              <h3 className="text-lg font-semibold text-barpel-slate mb-2">
                 Get Your AI Phone Number
               </h3>
-              <p className="text-sm text-obsidian/60 mb-6 max-w-sm mx-auto">
+              <p className="text-sm text-barpel-slate/60 mb-6 max-w-sm mx-auto">
                 Purchase a dedicated number for your AI receptionist. Forward your office calls using a simple carrier code.
               </p>
               <button
                 onClick={() => { setBuyModalDirection('inbound'); setShowBuyNumberModal(true); }}
-                className="px-6 py-3 bg-surgical-600 text-white rounded-lg hover:bg-surgical-700 transition-colors font-medium inline-flex items-center gap-2"
+                className="px-6 py-3 bg-barpel-teal text-white rounded-lg hover:bg-barpel-teal-dark transition-colors font-medium inline-flex items-center gap-2"
               >
                 <ShoppingCart className="w-4 h-4" />
                 Buy Inbound Number
               </button>
-              <p className="text-xs text-obsidian/60 mt-3">
+              <p className="text-xs text-barpel-slate/60 mt-3">
                 {PHONE_NUMBER_PRICING.costDisplay} {PHONE_NUMBER_PRICING.costType} + usage-based pricing
               </p>
             </div>
@@ -568,10 +568,10 @@ export default function PhoneSettingsPage() {
                 <Phone className="w-5 h-5 text-surgical-600" />
               </div>
               <div className="flex-1">
-                <h2 className="text-lg font-semibold text-obsidian">
+                <h2 className="text-lg font-semibold text-barpel-slate">
                   Outbound Calls
                 </h2>
-                <p className="text-sm text-obsidian/60 mt-1">
+                <p className="text-sm text-barpel-slate/60 mt-1">
                   Set what customers see when AI calls them
                 </p>
               </div>
@@ -581,7 +581,7 @@ export default function PhoneSettingsPage() {
           {/* Managed Outbound Number */}
           {status?.outbound.hasManagedOutboundNumber ? (
             <div className="mb-6 space-y-3">
-              <h3 className="text-base font-semibold text-obsidian">Outbound Number</h3>
+              <h3 className="text-base font-semibold text-barpel-slate">Outbound Number</h3>
               <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-2xl font-mono font-bold text-surgical-600">
@@ -591,28 +591,28 @@ export default function PhoneSettingsPage() {
                     Active
                   </span>
                 </div>
-                <p className="text-xs text-obsidian/60">Hosted by CallWaiting AI</p>
+                <p className="text-xs text-barpel-slate/60">Hosted by Barpel AI</p>
               </div>
 
               {/* Agent Linking */}
               {agents.outbound && (
                 <div className="bg-white border border-surgical-200 rounded-lg p-3">
-                  <p className="text-xs text-obsidian/60 mb-2 font-medium">Linked Agent</p>
+                  <p className="text-xs text-barpel-slate/60 mb-2 font-medium">Linked Agent</p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4 text-surgical-600" />
-                      <p className="text-sm font-medium text-obsidian">{agents.outbound.name}</p>
+                      <p className="text-sm font-medium text-barpel-slate">{agents.outbound.name}</p>
                       {agents.outbound.vapiPhoneNumberId === status.outbound.managedOutboundVapiPhoneId ? (
                         <span className="text-xs bg-surgical-100 text-surgical-600 px-2 py-0.5 rounded-full">Active</span>
                       ) : (
-                        <span className="text-xs bg-obsidian/10 text-obsidian/50 px-2 py-0.5 rounded-full">Not synced</span>
+                        <span className="text-xs bg-obsidian/10 text-barpel-slate/50 px-2 py-0.5 rounded-full">Not synced</span>
                       )}
                     </div>
                     {agents.outbound.vapiPhoneNumberId !== status.outbound.managedOutboundVapiPhoneId && (
                       <button
                         onClick={() => handleLinkAgent('outbound')}
                         disabled={assigningAgent === 'outbound'}
-                        className="text-xs px-3 py-1.5 bg-surgical-600 text-white rounded-lg hover:bg-surgical-700 transition-colors font-medium disabled:opacity-50 flex items-center gap-1.5"
+                        className="text-xs px-3 py-1.5 bg-barpel-teal text-white rounded-lg hover:bg-barpel-teal-dark transition-colors font-medium disabled:opacity-50 flex items-center gap-1.5"
                       >
                         {assigningAgent === 'outbound' ? (
                           <><Loader2 className="w-3 h-3 animate-spin" />Syncing...</>
@@ -637,19 +637,19 @@ export default function PhoneSettingsPage() {
             <div className="mb-6">
               <button
                 onClick={() => { setBuyModalDirection('outbound'); setShowBuyNumberModal(true); }}
-                className="w-full px-6 py-3 bg-surgical-600 text-white rounded-lg hover:bg-surgical-700 transition-colors font-medium inline-flex items-center justify-center gap-2"
+                className="w-full px-6 py-3 bg-barpel-teal text-white rounded-lg hover:bg-barpel-teal-dark transition-colors font-medium inline-flex items-center justify-center gap-2"
               >
                 <ShoppingCart className="w-4 h-4" />
                 Buy Outbound Number
               </button>
-              <p className="text-xs text-obsidian/60 mt-2 text-center">
+              <p className="text-xs text-barpel-slate/60 mt-2 text-center">
                 Purchase a dedicated number for outbound AI calls
               </p>
             </div>
           )}
 
           <div className="flex items-center gap-2 mb-4">
-            <h3 className="text-base font-semibold text-obsidian">
+            <h3 className="text-base font-semibold text-barpel-slate">
               Verified Caller ID
             </h3>
           </div>
@@ -664,18 +664,18 @@ export default function PhoneSettingsPage() {
                     {status.outbound.verifiedNumber}
                   </p>
                 </div>
-                <p className="text-xs text-obsidian/60">
+                <p className="text-xs text-barpel-slate/60">
                   Verified on {new Date(status.outbound.verifiedAt!).toLocaleDateString()}
                 </p>
               </div>
 
               <div className={`border rounded-lg p-4 ${status.outbound.vapiLinked ? 'bg-surgical-50 border-surgical-200' : 'bg-surgical-50 border-surgical-200'}`}>
                 {status.outbound.vapiLinked ? (
-                  <p className="text-sm text-obsidian">
+                  <p className="text-sm text-barpel-slate">
                     <strong>Ready for outbound calls.</strong> When your AI calls customers, they see <strong>{status.outbound.verifiedNumber}</strong>.
                   </p>
                 ) : (
-                  <p className="text-sm text-obsidian/70">
+                  <p className="text-sm text-barpel-slate/70">
                     <strong>Linking to call system...</strong> This usually completes within a few seconds. Refresh the page if this persists.
                   </p>
                 )}
@@ -696,13 +696,13 @@ export default function PhoneSettingsPage() {
                 <>
                   {/* Value proposition */}
                   <div className="space-y-3">
-                    <p className="text-sm text-obsidian">
+                    <p className="text-sm text-barpel-slate">
                       When your AI calls customers, they'll see this number on their caller ID.
                     </p>
 
                     <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-3 space-y-2">
-                      <p className="text-xs font-medium text-obsidian">Why this matters:</p>
-                      <ul className="text-xs text-obsidian/70 space-y-1">
+                      <p className="text-xs font-medium text-barpel-slate">Why this matters:</p>
+                      <ul className="text-xs text-barpel-slate/70 space-y-1">
                         <li>• Customers recognize YOUR number (not "Unknown")</li>
                         <li>• Higher answer rates (people trust known numbers)</li>
                         <li>• Professional appearance</li>
@@ -712,7 +712,7 @@ export default function PhoneSettingsPage() {
 
                   {/* Input field - Progressive disclosure: show detailed steps only when needed (step 2) */}
                   <div className="border-t border-surgical-200 pt-4">
-                    <label className="block text-sm font-medium text-obsidian mb-2">
+                    <label className="block text-sm font-medium text-barpel-slate mb-2">
                       Your Business Phone Number
                     </label>
                     <div className="relative">
@@ -738,7 +738,7 @@ export default function PhoneSettingsPage() {
                         ✓ Valid {getCountryName(detectedCountry)} number detected
                       </p>
                     ) : (
-                      <p className="text-xs text-obsidian/60 mt-1">Must include country code: +1 (US), +234 (Nigeria), +44 (UK), +91 (India), etc.</p>
+                      <p className="text-xs text-barpel-slate/60 mt-1">Must include country code: +1 (US), +234 (Nigeria), +44 (UK), +91 (India), etc.</p>
                     )}
                   </div>
 
@@ -751,7 +751,7 @@ export default function PhoneSettingsPage() {
                   <button
                     onClick={handleSendVerification}
                     disabled={!phoneNumber || verifying}
-                    className="w-full px-4 py-2 bg-surgical-600 text-white rounded-lg hover:bg-surgical-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full px-4 py-2 bg-barpel-teal text-white rounded-lg hover:bg-barpel-teal-dark transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {verifying ? (
                       <>
@@ -774,19 +774,19 @@ export default function PhoneSettingsPage() {
                   <div className="border border-surgical-200 rounded-lg p-3 bg-surgical-50">
                     {verificationCode ? (
                       <>
-                        <p className="text-sm font-medium text-obsidian mb-1">
+                        <p className="text-sm font-medium text-barpel-slate mb-1">
                           Verification call sent!
                         </p>
-                        <p className="text-xs text-obsidian/60">
+                        <p className="text-xs text-barpel-slate/60">
                           Calling: {phoneNumber}
                         </p>
                       </>
                     ) : (
                       <>
-                        <p className="text-sm font-medium text-obsidian mb-1">
+                        <p className="text-sm font-medium text-barpel-slate mb-1">
                           Verification in progress for {phoneNumber}
                         </p>
-                        <p className="text-xs text-obsidian/60">
+                        <p className="text-xs text-barpel-slate/60">
                           If you already entered the code on your phone, click "Verify & Complete Setup" below.
                           Otherwise, click "Resend" to get a new verification call.
                         </p>
@@ -797,7 +797,7 @@ export default function PhoneSettingsPage() {
                   {/* VALIDATION CODE DISPLAY - CRITICAL */}
                   {verificationCode && (
                     <div className="bg-surgical-50 border-2 border-surgical-500 rounded-lg p-6 text-center">
-                      <p className="text-sm font-medium text-obsidian mb-3">
+                      <p className="text-sm font-medium text-barpel-slate mb-3">
                         🔑 Your Verification Code
                       </p>
                       <div className="bg-white border-2 border-surgical-400 rounded-lg p-4 mb-3">
@@ -805,7 +805,7 @@ export default function PhoneSettingsPage() {
                           {verificationCode}
                         </p>
                       </div>
-                      <p className="text-xs text-obsidian/60">
+                      <p className="text-xs text-barpel-slate/60">
                         Enter this code on your phone keypad when Twilio calls
                       </p>
                     </div>
@@ -813,14 +813,14 @@ export default function PhoneSettingsPage() {
 
                   {/* Phone will ring notice */}
                   <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4">
-                    <p className="text-sm text-obsidian font-medium mb-2">
+                    <p className="text-sm text-barpel-slate font-medium mb-2">
                       📞 Your phone will ring in ~30 seconds
                     </p>
 
                     <div className="space-y-3 mt-3">
-                      <p className="text-xs font-medium text-obsidian">What to do next:</p>
+                      <p className="text-xs font-medium text-barpel-slate">What to do next:</p>
 
-                      <div className="space-y-2 text-xs text-obsidian/70">
+                      <div className="space-y-2 text-xs text-barpel-slate/70">
                         <div className="flex gap-2">
                           <span className="flex-shrink-0 w-5 h-5 rounded-full bg-surgical-100 text-surgical-700 flex items-center justify-center text-xs font-bold">1</span>
                           <p className="pt-0.5">Answer the call from Twilio (+14157234000)</p>
@@ -831,7 +831,7 @@ export default function PhoneSettingsPage() {
                         </div>
                         <div className="flex gap-2">
                           <span className="flex-shrink-0 w-5 h-5 rounded-full bg-surgical-100 text-surgical-700 flex items-center justify-center text-xs font-bold">3</span>
-                          <p className="pt-0.5">Enter the code shown above using your phone's keypad<br/><span className="text-obsidian/50">(Enter it on your PHONE, not on this screen)</span></p>
+                          <p className="pt-0.5">Enter the code shown above using your phone's keypad<br/><span className="text-barpel-slate/50">(Enter it on your PHONE, not on this screen)</span></p>
                         </div>
                         <div className="flex gap-2">
                           <span className="flex-shrink-0 w-5 h-5 rounded-full bg-surgical-100 text-surgical-700 flex items-center justify-center text-xs font-bold">4</span>
@@ -843,7 +843,7 @@ export default function PhoneSettingsPage() {
 
                   {/* Troubleshooting */}
                   <div className="text-center">
-                    <p className="text-xs text-obsidian/60">
+                    <p className="text-xs text-barpel-slate/60">
                       ⏱️ Call not received after 2 minutes?
                     </p>
                     <button
@@ -863,14 +863,14 @@ export default function PhoneSettingsPage() {
                   <div className="flex gap-2">
                     <button
                       onClick={resetVerification}
-                      className="flex-1 px-4 py-2 border border-surgical-200 text-obsidian rounded-lg hover:bg-surgical-50 transition-colors font-medium"
+                      className="flex-1 px-4 py-2 border border-surgical-200 text-barpel-slate rounded-lg hover:bg-surgical-50 transition-colors font-medium"
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleConfirmVerification}
                       disabled={verifying}
-                      className="flex-1 px-4 py-2 bg-surgical-600 text-white rounded-lg hover:bg-surgical-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      className="flex-1 px-4 py-2 bg-barpel-teal text-white rounded-lg hover:bg-barpel-teal-dark transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                       {verifying ? (
                         <>
@@ -895,19 +895,19 @@ export default function PhoneSettingsPage() {
                     <div className="w-16 h-16 rounded-full bg-surgical-50 mx-auto flex items-center justify-center mb-3 border border-surgical-200">
                       <CheckCircle className="w-8 h-8 text-surgical-600" />
                     </div>
-                    <h3 className="text-lg font-semibold text-obsidian mb-2">
+                    <h3 className="text-lg font-semibold text-barpel-slate mb-2">
                       🎉 Verification Complete!
                     </h3>
-                    <p className="text-sm text-obsidian font-medium">
+                    <p className="text-sm text-barpel-slate font-medium">
                       Your caller ID is now set to: {phoneNumber}
                     </p>
                   </div>
 
                   {/* What this means */}
                   <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4 space-y-3">
-                    <p className="text-xs font-medium text-obsidian">What this means:</p>
+                    <p className="text-xs font-medium text-barpel-slate">What this means:</p>
 
-                    <div className="space-y-2 text-xs text-obsidian/70">
+                    <div className="space-y-2 text-xs text-barpel-slate/70">
                       <div className="flex gap-2">
                         <span className="text-surgical-600">✓</span>
                         <p>When your AI calls customers, they see YOUR business number</p>
@@ -928,7 +928,7 @@ export default function PhoneSettingsPage() {
                       resetVerification();
                       fetchPhoneSettings();
                     }}
-                    className="w-full px-4 py-2 bg-surgical-600 text-white rounded-lg hover:bg-surgical-700 transition-colors font-medium"
+                    className="w-full px-4 py-2 bg-barpel-teal text-white rounded-lg hover:bg-barpel-teal-dark transition-colors font-medium"
                   >
                     Done
                   </button>
@@ -946,23 +946,23 @@ export default function PhoneSettingsPage() {
           className="w-full px-6 py-4 bg-white hover:bg-surgical-50 transition-colors flex items-center justify-between"
         >
           <div className="text-left">
-            <h3 className="text-sm font-semibold text-obsidian">
+            <h3 className="text-sm font-semibold text-barpel-slate">
               Advanced: Connect Your Own Phone Provider
             </h3>
-            <p className="text-xs text-obsidian/60 mt-0.5">
+            <p className="text-xs text-barpel-slate/60 mt-0.5">
               Already have a Twilio account? Connect it directly
             </p>
           </div>
           {showAdvanced ? (
-            <ChevronUp className="w-5 h-5 text-obsidian/60" />
+            <ChevronUp className="w-5 h-5 text-barpel-slate/60" />
           ) : (
-            <ChevronDown className="w-5 h-5 text-obsidian/60" />
+            <ChevronDown className="w-5 h-5 text-barpel-slate/60" />
           )}
         </button>
 
         {showAdvanced && (
           <div className="px-6 py-4 bg-surgical-50 border-t border-surgical-200">
-            <p className="text-sm text-obsidian/60 mb-4">
+            <p className="text-sm text-barpel-slate/60 mb-4">
               If you already have a Twilio account and phone number, you can configure it manually:
             </p>
             <a
@@ -992,17 +992,17 @@ export default function PhoneSettingsPage() {
       {confirmDeleteManaged && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl p-6 max-w-md w-full">
-            <h3 className="text-lg font-semibold text-obsidian mb-2">
+            <h3 className="text-lg font-semibold text-barpel-slate mb-2">
               Delete AI Phone Number?
             </h3>
-            <p className="text-sm text-obsidian/60 mb-4">
+            <p className="text-sm text-barpel-slate/60 mb-4">
               This will release {status?.inbound.managedNumber} and disconnect all forwarding.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setConfirmDeleteManaged(false)}
                 disabled={deleting}
-                className="flex-1 px-4 py-2 border border-surgical-200 text-obsidian rounded-lg hover:bg-surgical-50 transition-colors font-medium"
+                className="flex-1 px-4 py-2 border border-surgical-200 text-barpel-slate rounded-lg hover:bg-surgical-50 transition-colors font-medium"
               >
                 Cancel
               </button>
@@ -1022,17 +1022,17 @@ export default function PhoneSettingsPage() {
       {confirmDeleteManagedOutbound && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl p-6 max-w-md w-full">
-            <h3 className="text-lg font-semibold text-obsidian mb-2">
+            <h3 className="text-lg font-semibold text-barpel-slate mb-2">
               Delete Outbound Number?
             </h3>
-            <p className="text-sm text-obsidian/60 mb-4">
+            <p className="text-sm text-barpel-slate/60 mb-4">
               This will release {status?.outbound.managedOutboundNumber} and disconnect it from outbound calls. Your agent will need a new number configured before making calls.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setConfirmDeleteManagedOutbound(false)}
                 disabled={deleting}
-                className="flex-1 px-4 py-2 border border-surgical-200 text-obsidian rounded-lg hover:bg-surgical-50 transition-colors font-medium"
+                className="flex-1 px-4 py-2 border border-surgical-200 text-barpel-slate rounded-lg hover:bg-surgical-50 transition-colors font-medium"
               >
                 Cancel
               </button>
@@ -1052,17 +1052,17 @@ export default function PhoneSettingsPage() {
       {confirmDeleteVerified && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl p-6 max-w-md w-full">
-            <h3 className="text-lg font-semibold text-obsidian mb-2">
+            <h3 className="text-lg font-semibold text-barpel-slate mb-2">
               Remove Verified Number?
             </h3>
-            <p className="text-sm text-obsidian/60 mb-4">
+            <p className="text-sm text-barpel-slate/60 mb-4">
               This will remove {status?.outbound.verifiedNumber} from Twilio, disconnect it from outbound calls, and allow you to verify a different number.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setConfirmDeleteVerified(false)}
                 disabled={deleting}
-                className="flex-1 px-4 py-2 border border-surgical-200 text-obsidian rounded-lg hover:bg-surgical-50 transition-colors font-medium"
+                className="flex-1 px-4 py-2 border border-surgical-200 text-barpel-slate rounded-lg hover:bg-surgical-50 transition-colors font-medium"
               >
                 Cancel
               </button>

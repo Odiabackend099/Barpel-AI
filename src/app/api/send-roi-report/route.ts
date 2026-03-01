@@ -205,14 +205,14 @@ export async function POST(request: NextRequest) {
                         <td style="padding: 40px 30px; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); text-align: center;">
                             <h3 style="margin: 0 0 15px 0; color: #ffffff; font-size: 24px; font-weight: 700;">Ready to Stop Losing Revenue?</h3>
                             <p style="margin: 0 0 25px 0; color: #cbd5e1; font-size: 16px;">Book a demo and see Call Waiting AI in action</p>
-                            <a href="https://callwaitingai.dev" style="display: inline-block; background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%); color: #ffffff; text-decoration: none; padding: 16px 40px; border-radius: 12px; font-weight: 700; font-size: 16px;">Book Your Demo →</a>
+                            <a href="https://barpel.ai" style="display: inline-block; background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%); color: #ffffff; text-decoration: none; padding: 16px 40px; border-radius: 12px; font-weight: 700; font-size: 16px;">Book Your Demo →</a>
                         </td>
                     </tr>
 
                     <!-- Footer -->
                     <tr>
                         <td style="padding: 30px; text-align: center; background-color: #f8fafc; border-top: 1px solid #e2e8f0;">
-                            <p style="margin: 0 0 10px 0; color: #64748b; font-size: 14px;">CallWaiting AI - Never Miss Another Patient</p>
+                            <p style="margin: 0 0 10px 0; color: #64748b; font-size: 14px;">Barpel AI - Never Miss Another Patient</p>
                             <p style="margin: 0; color: #94a3b8; font-size: 12px;">This report was generated based on industry averages for cosmetic surgery practices.</p>
                         </td>
                     </tr>
@@ -231,14 +231,14 @@ export async function POST(request: NextRequest) {
             port: 587,
             secure: false, // true for 465, false for other ports
             auth: {
-                user: process.env.SMTP_USER || 'support@callwaitingai.dev',
+                user: process.env.SMTP_USER || 'support@barpel.ai',
                 pass: process.env.SMTP_PASSWORD,
             },
         });
 
         // Send email
         const info = await transporter.sendMail({
-            from: '"CallWaiting AI" <support@callwaitingai.dev>',
+            from: '"Barpel AI" <support@barpel.ai>',
             to: sanitizedEmail,
             subject: `Your ROI Report: You're Losing $${monthlyRevenueLoss.toLocaleString()}/Month`,
             html: htmlContent,

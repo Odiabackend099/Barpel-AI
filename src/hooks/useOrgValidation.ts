@@ -29,7 +29,7 @@ import useSWR from 'swr';
 // Session Storage Caching Layer
 // ============================================================================
 
-const ORG_VALIDATION_CACHE_KEY = 'voxanne_org_validation';
+const ORG_VALIDATION_CACHE_KEY = 'barpel_org_validation';
 const VALIDATION_CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
 interface CachedValidation {

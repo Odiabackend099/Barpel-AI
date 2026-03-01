@@ -46,8 +46,8 @@ export async function sendEmailViaSmtp(
   try {
     const transporter = createTransporter();
 
-    const fromEmail = options.from || process.env.FROM_EMAIL || 'noreply@callwaitingai.dev';
-    const fromName = options.from_name || 'Call Waiting AI by CallWaiting AI';
+    const fromEmail = options.from || process.env.FROM_EMAIL || 'noreply@barpel.ai';
+    const fromName = options.from_name || 'Call Waiting AI by Barpel AI';
 
     const mailOptions: any = {
       from: `${fromName} <${fromEmail}>`,
@@ -148,12 +148,12 @@ export async function sendDemoEmailTemplate(
 
             <p>Best regards,<br/>
             <strong>The Call Waiting AI Team</strong><br/>
-            CallWaiting AI<br/>
-            <a href="https://callwaitingai.dev">callwaitingai.dev</a>
+            Barpel AI<br/>
+            <a href="https://barpel.ai">barpel.ai</a>
             </p>
         </div>
         <div class="footer">
-            <p>© 2025 CallWaiting AI. All rights reserved.</p>
+            <p>© 2025 Barpel AI. All rights reserved.</p>
             <p>Collage House, 17 King Edward Road, Ruislip, London HA4 7AE, UK</p>
         </div>
     </div>
@@ -187,8 +187,8 @@ Questions? Reply to this email or call +44 7424 038250.
 
 Best regards,
 The Call Waiting AI Team
-CallWaiting AI
-https://callwaitingai.dev
+Barpel AI
+https://barpel.ai
   `;
 
   return sendEmailViaSmtp({

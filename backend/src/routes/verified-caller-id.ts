@@ -315,7 +315,7 @@ router.post('/verify', requireAuth, async (req: Request, res: Response) => {
     try {
       validation = await twilioClient.validationRequests.create({
         phoneNumber: phoneNumber,
-        friendlyName: `Voxanne AI - ${phoneNumber}`
+        friendlyName: `Barpel AI - ${phoneNumber}`
       });
 
       logger.info('verified-caller-id', 'Outgoing Caller ID created - FULL RESPONSE', {
@@ -351,7 +351,7 @@ router.post('/verify', requireAuth, async (req: Request, res: Response) => {
             await new Promise(resolve => setTimeout(resolve, 5000));
             validation = await twilioClient.validationRequests.create({
               phoneNumber,
-              friendlyName: `Voxanne AI - ${phoneNumber}`
+              friendlyName: `Barpel AI - ${phoneNumber}`
             });
             // Retry succeeded — skip remaining error handling, fall through to DB storage
           } catch (retryErr: any) {

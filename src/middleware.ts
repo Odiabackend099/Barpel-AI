@@ -8,11 +8,11 @@ export async function middleware(req: NextRequest) {
     const isVercelHost = host.endsWith('.vercel.app');
 
     // Prevent Supabase PKCE (code_verifier) mismatch by forcing a single canonical origin.
-    // If the OAuth flow starts on *.vercel.app and returns to callwaitingai.dev (or vice versa),
+    // If the OAuth flow starts on *.vercel.app and returns to barpel.ai (or vice versa),
     // the code_verifier stored per-origin won't be found and Supabase throws bad_code_verifier.
     if (!isLocalhost && isVercelHost) {
         const url = req.nextUrl.clone();
-        url.hostname = 'callwaitingai.dev';
+        url.hostname = 'barpel.ai';
         url.protocol = 'https:';
         url.port = '';
         return NextResponse.redirect(url, 308);

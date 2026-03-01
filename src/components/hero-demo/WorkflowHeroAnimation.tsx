@@ -237,7 +237,7 @@ function Phase2CustomizeUI({ activeSubstep }: { activeSubstep: number }) {
                 >
                     <div className="flex items-center gap-2 mb-2">
                         <Mic className="w-4 h-4 text-surgical-600" />
-                        <span className="text-sm font-semibold text-obsidian">Voice: Voxanne</span>
+                        <span className="text-sm font-semibold text-obsidian">Voice: Barpel</span>
                     </div>
                     <div className="flex gap-1 items-end h-6">
                         {[...Array(20)].map((_, i) => (
@@ -262,12 +262,12 @@ function Phase2CustomizeUI({ activeSubstep }: { activeSubstep: number }) {
                     className="bg-surgical-600 text-white p-4 rounded-2xl rounded-tr-sm"
                 >
                     <div className="flex items-start gap-4">
-                        <img src="/roxan_voice_interface.png" alt="Voxanne AI" className="w-10 h-10 rounded-full object-cover border-2 border-white/20" />
+                        <img src="/roxan_voice_interface.png" alt="Barpel AI" className="w-10 h-10 rounded-full object-cover border-2 border-white/20" />
                         <div>
                             <p className="text-sm leading-relaxed">
                                 Hi! I'm the clinic's AI assistant. How can I help you today?
                             </p>
-                            <p className="text-xs text-surgical-200 mt-2 font-medium">Preview · Voxanne Voice</p>
+                            <p className="text-xs text-surgical-200 mt-2 font-medium">Preview · Barpel Voice</p>
                         </div>
                     </div>
                 </motion.div>
@@ -483,7 +483,7 @@ export default function WorkflowHeroAnimation() {
 
                 {/* 3. Footer Actions */}
                 <div className="px-6 py-4 bg-white border-t border-surgical-100 text-[10px] text-obsidian/40 font-mono flex justify-between items-center">
-                    <span>VOXANNE-AI-V1.2</span>
+                    <span>BARPEL-AI-V1.2</span>
                     <span className="flex items-center gap-1.5 font-bold" style={{ color: '#047857' }}>
                         <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
                         SYSTEM ONLINE

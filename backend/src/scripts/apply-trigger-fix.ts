@@ -123,12 +123,12 @@ CREATE TRIGGER on_auth_user_created
     console.log('   ✓ org_id stamped into JWT app_metadata');
     console.log('   ✓ No more 404 "Organization Not Found" errors\n');
 
-    console.log('⏭️  Current user (voxanne@demo.com):\n');
+    console.log('⏭️  Current user (barpel@demo.com):\n');
     console.log('   1. Sign out completely');
     console.log('   2. Clear browser cache:\n');
     console.log('      F12 → Console → paste and run:');
     console.log('      localStorage.clear(); sessionStorage.clear(); location.reload();\n');
-    console.log('   3. Sign back in with voxanne@demo.com / demo123');
+    console.log('   3. Sign back in with barpel@demo.com / demo123');
     console.log('   4. Dashboard should load without 404 error\n');
 
   } catch (error: any) {

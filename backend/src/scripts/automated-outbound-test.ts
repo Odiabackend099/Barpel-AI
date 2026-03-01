@@ -15,7 +15,7 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBL
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001';
 
 // Test credentials
-const TEST_EMAIL = process.env.TEST_EMAIL || 'voxanne@demo.com';
+const TEST_EMAIL = process.env.TEST_EMAIL || 'barpel@demo.com';
 const TEST_PASSWORD = process.env.TEST_PASSWORD || 'your-password-here';
 
 // Phone number to call
@@ -112,8 +112,8 @@ async function main() {
       const behaviorPayload = {
         agentRole: 'outbound',
         config: {
-          systemPrompt: outboundAgent.system_prompt || 'You are Voxanne, a professional AI assistant making outbound calls for a medical clinic. Be friendly, professional, and helpful.',
-          firstMessage: outboundAgent.first_message || 'Hello! This is Voxanne calling from the clinic. I wanted to reach out to you today.',
+          systemPrompt: outboundAgent.system_prompt || 'You are Barpel, a professional AI assistant making outbound calls for a medical clinic. Be friendly, professional, and helpful.',
+          firstMessage: outboundAgent.first_message || 'Hello! This is Barpel calling from the clinic. I wanted to reach out to you today.',
           voice: outboundAgent.voice || 'Paige',
           language: outboundAgent.language || 'en-US',
           maxCallDuration: outboundAgent.max_call_duration || 600

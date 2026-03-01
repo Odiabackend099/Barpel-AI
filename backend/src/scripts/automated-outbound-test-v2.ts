@@ -68,8 +68,8 @@ async function main() {
         .insert({
           org_id: orgId,
           role: 'outbound',
-          system_prompt: 'You are Voxanne, a professional AI assistant making outbound calls for a medical clinic. Be friendly, professional, and helpful.',
-          first_message: 'Hello! This is Voxanne calling from the clinic. I wanted to reach out to you today.',
+          system_prompt: 'You are Barpel, a professional AI assistant making outbound calls for a medical clinic. Be friendly, professional, and helpful.',
+          first_message: 'Hello! This is Barpel calling from the clinic. I wanted to reach out to you today.',
           voice: 'Paige',
           language: 'en-US',
           max_call_duration: 600

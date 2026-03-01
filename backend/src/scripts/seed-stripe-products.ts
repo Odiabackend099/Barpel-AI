@@ -1,7 +1,7 @@
 /**
  * Stripe Product Seed Script
  *
- * Idempotently creates Voxanne billing products, prices, and meters in Stripe.
+ * Idempotently creates Barpel billing products, prices, and meters in Stripe.
  * Run manually: npx tsx src/scripts/seed-stripe-products.ts
  *
  * All amounts are in pence (GBP). Metered overage uses sum aggregation.
@@ -31,7 +31,7 @@ interface TierConfig {
 
 const TIERS: TierConfig[] = [
   {
-    name: 'Voxanne Starter',
+    name: 'Barpel Starter',
     tier: 'starter',
     monthlyPence: 35000,        // £350
     overagePencePerMin: 45,     // £0.45
@@ -39,7 +39,7 @@ const TIERS: TierConfig[] = [
     includedMinutes: 400,
   },
   {
-    name: 'Voxanne Professional',
+    name: 'Barpel Professional',
     tier: 'professional',
     monthlyPence: 55000,        // £550
     overagePencePerMin: 40,     // £0.40
@@ -47,7 +47,7 @@ const TIERS: TierConfig[] = [
     includedMinutes: 1200,
   },
   {
-    name: 'Voxanne Enterprise',
+    name: 'Barpel Enterprise',
     tier: 'enterprise',
     monthlyPence: 80000,        // £800
     overagePencePerMin: 35,     // £0.35
@@ -58,12 +58,12 @@ const TIERS: TierConfig[] = [
 
 async function findProductByMetadata(tier: string): Promise<Stripe.Product | null> {
   const products = await stripe.products.list({ limit: 100 });
-  return products.data.find(p => p.metadata?.voxanne_tier === tier) || null;
+  return products.data.find(p => p.metadata?.barpel_tier === tier) || null;
 }
 
 async function findSetupProductByMetadata(tier: string): Promise<Stripe.Product | null> {
   const products = await stripe.products.list({ limit: 100 });
-  return products.data.find(p => p.metadata?.voxanne_setup_tier === tier) || null;
+  return products.data.find(p => p.metadata?.barpel_setup_tier === tier) || null;
 }
 
 async function findPriceByMetadata(
@@ -71,7 +71,7 @@ async function findPriceByMetadata(
   priceType: string
 ): Promise<Stripe.Price | null> {
   const prices = await stripe.prices.list({ product: productId, limit: 100 });
-  return prices.data.find(p => p.metadata?.voxanne_price_type === priceType) || null;
+  return prices.data.find(p => p.metadata?.barpel_price_type === priceType) || null;
 }
 
 async function seedTier(config: TierConfig): Promise<{
@@ -92,7 +92,7 @@ async function seedTier(config: TierConfig): Promise<{
       name: config.name,
       description: `${config.name} - ${config.includedMinutes} minutes/month included`,
       metadata: {
-        voxanne_tier: config.tier,
+        barpel_tier: config.tier,
         included_minutes: String(config.includedMinutes),
       },
     });
@@ -112,7 +112,7 @@ async function seedTier(config: TierConfig): Promise<{
         interval: 'month',
       },
       metadata: {
-        voxanne_price_type: `${config.tier}_monthly`,
+        barpel_price_type: `${config.tier}_monthly`,
       },
     });
     console.log(`  Recurring price created: ${recurringPrice.id} (${config.monthlyPence} pence/mo)`);
@@ -133,7 +133,7 @@ async function seedTier(config: TierConfig): Promise<{
         aggregate_usage: 'sum',
       },
       metadata: {
-        voxanne_price_type: `${config.tier}_overage`,
+        barpel_price_type: `${config.tier}_overage`,
       },
     });
     console.log(`  Overage price created: ${overagePrice.id} (${config.overagePencePerMin} pence/min)`);
@@ -148,7 +148,7 @@ async function seedTier(config: TierConfig): Promise<{
       name: `${config.name} - Setup Fee`,
       description: `One-time onboarding and configuration for ${config.name}`,
       metadata: {
-        voxanne_setup_tier: config.tier,
+        barpel_setup_tier: config.tier,
       },
     });
     console.log(`  Setup product created: ${setupProduct.id}`);
@@ -164,7 +164,7 @@ async function seedTier(config: TierConfig): Promise<{
       unit_amount: config.setupPence,
       currency: 'gbp',
       metadata: {
-        voxanne_price_type: `${config.tier}_setup`,
+        barpel_price_type: `${config.tier}_setup`,
       },
     });
     console.log(`  Setup price created: ${setupPrice.id} (${config.setupPence} pence)`);
@@ -180,7 +180,7 @@ async function seedTier(config: TierConfig): Promise<{
 }
 
 async function main() {
-  console.log('=== Voxanne Stripe Product Seeding ===');
+  console.log('=== Barpel Stripe Product Seeding ===');
   console.log(`Using Stripe key: ${STRIPE_SECRET_KEY!.substring(0, 12)}...`);
 
   const results: Record<string, any> = {};

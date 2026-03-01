@@ -200,7 +200,7 @@ complianceRouter.post('/data-export',
 
       // Return as JSON download
       res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Content-Disposition', `attachment; filename="voxanne-data-export-${orgId}-${Date.now()}.json"`);
+      res.setHeader('Content-Disposition', `attachment; filename="barpel-data-export-${orgId}-${Date.now()}.json"`);
       return res.json(exportData);
 
     } catch (error: any) {

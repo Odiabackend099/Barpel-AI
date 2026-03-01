@@ -46,7 +46,7 @@ async function checkSchema() {
     console.log('⚠️  No data in call_logs table. Trying to see table structure...\n');
 
     // Try inserting minimal data to see what columns are required
-    const testOrgId = '46cf2995-2bee-44e3-838b-24151486fe4e'; // Voxanne Demo Clinic
+    const testOrgId = '46cf2995-2bee-44e3-838b-24151486fe4e'; // Barpel Demo Clinic
     const { error: insertError } = await supabase
       .from('call_logs')
       .insert({

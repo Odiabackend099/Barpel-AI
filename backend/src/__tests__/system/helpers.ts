@@ -30,7 +30,7 @@ const SYSTEM_TEST_PASSWORD = 'SystemTest123!';
  */
 export async function setupSystemTestUser(): Promise<TestUser> {
   const uniqueId = randomUUID().substring(0, 8);
-  const email = `system-${uniqueId}@voxanne.test`;
+  const email = `system-${uniqueId}@barpel.test`;
 
   // Use the public signup API — trigger creates the org automatically
   const signupRes = await request(app)

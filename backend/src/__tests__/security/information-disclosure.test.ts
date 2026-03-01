@@ -300,7 +300,7 @@ describe('Health Endpoint Information Control', () => {
     expect(bodyStr).not.toContain('host');
   });
 
-  it('should NOT include an openai check (Voxanne uses Vapi, not OpenAI directly)', () => {
+  it('should NOT include an openai check (Barpel uses Vapi, not OpenAI directly)', () => {
     const healthResponse = {
       status: 'healthy',
       checks: { database: true, vapi: true, timestamp: new Date().toISOString() },

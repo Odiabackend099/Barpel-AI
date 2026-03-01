@@ -21,7 +21,7 @@ const team = [
     {
         name: "Benjamin Nwoye",
         role: "Head of Human & International Relations",
-        bio: "Expanding Voxanne's global footprint across healthcare markets",
+        bio: "Expanding Barpel's global footprint across healthcare markets",
         linkedin: "#",
         image: "/team/benjamin-nwoye.jpg" // Placeholder
     }
@@ -68,7 +68,7 @@ export function Team() {
                     transition={{ duration: 0.8, delay: 0.1, ease: easeOutExpo }}
                     className="text-lg text-slate-600"
                 >
-                    The minds behind Voxanne AI's intelligent voice automation
+                    The minds behind Barpel AI's intelligent voice automation
                 </motion.p>
             </div>
 

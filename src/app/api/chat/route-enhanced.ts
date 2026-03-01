@@ -9,9 +9,9 @@ function getGroqClient() {
 }
 
 // Enhanced comprehensive knowledge base
-const VOXANNE_ENHANCED_PROMPT = `
-You are "Call Waiting AI Support", a friendly, knowledgeable support agent for CallWaiting AI.
-Website: callwaitingai.dev | Product: AI Receptionist for Aesthetic Clinics & Med Spas
+const BARPEL_ENHANCED_PROMPT = `
+You are "Call Waiting AI Support", a friendly, knowledgeable support agent for Barpel AI.
+Website: barpel.ai | Product: AI Receptionist for Aesthetic Clinics & Med Spas
 
 === CURRENT DATE & TIME ===
 Today: {{CURRENT_DATE}}
@@ -142,7 +142,7 @@ Data Infrastructure:
 
 Takes 15-30 minutes from signup to first call:
 
-Minute 0-2: Sign up at app.callwaitingai.dev
+Minute 0-2: Sign up at app.barpel.ai
 Minute 2-7: Enter clinic details (name, location, hours)
 Minute 7-15: Connect phone number (Twilio or existing)
 Minute 15-20: Connect calendar (Google/Acuity/etc.)
@@ -205,7 +205,7 @@ Q16: "Can we customize what it says?"
 A: Totally. Custom greeting, FAQ answers, tone, rules. Full control via dashboard.
 
 Q17: "How much does it cost vs. hiring a receptionist?"
-A: Receptionist: $40K-$60K/year salary + benefits. Voxanne: pay-as-you-go credits, average clinic spends $150-$400/month ($1.8K-$4.8K/year). 85-95% cheaper.
+A: Receptionist: $40K-$60K/year salary + benefits. Barpel: pay-as-you-go credits, average clinic spends $150-$400/month ($1.8K-$4.8K/year). 85-95% cheaper.
 
 Q18: "Is there a contract? Can I cancel anytime?"
 A: No contracts. Pay-as-you-go. Cancel anytime, zero penalties. Pay only for what you use.
@@ -235,13 +235,13 @@ After helpful answer, include one:
 
 For Interested: "Want to see a quick 5-minute demo? Book here: https://calendly.com/austyneguale/30min"
 
-For Ready: "Get started at https://voxanne.ai/start — pay only for what you use, from $25 (350 credits)"
+For Ready: "Get started at https://barpel.ai/start — pay only for what you use, from $25 (350 credits)"
 
-For Skeptical: "Watch 2-min video: https://www.youtube.com/watch?v=callwaitingai"
+For Skeptical: "Watch 2-min video: https://www.youtube.com/watch?v=barpelai"
 
 For Support: "Chat with founder: https://calendly.com/austyneguale/30min"
 
-For General: "Any other questions? Reply here or email support@callwaitingai.dev"
+For General: "Any other questions? Reply here or email support@barpel.ai"
 
 === ESCALATION RULES ===
 
@@ -291,7 +291,7 @@ function getAgentPrompt(): string {
     const now = new Date();
     const currentDate = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     const currentTime = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-    const base = agentName === 'sylvia' ? SYLVIA_PROMPT : VOXANNE_ENHANCED_PROMPT;
+    const base = agentName === 'sylvia' ? SYLVIA_PROMPT : BARPEL_ENHANCED_PROMPT;
     return base.replace('{{CURRENT_DATE}}', currentDate).replace('{{CURRENT_TIME}}', currentTime);
 }
 

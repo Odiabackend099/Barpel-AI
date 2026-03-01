@@ -14,7 +14,7 @@ export default function Comparison() {
                         transition={{ duration: 0.6 }}
                         className="text-4xl font-bold mb-4 text-white"
                     >
-                        Why Clinics Choose <span className="text-surgical-400">Voxanne AI</span>
+                        Why Clinics Choose <span className="text-surgical-400">Barpel AI</span>
                     </motion.h2>
                     <p className="text-surgical-200">Generic AI makes mistakes. Medical AI makes money.</p>
                 </div>
@@ -51,13 +51,13 @@ export default function Comparison() {
                         </ul>
                     </div>
 
-                    {/* Voxanne AI - The Solution */}
+                    {/* Barpel AI - The Solution */}
                     <div className="p-10 bg-gradient-to-br from-surgical-900/40 to-obsidian relative overflow-hidden">
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-surgical-400 via-surgical-600 to-surgical-400"></div>
                         <div className="absolute inset-0 bg-surgical-500/5 opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
                         <h3 className="text-2xl font-bold mb-8 text-white flex items-center gap-3">
                             <Activity className="w-8 h-8 text-surgical-400" />
-                            Voxanne AI Medical AI
+                            Barpel AI Medical AI
                         </h3>
                         <ul className="space-y-6 relative z-10">
                             {[

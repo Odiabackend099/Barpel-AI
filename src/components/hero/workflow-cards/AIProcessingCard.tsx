@@ -8,7 +8,7 @@ export function AIProcessingCard() {
                 <div className="rounded-full bg-gradient-to-br from-purple-500 to-purple-600 p-3">
                     <Bot className="h-6 w-6 text-white" />
                 </div>
-                <div className="text-sm font-medium text-gray-900">Voxanne AI</div>
+                <div className="text-sm font-medium text-gray-900">Barpel AI</div>
             </div>
 
             <div className="rounded-lg bg-gradient-to-br from-purple-50 to-blue-50 p-4">

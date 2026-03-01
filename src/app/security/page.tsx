@@ -4,8 +4,8 @@ import FooterRedesigned from '@/components/FooterRedesigned';
 import { ShieldCheck, Lock, Server, FileCheck, Eye } from 'lucide-react';
 
 export const metadata = {
-    title: 'Security | Voxanne AI',
-    description: 'Security practices and compliance at Voxanne AI. SOC 2, HIPAA, and data encryption standards.',
+    title: 'Security | Barpel AI',
+    description: 'Security practices and compliance at Barpel AI. SOC 2, HIPAA, and data encryption standards.',
 };
 
 export default function SecurityPage() {
@@ -65,10 +65,10 @@ export default function SecurityPage() {
                 <div className="bg-navy-900 rounded-3xl p-8 md:p-12 text-center text-white">
                     <h2 className="text-3xl font-bold mb-6">Report a Vulnerability</h2>
                     <p className="text-slate-300 mb-8 max-w-2xl mx-auto">
-                        We value the contributions of the security research community. If you believe you have found a security vulnerability in Voxanne AI, please let us know.
+                        We value the contributions of the security research community. If you believe you have found a security vulnerability in Barpel AI, please let us know.
                     </p>
                     <a 
-                        href="mailto:security@voxanne.ai" 
+                        href="mailto:security@barpel.ai" 
                         className="inline-flex items-center gap-2 bg-white text-navy-900 px-8 py-3 rounded-full font-semibold hover:bg-slate-100 transition-colors"
                     >
                         <Eye className="h-5 w-5" />

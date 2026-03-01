@@ -55,7 +55,7 @@ const caseStudies: CaseStudy[] = [
         icon: <TrendingUp className="w-5 h-5 text-purple-600" />,
       },
     ],
-    quote: 'We were skeptical about AI answering medical calls, but the safety protocols won us over. In three months, Voxanne paid for herself three times over. Our receptionist now focuses on in-clinic patients instead of being glued to the phone.',
+    quote: 'We were skeptical about AI answering medical calls, but the safety protocols won us over. In three months, Barpel paid for herself three times over. Our receptionist now focuses on in-clinic patients instead of being glued to the phone.',
     verificationLinks: [
       {
         label: 'LinkedIn Profile',
@@ -141,7 +141,7 @@ const caseStudies: CaseStudy[] = [
         icon: <TrendingUp className="w-5 h-5 text-purple-600" />,
       },
     ],
-    quote: 'I got my evenings back. Voxanne handles the tire-kickers and books the serious patients. My receptionist focuses on patient care, and I focus on medicine. It\'s the best hire I never had to train.',
+    quote: 'I got my evenings back. Barpel handles the tire-kickers and books the serious patients. My receptionist focuses on patient care, and I focus on medicine. It\'s the best hire I never had to train.',
     verificationLinks: [
       {
         label: 'GMC Register',
@@ -167,7 +167,7 @@ export default function CaseStudies() {
             Real Results from Real Clinics
           </h1>
           <p className="text-xl text-obsidian/70 max-w-2xl mx-auto">
-            See how healthcare practices are capturing missed revenue and saving staff time with CallWaiting AI
+            See how healthcare practices are capturing missed revenue and saving staff time with Barpel AI
           </p>
         </div>
 
@@ -260,7 +260,7 @@ export default function CaseStudies() {
             </button>
           </a>
           <p className="text-obsidian/70 text-sm mt-4">
-            See how CallWaiting AI can work for your practice
+            See how Barpel AI can work for your practice
           </p>
         </div>
       </div>

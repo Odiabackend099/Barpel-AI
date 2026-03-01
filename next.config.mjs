@@ -85,7 +85,7 @@ const withPWA = withPWAInit({
         },
         // API calls (NetworkFirst - prefer fresh data, fallback to cache)
         {
-            urlPattern: /^https:\/\/api\.voxanne\.ai\/api\/.*/i,
+            urlPattern: /^https:\/\/api\.barpel\.ai\/api\/.*/i,
             handler: 'NetworkFirst',
             options: {
                 cacheName: 'api-cache',
@@ -138,7 +138,7 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: 'voxanne.ai',
+                hostname: 'barpel.ai',
             },
         ],
     },
@@ -158,10 +158,10 @@ const nextConfig = {
                 has: [
                     {
                         type: 'host',
-                        value: 'www.voxanne.ai',
+                        value: 'www.barpel.ai',
                     },
                 ],
-                destination: 'https://voxanne.ai/:path*',
+                destination: 'https://barpel.ai/:path*',
                 permanent: true,
             },
             {
@@ -192,6 +192,10 @@ const nextConfig = {
         ];
     },
     async headers() {
+        const isDev = process.env.NODE_ENV === 'development';
+        const devSources = isDev
+            ? ' http://localhost:8001 http://localhost:8000 ws://localhost:8000 ws://localhost:8001'
+            : '';
         return [
             {
                 source: '/:path*',
@@ -214,7 +218,7 @@ const nextConfig = {
                     },
                     {
                         key: 'Content-Security-Policy',
-                        value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.vapi.ai https://*.sentry.io https://voxanneai.onrender.com; frame-ancestors 'none';",
+                        value: `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.vapi.ai https://*.sentry.io https://barpel.onrender.com${devSources}; frame-ancestors 'none';`,
                     },
                 ],
             },

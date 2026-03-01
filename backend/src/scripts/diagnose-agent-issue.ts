@@ -1,7 +1,7 @@
 /**
  * Diagnostic Script: Identify why wrong agent is being used
  *
- * Usage: npx ts-node src/scripts/diagnose-agent-issue.ts voxanne@demo.com
+ * Usage: npx ts-node src/scripts/diagnose-agent-issue.ts barpel@demo.com
  *
  * Checks:
  * 1. Find org_id for email
@@ -214,7 +214,7 @@ function printAgentDetails(agent: any, prefix = '') {
 const userEmail = process.argv[2];
 if (!userEmail) {
   console.error('Usage: npx ts-node src/scripts/diagnose-agent-issue.ts <email>');
-  console.error('Example: npx ts-node src/scripts/diagnose-agent-issue.ts voxanne@demo.com');
+  console.error('Example: npx ts-node src/scripts/diagnose-agent-issue.ts barpel@demo.com');
   process.exit(1);
 }
 

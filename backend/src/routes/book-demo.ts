@@ -91,8 +91,8 @@ router.post('/', async (req: Request, res: Response) => {
 
     // Send notification email to sales team
     const salesEmailResult = await sendEmailViaSmtp({
-      to: 'support@voxanne.ai',
-      cc: 'austyn.callwaitingai@gmail.com',
+      to: 'support@barpel.ai',
+      cc: 'austyn.hello@barpel.ai',
       subject: `New Demo Booking: ${clinic_name}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">

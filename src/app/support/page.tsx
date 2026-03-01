@@ -3,19 +3,19 @@ import NavbarRedesigned from '@/components/NavbarRedesigned';
 import FooterRedesigned from '@/components/FooterRedesigned';
 
 export const metadata: Metadata = {
-  title: "Support Center | Voxanne AI Help & Documentation",
-  description: "Get help with Voxanne AI. Browse documentation, FAQs, integration guides, and contact our 24/7 support team for assistance.",
+  title: "Support Center | Barpel AI Help & Documentation",
+  description: "Get help with Barpel AI. Browse documentation, FAQs, integration guides, and contact our 24/7 support team for assistance.",
   keywords: ["support", "help center", "documentation", "customer service"],
   openGraph: {
-    title: "Support Center | Voxanne AI",
-    description: "Get help with Voxanne AI. Browse documentation and contact our support team.",
-    url: 'https://voxanne.ai/support',
+    title: "Support Center | Barpel AI",
+    description: "Get help with Barpel AI. Browse documentation and contact our support team.",
+    url: 'https://barpel.ai/support',
     images: ['/og-image.png'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Support Center | Voxanne AI",
-    description: "Get help with Voxanne AI. Browse documentation and contact our support team.",
+    title: "Support Center | Barpel AI",
+    description: "Get help with Barpel AI. Browse documentation and contact our support team.",
     images: ['/og-image.png'],
   },
   alternates: {
@@ -69,7 +69,7 @@ export default function SupportPage() {
                 For anything urgent, reach our team by email or phone. Include your tracking ID for faster triage.
               </p>
               <ul className="text-sm text-slate-700 space-y-2">
-                <li><span className="font-semibold text-slate-900">Email:</span> support@voxanne.ai</li>
+                <li><span className="font-semibold text-slate-900">Email:</span> support@barpel.ai</li>
                 <li><span className="font-semibold text-slate-900">Phone:</span> +44 7424 038250</li>
                 <li><span className="font-semibold text-slate-900">Hours:</span> 24/7 for critical incidents; standard tickets in 1 business day.</li>
               </ul>

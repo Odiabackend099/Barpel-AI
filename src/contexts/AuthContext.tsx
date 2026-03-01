@@ -106,7 +106,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                     // Validation is handled by useOrgValidation hook in dashboard/layout.tsx
                 } else if (event === 'SIGNED_OUT') {
                     localStorage.removeItem('org_id'); // Clean up legacy localStorage
-                    try { sessionStorage.removeItem('voxanne_org_validation'); } catch { /* SSR safety */ }
+                    try { sessionStorage.removeItem('barpel_org_validation'); } catch { /* SSR safety */ }
                     setLoading(false);
                     routerRef.current.push('/login');
                 }
@@ -209,7 +209,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const signOut = async () => {
         try {
             setError(null);
-            try { sessionStorage.removeItem('voxanne_org_validation'); } catch { /* SSR safety */ }
+            try { sessionStorage.removeItem('barpel_org_validation'); } catch { /* SSR safety */ }
             await supabase.auth.signOut();
             setUser(null);
             setSession(null);

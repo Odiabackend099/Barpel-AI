@@ -1,6 +1,6 @@
 #!/usr/bin/env ts-node
 /**
- * Enable Calendar Integration for Voxanne Demo
+ * Enable Calendar Integration for Barpel Demo
  *
  * Sets is_active = true for the Google Calendar integration
  */
@@ -11,7 +11,7 @@ import * as path from 'path';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
-const VOXANNE_DEMO_ORG_ID = '46cf2995-2bee-44e3-838b-24151486fe4e';
+const BARPEL_DEMO_ORG_ID = '46cf2995-2bee-44e3-838b-24151486fe4e';
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -19,13 +19,13 @@ const supabase = createClient(
 );
 
 async function enableCalendar() {
-  console.log('🔧 Enabling Google Calendar integration for Voxanne Demo...\n');
+  console.log('🔧 Enabling Google Calendar integration for Barpel Demo...\n');
 
   // Check current status
   const { data: current, error: checkError } = await supabase
     .from('org_credentials')
     .select('*')
-    .eq('org_id', VOXANNE_DEMO_ORG_ID)
+    .eq('org_id', BARPEL_DEMO_ORG_ID)
     .eq('provider', 'google_calendar')
     .single();
 
@@ -52,7 +52,7 @@ async function enableCalendar() {
       is_active: true,
       updated_at: new Date().toISOString()
     })
-    .eq('org_id', VOXANNE_DEMO_ORG_ID)
+    .eq('org_id', BARPEL_DEMO_ORG_ID)
     .eq('provider', 'google_calendar');
 
   if (updateError) {
@@ -62,7 +62,7 @@ async function enableCalendar() {
 
   console.log('✅ Google Calendar integration enabled successfully!');
   console.log('\nYou can now run the demo feature tests:');
-  console.log('  npm run test:voxanne-demo');
+  console.log('  npm run test:barpel-demo');
 }
 
 enableCalendar().catch(console.error);

@@ -74,7 +74,7 @@ export default function HeroChatAnimation() {
                     <div className="absolute bottom-0 right-0 h-3 w-3 bg-green-500 rounded-full border-2 border-navy-900 animate-pulse" />
                 </div>
                 <div>
-                    <h3 className="text-white font-semibold text-sm">Voxanne AI</h3>
+                    <h3 className="text-white font-semibold text-sm">Barpel AI</h3>
                     <p className="text-surgical-100 text-xs flex items-center gap-1">
                         <span className="w-1.5 h-1.5 bg-green-400 rounded-full inline-block" />
                         Online & Ready

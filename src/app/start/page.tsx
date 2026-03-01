@@ -297,19 +297,19 @@ function OnboardingForm() {
       console.error('Submission error:', error);
       haptics.error();
       setStatus('idle');
-      showError('Failed to submit form. Please try again or contact support@voxanne.ai', 5000);
+      showError('Failed to submit form. Please try again or contact support@barpel.ai', 5000);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-50 to-slate-100">
+    <div className="min-h-screen flex flex-col bg-white">
       <NetworkStatus />
 
       <nav className="p-6 flex justify-between items-center max-w-7xl mx-auto w-full bg-white">
-        <Logo variant="icon-blue" size="lg" href="/" priority />
+        <Logo width={150} height={40} showText={true} />
         <Link
           href="/"
-          className="text-blue-600 hover:text-blue-700 transition-colors text-sm font-medium min-h-[48px] flex items-center active:scale-95 transition-transform"
+          className="text-barpel-teal hover:text-barpel-teal-dark transition-colors text-sm font-medium min-h-[48px] flex items-center active:scale-95 transition-transform"
           onClick={() => haptics.light()}
         >
           Back to Home Page
@@ -319,28 +319,28 @@ function OnboardingForm() {
       <main className="flex-grow flex items-center justify-center px-4 py-12">
         <div className="max-w-2xl w-full">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            <h1 className="text-3xl font-bold text-barpel-slate mb-4">
               Let&apos;s Build Your AI Agent
             </h1>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-barpel-gray">
               Provide your pricing sheet and greeting script below.
               Our team will configure your instance within 24 hours.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-2xl border border-slate-100 p-8 space-y-6">
+          <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-2xl border border-barpel-border p-8 space-y-6">
             {/* Company Name - REQUIRED */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-barpel-slate mb-2">
                 Company Name <span className="text-red-600">*</span>
               </label>
               <Input
                 autoFocus
                 name="company"
                 required
-                placeholder="e.g., Your Clinic Name"
+                placeholder="e.g., Your Business Name"
                 disabled={status === 'loading'}
-                className={`min-h-[48px] text-base placeholder:text-gray-400 ${
+                className={`min-h-[48px] text-base placeholder:text-barpel-gray/50 ${
                   fieldErrors.company ? 'border-red-500 focus-visible:ring-red-500' : ''
                 }`}
                 onFocus={() => haptics.light()}
@@ -362,15 +362,15 @@ function OnboardingForm() {
 
             {/* Company Website - OPTIONAL */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Company Website <span className="text-gray-500 text-xs font-normal">(Optional)</span>
+              <label className="block text-sm font-medium text-barpel-slate mb-2">
+                Company Website <span className="text-barpel-gray/70 text-xs font-normal">(Optional)</span>
               </label>
               <Input
                 name="website"
                 type="text"
                 placeholder="yourcompany.com or https://yourcompany.com"
                 disabled={status === 'loading'}
-                className={`min-h-[48px] text-base placeholder:text-gray-400 ${
+                className={`min-h-[48px] text-base placeholder:text-barpel-gray/50 ${
                   fieldErrors.website ? 'border-red-500 focus-visible:ring-red-500' : ''
                 }`}
                 onFocus={() => haptics.light()}
@@ -388,7 +388,7 @@ function OnboardingForm() {
                   <span>{fieldErrors.website}</span>
                 </div>
               ) : (
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-barpel-gray/70 mt-1">
                   We&apos;ll use this to personalize your AI agent&apos;s knowledge
                 </p>
               )}
@@ -396,7 +396,7 @@ function OnboardingForm() {
 
             {/* Email - REQUIRED */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-barpel-slate mb-2">
                 Your Email <span className="text-red-600">*</span>
               </label>
               <Input
@@ -405,7 +405,7 @@ function OnboardingForm() {
                 required
                 placeholder="your.email@company.com"
                 disabled={status === 'loading'}
-                className={`min-h-[48px] text-base placeholder:text-gray-400 ${
+                className={`min-h-[48px] text-base placeholder:text-barpel-gray/50 ${
                   fieldErrors.email ? 'border-red-500 focus-visible:ring-red-500' : ''
                 }`}
                 onFocus={() => haptics.light()}
@@ -427,7 +427,7 @@ function OnboardingForm() {
 
             {/* Phone - REQUIRED */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-barpel-slate mb-2">
                 Phone Number <span className="text-red-600">*</span>
               </label>
               <Input
@@ -436,7 +436,7 @@ function OnboardingForm() {
                 required
                 placeholder="+1 555 123 4567 or +44 7700 900000"
                 disabled={status === 'loading'}
-                className={`min-h-[48px] text-base placeholder:text-gray-400 ${
+                className={`min-h-[48px] text-base placeholder:text-barpel-gray/50 ${
                   fieldErrors.phone ? 'border-red-500 focus-visible:ring-red-500' : ''
                 }`}
                 onFocus={() => haptics.light()}
@@ -455,7 +455,7 @@ function OnboardingForm() {
                 </div>
               )}
               {!fieldErrors.phone && (
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-barpel-gray/70 mt-1">
                   Include country code: +1 for US/Canada, +44 for UK, +61 for Australia. Spaces and dashes are optional.
                 </p>
               )}
@@ -463,7 +463,7 @@ function OnboardingForm() {
 
             {/* Greeting Script - REQUIRED */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-barpel-slate mb-2">
                 Reception Greeting Script <span className="text-red-600">*</span>
               </label>
               <Textarea
@@ -472,7 +472,7 @@ function OnboardingForm() {
                 rows={4}
                 placeholder="e.g., Thank you for calling [Your Company]. How may I help you today?"
                 disabled={status === 'loading'}
-                className={`resize-none text-base placeholder:text-gray-400 min-h-[96px] ${
+                className={`resize-none text-base placeholder:text-barpel-gray/50 min-h-[96px] ${
                   fieldErrors.greeting_script ? 'border-red-500 focus-visible:ring-red-500' : ''
                 }`}
                 onFocus={() => haptics.light()}
@@ -496,8 +496,8 @@ function OnboardingForm() {
 
             {/* Voice Preference - OPTIONAL */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Preferred Voice Type <span className="text-gray-500 text-xs font-normal">(Optional)</span>
+              <label className="block text-sm font-medium text-barpel-slate mb-2">
+                Preferred Voice Type <span className="text-barpel-gray/70 text-xs font-normal">(Optional)</span>
               </label>
               <select
                 name="voice_preference"
@@ -511,15 +511,15 @@ function OnboardingForm() {
                 <option value="Male Voice">Male Voice - Professional male voice</option>
                 <option value="Female Voice">Female Voice - Professional female voice</option>
               </select>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-barpel-gray/70 mt-1">
                 Select the voice type for your AI agent
               </p>
             </div>
 
             {/* File Upload - OPTIONAL */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Pricing/Menu PDF <span className="text-gray-500 text-xs font-normal">(Optional)</span>
+              <label className="block text-sm font-medium text-barpel-slate mb-2">
+                Pricing/Menu PDF <span className="text-barpel-gray/70 text-xs font-normal">(Optional)</span>
               </label>
               <input
                 type="file"
@@ -527,11 +527,11 @@ function OnboardingForm() {
                 accept=".pdf"
                 disabled={status === 'loading'}
                 onChange={handleFileChange}
-                className={`block w-full text-sm text-gray-500
+                className={`block w-full text-sm text-barpel-gray/70
                   file:mr-4 file:py-2 file:px-4
                   file:rounded-lg file:border-0
                   file:text-sm file:font-semibold
-                  file:bg-blue-50 file:text-blue-700
+                  file:bg-barpel-teal/10 file:text-barpel-teal-dark
                   hover:file:bg-blue-100
                   disabled:opacity-50
                   ${fileError ? 'border border-red-500 rounded-md' : ''}`}
@@ -543,7 +543,7 @@ function OnboardingForm() {
                     {fileError}
                     <button
                       type="button"
-                      className="ml-2 underline text-blue-600 hover:text-blue-700 min-h-[48px] active:scale-95 transition-transform"
+                      className="ml-2 underline text-barpel-teal hover:text-barpel-teal-dark min-h-[48px] active:scale-95 transition-transform"
                       onClick={() => {
                         haptics.light();
                         const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
@@ -559,17 +559,17 @@ function OnboardingForm() {
                   </span>
                 </div>
               ) : (
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-barpel-gray/70 mt-1">
                   PDF only, max 10MB
                 </p>
               )}
 
               {selectedFile && !fileError && (
-                <div className="mt-2 p-3 bg-blue-50 rounded-lg flex items-center gap-3 border border-blue-200">
-                  <FileText className="h-5 w-5 text-blue-600 flex-shrink-0" />
+                <div className="mt-2 p-3 bg-barpel-teal/10 rounded-lg flex items-center gap-3 border border-barpel-teal/30">
+                  <FileText className="h-5 w-5 text-barpel-teal flex-shrink-0" />
                   <div className="flex-grow min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{selectedFile.name}</p>
-                    <p className="text-xs text-gray-600">
+                    <p className="text-sm font-medium text-barpel-slate truncate">{selectedFile.name}</p>
+                    <p className="text-xs text-barpel-gray">
                       {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
                     </p>
                   </div>
@@ -593,10 +593,10 @@ function OnboardingForm() {
             </div>
 
             {/* Social Proof */}
-            <div className="flex items-center justify-center gap-2 py-4 text-sm text-gray-600 border-t border-gray-100">
+            <div className="flex items-center justify-center gap-2 py-4 text-sm text-barpel-gray border-t border-gray-100">
               <Users className="h-4 w-4 text-green-600" />
               <span>
-                Join <strong className="text-gray-900">150+ healthcare practices</strong> using Voxanne AI
+                Join <strong className="text-barpel-slate">businesses using Barpel AI</strong>
               </span>
             </div>
 
@@ -606,24 +606,23 @@ function OnboardingForm() {
                 <div className="flex items-center justify-center">
                   <CheckCircle2 className="h-12 w-12 text-green-500" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900">
+                <h3 className="text-xl font-semibold text-barpel-slate">
                   Submitted Successfully! ✅
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-barpel-gray">
                   Check your email for next steps. Our team will configure your AI agent within 24 hours.
                 </p>
                 <div className="pt-4">
                   <Button variant="outline" className="w-full sm:w-auto min-h-[48px]" asChild>
                     <a
-                      href="https://calendly.com/austyneguale/30min"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href="#"
+                      aria-label="Demo booking coming soon"
                       onClick={() => haptics.medium()}
                     >
                       📅 Book a 30-Min Demo
                     </a>
                   </Button>
-                  <p className="text-sm text-gray-500 mt-2">
+                  <p className="text-sm text-barpel-gray/70 mt-2">
                     Want to see the platform in action?
                   </p>
                 </div>
@@ -661,7 +660,7 @@ function OnboardingForm() {
           </form>
 
           {/* Trust Badges */}
-          <div className="mt-6 text-center text-sm text-gray-500">
+          <div className="mt-6 text-center text-sm text-barpel-gray/70">
             <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2"></span>
             Secure • Human Verified • 24-Hour Setup
           </div>

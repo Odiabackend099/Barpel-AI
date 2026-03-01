@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Eye, EyeOff, Loader2, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Check } from 'lucide-react';
 import Logo from '@/components/Logo';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -23,8 +23,8 @@ function getPasswordStrength(p: string): { score: number; label: string; color: 
   const levels = [
     { score: 1, label: 'Weak', color: 'bg-red-400' },
     { score: 2, label: 'Fair', color: 'bg-amber-400' },
-    { score: 3, label: 'Strong', color: 'bg-blue-500' },
-    { score: 4, label: 'Very strong', color: 'bg-green-500' },
+    { score: 3, label: 'Strong', color: 'bg-[#37A195]' },
+    { score: 4, label: 'Very strong', color: 'bg-[#37A195]' },
   ];
   return levels[score - 1];
 }
@@ -58,19 +58,15 @@ export default function SignUpPage() {
     setLoading(true);
 
     try {
-      // Step 1: Create account via server-side API.
-      // Uses admin.createUser() which bypasses the Supabase "Allow new users to sign up"
-      // project-level restriction. The DB trigger creates org + profile + JWT metadata.
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
       const isProduction = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
       if (!backendUrl && isProduction) {
-        setError('Service configuration error. Please contact support@voxanne.ai.');
+        setError('Service configuration error. Please contact support@barpel.ai.');
         setLoading(false);
         return;
       }
       const resolvedBackendUrl = backendUrl || 'http://localhost:3001';
 
-      // Fetch CSRF token before submitting — required by backend CSRF protection.
       let csrfToken: string | null = null;
       try {
         const csrfRes = await fetch(`${resolvedBackendUrl}/api/csrf-token`);
@@ -79,7 +75,6 @@ export default function SignUpPage() {
           csrfToken = csrfData.csrfToken ?? null;
         }
       } catch {
-        // Network error fetching CSRF token
         setError('Unable to reach the server. Please check your connection and try again.');
         setLoading(false);
         return;
@@ -119,24 +114,19 @@ export default function SignUpPage() {
         return;
       }
 
-      // Step 2: Sign in to obtain a session.
-      // The account was created with email_confirm: true so sign-in is immediate.
-      // The trigger has already set app_metadata.org_id, so the JWT is backend-ready.
       const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
       });
 
       if (signInError || !signInData.session) {
-        // Account was created but auto sign-in failed — show inline message with login link.
-        // Do NOT auto-redirect: the user would land on /login with no context.
         setError('Account created! Auto sign-in failed — please sign in manually.');
         setErrorLink({ label: 'Sign in now →', href: '/login' });
         setLoading(false);
         return;
       }
 
-      reset(); // Clear rate-limit counter on success
+      reset();
       router.push('/dashboard/onboarding');
     } catch {
       setError('An unexpected error occurred. Please try again.');
@@ -171,34 +161,127 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="h-screen overflow-hidden grid lg:grid-cols-2">
-      {/* Left Column: Form */}
-      <div className="flex flex-col justify-center px-8 py-12 lg:px-20 xl:px-32 bg-white relative overflow-y-auto">
-        <FadeIn>
-          <div className="mb-8">
-            <div className="mb-6 flex items-center justify-between">
-              <Logo
-                variant="icon-blue"
-                size="xl"
-                className="h-16 w-auto"
-              />
-              <Link
-                href="/"
-                className="text-sm font-medium text-surgical-600 hover:text-surgical-700 transition-colors"
-              >
-                Back to Home
-              </Link>
+    <div className="h-screen overflow-hidden grid lg:grid-cols-[55%_45%]">
+      {/* Left Column: Brand Showcase */}
+      <div className="hidden lg:flex relative bg-gradient-to-br from-[#102A33] via-[#244B52] to-[#37A195] items-center justify-center overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10"
+          style={{ backgroundImage: 'radial-gradient(#37A195 1px, transparent 1px)', backgroundSize: '32px 32px' }}
+        />
+
+        <div className="relative z-10 max-w-lg px-12 text-center">
+          <FadeIn delay={0.1}>
+            {/* Logo */}
+            <div className="mb-8 flex justify-center">
+              <div className="w-24 h-24">
+                <Image
+                  src="/images/logos/logo_white.png"
+                  alt="Barpel AI"
+                  width={96}
+                  height={96}
+                  className="w-full h-full object-contain"
+                  priority
+                />
+              </div>
             </div>
-            <h1 className="text-4xl font-bold text-obsidian tracking-tighter mb-2">
+
+            {/* Headline */}
+            <h2 className="text-3xl font-bold text-white mb-2">Barpel AI</h2>
+            <p className="text-white/80 text-lg mb-8">Never miss another customer call</p>
+
+            {/* Stats Cards */}
+            <div className="grid grid-cols-3 gap-4 mb-10">
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
+                <p className="text-2xl font-bold text-white">10K+</p>
+                <p className="text-white/70 text-xs mt-1">Calls Handled</p>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
+                <p className="text-2xl font-bold text-white">&lt;2s</p>
+                <p className="text-white/70 text-xs mt-1">Response Time</p>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
+                <p className="text-2xl font-bold text-white">98.7%</p>
+                <p className="text-white/70 text-xs mt-1">Pickup Rate</p>
+              </div>
+            </div>
+
+            {/* Feature List */}
+            <div className="space-y-3 mb-10 text-left">
+              {[
+                '24/7 AI receptionist',
+                'Books appointments automatically',
+                'Qualifies and routes leads',
+                'Works with your existing calendar'
+              ].map((feature, i) => (
+                <div key={i} className="flex items-center gap-3 text-white">
+                  <Check className="w-5 h-5 text-[#6FE7DC] flex-shrink-0" />
+                  <span className="text-sm">{feature}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Testimonial */}
+            <div className="bg-white/5 border border-white/20 rounded-lg p-6 mb-8">
+              <p className="text-white italic text-sm mb-4">
+                &quot;Barpel increased our booking rate by 40% in the first month. It&apos;s like having a perfect receptionist 24/7.&quot;
+              </p>
+              <p className="text-white/70 text-xs font-medium">— Dr. Sarah Chen, MedSpa Owner</p>
+            </div>
+
+            {/* Trusted By */}
+            <div className="flex items-center justify-center gap-4 pt-4 border-t border-white/10">
+              <span className="text-white/60 text-xs">Trusted by:</span>
+              <div className="flex -space-x-2">
+                {[
+                  { name: 'Twilio', logo: '/integrations/twilio.png' },
+                  { name: 'Vapi', logo: '/integrations/vapi.png' },
+                  { name: 'Google Calendar', logo: '/integrations/google-calendar.png' }
+                ].map((integration) => (
+                  <div key={integration.name} className="h-8 w-8 rounded-full border-2 border-white/30 bg-white overflow-hidden flex items-center justify-center p-1">
+                    <Image
+                      src={integration.logo}
+                      alt={integration.name}
+                      width={24}
+                      height={24}
+                      className="object-contain"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </FadeIn>
+        </div>
+      </div>
+
+      {/* Right Column: Sign Up Form */}
+      <div className="flex flex-col justify-center px-8 py-12 lg:px-12 xl:px-16 bg-white relative overflow-y-auto">
+        <FadeIn>
+          <div className="mb-8 flex items-center justify-between lg:hidden">
+            <Logo
+              width={120}
+              height={32}
+              showText={true}
+              variant="dark"
+            />
+            <Link
+              href="/"
+              className="text-sm font-medium text-[#37A195] hover:text-[#2F8E88] transition-colors"
+            >
+              Home
+            </Link>
+          </div>
+
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-[#102A33] tracking-tight mb-2">
               Create your account
             </h1>
-            <p className="text-lg text-obsidian/70">
-              Get your AI receptionist up and running in minutes
+            <p className="text-[#6B7280]">
+              Start free, upgrade anytime
             </p>
           </div>
 
           {error && (
-            <div role="alert" aria-live="assertive" className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm mb-6">
+            <div role="alert" aria-live="assertive" className="bg-red-900/20 border border-red-500/30 text-red-600 px-4 py-3 rounded-lg text-sm mb-6">
               {error}{' '}
               {errorLink && (
                 <Link href={errorLink.href} className="font-semibold underline hover:no-underline">
@@ -208,16 +291,16 @@ export default function SignUpPage() {
             </div>
           )}
 
-          {/* Google OAuth — HERO CTA (industry standard: above form) */}
+          {/* Google OAuth */}
           <Button
             type="button"
             variant="outline"
-            className="w-full h-12 gap-3 text-obsidian border-2 border-surgical-200 rounded-xl bg-white shadow-md hover:shadow-lg hover:bg-surgical-50 hover:scale-[1.02] active:scale-100 focus:outline-none focus:ring-2 focus:ring-surgical-600/30 focus:ring-offset-2 transition-all duration-200 mb-4"
+            className="w-full h-11 gap-3 text-[#102A33] border-2 border-[#E5E7EB] rounded-lg bg-white shadow-sm hover:shadow-md hover:bg-gray-50 hover:scale-[1.02] active:scale-100 focus:outline-none focus:ring-2 focus:ring-[#37A195]/30 focus:ring-offset-2 transition-all duration-200 mb-4"
             onClick={handleGoogleSignUp}
             disabled={loading}
           >
             {loading ? (
-              <Loader2 className="h-5 w-5 animate-spin text-obsidian/40" />
+              <Loader2 className="h-5 w-5 animate-spin text-[#6B7280]" />
             ) : (
               <>
                 <svg className="h-5 w-5 flex-shrink-0" viewBox="0 0 24 24">
@@ -227,25 +310,24 @@ export default function SignUpPage() {
                   <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
                 </svg>
                 <span className="font-semibold">Continue with Google</span>
-                <ArrowRight className="h-4 w-4 ml-auto text-obsidian/40" />
               </>
             )}
           </Button>
 
           <div className="relative my-5">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-surgical-200" />
+              <div className="w-full border-t border-[#E5E7EB]" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="bg-white px-3 text-obsidian/40 font-medium">or sign up with email</span>
+              <span className="bg-white px-3 text-[#6B7280] font-medium">or sign up with email</span>
             </div>
           </div>
 
-          {/* Email / Password — secondary option, no confirm password field */}
+          {/* Form */}
           <form onSubmit={handleSignUp} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <label htmlFor="firstName" className="text-sm font-medium text-obsidian">
+                <label htmlFor="firstName" className="text-sm font-medium text-[#102A33]">
                   First name
                 </label>
                 <Input
@@ -257,10 +339,11 @@ export default function SignUpPage() {
                   onChange={(e) => setFirstName(e.target.value)}
                   required
                   disabled={loading}
+                  className="border border-[#E5E7EB] rounded-lg focus:border-[#37A195] focus:ring-[#37A195]/10"
                 />
               </div>
               <div className="space-y-1.5">
-                <label htmlFor="lastName" className="text-sm font-medium text-obsidian">
+                <label htmlFor="lastName" className="text-sm font-medium text-[#102A33]">
                   Last name
                 </label>
                 <Input
@@ -272,28 +355,30 @@ export default function SignUpPage() {
                   onChange={(e) => setLastName(e.target.value)}
                   required
                   disabled={loading}
+                  className="border border-[#E5E7EB] rounded-lg focus:border-[#37A195] focus:ring-[#37A195]/10"
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="email" className="text-sm font-medium text-obsidian">
+              <label htmlFor="email" className="text-sm font-medium text-[#102A33]">
                 Work email
               </label>
               <Input
                 id="email"
                 type="email"
                 autoComplete="email"
-                placeholder="you@clinic.com"
+                placeholder="you@company.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={loading}
+                className="border border-[#E5E7EB] rounded-lg focus:border-[#37A195] focus:ring-[#37A195]/10"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="password" className="text-sm font-medium text-obsidian">
+              <label htmlFor="password" className="text-sm font-medium text-[#102A33]">
                 Password
               </label>
               <div className="relative">
@@ -307,12 +392,13 @@ export default function SignUpPage() {
                   aria-describedby={password.length > 0 ? 'password-strength' : undefined}
                   required
                   disabled={loading}
+                  className="border border-[#E5E7EB] rounded-lg focus:border-[#37A195] focus:ring-[#37A195]/10"
                 />
                 <button
                   type="button"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-obsidian/40 hover:text-obsidian/60 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6B7280] hover:text-[#102A33] transition-colors"
                   disabled={loading}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -327,27 +413,27 @@ export default function SignUpPage() {
                   aria-label="Password strength"
                   className="mt-1.5 space-y-1"
                 >
-                  <div className="flex gap-1 h-1">
+                  <div className="flex gap-1 h-1.5">
                     {[1, 2, 3, 4].map((i) => (
                       <div
                         key={i}
                         className={`flex-1 rounded-full transition-colors duration-200 ${
-                          strength.score >= i ? strength.color : 'bg-neutral-200'
+                          strength.score >= i ? strength.color : 'bg-[#E5E7EB]'
                         }`}
                       />
                     ))}
                   </div>
-                  <p id="password-strength" className="text-xs text-obsidian/50">{strength.label}</p>
+                  <p id="password-strength" className="text-xs text-[#6B7280]">{strength.label}</p>
                 </div>
               )}
             </div>
 
             {lockedOut && (
-              <p className="text-sm text-center text-obsidian/60 mb-3">
+              <p className="text-sm text-center text-[#6B7280] mb-3">
                 Too many attempts. Retry in {timerLabel}, or{' '}
                 <a
-                  href="mailto:support@voxanne.ai"
-                  className="font-medium text-surgical-600 underline hover:no-underline"
+                  href="mailto:support@barpel.ai"
+                  className="font-medium text-[#37A195] underline hover:no-underline"
                 >
                   contact support
                 </a>.
@@ -356,8 +442,7 @@ export default function SignUpPage() {
 
             <Button
               type="submit"
-              aria-label={lockedOut ? `Try again later, locked out for ${timerLabel}` : undefined}
-              className="w-full h-12 text-base font-semibold bg-surgical-600 text-white rounded-xl shadow-lg shadow-surgical-600/25 hover:shadow-xl hover:shadow-surgical-600/35 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-100 focus:outline-none focus:ring-2 focus:ring-surgical-600/50 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-200"
+              className="w-full h-11 text-base font-semibold bg-[#37A195] text-white rounded-lg shadow-lg shadow-[#37A195]/25 hover:shadow-xl hover:shadow-[#37A195]/35 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-100 focus:outline-none focus:ring-2 focus:ring-[#37A195]/50 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-200"
               disabled={
                 loading ||
                 lockedOut ||
@@ -375,89 +460,25 @@ export default function SignUpPage() {
               ) : lockedOut ? (
                 'Try again later'
               ) : (
-                'Create Account →'
+                'Create Account'
               )}
             </Button>
           </form>
 
-          <p className="mt-5 text-center text-xs text-obsidian/40 leading-relaxed">
+          <p className="mt-5 text-center text-xs text-[#6B7280] leading-relaxed">
             By creating an account, you agree to our{' '}
-            <Link href="/terms" className="text-surgical-600 hover:underline">Terms of Service</Link>
+            <Link href="/terms" className="text-[#37A195] hover:underline">Terms of Service</Link>
             {' '}and{' '}
-            <Link href="/privacy" className="text-surgical-600 hover:underline">Privacy Policy</Link>.
+            <Link href="/privacy" className="text-[#37A195] hover:underline">Privacy Policy</Link>.
           </p>
 
-          <p className="mt-4 text-center text-sm text-obsidian/60">
+          <p className="mt-4 text-center text-sm text-[#6B7280]">
             Already have an account?{' '}
-            <Link href="/login" className="font-medium text-surgical-600 hover:text-surgical-700">
+            <Link href="/login" className="font-medium text-[#37A195] hover:text-[#2F8E88]">
               Sign In
             </Link>
           </p>
         </FadeIn>
-      </div>
-
-      {/* Right Column: Social Proof */}
-      <div className="hidden lg:flex relative bg-obsidian items-center justify-center overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage: 'radial-gradient(#3b82f6 1px, transparent 1px)',
-            backgroundSize: '32px 32px',
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-tr from-obsidian via-obsidian/95 to-surgical-700/40" />
-
-        <div className="relative z-10 max-w-lg px-12 text-center">
-          <FadeIn delay={0.2}>
-            <div className="mb-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm text-white/70 mb-8">
-                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                Setup takes under 5 minutes
-              </div>
-            </div>
-
-            <blockquote className="text-3xl font-bold leading-relaxed mb-8 text-white">
-              &quot;Never miss another patient call. Your AI receptionist starts in minutes.&quot;
-            </blockquote>
-            <div className="flex flex-col items-center gap-4">
-              <div className="h-px w-12 bg-surgical-500" />
-              <p className="text-surgical-100 font-medium tracking-wide uppercase text-sm">
-                Trusted by Healthcare Professionals
-              </p>
-            </div>
-
-            <div className="mt-12 flex items-center justify-center gap-6">
-              <div className="flex -space-x-4">
-                {[
-                  { name: 'Twilio', logo: '/integrations/twilio.png' },
-                  { name: 'Vapi', logo: '/integrations/vapi.png' },
-                  { name: 'Google Calendar', logo: '/integrations/google-calendar.png' },
-                ].map((integration) => (
-                  <div
-                    key={integration.name}
-                    className="h-12 w-12 rounded-full border-2 border-obsidian bg-white overflow-hidden relative flex items-center justify-center p-2"
-                  >
-                    <Image
-                      src={integration.logo}
-                      alt={integration.name}
-                      width={40}
-                      height={40}
-                      className="object-contain"
-                    />
-                  </div>
-                ))}
-              </div>
-              <div className="text-left">
-                <p className="text-white font-semibold text-base mb-1">
-                  Trusted Integrations
-                </p>
-                <p className="text-surgical-100 text-sm">
-                  to help you automate your front desk
-                </p>
-              </div>
-            </div>
-          </FadeIn>
-        </div>
       </div>
     </div>
   );

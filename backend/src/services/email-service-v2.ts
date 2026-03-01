@@ -10,8 +10,8 @@ import { Resend } from 'resend';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Email addresses from environment
-const FROM_EMAIL = process.env.FROM_EMAIL || 'hello@voxanne.ai';
-const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL || 'support@voxanne.ai';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'hello@barpel.ai';
+const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL || 'support@barpel.ai';
 
 // Types
 interface AppointmentConfirmationData {
@@ -158,12 +158,12 @@ export class EmailServiceV2 {
   <div class="container">
     <div class="header">
       <div class="check-icon">✅</div>
-      <h1>Your Voxanne AI Demo is Confirmed</h1>
+      <h1>Your Barpel AI Demo is Confirmed</h1>
     </div>
 
     <p>Hi <strong>${data.name}</strong>,</p>
 
-    <p>Thank you for booking a demo with Voxanne AI! We're excited to show you how our AI voice agents can transform your business communications.</p>
+    <p>Thank you for booking a demo with Barpel AI! We're excited to show you how our AI voice agents can transform your business communications.</p>
 
     <div class="details">
       <div class="details-row">
@@ -210,7 +210,7 @@ export class EmailServiceV2 {
       </div>
       <p style="margin-top: 20px;">
         Best regards,<br>
-        <strong>The Voxanne AI Team</strong>
+        <strong>The Barpel AI Team</strong>
       </p>
     </div>
   </div>
@@ -219,11 +219,11 @@ export class EmailServiceV2 {
       `;
 
       const textBody = `
-Your Voxanne AI Demo is Confirmed ✅
+Your Barpel AI Demo is Confirmed ✅
 
 Hi ${data.name},
 
-Thank you for booking a demo with Voxanne AI!
+Thank you for booking a demo with Barpel AI!
 
 📅 Date: ${data.date}
 🕐 Time: ${data.time}
@@ -238,14 +238,14 @@ What to expect:
 Questions? Call us at +44 7424 038250 or reply to this email.
 
 Best regards,
-The Voxanne AI Team
+The Barpel AI Team
       `.trim();
 
       // Send email with calendar attachment if provided
       const emailOptions: any = {
-        from: `Voxanne AI <${FROM_EMAIL}>`,
+        from: `Barpel AI <${FROM_EMAIL}>`,
         to: data.email,
-        subject: 'Your Voxanne AI Demo is Confirmed ✅',
+        subject: 'Your Barpel AI Demo is Confirmed ✅',
         html: htmlBody,
         text: textBody,
         tags: [
@@ -406,7 +406,7 @@ ${data.message}
       `.trim();
 
       const response = await resend.emails.send({
-        from: `Voxanne AI Contact Form <${FROM_EMAIL}>`,
+        from: `Barpel AI Contact Form <${FROM_EMAIL}>`,
         to: SUPPORT_EMAIL,
         replyTo: data.email,
         subject: `[Contact Form] ${data.subject} - ${data.name}`,
@@ -506,13 +506,13 @@ ${data.message}
     <div class="content">
       <p>Hi <strong>${data.name}</strong>,</p>
 
-      <p>Thank you for contacting Voxanne AI! We've received your message and our team will respond within 24 hours.</p>
+      <p>Thank you for contacting Barpel AI! We've received your message and our team will respond within 24 hours.</p>
 
       <p>In the meantime, feel free to explore our resources:</p>
       <ul>
-        <li><a href="https://voxanne.ai/demo">Book a live demo</a></li>
-        <li><a href="https://voxanne.ai/pricing">View pricing</a></li>
-        <li><a href="https://voxanne.ai/blog">Read our blog</a></li>
+        <li><a href="https://barpel.ai/demo">Book a live demo</a></li>
+        <li><a href="https://barpel.ai/pricing">View pricing</a></li>
+        <li><a href="https://barpel.ai/blog">Read our blog</a></li>
       </ul>
 
       <p>If you have an urgent question, call us at <a href="tel:+447424038250">+44 7424 038250</a>.</p>
@@ -521,7 +521,7 @@ ${data.message}
     <div class="footer">
       <p>
         Best regards,<br>
-        <strong>The Voxanne AI Team</strong>
+        <strong>The Barpel AI Team</strong>
       </p>
     </div>
   </div>
@@ -534,23 +534,23 @@ We've Received Your Message ✉️
 
 Hi ${data.name},
 
-Thank you for contacting Voxanne AI! We've received your message and our team will respond within 24 hours.
+Thank you for contacting Barpel AI! We've received your message and our team will respond within 24 hours.
 
 In the meantime, feel free to explore our resources:
-- Book a live demo: https://voxanne.ai/demo
-- View pricing: https://voxanne.ai/pricing
-- Read our blog: https://voxanne.ai/blog
+- Book a live demo: https://barpel.ai/demo
+- View pricing: https://barpel.ai/pricing
+- Read our blog: https://barpel.ai/blog
 
 If you have an urgent question, call us at +44 7424 038250.
 
 Best regards,
-The Voxanne AI Team
+The Barpel AI Team
       `.trim();
 
       const response = await resend.emails.send({
-        from: `Voxanne AI <${FROM_EMAIL}>`,
+        from: `Barpel AI <${FROM_EMAIL}>`,
         to: data.email,
-        subject: 'We\'ve Received Your Message - Voxanne AI',
+        subject: 'We\'ve Received Your Message - Barpel AI',
         html: htmlBody,
         text: textBody,
         tags: [
@@ -730,7 +730,7 @@ Received: ${data.timestamp}
       `.trim();
 
       const response = await resend.emails.send({
-        from: `Voxanne AI Alerts <${FROM_EMAIL}>`,
+        from: `Barpel AI Alerts <${FROM_EMAIL}>`,
         to: SUPPORT_EMAIL,
         subject: '🔥 Hot Lead from Chat Widget',
         html: htmlBody,
@@ -804,18 +804,18 @@ Received: ${data.timestamp}
 </head>
 <body>
   <div class="container">
-    <div class="logo">Voxanne AI</div>
+    <div class="logo">Barpel AI</div>
     <h1>Your AI receptionist is almost ready.</h1>
     <p>Hi there,</p>
     <p>You started setting up an AI receptionist for <strong>${EmailServiceV2.escHtml(clinicName)}</strong> but didn't finish the last step.</p>
     <p>Your personalized setup is still saved — just pick up where you left off. It takes less than 60 seconds to activate.</p>
     <p style="text-align: center;">
-      <a href="https://app.voxanne.ai/dashboard/onboarding" class="cta">Complete Setup</a>
+      <a href="https://app.barpel.ai/dashboard/onboarding" class="cta">Complete Setup</a>
     </p>
     <p style="color: #6b7280; font-size: 14px;">No pressure — your progress is saved whenever you're ready.</p>
     <div class="footer">
-      <p>Voxanne AI — Your 24/7 AI Receptionist</p>
-      <p style="font-size:11px;margin-top:8px;">Don't want these emails? <a href="https://app.voxanne.ai/unsubscribe" style="color:#9ca3af;">Unsubscribe</a></p>
+      <p>Barpel AI — Your 24/7 AI Receptionist</p>
+      <p style="font-size:11px;margin-top:8px;">Don't want these emails? <a href="https://app.barpel.ai/unsubscribe" style="color:#9ca3af;">Unsubscribe</a></p>
     </div>
   </div>
 </body>
@@ -828,14 +828,14 @@ Hi there,
 You started setting up an AI receptionist for ${clinicName} but didn't finish the last step.
 
 Your personalized setup is still saved — just pick up where you left off:
-https://app.voxanne.ai/dashboard/onboarding
+https://app.barpel.ai/dashboard/onboarding
 
 No pressure — your progress is saved whenever you're ready.
 
-— Voxanne AI`;
+— Barpel AI`;
 
       const response = await resend.emails.send({
-        from: `Voxanne AI <${FROM_EMAIL}>`,
+        from: `Barpel AI <${FROM_EMAIL}>`,
         to: email,
         subject: 'Your AI receptionist is almost ready',
         html: htmlBody,
@@ -883,7 +883,7 @@ No pressure — your progress is saved whenever you're ready.
 </head>
 <body>
   <div class="container">
-    <div class="logo">Voxanne AI</div>
+    <div class="logo">Barpel AI</div>
     <h1>How many calls did ${EmailServiceV2.escHtml(clinicName)} miss today?</h1>
     <p>The average medical practice misses <strong>30% of incoming calls</strong>. Each missed call is a patient going to a competitor.</p>
     <div class="stat-box">
@@ -892,12 +892,12 @@ No pressure — your progress is saved whenever you're ready.
     </div>
     <p>Your AI receptionist answers every call in 2 seconds, 24/7 — including nights, weekends, and lunch breaks. No hold music. No voicemail.</p>
     <p style="text-align: center;">
-      <a href="https://app.voxanne.ai/dashboard/onboarding" class="cta">Activate Your AI Receptionist</a>
+      <a href="https://app.barpel.ai/dashboard/onboarding" class="cta">Activate Your AI Receptionist</a>
     </p>
     <p style="color: #6b7280; font-size: 14px;">Setup takes less than 60 seconds. Your progress is still saved.</p>
     <div class="footer">
-      <p>Voxanne AI — Your 24/7 AI Receptionist</p>
-      <p style="font-size:11px;margin-top:8px;">Don't want these emails? <a href="https://app.voxanne.ai/unsubscribe" style="color:#9ca3af;">Unsubscribe</a></p>
+      <p>Barpel AI — Your 24/7 AI Receptionist</p>
+      <p style="font-size:11px;margin-top:8px;">Don't want these emails? <a href="https://app.barpel.ai/unsubscribe" style="color:#9ca3af;">Unsubscribe</a></p>
     </div>
   </div>
 </body>
@@ -912,14 +912,14 @@ $150-$400 — Average revenue lost per missed call.
 Your AI receptionist answers every call in 2 seconds, 24/7 — including nights, weekends, and lunch breaks.
 
 Activate your AI receptionist:
-https://app.voxanne.ai/dashboard/onboarding
+https://app.barpel.ai/dashboard/onboarding
 
 Setup takes less than 60 seconds. Your progress is still saved.
 
-— Voxanne AI`;
+— Barpel AI`;
 
       const response = await resend.emails.send({
-        from: `Voxanne AI <${FROM_EMAIL}>`,
+        from: `Barpel AI <${FROM_EMAIL}>`,
         to: email,
         subject: `How many calls did ${clinicName} miss today?`,
         html: htmlBody,
@@ -967,10 +967,10 @@ Setup takes less than 60 seconds. Your progress is still saved.
 </head>
 <body>
   <div class="container">
-    <div class="logo">Voxanne AI</div>
+    <div class="logo">Barpel AI</div>
     <h1>We added £10 to your account.</h1>
     <p>Hi there,</p>
-    <p>We know trying something new for ${EmailServiceV2.escHtml(clinicName)} is a big decision. So we've added a £10 credit to your Voxanne account — no strings attached.</p>
+    <p>We know trying something new for ${EmailServiceV2.escHtml(clinicName)} is a big decision. So we've added a £10 credit to your Barpel account — no strings attached.</p>
     <div class="credit-box">
       <div class="credit-amount">£10.00</div>
       <div class="credit-label">Credit applied to your account</div>
@@ -984,12 +984,12 @@ Setup takes less than 60 seconds. Your progress is still saved.
       <li>SMS follow-ups that reduce no-shows</li>
     </ul>
     <p style="text-align: center;">
-      <a href="https://app.voxanne.ai/dashboard/onboarding" class="cta">Claim Your £10 Credit</a>
+      <a href="https://app.barpel.ai/dashboard/onboarding" class="cta">Claim Your £10 Credit</a>
     </p>
     <p style="color: #6b7280; font-size: 14px;">This credit expires in 30 days. Your setup progress is still saved.</p>
     <div class="footer">
-      <p>Voxanne AI — Your 24/7 AI Receptionist</p>
-      <p style="font-size:11px;margin-top:8px;">Don't want these emails? <a href="https://app.voxanne.ai/unsubscribe" style="color:#9ca3af;">Unsubscribe</a></p>
+      <p>Barpel AI — Your 24/7 AI Receptionist</p>
+      <p style="font-size:11px;margin-top:8px;">Don't want these emails? <a href="https://app.barpel.ai/unsubscribe" style="color:#9ca3af;">Unsubscribe</a></p>
     </div>
   </div>
 </body>
@@ -999,7 +999,7 @@ Setup takes less than 60 seconds. Your progress is still saved.
 
 Hi there,
 
-We know trying something new for ${clinicName} is a big decision. So we've added a £10 credit to your Voxanne account — no strings attached.
+We know trying something new for ${clinicName} is a big decision. So we've added a £10 credit to your Barpel account — no strings attached.
 
 £10.00 Credit applied to your account
 
@@ -1012,14 +1012,14 @@ What you get:
 - SMS follow-ups that reduce no-shows
 
 Claim your credit:
-https://app.voxanne.ai/dashboard/onboarding
+https://app.barpel.ai/dashboard/onboarding
 
 This credit expires in 30 days. Your setup progress is still saved.
 
-— Voxanne AI`;
+— Barpel AI`;
 
       const response = await resend.emails.send({
-        from: `Voxanne AI <${FROM_EMAIL}>`,
+        from: `Barpel AI <${FROM_EMAIL}>`,
         to: email,
         subject: 'We added £10 to your account',
         html: htmlBody,
@@ -1070,7 +1070,7 @@ export function generateICSFile(params: {
     return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
   };
 
-  const uid = `${Date.now()}-${Math.random().toString(36).substring(7)}@voxanne.ai`;
+  const uid = `${Date.now()}-${Math.random().toString(36).substring(7)}@barpel.ai`;
   const dtstamp = formatICSDate(new Date());
   const dtstart = formatICSDate(startTime);
   const dtend = formatICSDate(endTime);
@@ -1078,7 +1078,7 @@ export function generateICSFile(params: {
   const icsContent = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Voxanne AI//Demo Booking//EN',
+    'PRODID:-//Barpel AI//Demo Booking//EN',
     'CALSCALE:GREGORIAN',
     'METHOD:REQUEST',
     'BEGIN:VEVENT',
@@ -1089,14 +1089,14 @@ export function generateICSFile(params: {
     `SUMMARY:${summary}`,
     `DESCRIPTION:${description.replace(/\n/g, '\\n')}`,
     location ? `LOCATION:${location}` : '',
-    `ORGANIZER;CN=Voxanne AI:mailto:${organizerEmail}`,
+    `ORGANIZER;CN=Barpel AI:mailto:${organizerEmail}`,
     `ATTENDEE;CN=${attendeeName};RSVP=TRUE:mailto:${attendeeEmail}`,
     'STATUS:CONFIRMED',
     'SEQUENCE:0',
     'BEGIN:VALARM',
     'TRIGGER:-PT15M',
     'ACTION:DISPLAY',
-    'DESCRIPTION:Reminder: Voxanne AI Demo in 15 minutes',
+    'DESCRIPTION:Reminder: Barpel AI Demo in 15 minutes',
     'END:VALARM',
     'END:VEVENT',
     'END:VCALENDAR'

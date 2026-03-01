@@ -185,7 +185,7 @@ export class TelephonyService {
     try {
       validationRequest = await twilioClient.validationRequests.create({
         phoneNumber,
-        friendlyName: friendlyName || `Voxanne Verified: ${phoneNumber}`
+        friendlyName: friendlyName || `Barpel Verified: ${phoneNumber}`
       });
     } catch (twilioError) {
       const errorMessage = twilioError instanceof Error ? twilioError.message : 'Unknown Twilio error';
@@ -218,7 +218,7 @@ export class TelephonyService {
             try {
               validationRequest = await twilioClient.validationRequests.create({
                 phoneNumber,
-                friendlyName: friendlyName || `Voxanne Verified: ${phoneNumber}`
+                friendlyName: friendlyName || `Barpel Verified: ${phoneNumber}`
               });
               logger.info('Validation retry succeeded after enabling Geo Permissions inheritance', { orgId, phoneNumber });
               // Break out of catch block - validation succeeded on retry

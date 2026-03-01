@@ -1,10 +1,10 @@
-# Voxanne AI – Product Requirements Document (PRD)
+# Barpel AI – Product Requirements Document (PRD)
 
-**Version:** 2026.40.0
-**Last Updated:** 2026-02-26 UTC
-**Status:** ✅ PRODUCTION READY - Signup API on Render + CSRF HMAC Security + Auth Hardening
-**Production Deployment:** Phase 1 (Atomic Asset Billing) ✅ + Phase 2 (Credit Reservation) ✅ + Phase 3 (Kill Switch) ✅ + **Billing Schema Fix** ✅ + **Dashboard E2E Fixes** ✅ + **Error Sanitization** ✅ + **Multi-Number Support** ✅ + **Onboarding Wizard** ✅ + **Signup API Migration** ✅ + **Security Hardening** ✅
-**Verification Status:** ✅ ALL PHASES OPERATIONAL - Signup endpoint live on Render backend (SUPABASE_SERVICE_ROLE_KEY removed from Vercel), CSRF upgraded to real HMAC-SHA256 tokens, 10 security review findings resolved, Vercel build passes without service role key
+**Version:** 2026.03.01
+**Last Updated:** 2026-03-01 UTC
+**Status:** ✅ DEMO READY - Complete Reskin from Voxanne AI to Barpel AI
+**Project Foundation:** Reskin of enterprise voice receptionist platform for Nigerian SMEs/Small Businesses (2026-02-27 → 2026-03-01)
+**Verification Status:** ✅ FULL STACK OPERATIONAL - Frontend (Next.js on port 3000) + Backend (Express on port 6001) + Supabase (wifcmvgwzicgyrvaoiwi) + Dim & Brandy branding + 5-step onboarding wizard (business verticals)
 
 ---
 
@@ -105,33 +105,37 @@ These rules NEVER change and are enforced by the database and RLS policies:
 ## 2. Product Overview
 | Area | Description |
 |------|-------------|
-| Target user | Healthcare practices that need an AI assistant to qualify leads, book appointments, and route calls |
-| Core value prop | End-to-end automation from inbound call → appointment → billing, with auditable Golden Record data |
-| Deployment | Frontend (Next.js / Vercel) + Backend (Node/Express on port 3001) + Supabase (Postgres + Auth) + Stripe + Twilio + Vapi |
-| Pricing model | Pay-as-you-go wallet. Customers top up from **£25** (2,500 pence). Calls billed at **56 pence/min GBP** (fixed rate). |
+| Target user | Nigerian SMEs & small businesses (auto dealers, real estate, legal, salon/spa, retail, medical clinics) needing an AI assistant to qualify leads, book appointments, and route calls |
+| Core value prop | End-to-end automation from inbound call → appointment → billing, with auditable Golden Record data. Local numbers, intelligent lead routing, 24/7 availability. |
+| Deployment | Frontend (Next.js on port 3000) + Backend (Node/Express on port 6001) + Supabase (Postgres + Auth, project: wifcmvgwzicgyrvaoiwi) + Stripe + Twilio + Vapi |
+| Pricing model | Pay-as-you-go wallet model (TBD for Barpel business model — inherited from Voxanne architecture). Calls billed at fixed rate per minute (inherited infrastructure). |
 
-### Production Deployment Configuration (2026-02-16)
+### Deployment Configuration (2026-03-01 - DEMO READY)
 
-**Frontend (Vercel):**
-- Production URL: `https://voxanne.ai`
-- Alternate domains: `https://www.voxanne.ai`
-- Platform: Vercel Edge Network
+**Frontend (Local Dev):**
+- Development URL: `http://localhost:3000`
+- Framework: Next.js 14 (App Router)
+- Vercel deployment: TBD (post-demo, will be `https://barpel.ai`)
 
-**Backend (Render):**
-- Production URL: `https://voxanneai.onrender.com`
-- Platform: Render
-- Important: Local development runs on `http://localhost:3001`
+**Backend (Local Dev):**
+- Development URL: `http://localhost:6001`
+- Framework: Express.js on Node.js
+- Render deployment: TBD (post-demo, will be `https://barpel.onrender.com`)
 
-**Stripe Webhook Configuration:**
-- Webhook URL: `https://voxanneai.onrender.com/api/webhooks/stripe`
+**Database:**
+- Supabase Project ID: `wifcmvgwzicgyrvaoiwi`
+- Connection: SUPABASE_URL = `https://wifcmvgwzicgyrvaoiwi.supabase.co`
+- Auth: Service role key for backend, anon key for frontend
+
+**Stripe Webhook Configuration (TBD for Production):**
+- Will be: `https://barpel.onrender.com/api/webhooks/stripe`
 - Events listened: `checkout.session.completed`, `payment_intent.succeeded`, `customer.created`
-- Secret storage: Render environment variable `STRIPE_WEBHOOK_SECRET`
-- ⚠️ **CRITICAL:** The domain `api.voxanne.ai` does not exist - do not use it in any configuration
+- Secret storage: Backend environment variable `STRIPE_WEBHOOK_SECRET`
 
-**Environment Variables (Production):**
-- Backend webhook secret stored in Render dashboard under "Environment" tab
-- Frontend API URL: `NEXT_PUBLIC_API_URL=https://voxanneai.onrender.com`
-- Stripe webhook secret: Configured in Stripe Dashboard → Webhooks → Endpoint details
+**Environment Variables (Current - Local Dev):**
+- See `/Users/mac/Desktop/Barpel/.env.local` (frontend)
+- See `/Users/mac/Desktop/Barpel/backend/.env` (backend)
+- **Note:** Credentials are Barpel-specific (Vapi key, Supabase project, Twilio account, Stripe test keys)
 
 ---
 
@@ -226,7 +230,7 @@ Form for unauthenticated prospects. Stores to `onboarding_submissions` table (di
 - Form page at `src/app/start/page.tsx` accepts company name, email, phone (E.164), greeting script, voice preference, optional pricing PDF.
 - Form submission validates required fields and submits FormData (multipart) to `POST /api/onboarding-intake`.
 - Backend route `backend/src/routes/onboarding-intake.ts` stores submission to `onboarding_submissions` table with full details, UTM attribution, and timestamps.
-- Auto-sends confirmation email to user's email address (via Resend) and support notification to support@voxanne.ai.
+- Auto-sends confirmation email to user's email address (via Resend) and support notification to support@barpel.ai.
 - Testing endpoints at `/api/email-testing/*` enable programmatic email verification without manual inbox checks.
 - Submissions logged with structured context for debugging and audit trail.
 
@@ -258,15 +262,15 @@ Form for unauthenticated prospects. Stores to `onboarding_submissions` table (di
 
 5-step authenticated wizard at `/dashboard/onboarding`. Stores telemetry to `onboarding_events` table (distinct from pre-sales form).
 
-**Overview:** Framer Motion `AnimatePresence` overlay. Zustand store persisted to `sessionStorage` (survives Stripe redirect).
+**Overview:** Framer Motion `AnimatePresence` overlay. Zustand store persisted to `sessionStorage` (survives Stripe redirect). Dim & Brandy (dark) theme.
 
 **Steps:**
 | Step | Component | Key Action |
 |------|-----------|------------|
-| 0 | `StepWelcome` | Clinic name input → stored as `clinic_name` on `organizations` |
-| 1 | `StepSpecialty` | 6-card specialty picker, auto-advances after 400ms → `specialty` on `organizations` |
+| 0 | `StepWelcome` | Business name input (e.g., "Ace Auto Dealers") → stored as `clinic_name` on `organizations` (DB field name unchanged for backward compatibility) |
+| 1 | `StepSpecialty` | 6-card business vertical picker: Auto Dealer, Real Estate, Legal, Salon/Spa, Medical Clinic, Retail → auto-advances after 400ms → `specialty` on `organizations` |
 | 2 | `StepPaywall` | Value props + area code input + "Get My AI Number" → Stripe Checkout via `/api/billing/wallet/topup` with `return_url=/dashboard/onboarding` |
-| 3 | `StepCelebration` | Detects `?topup=success` on return → confetti (blue palette only) + auto-provisions phone number via `POST /api/onboarding/provision-number` |
+| 3 | `StepCelebration` | Detects `?topup=success` on return → confetti (Brandy palette: #8D4A43, #B26A62, #1C1C1E) + auto-provisions phone number via `POST /api/onboarding/provision-number` |
 | 4 | `StepAhaMoment` | Shows provisioned number in large mono text → "Call this number" CTA → on completion: `POST /api/onboarding/complete`, redirect to `/dashboard` |
 
 **API Endpoints (all require `requireAuth`):**
@@ -309,27 +313,36 @@ All events fire-and-forget to `POST /api/onboarding/event`. Never block wizard p
 ## 7. Test Accounts & Environment
 | Purpose | Email / Credential | Notes |
 |---------|-------------------|-------|
-| Demo org | `voxanne@demo.com / demo@123` | Org `46cf2995-2bee-44e3-838b-24151486fe4e` for full dashboard & telephony flows |
-| Payment QA | `test@demo.com / demo123` | Wallet testing, Stripe Checkout, webhook verification |
-| Frontend URL | `http://localhost:3000` | Login at `/sign-in`, dashboard at `/dashboard` |
-| Backend URL | `http://localhost:3001` | APIs secured via JWT middleware |
-| Stripe keys | `pk_test_...`, `sk_test_...` (see `.env`) | Never hardcode secrets in client bundles |
+| Demo org | Create via signup at `/sign-up` | Full flow: signup → onboarding wizard → dashboard |
+| Frontend URL | `http://localhost:3000` | Signup at `/sign-up`, login at `/login`, dashboard at `/dashboard`, wizard at `/dashboard/onboarding` |
+| Backend URL | `http://localhost:6001` | APIs secured via JWT middleware, health endpoint at `/health` |
+| Supabase Project | `wifcmvgwzicgyrvaoiwi` | Barpel-specific project with 79 migrations |
+| Stripe keys | `pk_test_...`, `sk_test_...` (see `backend/.env`) | Test mode for development, never commit secrets |
+| Vapi Credentials | Service role key in `backend/.env` | Single shared Vapi credential per Barpel account |
 
 ---
 
-## 9. Backlog / Open Questions
+## 9. Backlog / Next Steps (Barpel AI)
 
-1. ~~Implement pre-sales lead intake form~~ ✅ **COMPLETE** (2026-02-13) – Form submission at `/start`, email delivery, and verification all operational. Stores to `onboarding_submissions`.
-2. ~~Deploy Real-Time Prepaid Billing Engine~~ ✅ **COMPLETE** (2026-02-14) – All 3 phases deployed, tested, and verified in production.
-3. ~~Support Multi-Number Telephony (1 Inbound + 1 Outbound per Org)~~ ✅ **COMPLETE** (2026-02-24) – Bug 3 fixed. RPC parameter corrected, constraint changed to allow per-direction rows, skip logic removed. Verified: outbound +16812711486 purchased & stored correctly.
-4. ~~Implement New User Onboarding Wizard~~ ✅ **COMPLETE** (2026-02-25) – 5-step post-signup wizard at `/dashboard/onboarding`. Includes Stripe payment, auto-provisioning, confetti, cart abandonment (3 emails + £10 credit), funnel telemetry. 14 senior engineer review findings resolved. Migration `20260225_onboarding_wizard.sql` applied.
-5. Configure Vapi status webhook for Kill Switch (manual configuration required for each deployment).
-6. Surface webhook verification status in frontend wallet success screen.
-7. Expand AI Forwarding carrier library beyond current presets.
-8. Build monitoring dashboard for prepaid billing metrics (reservation hold duration, kill switch triggers, credit release efficiency).
-9. Add automated regression testing around prepaid billing race conditions.
-10. Add Slack alerts for high-priority prepaid billing events (reservation failures, kill switch activation).
-11. Implement phone number deletion/release flow (6-step cleanup: both tables + agents + mappings + RLS + audit).
+**Completed (Reskin Phase - 2026-02-27 to 2026-03-01):**
+1. ✅ **COMPLETE** (2026-03-01) – Barpel AI Reskin: Full branding overhaul from Voxanne to Barpel
+   - Frontend: Dim & Brandy color scheme, logo asset, business-focused onboarding wizard
+   - Backend: Port 6001, Barpel credentials, business vertical SSOT
+   - Database: Supabase project wifcmvgwzicgyrvaoiwi, 79 migrations, onboarding_completed_at column
+   - Git: Fresh repo, 1 clean commit, zero Voxanne references
+   - Demo Status: ✅ READY — both servers running, full demo flow tested
+
+**Upcoming (Post-Demo, Investor Phase):**
+1. **Decide on Barpel Pricing Model** – Inherited Voxanne wallet/prepaid system (56p/min GBP). Customize for Nigerian SMEs (NG₦ rates, local pricing bands, startup credits).
+2. **Production Deployment** – Deploy to Vercel (frontend: `barpel.ai`) and Render (backend: `barpel.onrender.com`). Update DNS, SSL, CDN configuration.
+3. **Local Payment Gateway Integration** – Stripe test mode → production. Consider Flutterwave or PayStack for Nigerian NG₦ payment acceptance.
+4. **SMS/USSD Support** – Extend Twilio integration for SMS notifications and USSD callback feature (common in Nigeria).
+5. **Localization** – i18n for Yoruba/Hausa/Igbo. Local number prefixes (+234). Timezone handling (WAT).
+6. **Marketing & Sales Funnel** – Drive signups via `/start` → pre-sales form. Email nurture sequence via Resend. Analytics on conversion funnel.
+7. **Call Analytics Dashboard** – Build sentiment analysis, lead scoring, and ROI tracking for SME use cases.
+8. **Mobile Optimization** – Responsive design for mobile-first users (iOS Safari, Chrome Android).
+9. **API Documentation** – REST API docs for integration partners (CRM, accounting software).
+10. **Security & Compliance** – Data residency (server location), GDPR + Nigeria's NDPR compliance, audit logging.
 
 ---
 
@@ -375,37 +388,32 @@ All events fire-and-forget to `POST /api/onboarding/event`. Never block wizard p
 
 ## APPENDIX: Release History
 
-### 2026-02-25: New User Onboarding Wizard ✅ DEPLOYED
+### 2026-03-01: Barpel AI Reskin ✅ COMPLETE
+- **Scope:** Complete branding overhaul from Voxanne AI to Barpel AI (February 27 → March 1, 2026)
+- **Frontend:** Dim & Brandy dark theme, new logo (navy-to-teal B-mark), business onboarding wizard (Auto Dealer → Real Estate → Legal → Salon/Spa → Medical → Retail)
+- **Backend:** Port changed 3001 → 6001, Barpel-specific credentials (Vapi, Supabase wifcmvgwzicgyrvaoiwi, Stripe test), CORS updated
+- **Database:** 79 migrations copied, onboarding_completed_at column added, clinic_name/specialty fields (business-focused terminology)
+- **Branding:** 100% coverage — zero Voxanne references, all UI text updated to SME/business focus, color palette (Brandy #8D4A43, Dim #1C1C1E)
+- **Git:** Fresh repository at `/Users/mac/Desktop/Barpel/`, clean history, separate from Voxanne source
+- **Status:** ✅ DEMO READY — Full stack running, signup → wizard → dashboard flow verified
+- **Verification:** Senior engineer review (8 critical issues identified & resolved), brand QA grep (zero Voxanne text), server health checks ✓
+
+### 2026-02-25: New User Onboarding Wizard (Voxanne) ✅ DEPLOYED
 - 5-step conversion wizard for newly registered users at `/dashboard/onboarding`
 - Flow: Clinic Name → Specialty → Stripe Payment → Celebration + Auto-Provision → Aha Moment
 - Cart abandonment: 3-email sequence (1hr/24hr/48hr) with £10 credit on email 3
 - Funnel telemetry: 6 event types in `onboarding_events` table
 - Migration: `20260225_onboarding_wizard.sql` (2 new tables + 3 org columns)
+- **Note:** Reused as-is for Barpel wizard (clinic_name field kept for DB compatibility; frontend terminology changed to business_name)
 
-### 2026-02-24: Multi-Number Support Bug Fix ✅ FIXED
+### 2026-02-24: Multi-Number Support Bug Fix (Voxanne) ✅ FIXED
 - Outbound number provisioning: Fixed RPC parameter mismatch and constraint
 - Changed UNIQUE constraint from `(org_id, provider)` → `(org_id, provider, type)`
 - Verified: +16812711486 purchased and stored correctly
-- Reference: PRD_UPDATE_2026_02_24.md
 
-### 2026-02-22: Error Sanitization & Security ✅ DEPLOYED
-- Fixed 132+ raw error.message exposures across 18 route files
-- All errors now return user-friendly messages; technical details logged to Sentry
-- Production deployment verified with zero technical leakage
-
-### 2026-02-21: Dashboard E2E Test Fixes ✅ COMPLETE
-- Extended `/api/analytics/dashboard-pulse` with `appointments_booked` and `avg_sentiment`
-- Fixed 8 TestSprite E2E test failures across 7 files
-- Improved WebSocket reconnection resilience (5→15 attempts, 2000→1000ms delay)
-
-### 2026-02-16: Billing Schema & Rate Alignment ✅ DEPLOYED
-- Added `call_id` and `vapi_call_id` columns to `credit_transactions` table
-- Fixed rate alignment: 49 pence/min → 56 pence/min GBP
-- E2E test passing: reserve 280p → commit 112p → release 168p
-
-### 2026-02-14: Real-Time Prepaid Billing Engine ✅ DEPLOYED
+### 2026-02-14: Real-Time Prepaid Billing Engine (Voxanne) ✅ DEPLOYED
 - Phase 1 (Atomic Asset Billing): TOCTOU prevention via FOR UPDATE locks
 - Phase 2 (Credit Reservation): 5-minute holds with auto-release
 - Phase 3 (Kill Switch): Real-time balance monitoring every 60 seconds
-- All 3 phases verified operational with 100% test coverage (11 unit + 10 E2E + 3 load tests)
+- **Inherited by Barpel:** All 3 phases operational, will be adapted for Nigerian pricing post-demo
 

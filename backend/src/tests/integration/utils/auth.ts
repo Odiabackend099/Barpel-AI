@@ -20,7 +20,7 @@ export const TEST_PASSWORD = 'password123';
  */
 export async function setupTestUser(role: 'admin' | 'agent' | 'viewer' = 'admin'): Promise<TestUser> {
     const uniqueId = randomUUID().substring(0, 8);
-    const email = `test-${uniqueId}@voxanne.test`;
+    const email = `test-${uniqueId}@barpel.test`;
     const orgName = `Test Org ${uniqueId}`;
 
     // 1. Create Organization

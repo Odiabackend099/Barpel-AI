@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import type { Transition, Variants } from 'framer-motion';
 
 /**
- * Voxanne AI Animation Library
+ * Barpel AI Animation Library
  *
  * Unified animation system consolidating all animation patterns, easing curves,
  * and spring physics presets. Follows 2025 Webflow design standards with
@@ -53,7 +53,7 @@ export const easings = {
  * All variants respect performance best practices (transform + opacity only)
  */
 export const variants = {
-  /** Fade in from below with blur effect (signature Voxanne style) */
+  /** Fade in from below with blur effect (signature Barpel style) */
   fadeInUp: {
     hidden: { opacity: 0, y: 24, filter: "blur(8px)" },
     visible: {
@@ -308,7 +308,7 @@ export const createAccessibleVariants = (
 // ============================================================================
 
 /**
- * Voxanne AI brand colors for consistent glow effects and gradients
+ * Barpel AI brand colors for consistent glow effects and gradients
  */
 export const brandColors = {
   navyDark: '#0a0e27',      // Primary dark backgrounds

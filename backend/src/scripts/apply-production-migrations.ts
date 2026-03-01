@@ -43,8 +43,8 @@ async function measureTime<T>(fn: () => Promise<T>): Promise<[T, number]> {
 
 async function readMigrationFile(filename: string): Promise<string> {
   const possiblePaths = [
-    path.join('/Users/mac/Desktop/Callwaiting-AI-Voxanne-2026/backend/migrations', filename),
-    path.join('/Users/mac/Desktop/Callwaiting-AI-Voxanne-2026/backend/supabase/migrations', filename)
+    path.join('/Users/mac/Desktop/Callwaiting-AI-Barpel-2026/backend/migrations', filename),
+    path.join('/Users/mac/Desktop/Callwaiting-AI-Barpel-2026/backend/supabase/migrations', filename)
   ];
 
   for (const filePath of possiblePaths) {

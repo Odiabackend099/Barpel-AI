@@ -238,7 +238,7 @@ async function diagnoseAppointmentsIssue() {
         error: 'No JWT token'
       });
     } else {
-      const response = await fetch('https://voxanneai.onrender.com/api/appointments', {
+      const response = await fetch('https://barpel.onrender.com/api/appointments', {
         headers: {
           'Authorization': `Bearer ${authData.session.access_token}`,
           'Content-Type': 'application/json'

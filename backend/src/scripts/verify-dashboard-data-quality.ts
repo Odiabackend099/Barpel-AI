@@ -391,10 +391,10 @@ async function test8_DataConsistency() {
 async function main() {
   console.log('\n' + '█'.repeat(80));
   console.log('█' + ' '.repeat(78) + '█');
-  console.log('█' + '  VOXANNE AI DASHBOARD DATA QUALITY VERIFICATION REPORT'.padEnd(78) + '█');
+  console.log('█' + '  BARPEL AI DASHBOARD DATA QUALITY VERIFICATION REPORT'.padEnd(78) + '█');
   console.log('█' + ' '.repeat(78) + '█');
   console.log('█'.repeat(80));
-  console.log(`\nTest Organization: voxanne@demo.com`);
+  console.log(`\nTest Organization: barpel@demo.com`);
   console.log(`Organization ID: ${DEMO_ORG_ID}`);
   console.log(`Expected Total Calls: 11`);
   console.log(`Test Date: ${new Date().toISOString()}`);

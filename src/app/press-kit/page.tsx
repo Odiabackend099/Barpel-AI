@@ -3,21 +3,21 @@ import NavbarRedesigned from '@/components/NavbarRedesigned';
 import FooterRedesigned from '@/components/FooterRedesigned';
 
 export const metadata: Metadata = {
-  title: "Press Kit | Voxanne AI Brand Assets & Media",
-  description: "Download Voxanne AI logos, brand guidelines, screenshots, and press materials. Media inquiries welcome.",
+  title: "Press Kit | Barpel AI Brand Assets & Media",
+  description: "Download Barpel AI logos, brand guidelines, screenshots, and press materials. Media inquiries welcome.",
   keywords: ["press kit", "brand assets", "media kit", "logos"],
   robots: {
     index: false, // Press kits typically not indexed
     follow: true,
   },
   openGraph: {
-    title: "Press Kit | Voxanne AI",
-    url: 'https://voxanne.ai/press-kit',
+    title: "Press Kit | Barpel AI",
+    url: 'https://barpel.ai/press-kit',
     images: ['/og-image.png'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Press Kit | Voxanne AI",
+    title: "Press Kit | Barpel AI",
     images: ['/og-image.png'],
   },
   alternates: {
@@ -35,8 +35,8 @@ export default function PressKitPage() {
           <p className="text-sm font-semibold text-slate-500 uppercase tracking-[0.2em]">Press Kit</p>
           <h1 className="text-4xl font-bold text-slate-900 tracking-tight">Press & brand assets</h1>
           <p className="text-lg text-slate-600 leading-relaxed">
-            Download Voxanne AI logos, product screenshots, and fast facts. For interviews or media inquiries,
-            contact press@voxanne.ai.
+            Download Barpel AI logos, product screenshots, and fast facts. For interviews or media inquiries,
+            contact press@barpel.ai.
           </p>
         </div>
       </section>
@@ -66,7 +66,7 @@ export default function PressKitPage() {
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-6 space-y-3">
           <h2 className="text-2xl font-semibold text-slate-900">Media contact</h2>
-          <p className="text-sm text-slate-700 leading-relaxed">press@voxanne.ai</p>
+          <p className="text-sm text-slate-700 leading-relaxed">press@barpel.ai</p>
         </div>
       </section>
     </main>

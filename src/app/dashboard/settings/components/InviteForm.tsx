@@ -98,7 +98,7 @@ export const InviteForm: React.FC<InviteFormProps> = ({ onClose, onSuccess }) =>
 
       {/* Email Input */}
       <div>
-        <label className="block text-sm font-medium text-obsidian/70 mb-1">Email Address *</label>
+        <label className="block text-sm font-medium text-barpel-slate/70 mb-1">Email Address *</label>
         <input
           type="email"
           name="email"
@@ -108,14 +108,14 @@ export const InviteForm: React.FC<InviteFormProps> = ({ onClose, onSuccess }) =>
           className="w-full px-3 py-2 border border-surgical-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-surgical-500"
           disabled={isSubmitting}
         />
-        <p className="text-xs text-obsidian/60 mt-1">
+        <p className="text-xs text-barpel-slate/60 mt-1">
           An invitation will be sent to this email address
         </p>
       </div>
 
       {/* Role Selection */}
       <div>
-        <label className="block text-sm font-medium text-obsidian/70 mb-2">Role *</label>
+        <label className="block text-sm font-medium text-barpel-slate/70 mb-2">Role *</label>
         <div className="space-y-2">
           {(['admin', 'manager', 'agent', 'viewer'] as const).map((r) => (
             <label key={r} className="flex items-start">
@@ -129,8 +129,8 @@ export const InviteForm: React.FC<InviteFormProps> = ({ onClose, onSuccess }) =>
                 className="w-4 h-4 text-surgical-600 mt-0.5"
               />
               <div className="ml-3">
-                <span className="text-sm font-medium text-obsidian capitalize">{r}</span>
-                <p className="text-xs text-obsidian/60">{roleDescriptions[r]}</p>
+                <span className="text-sm font-medium text-barpel-slate capitalize">{r}</span>
+                <p className="text-xs text-barpel-slate/60">{roleDescriptions[r]}</p>
               </div>
             </label>
           ))}
@@ -142,7 +142,7 @@ export const InviteForm: React.FC<InviteFormProps> = ({ onClose, onSuccess }) =>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex-1 bg-surgical-600 text-white px-4 py-2 rounded-lg hover:bg-surgical-700 disabled:opacity-50 flex items-center justify-center gap-2"
+          className="flex-1 bg-barpel-teal text-white px-4 py-2 rounded-lg hover:bg-barpel-teal-dark disabled:opacity-50 flex items-center justify-center gap-2"
         >
           {isSubmitting && <Loader className="w-4 h-4 animate-spin" />}
           {isSubmitting ? 'Sending...' : 'Send Invitation'}
@@ -151,7 +151,7 @@ export const InviteForm: React.FC<InviteFormProps> = ({ onClose, onSuccess }) =>
           type="button"
           onClick={onClose}
           disabled={isSubmitting}
-          className="flex-1 bg-surgical-100 text-obsidian px-4 py-2 rounded-lg hover:bg-surgical-50 disabled:opacity-50"
+          className="flex-1 bg-surgical-100 text-barpel-slate px-4 py-2 rounded-lg hover:bg-surgical-50 disabled:opacity-50"
         >
           Cancel
         </button>

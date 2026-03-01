@@ -28,7 +28,7 @@ async function auditKnowledgeBase(): Promise<void> {
   console.log('\n' + '═'.repeat(70));
   console.log('📋 KNOWLEDGE BASE AUDIT - Supabase Database');
   console.log('═'.repeat(70));
-  console.log('\nTarget: voxanne@demo.com organization\n');
+  console.log('\nTarget: barpel@demo.com organization\n');
 
   // ==================== PHASE 1: Find Organization ====================
   console.log('📁 PHASE 1: Finding Organization...\n');
@@ -36,7 +36,7 @@ async function auditKnowledgeBase(): Promise<void> {
   const { data: orgs, error: orgError } = await supabase
     .from('organizations')
     .select('id, name, email, created_at')
-    .or('name.ilike.%voxanne%,email.ilike.%voxanne@demo.com%')
+    .or('name.ilike.%barpel%,email.ilike.%barpel@demo.com%')
     .limit(5);
 
   if (orgError) {
@@ -47,7 +47,7 @@ async function auditKnowledgeBase(): Promise<void> {
   console.log(`   Organizations found: ${orgs?.length || 0}`);
 
   if (!orgs || orgs.length === 0) {
-    console.log('\n❌ No organization found with voxanne@demo.com');
+    console.log('\n❌ No organization found with barpel@demo.com');
     console.log('   Searching all organizations...\n');
 
     const { data: allOrgs } = await supabase

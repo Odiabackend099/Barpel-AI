@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-    title: "Blog - Voxanne AI",
+    title: "Blog - Barpel AI",
     description: "Insights on AI, healthcare automation, and customer service innovation",
 };
 
@@ -19,7 +19,7 @@ const blogPosts = [
         date: "December 7, 2025",
         readTime: "5 min read",
         category: "Case Studies",
-        author: "Voxanne Team"
+        author: "Barpel Team"
     },
     {
         slug: "cost-of-missed-calls",
@@ -28,7 +28,7 @@ const blogPosts = [
         date: "December 6, 2025",
         readTime: "4 min read",
         category: "Business",
-        author: "Voxanne Team"
+        author: "Barpel Team"
     },
     {
         slug: "hipaa-compliance-ai-receptionists",
@@ -37,7 +37,7 @@ const blogPosts = [
         date: "December 5, 2025",
         readTime: "7 min read",
         category: "Compliance",
-        author: "Voxanne Team"
+        author: "Barpel Team"
     }
 ];
 
@@ -50,7 +50,7 @@ export default function BlogPage() {
                 {/* Header */}
                 <div className="text-center mb-12">
                     <h1 className="text-4xl md:text-5xl font-bold text-navy-900 mb-4">
-                        Voxanne AI Blog
+                        Barpel AI Blog
                     </h1>
                     <p className="text-lg text-slate-600">
                         Insights on AI, healthcare automation, and customer service innovation

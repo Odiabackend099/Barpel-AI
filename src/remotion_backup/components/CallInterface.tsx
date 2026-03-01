@@ -12,7 +12,7 @@ export const CallInterface: React.FC<{
                 <div>
                     <div className="flex items-center gap-3 mb-12">
                         <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">V</div>
-                        <span className="text-2xl font-bold text-slate-900">Voxanne AI</span>
+                        <span className="text-2xl font-bold text-slate-900">Barpel AI</span>
                     </div>
 
                     <div className="space-y-8">

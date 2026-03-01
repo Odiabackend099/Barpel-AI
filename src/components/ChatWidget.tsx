@@ -8,7 +8,7 @@ import Image from "next/image";
 export const ChatWidget = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<{ role: "bot" | "user" | "system"; text: string }[]>([
-        { role: "bot", text: "👋 Hi there! I'm Voxanne, your AI front desk assistant for Voxanne AI. I'm here to help you 24/7!" },
+        { role: "bot", text: "👋 Hi there! I'm Barpel, your AI front desk assistant for Barpel AI. I'm here to help you 24/7!" },
         { role: "bot", text: "I can answer questions about our AI receptionist, pricing, features, integrations, security, setup, or anything else you'd like to know. Whether you're a prospect exploring options or an existing customer needing support, I'm here to help!" }
     ]);
     const [inputValue, setInputValue] = useState("");
@@ -54,7 +54,7 @@ export const ChatWidget = () => {
             }
         } catch (error) {
             console.error("Chat error:", error);
-            setMessages((prev) => [...prev, { role: "bot", text: "I'm having trouble connecting to my knowledge base right now. Please try again in a moment, or reach out to our team at support@callwaitingai.dev for immediate assistance. We're here to help! 🙏" }]);
+            setMessages((prev) => [...prev, { role: "bot", text: "I'm having trouble connecting to my knowledge base right now. Please try again in a moment, or reach out to our team at support@barpel.ai for immediate assistance. We're here to help! 🙏" }]);
         } finally {
             setIsLoading(false);
         }
@@ -80,10 +80,10 @@ export const ChatWidget = () => {
                             <div className="flex items-center justify-between mb-3">
                                 <div className="flex items-center gap-3">
                                     <div className="relative w-10 h-10 rounded-full bg-white/20 flex items-center justify-center overflow-hidden border-2 border-white/30">
-                                        <Image src="/Brand/3.png" alt="Voxanne AI" width={40} height={40} className="object-contain" />
+                                        <Image src="/Brand/3.png" alt="Barpel AI" width={40} height={40} className="object-contain" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-white text-sm font-display">Voxanne Support</h3>
+                                        <h3 className="font-bold text-white text-sm font-display">Barpel Support</h3>
                                         <div className="flex items-center gap-1.5">
                                             <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
                                             <span className="text-xs text-white/90">Always Available</span>
@@ -122,7 +122,7 @@ export const ChatWidget = () => {
                                         <p className="text-xs text-slate-500 font-semibold">Quick questions:</p>
                                         <div className="space-y-2">
                                             <button
-                                                onClick={() => handleQuickAction("What is Voxanne AI and how does it work?")}
+                                                onClick={() => handleQuickAction("What is Barpel AI and how does it work?")}
                                                 className="w-full text-left px-3 py-2 rounded-lg bg-cyan-50 dark:bg-slate-800/50 hover:bg-cyan-100 dark:hover:bg-slate-700 text-xs text-slate-700 dark:text-slate-300 transition-colors border border-cyan-200 dark:border-slate-700"
                                             >
                                                 📱 How does it work?

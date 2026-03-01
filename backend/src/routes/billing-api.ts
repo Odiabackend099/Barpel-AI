@@ -241,7 +241,7 @@ router.post('/create-checkout-session', requireAuth, async (req: Request, res: R
       const customer = await stripe.customers.create({
         metadata: {
           org_id: orgId,
-          voxanne_tier: tier,
+          barpel_tier: tier,
         },
         name: checkoutOrg?.name || undefined,
       });
@@ -281,14 +281,14 @@ router.post('/create-checkout-session', requireAuth, async (req: Request, res: R
       subscription_data: {
         metadata: {
           org_id: orgId,
-          voxanne_tier: tier,
+          barpel_tier: tier,
         },
       },
       success_url: `${frontendUrl}/dashboard?billing=success`,
       cancel_url: `${frontendUrl}/dashboard?billing=canceled`,
       metadata: {
         org_id: orgId,
-        voxanne_tier: tier,
+        barpel_tier: tier,
       },
     });
 
@@ -563,9 +563,9 @@ router.post('/wallet/topup', requireAuth, async (req: Request, res: Response) =>
           price_data: {
             currency: 'gbp',
             product_data: {
-              name: 'Voxanne AI Credits',
+              name: 'Barpel AI Credits',
               // Show BOTH currencies in description to prevent confusion
-              description: `Voxanne AI Top-up: ~$${Math.round(parseFloat(amount_usd))} (£${(amount_pence / 100).toFixed(2)} GBP) — ~${estimated_credits} credits`,
+              description: `Barpel AI Top-up: ~$${Math.round(parseFloat(amount_usd))} (£${(amount_pence / 100).toFixed(2)} GBP) — ~${estimated_credits} credits`,
             },
             unit_amount: amount_pence,
           },

@@ -19,7 +19,7 @@ import { normalizeAuthError } from '../../lib/auth-errors';
 // Helpers
 // ---------------------------------------------------------------------------
 
-const SUPPORT = 'support@voxanne.ai';
+const SUPPORT = 'support@barpel.ai';
 
 function errWithCode(code: string, message = ''): unknown {
   return { code, message };

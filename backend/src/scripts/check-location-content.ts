@@ -18,7 +18,7 @@ async function checkLocationContent() {
   const { data: orgs } = await supabase
     .from('organizations')
     .select('id, email')
-    .ilike('email', '%voxanne@demo.com%')
+    .ilike('email', '%barpel@demo.com%')
     .limit(1);
 
   if (!orgs || orgs.length === 0) {

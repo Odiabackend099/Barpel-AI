@@ -87,7 +87,7 @@ export function VideoModal({ isOpen, onClose, videoSrc, title = 'Video' }: Video
             autoPlay
             preload="metadata"
             playsInline
-            aria-label="Voxanne AI demo video"
+            aria-label="Barpel AI demo video"
           >
             <source src={videoSrc} type="video/mp4" />
             <track kind="captions" />

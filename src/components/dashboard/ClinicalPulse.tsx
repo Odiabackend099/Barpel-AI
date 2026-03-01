@@ -42,13 +42,13 @@ export default function ClinicalPulse() {
     if (error) {
         return (
             <div className="bg-white rounded-2xl p-6 mb-4 border border-obsidian/20 shadow-md">
-                <div className="flex items-center gap-2 text-obsidian mb-4">
+                <div className="flex items-center gap-2 text-barpel-slate mb-4">
                     <AlertCircle className="w-5 h-5" />
                     <p className="font-semibold">Error loading dashboard stats: {error.message || 'Unknown error'}</p>
                 </div>
                 <button
                     onClick={() => mutate()}
-                    className="px-4 py-2.5 text-white font-medium bg-surgical-600 hover:scale-105 active:scale-100 rounded-xl transition-all shadow-lg shadow-surgical-600/20 hover:shadow-xl hover:shadow-surgical-600/30 focus:outline-none focus:ring-2 focus:ring-surgical-600/50 focus:ring-offset-2"
+                    className="px-4 py-2.5 text-white font-medium bg-barpel-teal hover:scale-105 active:scale-100 rounded-xl transition-all shadow-lg shadow-barpel-teal/20 hover:shadow-xl hover:shadow-barpel-teal/30 focus:outline-none focus:ring-2 focus:ring-barpel-teal/50 focus:ring-offset-2"
                 >
                     Retry
                 </button>
@@ -74,16 +74,16 @@ export default function ClinicalPulse() {
                 </div>
                 <div className="relative z-10">
                     <div className="flex items-center gap-2 mb-4">
-                        <div className="p-2 rounded-lg bg-surgical-600/10 text-surgical-600">
+                        <div className="p-2 rounded-lg bg-barpel-teal/10 text-surgical-600">
                             <Phone className="w-5 h-5" />
                         </div>
-                        <span className="text-xs font-semibold uppercase tracking-wider text-obsidian/60">Total Calls</span>
+                        <span className="text-xs font-semibold uppercase tracking-wider text-barpel-slate/60">Total Calls</span>
                     </div>
-                    <h3 className="text-4xl font-bold text-obsidian tracking-tight mb-2">
+                    <h3 className="text-4xl font-bold text-barpel-slate tracking-tight mb-2">
                         {isLoading ? <span className="animate-pulse bg-surgical-200/30 rounded h-10 w-20 inline-block" /> : safeStats.total_calls}
                     </h3>
-                    <div className="flex items-center gap-2 text-xs font-medium text-obsidian/60 mt-3">
-                        <span className="text-surgical-600 bg-surgical-600/10 px-2 py-1 rounded-full font-semibold border border-surgical-600/20 flex items-center gap-1">
+                    <div className="flex items-center gap-2 text-xs font-medium text-barpel-slate/60 mt-3">
+                        <span className="text-surgical-600 bg-barpel-teal/10 px-2 py-1 rounded-full font-semibold border border-barpel-teal/20 flex items-center gap-1">
                             <ArrowDownRight className="w-3 h-3" /> {safeStats.inbound_calls} Inbound
                         </span>
                         <span className="text-surgical-500 bg-surgical-500/10 px-2 py-1 rounded-full font-semibold border border-surgical-500/20 flex items-center gap-1">
@@ -104,12 +104,12 @@ export default function ClinicalPulse() {
                         <div className="p-2 rounded-lg bg-surgical-500/10 text-surgical-500">
                             <Clock className="w-5 h-5" />
                         </div>
-                        <span className="text-xs font-semibold uppercase tracking-wider text-obsidian/60">Avg Duration</span>
+                        <span className="text-xs font-semibold uppercase tracking-wider text-barpel-slate/60">Avg Duration</span>
                     </div>
-                    <h3 className="text-4xl font-bold text-obsidian tracking-tight mb-2">
+                    <h3 className="text-4xl font-bold text-barpel-slate tracking-tight mb-2">
                         {isLoading ? <span className="animate-pulse bg-surgical-200/30 rounded h-10 w-20 inline-block" /> : formatDuration(safeStats.avg_duration_seconds)}
                     </h3>
-                    <div className="flex items-center gap-2 text-xs font-medium text-obsidian/60 mt-3">
+                    <div className="flex items-center gap-2 text-xs font-medium text-barpel-slate/60 mt-3">
                         <span className="text-surgical-500 bg-surgical-500/10 px-2 py-1 rounded-full font-semibold border border-surgical-500/20">
                             Handle Time
                         </span>
@@ -124,16 +124,16 @@ export default function ClinicalPulse() {
                 </div>
                 <div className="relative z-10">
                     <div className="flex items-center gap-2 mb-4">
-                        <div className="p-2 rounded-lg bg-surgical-600/10 text-surgical-600">
+                        <div className="p-2 rounded-lg bg-barpel-teal/10 text-surgical-600">
                             <Calendar className="w-5 h-5" />
                         </div>
-                        <span className="text-xs font-semibold uppercase tracking-wider text-obsidian/60">Appointments</span>
+                        <span className="text-xs font-semibold uppercase tracking-wider text-barpel-slate/60">Appointments</span>
                     </div>
-                    <h3 className="text-4xl font-bold text-obsidian tracking-tight mb-2">
+                    <h3 className="text-4xl font-bold text-barpel-slate tracking-tight mb-2">
                         {isLoading ? <span className="animate-pulse bg-surgical-200/30 rounded h-10 w-20 inline-block" /> : safeStats.appointments_booked}
                     </h3>
-                    <div className="flex items-center gap-2 text-xs font-medium text-obsidian/60 mt-3">
-                        <span className="text-surgical-600 bg-surgical-600/10 px-2 py-1 rounded-full font-semibold border border-surgical-600/20">
+                    <div className="flex items-center gap-2 text-xs font-medium text-barpel-slate/60 mt-3">
+                        <span className="text-surgical-600 bg-barpel-teal/10 px-2 py-1 rounded-full font-semibold border border-barpel-teal/20">
                             Booked
                         </span>
                     </div>
@@ -150,12 +150,12 @@ export default function ClinicalPulse() {
                         <div className="p-2 rounded-lg bg-surgical-500/10 text-surgical-500">
                             <AlertCircle className="w-5 h-5" />
                         </div>
-                        <span className="text-xs font-semibold uppercase tracking-wider text-obsidian/60">Average Sentiment</span>
+                        <span className="text-xs font-semibold uppercase tracking-wider text-barpel-slate/60">Average Sentiment</span>
                     </div>
-                    <h3 className="text-4xl font-bold text-obsidian tracking-tight mb-2">
+                    <h3 className="text-4xl font-bold text-barpel-slate tracking-tight mb-2">
                         {isLoading ? <span className="animate-pulse bg-surgical-200/30 rounded h-10 w-20 inline-block" /> : `${(safeStats.avg_sentiment * 100).toFixed(0)}%`}
                     </h3>
-                    <div className="flex items-center gap-2 text-xs font-medium text-obsidian/60 mt-3">
+                    <div className="flex items-center gap-2 text-xs font-medium text-barpel-slate/60 mt-3">
                         <span className="text-surgical-500 bg-surgical-500/10 px-2 py-1 rounded-full font-semibold border border-surgical-500/20">
                             Caller Mood
                         </span>

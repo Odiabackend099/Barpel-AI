@@ -27,7 +27,7 @@ export function AudioDemos({ id }: { id?: string } = {}) {
         <Section id={id} className="bg-slate-50 border-y border-slate-100">
             <div className="text-center mb-16">
                 <h2 className="text-3xl font-bold text-navy-900">Hear the Intelligence</h2>
-                <p className="text-slate-600 mt-4">Listen to Voxanne handle complex patient scenarios in real-time.</p>
+                <p className="text-slate-600 mt-4">Listen to Barpel handle complex patient scenarios in real-time.</p>
             </div>
 
             <div className="max-w-3xl mx-auto space-y-4">

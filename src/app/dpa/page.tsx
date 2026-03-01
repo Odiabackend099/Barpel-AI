@@ -48,10 +48,10 @@ export default function DPAPage() {
                             Under the UK GDPR and EU GDPR (Article 28), organizations that process personal data on behalf of customers (Data Controllers) must have a written Data Processing Agreement (DPA) with their service providers (Data Processors).
                         </p>
                         <p className="text-slate-700 leading-relaxed mb-4">
-                            <strong>Voxanne AI acts as a Data Processor</strong> when your organization uses our AI receptionist services. We process personal data (customer names, phone numbers, appointment details, health information, etc.) according to your instructions.
+                            <strong>Barpel AI acts as a Data Processor</strong> when your organization uses our AI receptionist services. We process personal data (customer names, phone numbers, appointment details, health information, etc.) according to your instructions.
                         </p>
                         <p className="text-slate-700 leading-relaxed">
-                            <strong>When do you need a DPA with us?</strong> If you are a Data Controller (clinic, med spa, healthcare provider, or any organization) and use Voxanne AI to process personal data of your patients, customers, or staff, you require a signed DPA.
+                            <strong>When do you need a DPA with us?</strong> If you are a Data Controller (clinic, med spa, healthcare provider, or any organization) and use Barpel AI to process personal data of your patients, customers, or staff, you require a signed DPA.
                         </p>
                     </motion.div>
 
@@ -81,7 +81,7 @@ export default function DPAPage() {
                                     <div className="border-t pt-3">
                                         <p className="font-semibold text-deep-obsidian">Data Processor:</p>
                                         <p className="text-slate-600 ml-4">
-                                            Voxanne AI, a product of Call Waiting AI Ltd
+                                            Barpel AI, a product of Call Waiting AI Ltd
                                         </p>
                                     </div>
                                     <div className="border-t pt-3">
@@ -130,7 +130,7 @@ export default function DPAPage() {
                                     <div>
                                         <p className="font-semibold mb-2">Duration:</p>
                                         <p className="text-sm text-slate-600">
-                                            For the duration of your service agreement with Voxanne AI, plus 30 days post-termination for data return/deletion.
+                                            For the duration of your service agreement with Barpel AI, plus 30 days post-termination for data return/deletion.
                                         </p>
                                     </div>
                                     <div>
@@ -148,7 +148,7 @@ export default function DPAPage() {
                                     3. Processing Instructions
                                 </h3>
                                 <p className="text-sm text-slate-600 mb-4">
-                                    Voxanne AI processes personal data only according to your documented instructions:
+                                    Barpel AI processes personal data only according to your documented instructions:
                                 </p>
                                 <ul className="space-y-2 text-sm text-slate-600 ml-4">
                                     <li>✓ Inbound call handling and transcription</li>
@@ -213,7 +213,7 @@ export default function DPAPage() {
                                     <p><strong>Article 16 (Right to Rectification):</strong> Update via customer dashboard or API.</p>
                                     <p><strong>Article 17 (Right to Erasure):</strong> Initiate 30-day deletion process via dashboard. Permanent deletion after grace period.</p>
                                     <p><strong>Article 20 (Right to Portability):</strong> JSON export format for machine-readable data portability.</p>
-                                    <p><strong>Article 21 (Right to Object):</strong> Contact privacy@voxanne.ai with objection details.</p>
+                                    <p><strong>Article 21 (Right to Object):</strong> Contact privacy@barpel.ai with objection details.</p>
                                 </div>
                             </div>
 
@@ -245,7 +245,7 @@ export default function DPAPage() {
                                     <li>✓ <strong>Standard Contractual Clauses (SCCs)</strong> for EU/UK customers</li>
                                     <li>✓ <strong>UK IDTA</strong> (International Data Transfer Agreement) for UK-specific transfers</li>
                                     <li>✓ <strong>Encryption in transit</strong> provides additional protection (TLS 1.3)</li>
-                                    <li>✓ <strong>EU-only option:</strong> Contact sales@voxanne.ai to discuss EU-region-only data residency</li>
+                                    <li>✓ <strong>EU-only option:</strong> Contact sales@barpel.ai to discuss EU-region-only data residency</li>
                                 </ul>
                             </div>
 
@@ -286,7 +286,7 @@ export default function DPAPage() {
                                     <ol className="list-decimal list-inside space-y-1 ml-2">
                                         <li>Copy this DPA template</li>
                                         <li>Sign electronically via DocuSign or Acrobat Sign</li>
-                                        <li>Email signed copy to support@voxanne.ai</li>
+                                        <li>Email signed copy to support@barpel.ai</li>
                                         <li>Receive counter-signed copy within 5 business days</li>
                                     </ol>
                                     <p className="mt-4">
@@ -299,7 +299,7 @@ export default function DPAPage() {
                                         <li>We will counter-sign and return</li>
                                     </ol>
                                     <p className="mt-4 font-semibold">
-                                        Questions? Contact: support@voxanne.ai
+                                        Questions? Contact: support@barpel.ai
                                     </p>
                                 </div>
                             </div>
@@ -378,7 +378,7 @@ export default function DPAPage() {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <a
-                            href="mailto:support@voxanne.ai"
+                            href="mailto:support@barpel.ai"
                             className="bg-surgical-600 hover:bg-surgical-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
                         >
                             Contact Support Team

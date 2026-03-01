@@ -13,7 +13,7 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBL
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001';
 
 // Test credentials - replace with your actual credentials
-const TEST_EMAIL = process.env.TEST_EMAIL || 'voxanne@demo.com';
+const TEST_EMAIL = process.env.TEST_EMAIL || 'barpel@demo.com';
 const TEST_PASSWORD = process.env.TEST_PASSWORD || 'your-password-here';
 
 // Phone number to call

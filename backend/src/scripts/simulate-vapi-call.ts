@@ -28,7 +28,7 @@ dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 // Constants
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001';
-const ORG_ID = '46cf2995-2bee-44e3-838b-24151486fe4e'; // Voxanne Demo Clinic
+const ORG_ID = '46cf2995-2bee-44e3-838b-24151486fe4e'; // Barpel Demo Clinic
 const TEST_PHONE = '+2348141995397'; // Austyn
 const APPOINTMENT_DATE = '2026-02-06';
 const APPOINTMENT_TIME = '15:00';

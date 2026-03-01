@@ -1,20 +1,20 @@
 /**
  * SSOT Violation Investigation Script
  *
- * Checks if voxanne@demo.com has provisioned managed numbers
+ * Checks if barpel@demo.com has provisioned managed numbers
  * and verifies if they were properly saved to org_credentials (SSOT)
  */
 
 import { supabaseAdmin } from '../config/supabase';
 
 async function investigate() {
-  console.log('🔍 Step 1: Finding organization ID for voxanne@demo.com...\n');
+  console.log('🔍 Step 1: Finding organization ID for barpel@demo.com...\n');
 
   // Find org
   const { data: org, error: orgError } = await supabaseAdmin
     .from('organizations')
     .select('id, name, email')
-    .eq('email', 'voxanne@demo.com')
+    .eq('email', 'barpel@demo.com')
     .single();
 
   if (orgError || !org) {

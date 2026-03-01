@@ -71,7 +71,7 @@ beforeAll(async () => {
         first_name: 'OrgA',
         last_name: 'Contact',
         phone: uniquePhone(),
-        email: `orga.contact.${randomUUID().substring(0, 8)}@voxanne.test`,
+        email: `orga.contact.${randomUUID().substring(0, 8)}@barpel.test`,
       })
       .select('id')
       .single(),
@@ -82,7 +82,7 @@ beforeAll(async () => {
         first_name: 'OrgB',
         last_name: 'Contact',
         phone: uniquePhone(),
-        email: `orgb.contact.${randomUUID().substring(0, 8)}@voxanne.test`,
+        email: `orgb.contact.${randomUUID().substring(0, 8)}@barpel.test`,
       })
       .select('id')
       .single(),

@@ -57,7 +57,7 @@ export async function testLiveSMS(orgId: string): Promise<TestResult> {
       {
         serviceType: 'E2E Test - Botox Treatment',
         scheduledAt: appointmentDate,
-        confirmationUrl: 'https://voxanne.ai/confirm/test123'
+        confirmationUrl: 'https://barpel.ai/confirm/test123'
       },
       orgId
     );

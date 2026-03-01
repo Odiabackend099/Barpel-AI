@@ -20,10 +20,10 @@ export const ROICalculator = () => {
     const monthlyRevenueLoss = Math.round(missedCallsPerMonth * avgProcedureValue * conversionRate);
     const yearlyRevenueLoss = monthlyRevenueLoss * 12;
 
-    // With Voxanne AI (high call answer rate - always available)
-    const withVoxanneAIMissed = Math.round(missedCallsPerMonth * 0.02);
-    const withVoxanneAIRevenueSaved = Math.round((missedCallsPerMonth - withVoxanneAIMissed) * avgProcedureValue * conversionRate);
-    const yearlyRevenueSaved = withVoxanneAIRevenueSaved * 12;
+    // With Barpel AI (high call answer rate - always available)
+    const withBarpelAIMissed = Math.round(missedCallsPerMonth * 0.02);
+    const withBarpelAIRevenueSaved = Math.round((missedCallsPerMonth - withBarpelAIMissed) * avgProcedureValue * conversionRate);
+    const yearlyRevenueSaved = withBarpelAIRevenueSaved * 12;
 
     return (
         <div className="relative py-24 px-6 overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -95,7 +95,7 @@ export const ROICalculator = () => {
 
                     {/* Results Grid */}
                     <div className="grid md:grid-cols-2 gap-6">
-                        {/* Without Voxanne AI */}
+                        {/* Without Barpel AI */}
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -104,7 +104,7 @@ export const ROICalculator = () => {
                         >
                             <div className="flex items-center gap-2 mb-4">
                                 <TrendingDown className="w-5 h-5 text-red-400" />
-                                <h3 className="font-bold text-white">Without Voxanne AI</h3>
+                                <h3 className="font-bold text-white">Without Barpel AI</h3>
                             </div>
                             <div className="space-y-4">
                                 <div>
@@ -137,7 +137,7 @@ export const ROICalculator = () => {
                             </div>
                         </motion.div>
 
-                        {/* With Voxanne AI */}
+                        {/* With Barpel AI */}
                         <motion.div
                             initial={{ opacity: 0, x: 20 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -147,29 +147,29 @@ export const ROICalculator = () => {
                             <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl"></div>
                             <div className="flex items-center gap-2 mb-4 relative z-10">
                                 <TrendingUp className="w-5 h-5 text-emerald-400" />
-                                <h3 className="font-bold text-white">With Voxanne AI</h3>
+                                <h3 className="font-bold text-white">With Barpel AI</h3>
                             </div>
                             <div className="space-y-4 relative z-10">
                                 <div>
                                     <p className="text-slate-400 text-sm mb-1">Monthly Revenue Saved</p>
                                     <motion.p
-                                        key={withVoxanneAIRevenueSaved}
+                                        key={withBarpelAIRevenueSaved}
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         className="text-3xl font-bold text-emerald-400"
                                     >
-                                        ${withVoxanneAIRevenueSaved.toLocaleString()}
+                                        ${withBarpelAIRevenueSaved.toLocaleString()}
                                     </motion.p>
                                 </div>
                                 <div>
                                     <p className="text-slate-400 text-sm mb-1">Yearly Revenue Saved</p>
                                     <motion.p
-                                        key={withVoxanneAIRevenueSaved * 12}
+                                        key={withBarpelAIRevenueSaved * 12}
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         className="text-2xl font-bold text-emerald-300"
                                     >
-                                        ${(withVoxanneAIRevenueSaved * 12).toLocaleString()}
+                                        ${(withBarpelAIRevenueSaved * 12).toLocaleString()}
                                     </motion.p>
                                 </div>
                                 <div className="pt-4 border-t border-emerald-500/20">
@@ -178,7 +178,7 @@ export const ROICalculator = () => {
                                         <span>24/7 Call Coverage</span>
                                     </div>
                                     <p className="text-xs text-slate-400 mt-1">
-                                        Only {withVoxanneAIMissed} missed calls/month
+                                        Only {withBarpelAIMissed} missed calls/month
                                     </p>
                                 </div>
                             </div>

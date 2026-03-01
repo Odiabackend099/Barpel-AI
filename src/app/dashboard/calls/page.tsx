@@ -37,7 +37,7 @@ interface Call {
 interface CallDetail extends Call {
     recording_url?: string;
     transcript: Array<{
-        speaker: 'caller' | 'voxanne';
+        speaker: 'caller' | 'barpel';
         text: string;
         timestamp: number;
         sentiment: string;
@@ -299,8 +299,8 @@ const CallsPageContent = () => {
         const n = label?.toLowerCase() || '';
         if (n === 'positive' || n === 'reassured' || n === 'decisive') return 'text-surgical-600 bg-surgical-50';
         if (n === 'negative' || n === 'frustrated') return 'text-red-600 bg-red-50';
-        if (n === 'anxious') return 'text-obsidian/70 bg-surgical-50';
-        return 'text-obsidian/60 bg-surgical-50';
+        if (n === 'anxious') return 'text-barpel-slate/70 bg-surgical-50';
+        return 'text-barpel-slate/60 bg-surgical-50';
     };
 
     const getStatusColor = (status: string) => {
@@ -309,7 +309,7 @@ const CallsPageContent = () => {
             case 'missed': return 'bg-red-50 text-red-700 border-red-200';
             case 'transferred': return 'bg-surgical-50 text-surgical-500 border-surgical-200';
             case 'failed': return 'bg-red-50 text-red-700 border-red-200';
-            default: return 'bg-surgical-50 text-obsidian/60 border-surgical-200';
+            default: return 'bg-surgical-50 text-barpel-slate/60 border-surgical-200';
         }
     };
 
@@ -322,8 +322,8 @@ const CallsPageContent = () => {
             <div className="max-w-7xl mx-auto px-6 py-8">
                 {/* Header */}
                 <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-obsidian mb-2">Call Recordings</h1>
-                    <p className="text-obsidian/60">View and analyze all call activity with transcripts and sentiment analysis</p>
+                    <h1 className="text-4xl font-bold text-barpel-slate mb-2">Call Recordings</h1>
+                    <p className="text-barpel-slate/60">View and analyze all call activity with transcripts and sentiment analysis</p>
                 </div>
 
                 {/* Error */}
@@ -337,20 +337,20 @@ const CallsPageContent = () => {
                 {analytics && (
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
                         <div className="bg-white border border-surgical-200 rounded-xl p-4 hover:shadow-md transition-shadow">
-                            <p className="text-2xl font-bold text-obsidian">{analytics.total_calls}</p>
-                            <p className="text-xs text-obsidian/60 font-medium">Total Calls</p>
+                            <p className="text-2xl font-bold text-barpel-slate">{analytics.total_calls}</p>
+                            <p className="text-xs text-barpel-slate/60 font-medium">Total Calls</p>
                         </div>
                         <div className="bg-white border border-surgical-200 rounded-xl p-4 hover:shadow-md transition-shadow">
                             <p className="text-2xl font-bold text-surgical-600">{analytics.completed_calls}</p>
-                            <p className="text-xs text-obsidian/60 font-medium">Completed</p>
+                            <p className="text-xs text-barpel-slate/60 font-medium">Completed</p>
                         </div>
                         <div className="bg-white border border-surgical-200 rounded-xl p-4 hover:shadow-md transition-shadow">
-                            <p className="text-2xl font-bold text-obsidian">{analytics.average_duration}s</p>
-                            <p className="text-xs text-obsidian/60 font-medium">Avg Duration</p>
+                            <p className="text-2xl font-bold text-barpel-slate">{analytics.average_duration}s</p>
+                            <p className="text-xs text-barpel-slate/60 font-medium">Avg Duration</p>
                         </div>
                         <div className="bg-white border border-surgical-200 rounded-xl p-4 hover:shadow-md transition-shadow">
                             <p className="text-2xl font-bold text-surgical-600">{(analytics.average_sentiment * 100).toFixed(0)}%</p>
-                            <p className="text-xs text-obsidian/60 font-medium">Avg Sentiment</p>
+                            <p className="text-xs text-barpel-slate/60 font-medium">Avg Sentiment</p>
                         </div>
                     </div>
                 )}
@@ -360,16 +360,16 @@ const CallsPageContent = () => {
                     <button
                         onClick={() => { setActiveTab('inbound'); setCurrentPage(1); }}
                         className={`px-6 py-3 font-medium text-sm border-b-2 transition-colors ${activeTab === 'inbound'
-                            ? 'border-surgical-600 text-surgical-600'
-                            : 'border-transparent text-obsidian/60 hover:text-obsidian'}`}
+                            ? 'border-barpel-teal text-surgical-600'
+                            : 'border-transparent text-barpel-slate/60 hover:text-barpel-slate'}`}
                     >
                         Inbound Calls
                     </button>
                     <button
                         onClick={() => { setActiveTab('outbound'); setCurrentPage(1); }}
                         className={`px-6 py-3 font-medium text-sm border-b-2 transition-colors ${activeTab === 'outbound'
-                            ? 'border-surgical-600 text-surgical-600'
-                            : 'border-transparent text-obsidian/60 hover:text-obsidian'}`}
+                            ? 'border-barpel-teal text-surgical-600'
+                            : 'border-transparent text-barpel-slate/60 hover:text-barpel-slate'}`}
                     >
                         Outbound Calls
                     </button>
@@ -390,7 +390,7 @@ const CallsPageContent = () => {
                         {searchQuery && (
                             <button
                                 onClick={() => { setSearchQuery(''); setCurrentPage(1); }}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-obsidian/40 hover:text-obsidian transition-colors"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-barpel-slate/40 hover:text-barpel-slate transition-colors"
                                 aria-label="Clear search"
                             >
                                 <X className="w-4 h-4" />
@@ -428,13 +428,13 @@ const CallsPageContent = () => {
                         <table className="w-full">
                             <thead className="bg-surgical-50 border-b border-surgical-200">
                                 <tr>
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-obsidian/70 uppercase">Date & Time</th>
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-obsidian/70 uppercase">Caller</th>
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-obsidian/70 uppercase">Duration</th>
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-obsidian/70 uppercase">Status</th>
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-obsidian/70 uppercase">Sentiment</th>
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-obsidian/70 uppercase">Outcome Summary</th>
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-obsidian/70 uppercase">Actions</th>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/70 uppercase">Date & Time</th>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/70 uppercase">Caller</th>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/70 uppercase">Duration</th>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/70 uppercase">Status</th>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/70 uppercase">Sentiment</th>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/70 uppercase">Outcome Summary</th>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/70 uppercase">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-surgical-200">
@@ -443,14 +443,14 @@ const CallsPageContent = () => {
                                         <td colSpan={7} className="px-6 py-12 text-center">
                                             <div className="flex flex-col items-center gap-3">
                                                 <div className="w-8 h-8 border-4 border-surgical-200 border-t-surgical-600 rounded-full animate-spin" />
-                                                <p className="text-obsidian/60">Loading calls...</p>
+                                                <p className="text-barpel-slate/60">Loading calls...</p>
                                             </div>
                                         </td>
                                     </tr>
                                 ) : calls.length === 0 ? (
                                     <tr>
                                         <td colSpan={7} className="px-6 py-12 text-center">
-                                            <p className="text-obsidian/60">No calls found</p>
+                                            <p className="text-barpel-slate/60">No calls found</p>
                                         </td>
                                     </tr>
                                 ) : (
@@ -461,18 +461,18 @@ const CallsPageContent = () => {
                                             onClick={() => fetchCallDetail(call.id)}
                                         >
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center gap-2 text-sm text-obsidian font-medium">
-                                                    <Calendar className="w-4 h-4 text-obsidian/40" />
+                                                <div className="flex items-center gap-2 text-sm text-barpel-slate font-medium">
+                                                    <Calendar className="w-4 h-4 text-barpel-slate/40" />
                                                     {formatDateTime(call.call_date)}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm font-medium text-obsidian">{call.caller_name}</div>
-                                                <div className="text-xs text-obsidian/60">{call.phone_number}</div>
+                                                <div className="text-sm font-medium text-barpel-slate">{call.caller_name}</div>
+                                                <div className="text-xs text-barpel-slate/60">{call.phone_number}</div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center gap-2 text-sm text-obsidian font-medium">
-                                                    <Clock className="w-4 h-4 text-obsidian/40" />
+                                                <div className="flex items-center gap-2 text-sm text-barpel-slate font-medium">
+                                                    <Clock className="w-4 h-4 text-barpel-slate/40" />
                                                     {formatDuration(call.duration_seconds)}
                                                 </div>
                                             </td>
@@ -494,15 +494,15 @@ const CallsPageContent = () => {
                                             </td>
                                             <td className="px-6 py-4">
                                                 {call.outcome_summary ? (
-                                                    <p className="text-xs text-obsidian/70 line-clamp-2 leading-relaxed max-w-xs">
+                                                    <p className="text-xs text-barpel-slate/70 line-clamp-2 leading-relaxed max-w-xs">
                                                         {call.outcome_summary}
                                                     </p>
                                                 ) : call.sentiment_summary ? (
-                                                    <p className="text-xs text-obsidian/60 line-clamp-2 leading-relaxed max-w-xs italic">
+                                                    <p className="text-xs text-barpel-slate/60 line-clamp-2 leading-relaxed max-w-xs italic">
                                                         {call.sentiment_summary}
                                                     </p>
                                                 ) : (
-                                                    <span className="text-xs text-obsidian/40">&mdash;</span>
+                                                    <span className="text-xs text-barpel-slate/40">&mdash;</span>
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
@@ -517,7 +517,7 @@ const CallsPageContent = () => {
                                                             <Play className="w-4 h-4 text-surgical-600" />
                                                         </button>
                                                     ) : (
-                                                        <span className="text-xs text-obsidian/40 px-2">&mdash;</span>
+                                                        <span className="text-xs text-barpel-slate/40 px-2">&mdash;</span>
                                                     )}
                                                     {/* SMS */}
                                                     {call.phone_number ? (
@@ -534,7 +534,7 @@ const CallsPageContent = () => {
                                                         </button>
                                                     ) : (
                                                         <button disabled className="p-2 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed" title="No phone number">
-                                                            <Mail className="w-4 h-4 text-obsidian/30" />
+                                                            <Mail className="w-4 h-4 text-barpel-slate/30" />
                                                         </button>
                                                     )}
                                                     {/* Delete */}
@@ -557,22 +557,22 @@ const CallsPageContent = () => {
                     {/* Pagination */}
                     {totalPages > 1 && (
                         <div className="px-6 py-4 border-t border-surgical-200 flex items-center justify-between">
-                            <div className="text-sm text-obsidian/70">
+                            <div className="text-sm text-barpel-slate/70">
                                 Showing {(currentPage - 1) * callsPerPage + 1} to {Math.min(currentPage * callsPerPage, totalCalls)} of {totalCalls} calls
                             </div>
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                                     disabled={currentPage === 1}
-                                    className="px-3 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-obsidian/70 hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+                                    className="px-3 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/70 hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
                                 >
                                     <ChevronLeft className="w-4 h-4" /> Previous
                                 </button>
-                                <span className="text-sm text-obsidian/70">Page {currentPage} of {totalPages}</span>
+                                <span className="text-sm text-barpel-slate/70">Page {currentPage} of {totalPages}</span>
                                 <button
                                     onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                                     disabled={currentPage === totalPages}
-                                    className="px-3 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-obsidian/70 hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+                                    className="px-3 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/70 hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
                                 >
                                     Next <ChevronRight className="w-4 h-4" />
                                 </button>
@@ -589,20 +589,20 @@ const CallsPageContent = () => {
                         {/* Header */}
                         <div className="sticky top-0 bg-white border-b border-surgical-200 px-6 py-4 flex items-center justify-between">
                             <div>
-                                <h2 className="text-2xl font-bold text-obsidian">
+                                <h2 className="text-2xl font-bold text-barpel-slate">
                                     {selectedCall.caller_name}
                                     {selectedCall.phone_number && selectedCall.caller_name !== selectedCall.phone_number && (
-                                        <span className="text-lg text-obsidian/60 font-normal ml-2">
+                                        <span className="text-lg text-barpel-slate/60 font-normal ml-2">
                                             ({selectedCall.phone_number})
                                         </span>
                                     )}
                                 </h2>
-                                <p className="text-sm text-obsidian/60">
+                                <p className="text-sm text-barpel-slate/60">
                                     {selectedCall.call_type === 'outbound' ? '📞 Outbound' : '📲 Inbound'} &bull; {formatDateTime(selectedCall.call_date)}
                                 </p>
                             </div>
                             <button onClick={() => setShowDetailModal(false)} className="p-2 hover:bg-surgical-50 rounded-lg transition-colors">
-                                <X className="w-6 h-6 text-obsidian/60" />
+                                <X className="w-6 h-6 text-barpel-slate/60" />
                             </button>
                         </div>
 
@@ -610,25 +610,25 @@ const CallsPageContent = () => {
                             {/* Call Metadata */}
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                 <div>
-                                    <p className="text-xs text-obsidian/60 font-medium uppercase">Duration</p>
-                                    <p className="text-lg font-bold text-obsidian">{formatDuration(selectedCall.duration_seconds)}</p>
+                                    <p className="text-xs text-barpel-slate/60 font-medium uppercase">Duration</p>
+                                    <p className="text-lg font-bold text-barpel-slate">{formatDuration(selectedCall.duration_seconds)}</p>
                                 </div>
                                 <div>
-                                    <p className="text-xs text-obsidian/60 font-medium uppercase">Status</p>
-                                    <p className="text-lg font-bold text-obsidian capitalize">{selectedCall.status}</p>
+                                    <p className="text-xs text-barpel-slate/60 font-medium uppercase">Status</p>
+                                    <p className="text-lg font-bold text-barpel-slate capitalize">{selectedCall.status}</p>
                                 </div>
                                 <div>
-                                    <p className="text-xs text-obsidian/60 font-medium uppercase">Sentiment</p>
-                                    <p className="text-lg font-bold text-obsidian capitalize">
+                                    <p className="text-xs text-barpel-slate/60 font-medium uppercase">Sentiment</p>
+                                    <p className="text-lg font-bold text-barpel-slate capitalize">
                                         {selectedCall.sentiment_label || 'neutral'}
                                         {selectedCall.sentiment_score !== null && selectedCall.sentiment_score !== undefined && (
-                                            <span className="text-sm text-obsidian/60 font-normal ml-1">
+                                            <span className="text-sm text-barpel-slate/60 font-normal ml-1">
                                                 ({Math.round(selectedCall.sentiment_score * 100)}%)
                                             </span>
                                         )}
                                     </p>
                                     {selectedCall.sentiment_urgency && selectedCall.sentiment_urgency !== 'low' && (
-                                        <p className="text-xs text-obsidian/60 mt-1">
+                                        <p className="text-xs text-barpel-slate/60 mt-1">
                                             <span className={`px-2 py-0.5 rounded-full ${
                                                 selectedCall.sentiment_urgency === 'critical' ? 'bg-red-100 text-red-700' :
                                                 selectedCall.sentiment_urgency === 'high' ? 'bg-orange-100 text-orange-700' :
@@ -640,24 +640,24 @@ const CallsPageContent = () => {
                                     )}
                                 </div>
                                 <div>
-                                    <p className="text-xs text-obsidian/60 font-medium uppercase">Recording</p>
-                                    <p className="text-sm text-obsidian">{selectedCall.has_recording ? 'Available' : 'None'}</p>
+                                    <p className="text-xs text-barpel-slate/60 font-medium uppercase">Recording</p>
+                                    <p className="text-sm text-barpel-slate">{selectedCall.has_recording ? 'Available' : 'None'}</p>
                                 </div>
                                 <div>
-                                    <p className="text-xs text-obsidian/60 font-medium uppercase">Cost</p>
-                                    <p className="text-lg font-bold text-obsidian">
+                                    <p className="text-xs text-barpel-slate/60 font-medium uppercase">Cost</p>
+                                    <p className="text-lg font-bold text-barpel-slate">
                                         {selectedCall.cost_cents != null && selectedCall.cost_cents > 0
                                             ? `£${(selectedCall.cost_cents / 100).toFixed(2)}`
                                             : '—'}
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-xs text-obsidian/60 font-medium uppercase">Appointment ID</p>
-                                    <p className="text-sm font-bold text-obsidian truncate">{selectedCall.appointment_id || '—'}</p>
+                                    <p className="text-xs text-barpel-slate/60 font-medium uppercase">Appointment ID</p>
+                                    <p className="text-sm font-bold text-barpel-slate truncate">{selectedCall.appointment_id || '—'}</p>
                                 </div>
                                 <div>
-                                    <p className="text-xs text-obsidian/60 font-medium uppercase">Tools Used</p>
-                                    <p className="text-sm text-obsidian">
+                                    <p className="text-xs text-barpel-slate/60 font-medium uppercase">Tools Used</p>
+                                    <p className="text-sm text-barpel-slate">
                                         {selectedCall.tools_used && selectedCall.tools_used.length > 0
                                             ? selectedCall.tools_used.join(', ')
                                             : '—'}
@@ -668,23 +668,23 @@ const CallsPageContent = () => {
                             {/* Outcome Summary (Vapi Primary Source) */}
                             {selectedCall.outcome_summary && (
                                 <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4">
-                                    <p className="text-sm font-bold text-obsidian mb-2">📋 Outcome Summary</p>
-                                    <p className="text-sm text-obsidian/70 leading-relaxed">{selectedCall.outcome_summary}</p>
+                                    <p className="text-sm font-bold text-barpel-slate mb-2">📋 Outcome Summary</p>
+                                    <p className="text-sm text-barpel-slate/70 leading-relaxed">{selectedCall.outcome_summary}</p>
                                 </div>
                             )}
 
                             {/* Sentiment Analysis (if different from outcome) */}
                             {selectedCall.sentiment_summary && selectedCall.sentiment_summary !== selectedCall.outcome_summary && (
                                 <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4">
-                                    <p className="text-sm font-bold text-obsidian mb-2">💭 Sentiment Analysis</p>
-                                    <p className="text-sm text-obsidian/70 leading-relaxed">{selectedCall.sentiment_summary}</p>
+                                    <p className="text-sm font-bold text-barpel-slate mb-2">💭 Sentiment Analysis</p>
+                                    <p className="text-sm text-barpel-slate/70 leading-relaxed">{selectedCall.sentiment_summary}</p>
                                 </div>
                             )}
 
                             {/* Recording Player */}
                             {selectedCall.has_recording && selectedCall.recording_status === 'completed' && (
                                 <div className="bg-surgical-50 rounded-lg p-4">
-                                    <p className="text-sm font-bold text-obsidian mb-3">Recording</p>
+                                    <p className="text-sm font-bold text-barpel-slate mb-3">Recording</p>
                                     <RecordingPlayer callId={selectedCall.id} recordingUrl={selectedCall.recording_url} />
                                 </div>
                             )}
@@ -692,16 +692,16 @@ const CallsPageContent = () => {
                             {/* Transcript */}
                             {selectedCall.transcript && selectedCall.transcript.length > 0 && (
                                 <div className="bg-surgical-50 rounded-lg p-4">
-                                    <p className="text-sm font-bold text-obsidian mb-4">Transcript</p>
+                                    <p className="text-sm font-bold text-barpel-slate mb-4">Transcript</p>
                                     <div className="space-y-3 max-h-96 overflow-y-auto">
                                         {selectedCall.transcript.map((segment, idx) => {
-                                            const isAgent = segment.speaker === 'voxanne';
+                                            const isAgent = segment.speaker === 'barpel';
                                             return (
                                                 <div key={idx} className={`rounded-lg p-4 border-l-4 ${isAgent ? 'bg-surgical-50 border-surgical-500' : 'bg-white border-obsidian/20'}`}>
-                                                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold mb-2 ${isAgent ? 'bg-surgical-100 text-surgical-600' : 'bg-surgical-50 text-obsidian/70'}`}>
-                                                        {isAgent ? 'Voxanne (Agent)' : 'Caller'}
+                                                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold mb-2 ${isAgent ? 'bg-surgical-100 text-surgical-600' : 'bg-surgical-50 text-barpel-slate/70'}`}>
+                                                        {isAgent ? 'Barpel (Agent)' : 'Caller'}
                                                     </span>
-                                                    <p className="text-sm text-obsidian break-words leading-relaxed">{segment.text}</p>
+                                                    <p className="text-sm text-barpel-slate break-words leading-relaxed">{segment.text}</p>
                                                 </div>
                                             );
                                         })}
@@ -712,10 +712,10 @@ const CallsPageContent = () => {
                             {/* Action Items */}
                             {selectedCall.action_items && selectedCall.action_items.length > 0 && (
                                 <div className="bg-surgical-50 rounded-lg p-4">
-                                    <p className="text-sm font-bold text-obsidian mb-3">Action Items</p>
+                                    <p className="text-sm font-bold text-barpel-slate mb-3">Action Items</p>
                                     <ul className="space-y-2">
                                         {selectedCall.action_items.map((item, idx) => (
-                                            <li key={idx} className="flex items-start gap-2 text-sm text-obsidian">
+                                            <li key={idx} className="flex items-start gap-2 text-sm text-barpel-slate">
                                                 <span className="text-surgical-600 font-bold">&bull;</span>
                                                 {item}
                                             </li>
@@ -734,7 +734,7 @@ const CallsPageContent = () => {
                                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                                         selectedCall.has_recording && selectedCall.recording_status === 'completed'
                                             ? 'bg-surgical-50 text-surgical-600 hover:bg-surgical-100 border border-surgical-200'
-                                            : 'bg-surgical-50 text-obsidian/30 cursor-not-allowed opacity-60'}`}
+                                            : 'bg-surgical-50 text-barpel-slate/30 cursor-not-allowed opacity-60'}`}
                                 >
                                     <Download className="w-4 h-4" /> Download
                                 </button>
@@ -747,7 +747,7 @@ const CallsPageContent = () => {
                                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                                         selectedCall.phone_number
                                             ? 'bg-surgical-50 text-surgical-600 hover:bg-surgical-100 border border-surgical-200'
-                                            : 'bg-surgical-50 text-obsidian/30 cursor-not-allowed opacity-60'}`}
+                                            : 'bg-surgical-50 text-barpel-slate/30 cursor-not-allowed opacity-60'}`}
                                 >
                                     <Mail className="w-4 h-4" /> Follow-up
                                 </button>
@@ -755,7 +755,7 @@ const CallsPageContent = () => {
                         </div>
 
                         <div className="border-t border-surgical-200 px-6 py-4 flex items-center justify-end">
-                            <button onClick={() => setShowDetailModal(false)} className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-obsidian/70 hover:bg-surgical-50 transition-colors">
+                            <button onClick={() => setShowDetailModal(false)} className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/70 hover:bg-surgical-50 transition-colors">
                                 Close
                             </button>
                         </div>
@@ -768,19 +768,19 @@ const CallsPageContent = () => {
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-2xl max-w-xl w-full shadow-xl">
                         <div className="border-b border-surgical-200 px-6 py-4 flex items-center justify-between">
-                            <h2 className="text-2xl font-bold text-obsidian">Send Follow-up</h2>
+                            <h2 className="text-2xl font-bold text-barpel-slate">Send Follow-up</h2>
                             <button onClick={() => { setShowFollowupModal(false); setFollowupMessage(''); }} className="p-2 hover:bg-surgical-50 rounded-lg transition-colors">
-                                <X className="w-6 h-6 text-obsidian/60" />
+                                <X className="w-6 h-6 text-barpel-slate/60" />
                             </button>
                         </div>
                         <div className="p-6 space-y-4">
                             <div>
-                                <p className="text-sm font-bold text-obsidian mb-2">Contact</p>
-                                <p className="text-obsidian/70">{selectedCall.caller_name}</p>
-                                <p className="text-sm text-obsidian/60">{selectedCall.phone_number}</p>
+                                <p className="text-sm font-bold text-barpel-slate mb-2">Contact</p>
+                                <p className="text-barpel-slate/70">{selectedCall.caller_name}</p>
+                                <p className="text-sm text-barpel-slate/60">{selectedCall.phone_number}</p>
                             </div>
                             <div>
-                                <label className="block text-sm font-bold text-obsidian mb-2">Follow-up Message</label>
+                                <label className="block text-sm font-bold text-barpel-slate mb-2">Follow-up Message</label>
                                 <textarea
                                     value={followupMessage}
                                     onChange={(e) => setFollowupMessage(e.target.value)}
@@ -789,16 +789,16 @@ const CallsPageContent = () => {
                                     className="w-full px-4 py-2 border border-surgical-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-surgical-500"
                                 />
                             </div>
-                            <p className="text-xs text-obsidian/60">SMS will be sent to {selectedCall.phone_number}</p>
+                            <p className="text-xs text-barpel-slate/60">SMS will be sent to {selectedCall.phone_number}</p>
                         </div>
                         <div className="border-t border-surgical-200 px-6 py-4 flex items-center justify-end gap-3">
-                            <button onClick={() => { setShowFollowupModal(false); setFollowupMessage(''); }} className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-obsidian/70 hover:bg-surgical-50 transition-colors">
+                            <button onClick={() => { setShowFollowupModal(false); setFollowupMessage(''); }} className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/70 hover:bg-surgical-50 transition-colors">
                                 Cancel
                             </button>
                             <button
                                 onClick={handleSendFollowup}
                                 disabled={loadingAction === 'followup'}
-                                className="px-4 py-2 rounded-lg bg-surgical-600 hover:bg-surgical-700 disabled:opacity-50 text-white text-sm font-medium transition-colors flex items-center gap-2"
+                                className="px-4 py-2 rounded-lg bg-barpel-teal hover:bg-barpel-teal-dark disabled:opacity-50 text-white text-sm font-medium transition-colors flex items-center gap-2"
                             >
                                 {loadingAction === 'followup' ? (
                                     <><Loader className="w-4 h-4 animate-spin" /> Sending...</>
@@ -815,7 +815,7 @@ const CallsPageContent = () => {
             {showSmsModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
-                        <h3 className="text-lg font-semibold text-obsidian mb-4">Send Follow-Up Message</h3>
+                        <h3 className="text-lg font-semibold text-barpel-slate mb-4">Send Follow-Up Message</h3>
                         <textarea
                             value={smsMessage}
                             onChange={(e) => setSmsMessage(e.target.value.slice(0, 160))}
@@ -824,7 +824,7 @@ const CallsPageContent = () => {
                             rows={4}
                             autoFocus
                         />
-                        <p className="text-sm text-obsidian/60 mb-4">{smsMessage.length}/160 characters</p>
+                        <p className="text-sm text-barpel-slate/60 mb-4">{smsMessage.length}/160 characters</p>
                         <div className="flex gap-3 justify-end">
                             <button
                                 onClick={() => {
@@ -832,14 +832,14 @@ const CallsPageContent = () => {
                                     setSmsMessage('');
                                     setSmsCallId(null);
                                 }}
-                                className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-obsidian/70 hover:bg-surgical-50 transition-colors"
+                                className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/70 hover:bg-surgical-50 transition-colors"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleSendSms}
                                 disabled={!smsMessage.trim() || loadingAction?.startsWith('sms')}
-                                className="px-4 py-2 rounded-lg bg-surgical-600 hover:bg-surgical-700 disabled:opacity-50 text-white text-sm font-medium transition-colors"
+                                className="px-4 py-2 rounded-lg bg-barpel-teal hover:bg-barpel-teal-dark disabled:opacity-50 text-white text-sm font-medium transition-colors"
                             >
                                 {loadingAction?.startsWith('sms') ? 'Sending...' : 'Send SMS'}
                             </button>
@@ -869,7 +869,7 @@ export default function CallsPage() {
             <div className="min-h-screen bg-surgical-50 flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
                     <div className="w-8 h-8 border-4 border-surgical-200 border-t-surgical-600 rounded-full animate-spin" />
-                    <p className="text-obsidian/60">Loading...</p>
+                    <p className="text-barpel-slate/60">Loading...</p>
                 </div>
             </div>
         }>

@@ -155,7 +155,7 @@ export default function SubProcessorsPage() {
                             What is a Sub-Processor?
                         </h2>
                         <p className="text-slate-700 leading-relaxed mb-4">
-                            Under GDPR Article 28, Data Processors (like Voxanne AI) must obtain written authorization before engaging sub-processors to handle personal data. We believe in transparency - below is our complete list of all vendors who access or process your data.
+                            Under GDPR Article 28, Data Processors (like Barpel AI) must obtain written authorization before engaging sub-processors to handle personal data. We believe in transparency - below is our complete list of all vendors who access or process your data.
                         </p>
                         <p className="text-slate-700 leading-relaxed">
                             <strong>Why we use sub-processors:</strong> We use specialized vendors to deliver the best AI receptionist experience - voice infrastructure, transcription, database storage, and analytics. We carefully vet each vendor for GDPR compliance, security certifications, and data protection practices.
@@ -188,7 +188,7 @@ export default function SubProcessorsPage() {
                                     You have the right to object or terminate your agreement if you disagree with sub-processor changes.
                                 </p>
                                 <p className="text-sm text-amber-700 mt-3">
-                                    Notifications are sent via email to the primary account contact. To update your contact preferences, email support@voxanne.ai.
+                                    Notifications are sent via email to the primary account contact. To update your contact preferences, email support@barpel.ai.
                                 </p>
                             </div>
                         </div>
@@ -347,7 +347,7 @@ export default function SubProcessorsPage() {
                                         <strong>✓ EU-Region Backups:</strong> Database backups retained in EU region
                                     </p>
                                     <p className="text-slate-700 mt-4 font-semibold">
-                                        <strong>Note:</strong> Some sub-processors (Vapi, Twilio, OpenAI) operate globally and cannot be restricted to EU region. Contact sales@voxanne.ai to discuss EU-only data residency requirements.
+                                        <strong>Note:</strong> Some sub-processors (Vapi, Twilio, OpenAI) operate globally and cannot be restricted to EU region. Contact sales@barpel.ai to discuss EU-only data residency requirements.
                                     </p>
                                 </div>
                             </div>
@@ -370,7 +370,7 @@ export default function SubProcessorsPage() {
                             </p>
                             <div className="space-y-3 ml-4">
                                 <p className="text-slate-700">
-                                    <strong>1. Standard Contractual Clauses (SCCs):</strong> EU/UK GDPR-approved transfer mechanism between Voxanne AI and all US-based sub-processors
+                                    <strong>1. Standard Contractual Clauses (SCCs):</strong> EU/UK GDPR-approved transfer mechanism between Barpel AI and all US-based sub-processors
                                 </p>
                                 <p className="text-slate-700">
                                     <strong>2. UK International Data Transfer Agreement (IDTA):</strong> For UK-specific GDPR compliance
@@ -453,7 +453,7 @@ export default function SubProcessorsPage() {
                             </div>
                         </div>
                         <p className="text-xs text-slate-500 mt-6">
-                            This page is updated whenever sub-processors change. Subscribe to security updates by contacting support@voxanne.ai.
+                            This page is updated whenever sub-processors change. Subscribe to security updates by contacting support@barpel.ai.
                         </p>
                     </motion.div>
 
@@ -473,7 +473,7 @@ export default function SubProcessorsPage() {
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <a
-                                href="mailto:support@voxanne.ai"
+                                href="mailto:support@barpel.ai"
                                 className="bg-surgical-600 hover:bg-surgical-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
                             >
                                 Contact Support

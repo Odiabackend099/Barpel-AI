@@ -11,7 +11,7 @@ interface Message {
   timestamp: Date;
 }
 
-const INITIAL_GREETING = "Hi! I'm here to help you learn about Voxanne AI. What brings you here today?";
+const INITIAL_GREETING = "Hi! I'm here to help you learn about Barpel AI. What brings you here today?";
 
 const QUICK_ACTIONS = [
   { icon: Calendar, label: 'Schedule a Demo', action: 'demo' },
@@ -20,7 +20,7 @@ const QUICK_ACTIONS = [
   { icon: Mail, label: 'Contact Sales', action: 'contact' },
 ];
 
-export default function VoxanneChatWidget() {
+export default function BarpelChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -29,7 +29,7 @@ export default function VoxanneChatWidget() {
 
   // Load messages from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem('voxanne-chat-messages');
+    const stored = localStorage.getItem('barpel-chat-messages');
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
@@ -46,7 +46,7 @@ export default function VoxanneChatWidget() {
   // Save messages to localStorage whenever they change
   useEffect(() => {
     if (messages.length > 0) {
-      localStorage.setItem('voxanne-chat-messages', JSON.stringify(messages));
+      localStorage.setItem('barpel-chat-messages', JSON.stringify(messages));
     }
   }, [messages]);
 
@@ -122,7 +122,7 @@ export default function VoxanneChatWidget() {
       const data = await response.json();
       const assistantMessage: Message = {
         role: 'assistant',
-        content: data.reply || "I'm having trouble right now. Please try again or contact support@voxanne.ai",
+        content: data.reply || "I'm having trouble right now. Please try again or contact support@barpel.ai",
         timestamp: new Date(),
       };
 
@@ -131,7 +131,7 @@ export default function VoxanneChatWidget() {
       console.error('Chat error:', error);
       const errorMessage: Message = {
         role: 'assistant',
-        content: "I'm having trouble connecting. Please try again or reach out to us at support@voxanne.ai or call +44 7424 038250.",
+        content: "I'm having trouble connecting. Please try again or reach out to us at support@barpel.ai or call +44 7424 038250.",
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMessage]);
@@ -157,11 +157,11 @@ export default function VoxanneChatWidget() {
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsOpen(true)}
               className="relative w-16 h-16 rounded-full bg-white shadow-2xl shadow-gray-400/40 ring-2 ring-gray-200/80 hover:shadow-surgical-500/50 hover:ring-surgical-400 transition-all duration-300 flex items-center justify-center"
-              aria-label="Chat with Voxanne"
+              aria-label="Chat with Barpel"
             >
               <Image
                 src="/Brand/10.png"
-                alt="Chat with Voxanne"
+                alt="Chat with Barpel"
                 width={36}
                 height={36}
                 className="w-9 h-9"
@@ -187,13 +187,13 @@ export default function VoxanneChatWidget() {
               <div className="flex items-center gap-3">
                 <Image
                   src="/Brand/10.png"
-                  alt="Voxanne AI"
+                  alt="Barpel AI"
                   width={32}
                   height={32}
                   className="w-8 h-8"
                 />
                 <div>
-                  <h3 className="font-semibold text-base">Voxanne</h3>
+                  <h3 className="font-semibold text-base">Barpel</h3>
                   <p className="text-xs text-white/80">Always here to help</p>
                 </div>
               </div>

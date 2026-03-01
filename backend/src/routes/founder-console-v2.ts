@@ -1,6 +1,6 @@
 /**
- * CallWaiting AI API Routes
- * Handles agent configuration, leads, and call management for CallWaiting AI
+ * Barpel AI API Routes
+ * Handles agent configuration, leads, and call management for Barpel AI
  *
  * ================================================================================================
  * ⚠️  CRITICAL: ORGANIZATION CONTEXT REQUIREMENTS - READ THIS BEFORE MODIFYING
@@ -337,7 +337,7 @@ const VAPI_DEFAULTS = {
   TRANSCRIBER_MODEL: 'nova-2',
   DEFAULT_LANGUAGE: 'en',
   DEFAULT_MAX_DURATION: 600,
-  DEFAULT_FIRST_MESSAGE: 'Hello! This is CallWaiting AI calling.'
+  DEFAULT_FIRST_MESSAGE: 'Hello! This is Barpel AI calling.'
 } as const;
 
 // Retry configuration for network resilience (Nigeria/2G)
@@ -489,7 +489,7 @@ router.get('/voices', async (req: Request, res: Response): Promise<void> => {
 });
 
 // Protect all founder-console routes with authentication (Supabase JWT)
-// ALWAYS require auth - user must be signed in to access CallWaiting AI
+// ALWAYS require auth - user must be signed in to access Barpel AI
 router.use(requireAuthOrDev);
 
 // Rate limiting - prevent abuse of expensive Vapi calls
@@ -834,7 +834,7 @@ async function ensureAssistantSynced(agentId: string, vapiApiKey: string, import
   // Using non-standard keys like systemPrompt/voiceId/serverUrl can cause 400 Bad Request.
   // MODERN APPROACH: Tools are registered separately by ToolSyncService, not embedded here
   const assistantCreatePayload = {
-    name: agent.name || 'CallWaiting AI Outbound',
+    name: agent.name || 'Barpel AI Outbound',
     model: {
       provider: VAPI_DEFAULTS.MODEL_PROVIDER,
       model: VAPI_DEFAULTS.MODEL_NAME,
@@ -1331,7 +1331,7 @@ router.post('/agent/voice-preview', voicePreviewLimiter, requireAuthOrDev, async
 
 /**
  * GET /api/founder-console/agent/config
- * Returns the global agent configuration for CallWaiting AI
+ * Returns the global agent configuration for Barpel AI
  */
 router.get('/agent/config', requireAuthOrDev, async (req: Request, res: Response): Promise<void> => {
   try {
@@ -1427,8 +1427,8 @@ router.get('/agent/config', requireAuthOrDev, async (req: Request, res: Response
         language: outboundAgent.language || 'en-GB',
         maxCallDuration: outboundAgent.max_call_duration || 600,
         max_call_duration: outboundAgent.max_call_duration || 600,
-        firstMessage: outboundAgent.first_message || 'Hello! This is CallWaiting AI calling...',
-        first_message: outboundAgent.first_message || 'Hello! This is CallWaiting AI calling...',
+        firstMessage: outboundAgent.first_message || 'Hello! This is Barpel AI calling...',
+        first_message: outboundAgent.first_message || 'Hello! This is Barpel AI calling...',
         vapiAssistantId: outboundAgent.vapi_assistant_id,
         vapi_assistant_id: outboundAgent.vapi_assistant_id,
         vapiPhoneNumberId: outboundAgent.vapi_phone_number_id,
@@ -1446,7 +1446,7 @@ router.get('/agent/config', requireAuthOrDev, async (req: Request, res: Response
       voice: outboundAgent.voice || 'jennifer',
       language: outboundAgent.language || 'en-GB',
       maxCallDuration: outboundAgent.max_call_duration || 600,
-      firstMessage: outboundAgent.first_message || 'Hello! This is CallWaiting AI calling...',
+      firstMessage: outboundAgent.first_message || 'Hello! This is Barpel AI calling...',
       phoneNumberId: vapiConfig.vapi_phone_number_id || ''
     } : {
       publicKey: maskKey(vapiConfig.vapi_public_key),
@@ -1455,7 +1455,7 @@ router.get('/agent/config', requireAuthOrDev, async (req: Request, res: Response
       voice: 'jennifer',
       language: 'en-GB',
       maxCallDuration: 600,
-      firstMessage: 'Hello! This is CallWaiting AI calling...',
+      firstMessage: 'Hello! This is Barpel AI calling...',
       phoneNumberId: vapiConfig.vapi_phone_number_id || ''
     };
 
@@ -1743,7 +1743,7 @@ async function syncAssistantPromptInBackground(
 
 /**
  * POST /api/founder-console/agent/config
- * Save agent configuration for CallWaiting AI
+ * Save agent configuration for Barpel AI
  * Uses atomic RPC transaction for agents + integrations
  * Rate limited to 10 requests per minute
  */
@@ -1882,7 +1882,7 @@ router.post(
           .from('agents')
           .insert({
             role: AGENT_ROLES.OUTBOUND,
-            name: 'CallWaiting AI Outbound',
+            name: 'Barpel AI Outbound',
             status: 'active',
             org_id: orgId
           })
@@ -2484,7 +2484,7 @@ router.post(
 
         if (!agentId) {
           console.log(`No existing agent for ${role}, creating new one...`);
-          const name = role === AGENT_ROLES.OUTBOUND ? 'CallWaiting AI Outbound' : 'CallWaiting AI Inbound';
+          const name = role === AGENT_ROLES.OUTBOUND ? 'Barpel AI Outbound' : 'Barpel AI Inbound';
           const defaultSystemPrompt = role === AGENT_ROLES.OUTBOUND
             ? 'You are a helpful assistant making outbound calls on behalf of the business.'
             : 'You are a helpful assistant answering inbound calls for the business.';
@@ -3367,7 +3367,7 @@ router.post(
 
         // Surface provider failures so the frontend doesn't spin forever.
         // Detect Vapi billing errors and translate to a clear platform message
-        // so users don't confuse Vapi's internal balance with the Voxanne wallet.
+        // so users don't confuse Vapi's internal balance with the Barpel wallet.
         const isVapiBillingError =
           message && /wallet balance|purchase more credits|upgrade your plan/i.test(message);
 
@@ -3377,7 +3377,7 @@ router.post(
             requestId,
             provider: 'vapi',
             providerStatus: status,
-            detail: 'This is NOT your Voxanne wallet — it is the voice infrastructure provider balance.'
+            detail: 'This is NOT your Barpel wallet — it is the voice infrastructure provider balance.'
           });
           return;
         }
@@ -3952,7 +3952,7 @@ router.post(
             error: 'Voice provider (Vapi) billing limit reached. Please contact support or top up the Vapi dashboard to resume calls.',
             requestId,
             provider: 'vapi',
-            detail: 'This is NOT your Voxanne wallet — it is the voice infrastructure provider balance.'
+            detail: 'This is NOT your Barpel wallet — it is the voice infrastructure provider balance.'
           });
           return;
         }
@@ -4725,7 +4725,7 @@ router.post(
                 agent_id: agent.id,
                 call_tracking_id: callRecord.id // Link Vapi call back to our DB record
               },
-              firstMessage: `Hi ${sanitizeName(lead.contact_name || lead.name || 'there')}, this is ${process.env.COMPANY_NAME || 'CallWaiting AI'} calling on behalf of ${process.env.FOUNDER_NAME || 'Austyn'} from ${process.env.COMPANY_NAME || 'CallWaiting AI'}. We help aesthetic clinics like ${sanitizeName(lead.clinic_name || lead.company_name || 'your clinic')} reduce missed calls and turn more phone calls into booked appointments.`
+              firstMessage: `Hi ${sanitizeName(lead.contact_name || lead.name || 'there')}, this is ${process.env.COMPANY_NAME || 'Barpel AI'} calling on behalf of ${process.env.FOUNDER_NAME || 'Austyn'} from ${process.env.COMPANY_NAME || 'Barpel AI'}. We help aesthetic clinics like ${sanitizeName(lead.clinic_name || lead.company_name || 'your clinic')} reduce missed calls and turn more phone calls into booked appointments.`
             }
           }),
           VAPI_TIMEOUT_MS,

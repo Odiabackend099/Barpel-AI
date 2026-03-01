@@ -11,7 +11,7 @@
 
 import axios from 'axios';
 
-const PRODUCTION_BACKEND = 'https://voxanneai.onrender.com';
+const PRODUCTION_BACKEND = 'https://barpel.onrender.com';
 
 async function verifyProduction() {
   console.log('🔍 Production OAuth Configuration Verification\n');
@@ -84,7 +84,7 @@ async function verifyProduction() {
         const url = new URL(authUrl);
         const redirectUri = url.searchParams.get('redirect_uri');
 
-        if (redirectUri?.includes('voxanneai.onrender.com')) {
+        if (redirectUri?.includes('barpel.onrender.com')) {
           console.log('✅ Redirect URI points to Render deployment');
           console.log(`   URI: ${redirectUri}`);
           passed++;
@@ -148,7 +148,7 @@ async function verifyProduction() {
     console.log('✅ Production OAuth configuration is VALID!');
     console.log('\n📝 Pre-Launch Checklist:');
     console.log('☑️  OAuth endpoints responding correctly');
-    console.log('☐ Verify https://voxanneai.onrender.com/api/google-oauth/callback');
+    console.log('☐ Verify https://barpel.onrender.com/api/google-oauth/callback');
     console.log('   is in Google Cloud Console approved redirect URIs');
     console.log('☐ Test full OAuth flow with a real Google account');
     console.log('☐ Monitor Render logs for any errors');
@@ -160,10 +160,10 @@ async function verifyProduction() {
     console.log('1. Check Render backend is running:');
     console.log(`   → Open ${PRODUCTION_BACKEND} in browser`);
     console.log('2. Check Render environment variables:');
-    console.log('   → BACKEND_URL=https://voxanneai.onrender.com');
-    console.log('   → GOOGLE_REDIRECT_URI=https://voxanneai.onrender.com/api/google-oauth/callback');
+    console.log('   → BACKEND_URL=https://barpel.onrender.com');
+    console.log('   → GOOGLE_REDIRECT_URI=https://barpel.onrender.com/api/google-oauth/callback');
     console.log('3. Check Google Cloud Console:');
-    console.log('   → Approved redirect URIs includes https://voxanneai.onrender.com/api/google-oauth/callback');
+    console.log('   → Approved redirect URIs includes https://barpel.onrender.com/api/google-oauth/callback');
     console.log('4. Check Render logs for startup errors');
     process.exit(1);
   }

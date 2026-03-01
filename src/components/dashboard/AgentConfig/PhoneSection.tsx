@@ -32,18 +32,18 @@ export const PhoneSection: React.FC<PhoneSectionProps> = ({
       <div className="bg-white rounded-xl shadow-sm border border-surgical-200 p-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-semibold text-obsidian mb-0.5 flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-barpel-slate mb-0.5 flex items-center gap-2">
               <Phone className="w-4 h-4 text-surgical-600" />
               Phone Number
             </h3>
-            <p className="text-sm text-obsidian/70">
+            <p className="text-sm text-barpel-slate/70">
               {inboundStatus?.configured && inboundStatus.inboundNumber ? (
                 <>
                   <span className="font-mono">{inboundStatus.inboundNumber}</span>{' '}
                   · Active
                 </>
               ) : (
-                <span className="text-obsidian/40">No number assigned</span>
+                <span className="text-barpel-slate/40">No number assigned</span>
               )}
             </p>
           </div>
@@ -69,17 +69,17 @@ export const PhoneSection: React.FC<PhoneSectionProps> = ({
       <div className="bg-white rounded-xl shadow-sm border border-surgical-200 p-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-semibold text-obsidian mb-0.5 flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-barpel-slate mb-0.5 flex items-center gap-2">
               <Phone className="w-4 h-4 text-surgical-600" />
               Outbound Caller ID
             </h3>
-            <p className="text-sm text-obsidian/70">
+            <p className="text-sm text-barpel-slate/70">
               {outboundNumber ? (
                 <>
                   <span className="font-mono">{outboundNumber}</span> · Active
                 </>
               ) : (
-                <span className="text-obsidian/40">No number assigned</span>
+                <span className="text-barpel-slate/40">No number assigned</span>
               )}
             </p>
           </div>

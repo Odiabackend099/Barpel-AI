@@ -222,11 +222,11 @@ describe('Bug 3: Sentiment Transcript Reconstruction', () => {
   test('handles content field (alternative message format)', () => {
     const messages = [
       { role: 'user', content: 'Hello there' },
-      { role: 'assistant', content: 'Welcome to Voxanne' }
+      { role: 'assistant', content: 'Welcome to Barpel' }
     ];
     const transcript = reconstructTranscript(messages);
     expect(transcript).toContain('Caller: Hello there');
-    expect(transcript).toContain('Assistant: Welcome to Voxanne');
+    expect(transcript).toContain('Assistant: Welcome to Barpel');
   });
 
   test('skips tool messages (tool_call_result has no user-facing content)', () => {

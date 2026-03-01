@@ -63,7 +63,7 @@ export const VoiceSection: React.FC<VoiceSectionProps> = ({
 }) => {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-surgical-200 p-6">
-      <h3 className="text-lg font-semibold text-obsidian mb-4 flex items-center gap-2">
+      <h3 className="text-lg font-semibold text-barpel-slate mb-4 flex items-center gap-2">
         <Volume2 className="w-5 h-5 text-surgical-600" />
         Voice Settings
       </h3>
@@ -81,13 +81,13 @@ export const VoiceSection: React.FC<VoiceSectionProps> = ({
 
         {/* Language Selector */}
         <div>
-          <label className="block text-sm font-medium text-obsidian/60 mb-2">
+          <label className="block text-sm font-medium text-barpel-slate/60 mb-2">
             Language
           </label>
           <select
             value={language}
             onChange={(e) => onLanguageChange(e.target.value)}
-            className="w-full px-3 py-2.5 rounded-lg bg-white border border-surgical-200 text-obsidian focus:ring-2 focus:ring-surgical-500 outline-none"
+            className="w-full px-3 py-2.5 rounded-lg bg-white border border-surgical-200 text-barpel-slate focus:ring-2 focus:ring-surgical-500 outline-none"
           >
             <option value="en-US">English (US)</option>
             <option value="en-GB">English (UK)</option>
@@ -103,7 +103,7 @@ export const VoiceSection: React.FC<VoiceSectionProps> = ({
           <button
             type="button"
             onClick={() => onAdvancedVoiceToggle(!advancedVoiceOpen)}
-            className="flex items-center justify-between w-full py-2 text-sm font-medium text-obsidian/60 hover:text-obsidian transition-colors select-none"
+            className="flex items-center justify-between w-full py-2 text-sm font-medium text-barpel-slate/60 hover:text-barpel-slate transition-colors select-none"
             aria-expanded={advancedVoiceOpen}
           >
             <span>Advanced Voice Settings</span>
@@ -127,12 +127,12 @@ export const VoiceSection: React.FC<VoiceSectionProps> = ({
                   {/* Stability slider */}
                   <div>
                     <div className="flex items-center gap-1.5 mb-1">
-                      <label className="text-sm font-medium text-obsidian/70">
+                      <label className="text-sm font-medium text-barpel-slate/70">
                         Voice Stability
                       </label>
                       <span
                         title="Higher = more consistent but less expressive. Lower = more dynamic but less predictable."
-                        className="text-obsidian/40 hover:text-obsidian/60 cursor-help"
+                        className="text-barpel-slate/40 hover:text-barpel-slate/60 cursor-help"
                       >
                         <Info className="w-3.5 h-3.5" />
                       </span>
@@ -144,7 +144,7 @@ export const VoiceSection: React.FC<VoiceSectionProps> = ({
                           <button
                             type="button"
                             onClick={() => onStabilityChange(null)}
-                            className="font-sans text-obsidian/40 hover:text-obsidian/70 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-surgical-500 rounded-sm"
+                            className="font-sans text-barpel-slate/40 hover:text-barpel-slate/70 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-surgical-500 rounded-sm"
                             title="Reset to provider default"
                           >
                             Reset
@@ -163,7 +163,7 @@ export const VoiceSection: React.FC<VoiceSectionProps> = ({
                       }
                       className="w-full voice-slider"
                     />
-                    <div className="flex justify-between text-xs text-obsidian/40 mt-0.5">
+                    <div className="flex justify-between text-xs text-barpel-slate/40 mt-0.5">
                       <span>Expressive</span>
                       <span>Consistent</span>
                     </div>
@@ -172,12 +172,12 @@ export const VoiceSection: React.FC<VoiceSectionProps> = ({
                   {/* Similarity Boost slider */}
                   <div>
                     <div className="flex items-center gap-1.5 mb-1">
-                      <label className="text-sm font-medium text-obsidian/70">
+                      <label className="text-sm font-medium text-barpel-slate/70">
                         Voice Similarity
                       </label>
                       <span
                         title="Higher = voice sounds closer to the original sample. Lower = allows more flexibility."
-                        className="text-obsidian/40 hover:text-obsidian/60 cursor-help"
+                        className="text-barpel-slate/40 hover:text-barpel-slate/60 cursor-help"
                       >
                         <Info className="w-3.5 h-3.5" />
                       </span>
@@ -189,7 +189,7 @@ export const VoiceSection: React.FC<VoiceSectionProps> = ({
                           <button
                             type="button"
                             onClick={() => onSimilarityBoostChange(null)}
-                            className="font-sans text-obsidian/40 hover:text-obsidian/70 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-surgical-500 rounded-sm"
+                            className="font-sans text-barpel-slate/40 hover:text-barpel-slate/70 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-surgical-500 rounded-sm"
                             title="Reset to provider default"
                           >
                             Reset
@@ -208,14 +208,14 @@ export const VoiceSection: React.FC<VoiceSectionProps> = ({
                       }
                       className="w-full voice-slider"
                     />
-                    <div className="flex justify-between text-xs text-obsidian/40 mt-0.5">
+                    <div className="flex justify-between text-xs text-barpel-slate/40 mt-0.5">
                       <span>Flexible</span>
                       <span>Original</span>
                     </div>
                   </div>
                 </>
               ) : (
-                <p className="text-xs text-obsidian/50 italic py-1">
+                <p className="text-xs text-barpel-slate/50 italic py-1">
                   Advanced voice parameters (stability, similarity) are
                   available for ElevenLabs voices only.
                 </p>
@@ -226,7 +226,7 @@ export const VoiceSection: React.FC<VoiceSectionProps> = ({
 
         {/* Call Limits */}
         <div className="pt-4 mt-4 border-t border-surgical-100">
-          <label className="block text-sm font-medium text-obsidian/60 mb-2 flex items-center gap-1.5">
+          <label className="block text-sm font-medium text-barpel-slate/60 mb-2 flex items-center gap-1.5">
             <Clock className="w-4 h-4" />
             Max Duration (Seconds)
           </label>
@@ -241,9 +241,9 @@ export const VoiceSection: React.FC<VoiceSectionProps> = ({
             }
             min={AGENT_CONFIG_CONSTRAINTS.MIN_DURATION_SECONDS}
             max={AGENT_CONFIG_CONSTRAINTS.MAX_DURATION_SECONDS}
-            className="w-full px-3 py-2.5 rounded-lg bg-white border border-surgical-200 text-obsidian focus:ring-2 focus:ring-surgical-500 outline-none"
+            className="w-full px-3 py-2.5 rounded-lg bg-white border border-surgical-200 text-barpel-slate focus:ring-2 focus:ring-surgical-500 outline-none"
           />
-          <p className="text-xs text-obsidian/60 mt-1">
+          <p className="text-xs text-barpel-slate/60 mt-1">
             Auto-end call after this time.
           </p>
         </div>

@@ -42,7 +42,7 @@ export default function HeroDemoCard({ isActive, onToggle }: HeroDemoCardProps) 
                 <div className="flex items-center gap-2">
                     <div className={cn("w-2 h-2 rounded-full", isActive ? "bg-green-400 animate-pulse" : "bg-white/40")} />
                     <span className="text-xs font-semibold text-white/80 tracking-wide uppercase">
-                        {isActive ? 'Live Demo' : 'Voxanne AI'}
+                        {isActive ? 'Live Demo' : 'Barpel AI'}
                     </span>
                 </div>
                 {isActive && (

@@ -75,7 +75,7 @@ export function MFAEnrollment() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'voxanne-recovery-codes.txt';
+    a.download = 'barpel-recovery-codes.txt';
     a.click();
     URL.revokeObjectURL(url);
   };

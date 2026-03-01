@@ -121,7 +121,7 @@ export default function UpdatePasswordPage() {
                 <div className="max-w-md w-full relative z-10">
                     <div className="text-center mb-8">
                         <div className="flex justify-center mb-4">
-                            <Logo size="lg" showText={false} href="/" priority={true} />
+                            <Logo width={100} height={100} showText={false} variant="dark" />
                         </div>
                         <h1 className="text-4xl font-serif font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
                             New Password

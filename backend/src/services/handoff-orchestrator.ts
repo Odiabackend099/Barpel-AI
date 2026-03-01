@@ -1,6 +1,6 @@
 /**
  * Context Handoff Orchestrator
- * Manages state transitions between inbound (Voxanne) and outbound (Sarah) agents
+ * Manages state transitions between inbound (Barpel) and outbound (Sarah) agents
  * 
  * Implements Task 2 from Master Orchestrator workflow:
  * - Detects abandoned calls with service interest

@@ -15,8 +15,8 @@ async function testEmailServiceV2() {
   // Verify environment variables
   console.log('📋 Environment Check:');
   console.log(`  RESEND_API_KEY: ${process.env.RESEND_API_KEY ? '✅ Set' : '❌ Missing'}`);
-  console.log(`  FROM_EMAIL: ${process.env.FROM_EMAIL || 'hello@voxanne.ai'}`);
-  console.log(`  SUPPORT_EMAIL: ${process.env.SUPPORT_EMAIL || 'support@voxanne.ai'}`);
+  console.log(`  FROM_EMAIL: ${process.env.FROM_EMAIL || 'hello@barpel.ai'}`);
+  console.log(`  SUPPORT_EMAIL: ${process.env.SUPPORT_EMAIL || 'support@barpel.ai'}`);
   console.log('');
 
   if (!process.env.RESEND_API_KEY) {
@@ -38,10 +38,10 @@ async function testEmailServiceV2() {
     const icsContent = generateICSFile({
       startTime,
       endTime,
-      summary: 'Voxanne AI Demo',
-      description: 'Personalized demo of Voxanne AI voice agents. We\'ll show you how our AI can transform your business communications.',
+      summary: 'Barpel AI Demo',
+      description: 'Personalized demo of Barpel AI voice agents. We\'ll show you how our AI can transform your business communications.',
       location: 'Zoom (link will be sent separately)',
-      organizerEmail: process.env.FROM_EMAIL || 'hello@voxanne.ai',
+      organizerEmail: process.env.FROM_EMAIL || 'hello@barpel.ai',
       attendeeEmail: TEST_EMAIL,
       attendeeName: 'John Smith'
     });
@@ -154,7 +154,7 @@ Conversation quality score: 9/10`,
       summary: 'Test Calendar Event',
       description: 'This is a test calendar event',
       location: 'Virtual (Zoom)',
-      organizerEmail: 'organizer@voxanne.ai',
+      organizerEmail: 'organizer@barpel.ai',
       attendeeEmail: 'attendee@example.com',
       attendeeName: 'Test Attendee'
     });
@@ -210,7 +210,7 @@ Conversation quality score: 9/10`,
   console.log('✅ Email Service V2 Testing Complete');
   console.log('═══════════════════════════════════════');
   console.log('\nCheck your email inbox and spam folder for test emails.');
-  console.log('Also check support@voxanne.ai inbox for internal notifications.\n');
+  console.log('Also check support@barpel.ai inbox for internal notifications.\n');
 }
 
 // Run tests

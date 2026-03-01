@@ -70,7 +70,7 @@ export function DemoModal({ isOpen, onClose, agentId }: DemoModalProps) {
               {/* Header */}
               <div className="bg-gradient-to-r from-surgical-blue to-clinical-blue px-6 md:px-8 py-4">
                 <h2 className="text-xl md:text-2xl font-bold text-pure-white">
-                  Watch Voxanne AI in Action
+                  Watch Barpel AI in Action
                 </h2>
                 <p className="text-sm text-slate-200 mt-1">
                   See how our AI receptionist handles a real patient interaction
@@ -91,7 +91,7 @@ export function DemoModal({ isOpen, onClose, agentId }: DemoModalProps) {
                       width="100%"
                       height="100%"
                       src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-                      title="Voxanne AI Demo"
+                      title="Barpel AI Demo"
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen

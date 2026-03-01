@@ -72,10 +72,10 @@ export default function FooterRedesigned({ disableAnimations = false }: FooterRe
                         >
                             <div className="mb-6">
                                 <Logo
-                                    variant="icon-white"
-                                    size="lg"
-                                    href="/"
-                                    priority={false}
+                                    variant="light"
+                                    width={120} height={32}
+                                    
+                                    
                                     showText={true}
                                 />
                             </div>
@@ -85,7 +85,7 @@ export default function FooterRedesigned({ disableAnimations = false }: FooterRe
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3 text-pure-white/70 hover:text-pure-white transition-colors">
                                     <Mail className="w-5 h-5" />
-                                    <a href="mailto:support@voxanne.ai">support@voxanne.ai</a>
+                                    <a href="mailto:support@barpel.ai">support@barpel.ai</a>
                                 </div>
                                 <div className="flex items-center gap-3 text-pure-white/70 hover:text-pure-white transition-colors">
                                     <Phone className="w-5 h-5" />
@@ -203,10 +203,10 @@ export default function FooterRedesigned({ disableAnimations = false }: FooterRe
                             })}
                             className="text-pure-white/60 text-sm space-y-2"
                         >
-                            <p>{currentYear} Voxanne AI. All rights reserved. UK GDPR & HIPAA Compliant.</p>
+                            <p>{currentYear} Barpel AI. All rights reserved. UK GDPR & HIPAA Compliant.</p>
                             <div className="flex items-center gap-2 text-sm text-pure-white/70">
                                 <span>A product of</span>
-                                <a href="https://www.callwaitingai.dev/" target="_blank" rel="noopener noreferrer" className="font-medium text-surgical-blue hover:text-surgical-blue/80 transition-colors underline">
+                                <a href="https://www.barpel.ai/" target="_blank" rel="noopener noreferrer" className="font-medium text-surgical-blue hover:text-surgical-blue/80 transition-colors underline">
                                     Call Waiting AI
                                 </a>
                             </div>

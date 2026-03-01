@@ -5,26 +5,26 @@ import { Check, X, Zap } from "lucide-react";
 
 interface ComparisonRow {
     feature: string;
-    voxanne: boolean | string;
+    barpel: boolean | string;
     generic: boolean | string;
     highlight?: boolean;
 }
 
 const comparisonData: ComparisonRow[] = [
-    { feature: "Medical-Specific Training", voxanne: true, generic: false, highlight: true },
-    { feature: "UK GDPR & HIPAA Compliance", voxanne: true, generic: "Varies", highlight: true },
-    { feature: "Calendar Integration", voxanne: true, generic: false, highlight: true },
-    { feature: "Procedure Knowledge (BBL, Rhinoplasty, etc.)", voxanne: "500+ procedures", generic: "Basic only" },
-    { feature: "UK + US Support", voxanne: true, generic: "US only" },
-    { feature: "British English Voice", voxanne: true, generic: false, highlight: true },
-    { feature: "Emergency Escalation Protocol", voxanne: true, generic: "Basic" },
-    { feature: "Price Objection Handling", voxanne: "Trained", generic: "Generic" },
-    { feature: "After-Hours Triage", voxanne: true, generic: false },
-    { feature: "Instagram/WhatsApp Integration", voxanne: true, generic: false },
-    { feature: "Setup Time", voxanne: "48 hours", generic: "1-2 weeks" },
-    { feature: "Monthly Cost", voxanne: "From £299", generic: "From £500" },
-    { feature: "Contract Length", voxanne: "Month-to-month", generic: "12 months" },
-    { feature: "Money-Back Guarantee", voxanne: "30 days", generic: "None" }
+    { feature: "Medical-Specific Training", barpel: true, generic: false, highlight: true },
+    { feature: "UK GDPR & HIPAA Compliance", barpel: true, generic: "Varies", highlight: true },
+    { feature: "Calendar Integration", barpel: true, generic: false, highlight: true },
+    { feature: "Procedure Knowledge (BBL, Rhinoplasty, etc.)", barpel: "500+ procedures", generic: "Basic only" },
+    { feature: "UK + US Support", barpel: true, generic: "US only" },
+    { feature: "British English Voice", barpel: true, generic: false, highlight: true },
+    { feature: "Emergency Escalation Protocol", barpel: true, generic: "Basic" },
+    { feature: "Price Objection Handling", barpel: "Trained", generic: "Generic" },
+    { feature: "After-Hours Triage", barpel: true, generic: false },
+    { feature: "Instagram/WhatsApp Integration", barpel: true, generic: false },
+    { feature: "Setup Time", barpel: "48 hours", generic: "1-2 weeks" },
+    { feature: "Monthly Cost", barpel: "From £299", generic: "From £500" },
+    { feature: "Contract Length", barpel: "Month-to-month", generic: "12 months" },
+    { feature: "Money-Back Guarantee", barpel: "30 days", generic: "None" }
 ];
 
 export default function CompetitorComparison() {
@@ -42,7 +42,7 @@ export default function CompetitorComparison() {
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-medium mb-6"
                     >
                         <Zap className="w-4 h-4" />
-                        <span>Why Voxanne AI Wins</span>
+                        <span>Why Barpel AI Wins</span>
                     </motion.div>
 
                     <motion.h2
@@ -51,7 +51,7 @@ export default function CompetitorComparison() {
                         transition={{ delay: 0.1 }}
                         className="text-3xl md:text-5xl font-bold text-white mb-6"
                     >
-                        Voxanne AI vs. Generic AI Receptionists
+                        Barpel AI vs. Generic AI Receptionists
                     </motion.h2>
 
                     <motion.p
@@ -78,7 +78,7 @@ export default function CompetitorComparison() {
                             <div className="text-center">
                                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-sm">
                                     <Check className="w-4 h-4" />
-                                    Voxanne AI
+                                    Barpel AI
                                 </div>
                             </div>
                             <div className="text-center text-slate-400 font-medium">Generic AI</div>
@@ -109,10 +109,10 @@ export default function CompetitorComparison() {
                                         )}
                                     </div>
 
-                                    {/* Voxanne AI Column */}
+                                    {/* Barpel AI Column */}
                                     <div className="flex items-center justify-center">
-                                        {typeof row.voxanne === 'boolean' ? (
-                                            row.voxanne ? (
+                                        {typeof row.barpel === 'boolean' ? (
+                                            row.barpel ? (
                                                 <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
                                                     <Check className="w-5 h-5 text-green-400" strokeWidth={3} />
                                                 </div>
@@ -122,7 +122,7 @@ export default function CompetitorComparison() {
                                                 </div>
                                             )
                                         ) : (
-                                            <span className="text-green-400 font-semibold text-sm">{row.voxanne}</span>
+                                            <span className="text-green-400 font-semibold text-sm">{row.barpel}</span>
                                         )}
                                     </div>
 

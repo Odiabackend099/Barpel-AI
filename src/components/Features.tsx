@@ -51,7 +51,7 @@ export default function Features() {
                             <span className="text-surgical-600">Just faster.</span>
                         </h2>
                         <p className="text-lg text-obsidian/70">
-                            Voxanne handles the repetitive tasks so your staff can focus on patient care.
+                            Barpel handles the repetitive tasks so your staff can focus on patient care.
                         </p>
                     </div>
                 </FadeIn>

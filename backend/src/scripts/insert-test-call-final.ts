@@ -15,7 +15,7 @@ const supabase = createClient(
 );
 
 async function insertTestCall() {
-  const orgId = '46cf2995-2bee-44e3-838b-24151486fe4e'; // Voxanne Demo Clinic
+  const orgId = '46cf2995-2bee-44e3-838b-24151486fe4e'; // Barpel Demo Clinic
   const testCallId = `test-dashboard-${Date.now()}`;
 
   console.log('🧪 Inserting test call for dashboard verification...\n');

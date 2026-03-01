@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
         if (!response.ok) {
             console.error('Backend chat widget error:', data);
             return NextResponse.json(
-                { error: data.error || "I'm having trouble right now. Please try again or contact support@voxanne.ai" },
+                { error: data.error || "I'm having trouble right now. Please try again or contact support@barpel.ai" },
                 { status: response.status }
             );
         }
@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
         }
 
         return NextResponse.json(
-            { error: "I'm having trouble right now. Please reach out to support@voxanne.ai or call +44 7424 038250." },
+            { error: "I'm having trouble right now. Please reach out to support@barpel.ai or call +44 7424 038250." },
             { status: 500 }
         );
     }

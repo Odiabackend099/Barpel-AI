@@ -34,7 +34,7 @@ let authToken: string;
 let orgId: string;
 let userId: string;
 const uniqueId = randomUUID().substring(0, 8);
-const signupEmail = `system-signup-${uniqueId}@voxanne.test`;
+const signupEmail = `system-signup-${uniqueId}@barpel.test`;
 const signupPassword = 'SystemTest123!';
 
 // Skip all tests if the backend URL resolves but Supabase env vars are absent

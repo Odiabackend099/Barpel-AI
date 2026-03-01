@@ -97,7 +97,7 @@ router.post('/sync-agents', async (req: Request, res: Response): Promise<void> =
         const { error: updateError } = await supabase
           .from('agents')
           .update({
-            name: 'Voxanne (Inbound Coordinator)',
+            name: 'Barpel (Inbound Coordinator)',
             system_prompt: inboundConfig.system_prompt,
             first_message: inboundConfig.first_message,
             voice: inboundConfig.voice_id,
@@ -129,7 +129,7 @@ router.post('/sync-agents', async (req: Request, res: Response): Promise<void> =
           .insert({
             org_id: orgId,
             role: 'inbound',
-            name: 'Voxanne (Inbound Coordinator)',
+            name: 'Barpel (Inbound Coordinator)',
             system_prompt: inboundConfig.system_prompt,
             first_message: inboundConfig.first_message,
             voice: inboundConfig.voice_id,
@@ -176,7 +176,7 @@ router.post('/sync-agents', async (req: Request, res: Response): Promise<void> =
           // @ai-invariant DO NOT REMOVE vapi_phone_number_id or vapi_assistant_id from this payload.
           // These fields are required for outbound calls to work. See .claude/CLAUDE.md "CRITICAL INVARIANTS".
           .update({
-            name: 'Voxanne (Outbound SDR)',
+            name: 'Barpel (Outbound SDR)',
             system_prompt: outboundConfig.system_prompt,
             first_message: outboundConfig.first_message,
             voice: outboundConfig.voice_id,
@@ -211,7 +211,7 @@ router.post('/sync-agents', async (req: Request, res: Response): Promise<void> =
           .insert({
             org_id: orgId,
             role: 'outbound',
-            name: 'Voxanne (Outbound SDR)',
+            name: 'Barpel (Outbound SDR)',
             system_prompt: outboundConfig.system_prompt,
             first_message: outboundConfig.first_message,
             voice: outboundConfig.voice_id,
@@ -291,7 +291,7 @@ router.post('/sync-agents', async (req: Request, res: Response): Promise<void> =
             inboundConfig.voice_provider || getVoiceById(inboundConfig.voice_id)?.provider || 'vapi'
           );
           await vapi.updateAssistant(inboundConfig.vapi_assistant_id, {
-            name: 'Voxanne (Inbound Coordinator)',
+            name: 'Barpel (Inbound Coordinator)',
             model: {
               provider: 'openai',
               model: 'gpt-4',
@@ -342,7 +342,7 @@ router.post('/sync-agents', async (req: Request, res: Response): Promise<void> =
             outboundConfig.voice_provider || getVoiceById(outboundConfig.voice_id)?.provider || 'vapi'
           );
           await vapi.updateAssistant(outboundConfig.vapi_assistant_id, {
-            name: 'Voxanne (Outbound SDR)',
+            name: 'Barpel (Outbound SDR)',
             model: {
               provider: 'openai',
               model: 'gpt-4',

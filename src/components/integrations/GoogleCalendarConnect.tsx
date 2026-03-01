@@ -111,7 +111,7 @@ export function GoogleCalendarConnect() {
       <CardHeader>
         <CardTitle>Google Calendar Integration</CardTitle>
         <CardDescription>
-          Connect your clinic's Google Calendar so Voxanne can check availability and book
+          Connect your clinic's Google Calendar so Barpel can check availability and book
           appointments automatically
         </CardDescription>
       </CardHeader>
@@ -140,7 +140,7 @@ export function GoogleCalendarConnect() {
 
             <div className="text-sm text-muted-foreground bg-blue-50 p-3 rounded-lg border border-blue-200">
               <p className="font-medium text-blue-900 mb-1">🎯 Status: Active</p>
-              <p>Voxanne can now:</p>
+              <p>Barpel can now:</p>
               <ul className="list-disc list-inside mt-2 space-y-1 ml-2">
                 <li>Check calendar availability in real-time</li>
                 <li>Book appointments automatically</li>
@@ -173,7 +173,7 @@ export function GoogleCalendarConnect() {
             <div className="text-sm text-muted-foreground bg-amber-50 p-3 rounded-lg border border-amber-200">
               <p className="font-medium text-amber-900 mb-1">ℹ️ Not Connected</p>
               <p>
-                Click the button below to securely connect your Google Calendar. Voxanne will
+                Click the button below to securely connect your Google Calendar. Barpel will
                 automatically book appointments and send calendar invites.
               </p>
             </div>
@@ -202,7 +202,7 @@ export function GoogleCalendarConnect() {
             </Button>
 
             <p className="text-xs text-muted-foreground text-center">
-              We'll never store your password. You control which calendar Voxanne can access.
+              We'll never store your password. You control which calendar Barpel can access.
             </p>
           </div>
         )}

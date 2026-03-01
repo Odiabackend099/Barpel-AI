@@ -16,7 +16,7 @@ export interface TwilioCredentials {
   phoneNumber: string;
   whatsappNumber?: string;
   messagingServiceSid?: string; // For international delivery
-  senderId?: string; // Alphanumeric Sender ID (e.g., "VOXANNE")
+  senderId?: string; // Alphanumeric Sender ID (e.g., "BARPEL")
 }
 
 // Basic message options

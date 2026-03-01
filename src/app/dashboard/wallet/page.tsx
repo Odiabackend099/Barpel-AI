@@ -74,7 +74,7 @@ const TX_META: Record<string, { icon: React.ElementType; label: string; color: s
     topup:              { icon: ArrowUpRight,  label: 'Top-Up',           color: 'text-green-600' },
     call_deduction:     { icon: ArrowDownLeft, label: 'Call Charge',      color: 'text-red-500' },
     refund:             { icon: RefreshCw,     label: 'Refund',           color: 'text-surgical-600' },
-    adjustment:         { icon: CreditCard,    label: 'Adjustment',       color: 'text-obsidian/60' },
+    adjustment:         { icon: CreditCard,    label: 'Adjustment',       color: 'text-barpel-slate/60' },
     bonus:              { icon: Plus,          label: 'Bonus',            color: 'text-surgical-600' },
     phone_provisioning: { icon: Phone,         label: 'Phone Purchase',   color: 'text-red-500' },
 };
@@ -211,9 +211,9 @@ const WalletPageContent = () => {
             <div>
                 <div className="flex items-center gap-3 mb-1">
                     <Wallet className="w-7 h-7 text-surgical-600" />
-                    <h1 className="text-3xl font-bold text-obsidian tracking-tight">Wallet</h1>
+                    <h1 className="text-3xl font-bold text-barpel-slate tracking-tight">Wallet</h1>
                 </div>
-                <p className="text-obsidian/60 text-sm">Manage your prepaid credits and billing</p>
+                <p className="text-barpel-slate/60 text-sm">Manage your prepaid credits and billing</p>
             </div>
 
             {/* Balance Card */}
@@ -283,11 +283,11 @@ const WalletPageContent = () => {
                             {loading ? (
                                 <span className="animate-pulse bg-surgical-100 rounded h-7 w-16 inline-block" />
                             ) : (
-                                <p className="text-2xl font-bold text-obsidian">
+                                <p className="text-2xl font-bold text-barpel-slate">
                                     {card.value}
                                 </p>
                             )}
-                            <p className="text-xs text-obsidian/60 font-medium mt-0.5">{card.label}</p>
+                            <p className="text-xs text-barpel-slate/60 font-medium mt-0.5">{card.label}</p>
                         </div>
                     );
                 })}
@@ -298,11 +298,11 @@ const WalletPageContent = () => {
                 {/* Transactions */}
                 <div className="lg:col-span-2 bg-white border border-surgical-200 rounded-2xl overflow-hidden shadow-sm">
                     <div className="p-5 border-b border-surgical-200 flex items-center justify-between">
-                        <h3 className="text-lg font-bold text-obsidian tracking-tight">Transaction History</h3>
+                        <h3 className="text-lg font-bold text-barpel-slate tracking-tight">Transaction History</h3>
                         <select
                             value={txType}
                             onChange={(e) => { setTxType(e.target.value); setTxPage(1); }}
-                            className="px-3 py-1.5 border border-surgical-200 rounded-lg text-sm text-obsidian bg-white focus:outline-none focus:ring-2 focus:ring-surgical-200"
+                            className="px-3 py-1.5 border border-surgical-200 rounded-lg text-sm text-barpel-slate bg-white focus:outline-none focus:ring-2 focus:ring-surgical-200"
                         >
                             <option value="">All Types</option>
                             <option value="topup">Top-Ups</option>
@@ -326,16 +326,16 @@ const WalletPageContent = () => {
                         </div>
                     ) : txList.length === 0 ? (
                         <div className="text-center py-16">
-                            <Wallet className="w-12 h-12 text-obsidian/20 mx-auto mb-3" />
-                            <p className="text-obsidian font-medium">No transactions yet</p>
-                            <p className="text-sm text-obsidian/60 mt-1">Top up your wallet to get started</p>
+                            <Wallet className="w-12 h-12 text-barpel-slate/20 mx-auto mb-3" />
+                            <p className="text-barpel-slate font-medium">No transactions yet</p>
+                            <p className="text-sm text-barpel-slate/60 mt-1">Top up your wallet to get started</p>
                         </div>
                     ) : (
                         <>
                             <div className="overflow-x-auto">
                                 <table className="w-full text-sm">
                                     <thead>
-                                        <tr className="text-left text-xs font-semibold text-obsidian/40 uppercase tracking-wider border-b border-surgical-100">
+                                        <tr className="text-left text-xs font-semibold text-barpel-slate/40 uppercase tracking-wider border-b border-surgical-100">
                                             <th className="px-5 py-3">Date</th>
                                             <th className="px-5 py-3">Type</th>
                                             <th className="px-5 py-3 hidden sm:table-cell">Description</th>
@@ -350,7 +350,7 @@ const WalletPageContent = () => {
                                             const isCredit = tx.direction === 'credit';
                                             return (
                                                 <tr key={tx.id} className="hover:bg-surgical-50/50 transition-colors">
-                                                    <td className="px-5 py-3 whitespace-nowrap text-obsidian/60">
+                                                    <td className="px-5 py-3 whitespace-nowrap text-barpel-slate/60">
                                                         {formatDate(tx.created_at)}
                                                     </td>
                                                     <td className="px-5 py-3 whitespace-nowrap">
@@ -359,13 +359,13 @@ const WalletPageContent = () => {
                                                             <span className={`font-medium ${meta.color}`}>{meta.label}</span>
                                                         </div>
                                                     </td>
-                                                    <td className="px-5 py-3 text-obsidian/60 truncate max-w-[200px] hidden sm:table-cell">
+                                                    <td className="px-5 py-3 text-barpel-slate/60 truncate max-w-[200px] hidden sm:table-cell">
                                                         {tx.description || '--'}
                                                     </td>
-                                                    <td className={`px-5 py-3 text-right font-semibold whitespace-nowrap ${isCredit ? 'text-green-600' : 'text-obsidian'}`}>
+                                                    <td className={`px-5 py-3 text-right font-semibold whitespace-nowrap ${isCredit ? 'text-green-600' : 'text-barpel-slate'}`}>
                                                         {isCredit ? '+' : '-'}{formatPence(tx.amount_pence)}
                                                     </td>
-                                                    <td className="px-5 py-3 text-right text-obsidian/40 whitespace-nowrap hidden sm:table-cell">
+                                                    <td className="px-5 py-3 text-right text-barpel-slate/40 whitespace-nowrap hidden sm:table-cell">
                                                         {formatPence(tx.balance_after_pence)}
                                                     </td>
                                                 </tr>
@@ -378,7 +378,7 @@ const WalletPageContent = () => {
                             {/* Pagination */}
                             {pagination && pagination.total_pages > 1 && (
                                 <div className="px-5 py-3 border-t border-surgical-100 flex items-center justify-between text-sm">
-                                    <span className="text-obsidian/40">
+                                    <span className="text-barpel-slate/40">
                                         {pagination.total} transaction{pagination.total !== 1 ? 's' : ''}
                                     </span>
                                     <div className="flex items-center gap-2">
@@ -389,7 +389,7 @@ const WalletPageContent = () => {
                                         >
                                             <ChevronLeft className="w-4 h-4" />
                                         </button>
-                                        <span className="text-obsidian/60 min-w-[80px] text-center">
+                                        <span className="text-barpel-slate/60 min-w-[80px] text-center">
                                             Page {pagination.page} of {pagination.total_pages}
                                         </span>
                                         <button
@@ -409,19 +409,19 @@ const WalletPageContent = () => {
                 {/* Auto-Recharge Card */}
                 <div className="lg:col-span-1 bg-white border border-surgical-200 rounded-2xl overflow-hidden shadow-sm h-fit">
                     <div className="p-5 border-b border-surgical-200">
-                        <h3 className="text-lg font-bold text-obsidian tracking-tight">Auto-Recharge</h3>
-                        <p className="text-xs text-obsidian/60 mt-1">Automatically top up when balance is low</p>
+                        <h3 className="text-lg font-bold text-barpel-slate tracking-tight">Auto-Recharge</h3>
+                        <p className="text-xs text-barpel-slate/60 mt-1">Automatically top up when balance is low</p>
                     </div>
                     <div className="p-5 space-y-5">
                         {/* Toggle */}
                         <div className="flex items-center justify-between">
-                            <label className="text-sm font-medium text-obsidian">Enable auto-recharge</label>
+                            <label className="text-sm font-medium text-barpel-slate">Enable auto-recharge</label>
                             <button
                                 type="button"
                                 role="switch"
                                 aria-checked={arEnabled}
                                 onClick={() => setArEnabled(!arEnabled)}
-                                className={`relative w-11 h-6 rounded-full transition-colors ${arEnabled ? 'bg-surgical-600' : 'bg-obsidian/20'}`}
+                                className={`relative w-11 h-6 rounded-full transition-colors ${arEnabled ? 'bg-barpel-teal' : 'bg-obsidian/20'}`}
                             >
                                 <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${arEnabled ? 'translate-x-5' : 'translate-x-0'}`} />
                             </button>
@@ -430,34 +430,34 @@ const WalletPageContent = () => {
                         {arEnabled && (
                             <>
                                 <div>
-                                    <label className="block text-sm font-medium text-obsidian mb-1.5">
+                                    <label className="block text-sm font-medium text-barpel-slate mb-1.5">
                                         Recharge when balance falls below
                                     </label>
                                     <div className="relative">
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-obsidian/40 font-medium">£</span>
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-barpel-slate/40 font-medium">£</span>
                                         <input
                                             type="number"
                                             step="0.01"
                                             min="1"
                                             value={arThreshold}
                                             onChange={(e) => setArThreshold(e.target.value)}
-                                            className="w-full pl-8 pr-4 py-2.5 border border-surgical-200 rounded-lg text-sm text-obsidian focus:outline-none focus:ring-2 focus:ring-surgical-200"
+                                            className="w-full pl-8 pr-4 py-2.5 border border-surgical-200 rounded-lg text-sm text-barpel-slate focus:outline-none focus:ring-2 focus:ring-surgical-200"
                                         />
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-obsidian mb-1.5">
+                                    <label className="block text-sm font-medium text-barpel-slate mb-1.5">
                                         Recharge amount
                                     </label>
                                     <div className="relative">
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-obsidian/40 font-medium">£</span>
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-barpel-slate/40 font-medium">£</span>
                                         <input
                                             type="number"
                                             step="0.01"
                                             min="10"
                                             value={arAmount}
                                             onChange={(e) => setArAmount(e.target.value)}
-                                            className="w-full pl-8 pr-4 py-2.5 border border-surgical-200 rounded-lg text-sm text-obsidian focus:outline-none focus:ring-2 focus:ring-surgical-200"
+                                            className="w-full pl-8 pr-4 py-2.5 border border-surgical-200 rounded-lg text-sm text-barpel-slate focus:outline-none focus:ring-2 focus:ring-surgical-200"
                                         />
                                     </div>
                                 </div>
@@ -473,7 +473,7 @@ const WalletPageContent = () => {
                         <button
                             onClick={handleSaveAutoRecharge}
                             disabled={savingAr}
-                            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-surgical-600 text-white rounded-lg hover:bg-surgical-700 transition-colors font-medium text-sm disabled:opacity-60"
+                            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-barpel-teal text-white rounded-lg hover:bg-barpel-teal-dark transition-colors font-medium text-sm disabled:opacity-60"
                         >
                             {savingAr ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
                             {savingAr ? 'Saving...' : 'Save Settings'}
@@ -487,16 +487,16 @@ const WalletPageContent = () => {
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-2xl max-w-md w-full shadow-xl">
                         <div className="px-6 py-4 border-b border-surgical-200 flex items-center justify-between">
-                            <h2 className="text-xl font-bold text-obsidian">Top Up Credits</h2>
+                            <h2 className="text-xl font-bold text-barpel-slate">Top Up Credits</h2>
                             <button
                                 onClick={() => { setShowTopUp(false); setSelectedAmount(null); setCustomAmount(''); }}
-                                className="p-1.5 rounded-lg text-obsidian/40 hover:bg-surgical-50 transition-colors"
+                                className="p-1.5 rounded-lg text-barpel-slate/40 hover:bg-surgical-50 transition-colors"
                             >
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
                         <div className="p-6 space-y-5">
-                            <p className="text-sm text-obsidian/60">Select an amount or enter a custom value</p>
+                            <p className="text-sm text-barpel-slate/60">Select an amount or enter a custom value</p>
                             <div className="grid grid-cols-2 gap-3">
                                 {[
                                     { multiplier: 1 },
@@ -515,8 +515,8 @@ const WalletPageContent = () => {
                                         onClick={() => { setSelectedAmount(option.pence); setCustomAmount(''); }}
                                         className={`p-4 rounded-xl border-2 text-center transition-all
                                             ${selectedAmount === option.pence
-                                                ? 'border-surgical-600 bg-surgical-50 text-surgical-600'
-                                                : 'border-surgical-200 hover:border-surgical-300 text-obsidian'
+                                                ? 'border-barpel-teal bg-surgical-50 text-surgical-600'
+                                                : 'border-surgical-200 hover:border-surgical-300 text-barpel-slate'
                                             }`}
                                     >
                                         <div className="font-bold text-lg">{option.label}</div>
@@ -524,11 +524,11 @@ const WalletPageContent = () => {
                                 ))}
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-obsidian mb-1.5">
+                                <label className="block text-sm font-medium text-barpel-slate mb-1.5">
                                     Custom amount in GBP (min £{MIN_TOPUP_GBP.toFixed(0)})
                                 </label>
                                 <div className="relative">
-                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-obsidian/40 font-medium">£</span>
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-barpel-slate/40 font-medium">£</span>
                                     <input
                                         type="number"
                                         min={MIN_TOPUP_GBP.toFixed(2)}
@@ -540,12 +540,12 @@ const WalletPageContent = () => {
                                             setSelectedAmount(null);
                                         }}
                                         placeholder="25.00"
-                                        className="w-full pl-8 pr-4 py-2.5 border border-surgical-200 rounded-lg text-sm text-obsidian focus:outline-none focus:ring-2 focus:ring-surgical-200"
+                                        className="w-full pl-8 pr-4 py-2.5 border border-surgical-200 rounded-lg text-sm text-barpel-slate focus:outline-none focus:ring-2 focus:ring-surgical-200"
                                     />
                                 </div>
                                 {customAmount && parseFloat(customAmount) >= MIN_TOPUP_GBP && (
                                     <div className="space-y-1.5 mt-1.5">
-                                        <p className="text-xs text-obsidian/60">
+                                        <p className="text-xs text-barpel-slate/60">
                                             You'll be charged: £{parseFloat(customAmount).toFixed(2)} GBP via Stripe
                                         </p>
                                     </div>
@@ -553,20 +553,20 @@ const WalletPageContent = () => {
                             </div>
                         </div>
                         <div className="px-6 py-4 border-t border-surgical-200">
-                            <p className="text-xs text-obsidian/60 mb-3 text-center">
+                            <p className="text-xs text-barpel-slate/60 mb-3 text-center">
                                 💡 Payments processed securely via Stripe in GBP (British Pounds)
                             </p>
                             <div className="flex justify-end gap-3">
                                 <button
                                     onClick={() => { setShowTopUp(false); setSelectedAmount(null); setCustomAmount(''); }}
-                                    className="px-4 py-2 border border-surgical-200 rounded-lg text-sm font-medium text-obsidian hover:bg-surgical-50 transition-colors"
+                                    className="px-4 py-2 border border-surgical-200 rounded-lg text-sm font-medium text-barpel-slate hover:bg-surgical-50 transition-colors"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     onClick={handleTopUp}
                                     disabled={processingTopUp || (!selectedAmount && !customAmount)}
-                                    className="flex items-center gap-2 px-5 py-2 bg-surgical-600 text-white rounded-lg text-sm font-medium hover:bg-surgical-700 transition-colors disabled:opacity-60"
+                                    className="flex items-center gap-2 px-5 py-2 bg-barpel-teal text-white rounded-lg text-sm font-medium hover:bg-barpel-teal-dark transition-colors disabled:opacity-60"
                                 >
                                     {processingTopUp ? (
                                         <><Loader2 className="w-4 h-4 animate-spin" /> Processing...</>
@@ -589,7 +589,7 @@ export default function WalletPage() {
             <div className="min-h-screen bg-surgical-50 flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
                     <div className="w-8 h-8 border-4 border-surgical-200 border-t-surgical-600 rounded-full animate-spin" />
-                    <p className="text-obsidian/60">Loading...</p>
+                    <p className="text-barpel-slate/60">Loading...</p>
                 </div>
             </div>
         }>

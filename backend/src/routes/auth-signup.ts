@@ -122,7 +122,7 @@ router.post(
       if (!adminClient) {
         log.error('AuthSignup', 'Admin client unavailable — SUPABASE_SERVICE_ROLE_KEY is not set');
         return res.status(503).json({
-          error: 'Service temporarily unavailable. Please contact support@voxanne.ai.',
+          error: 'Service temporarily unavailable. Please contact support@barpel.ai.',
         });
       }
 

@@ -1,7 +1,7 @@
 /**
- * Backfill Script: Create Missing Org and Agent for voxanne@demo.com
+ * Backfill Script: Create Missing Org and Agent for barpel@demo.com
  * 
- * This script creates the missing database records for the voxanne@demo.com user
+ * This script creates the missing database records for the barpel@demo.com user
  * and links them to the existing Vapi assistant.
  */
 
@@ -29,7 +29,7 @@ if (!SUPABASE_URL || !SUPABASE_KEY) {
 }
 
 if (!VAPI_ASSISTANT_ID) {
-    console.error('❌ Usage: npm run script backfill-voxanne-org.ts <VAPI_ASSISTANT_ID>');
+    console.error('❌ Usage: npm run script backfill-barpel-org.ts <VAPI_ASSISTANT_ID>');
     console.error('   Please provide the Vapi Assistant ID from your dashboard');
     process.exit(1);
 }
@@ -41,7 +41,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
 async function backfillOrg() {
     console.log('');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('🔧 Backfilling voxanne@demo.com Organization');
+    console.log('🔧 Backfilling barpel@demo.com Organization');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('');
     console.log(`Org ID: ${ORG_ID}`);
@@ -56,8 +56,8 @@ async function backfillOrg() {
             .from('organizations')
             .upsert({
                 id: ORG_ID,
-                name: 'Voxanne Demo Clinic',
-                email: 'voxanne@demo.com',
+                name: 'Barpel Demo Clinic',
+                email: 'barpel@demo.com',
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString()
             })
@@ -79,7 +79,7 @@ async function backfillOrg() {
             .insert({
                 org_id: ORG_ID,
                 role: 'inbound',
-                name: 'Voxanne Inbound Agent',
+                name: 'Barpel Inbound Agent',
                 vapi_assistant_id: VAPI_ASSISTANT_ID,
                 system_prompt: 'You are a helpful medical receptionist.',
                 first_message: 'Hello! How can I help you today?',

@@ -131,7 +131,7 @@ export default function ForgotPasswordPage() {
                         </Link>
 
                         <div className="mb-4">
-                            <Logo size="md" showText={true} href="/" priority={true} />
+                            <Logo width={120} height={32} showText={true} variant="light" />
                         </div>
                         <h1 className="text-4xl font-serif font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
                             Reset Password

@@ -113,9 +113,9 @@ export const TeamMembersList: React.FC = () => {
       admin: 'bg-surgical-100 text-surgical-600',
       manager: 'bg-surgical-100 text-surgical-600',
       agent: 'bg-green-100 text-green-800',
-      viewer: 'bg-surgical-50 text-obsidian/60',
+      viewer: 'bg-surgical-50 text-barpel-slate/60',
     };
-    return colors[role] || 'bg-surgical-50 text-obsidian/60';
+    return colors[role] || 'bg-surgical-50 text-barpel-slate/60';
   };
 
   return (
@@ -123,13 +123,13 @@ export const TeamMembersList: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-start">
         <div>
-          <h2 className="text-2xl font-bold text-obsidian">Team Members</h2>
-          <p className="text-obsidian/60 mt-1">Manage your team and assign roles</p>
+          <h2 className="text-2xl font-bold text-barpel-slate">Team Members</h2>
+          <p className="text-barpel-slate/60 mt-1">Manage your team and assign roles</p>
         </div>
         <button
           type="button"
           onClick={() => setShowInviteForm(true)}
-          className="bg-surgical-600 text-white px-4 py-2 rounded-lg hover:bg-surgical-700 flex items-center gap-2"
+          className="bg-barpel-teal text-white px-4 py-2 rounded-lg hover:bg-barpel-teal-dark flex items-center gap-2"
         >
           <Plus className="w-5 h-5" />
           Invite Member
@@ -169,7 +169,7 @@ export const TeamMembersList: React.FC = () => {
           </div>
         ) : members.length === 0 ? (
           <div className="p-8 text-center">
-            <p className="text-obsidian/60 mb-4">No team members yet</p>
+            <p className="text-barpel-slate/60 mb-4">No team members yet</p>
             <button
               type="button"
               onClick={() => setShowInviteForm(true)}
@@ -182,16 +182,16 @@ export const TeamMembersList: React.FC = () => {
           <table className="w-full divide-y divide-surgical-200">
             <thead className="bg-surgical-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-obsidian/70 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-barpel-slate/70 uppercase tracking-wider">
                   Member
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-obsidian/70 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-barpel-slate/70 uppercase tracking-wider">
                   Role
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-obsidian/70 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-barpel-slate/70 uppercase tracking-wider">
                   Joined
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-obsidian/70 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-barpel-slate/70 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -205,7 +205,7 @@ export const TeamMembersList: React.FC = () => {
                         {member.email?.charAt(0)?.toUpperCase() || '?'}
                       </div>
                       <div>
-                        <p className="font-medium text-obsidian">{member.email}</p>
+                        <p className="font-medium text-barpel-slate">{member.email}</p>
                       </div>
                     </div>
                   </td>
@@ -226,7 +226,7 @@ export const TeamMembersList: React.FC = () => {
                       </select>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-obsidian/60">
+                  <td className="px-6 py-4 text-sm text-barpel-slate/60">
                     {new Date(member.created_at).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 text-sm">
@@ -251,7 +251,7 @@ export const TeamMembersList: React.FC = () => {
       {showInviteForm && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 border border-surgical-200">
-            <h2 className="text-2xl font-bold mb-4 text-obsidian">Invite Team Member</h2>
+            <h2 className="text-2xl font-bold mb-4 text-barpel-slate">Invite Team Member</h2>
             <InviteForm
               onClose={() => setShowInviteForm(false)}
               onSuccess={() => {

@@ -230,8 +230,8 @@ export function HeroCalendlyReplica() {
             <VideoModal
                 isOpen={isDemoModalOpen}
                 onClose={() => setIsDemoModalOpen(false)}
-                videoSrc="/demo/voxanne-testimonial.mp4"
-                title="Voxanne AI Platform Demo"
+                videoSrc="/demo/barpel-testimonial.mp4"
+                title="Barpel AI Platform Demo"
             />
         </section>
     );

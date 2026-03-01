@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-    title: "Resources - Voxanne AI",
+    title: "Resources - Barpel AI",
     description: "Guides, templates, and resources for medical practice management",
 };
 
@@ -43,14 +43,14 @@ const resources = [
         title: "Setup Walkthrough Video",
         type: "Video",
         icon: Video,
-        description: "5-minute video showing how to set up Voxanne AI from scratch",
+        description: "5-minute video showing how to set up Barpel AI from scratch",
         downloadUrl: "/resources/setup-video"
     },
     {
         title: "Integration Guide: Google Calendar",
         type: "PDF Guide",
         icon: FileText,
-        description: "Step-by-step guide to connect Voxanne AI with your Google Calendar",
+        description: "Step-by-step guide to connect Barpel AI with your Google Calendar",
         downloadUrl: "/resources/calendar-integration.pdf"
     }
 ];

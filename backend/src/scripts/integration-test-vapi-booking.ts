@@ -8,7 +8,7 @@
  * 4. Tests double-booking prevention
  *
  * Test Details:
- * - Organization: voxanne@demo.com
+ * - Organization: barpel@demo.com
  * - Caller: Austyn (+2348141995397, austyn@demo.com)
  * - Date: February 5th, 2026 (2026-02-05)
  * - Time: 3 PM (15:00)
@@ -19,7 +19,7 @@ import { supabase } from '../services/supabase-client';
 import { log } from '../services/logger';
 
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3000';
-const TEST_ORG_EMAIL = 'voxanne@demo.com';
+const TEST_ORG_EMAIL = 'barpel@demo.com';
 const TEST_DATE = '2026-02-05';
 const TEST_TIME = '15:00';
 const TEST_PHONE = '+2348141995397';
@@ -68,7 +68,7 @@ async function runIntegrationTest() {
         .from('organizations')
         .insert({
           email: TEST_ORG_EMAIL,
-          name: 'Voxanne Demo Clinic',
+          name: 'Barpel Demo Clinic',
           timezone: 'America/Los_Angeles',
           business_hours: '9 AM - 6 PM'
         })

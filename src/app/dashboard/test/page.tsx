@@ -517,15 +517,15 @@ const TestAgentPageContent = () => {
     if (!user && !loading) return null;
 
     return (
-        <div className="min-h-screen bg-clinical-bg flex flex-col overflow-hidden p-6">
+        <div className="min-h-screen bg-gray-50 flex flex-col overflow-hidden p-6">
             <div className="flex-none max-w-5xl mx-auto w-full mb-4">
                 {/* Tab Switcher - TOP POSITION */}
                 <div className="bg-white border border-surgical-200 p-1 rounded-lg inline-flex shadow-sm">
                     <button
                         onClick={() => setActiveTab('web')}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${activeTab === 'web'
-                            ? 'bg-surgical-600 text-white'
-                            : 'text-obsidian hover:bg-surgical-50'
+                            ? 'bg-barpel-teal text-white'
+                            : 'text-barpel-slate hover:bg-surgical-50'
                             }`}
                     >
                         <Globe className="w-4 h-4" />
@@ -534,8 +534,8 @@ const TestAgentPageContent = () => {
                     <button
                         onClick={() => setActiveTab('phone')}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${activeTab === 'phone'
-                            ? 'bg-surgical-600 text-white'
-                            : 'text-obsidian hover:bg-surgical-50'
+                            ? 'bg-barpel-teal text-white'
+                            : 'text-barpel-slate hover:bg-surgical-50'
                             }`}
                     >
                         <Phone className="w-4 h-4" />
@@ -558,7 +558,7 @@ const TestAgentPageContent = () => {
                             aria-label="Conversation transcript"
                         >
                             {displayTranscripts.length === 0 ? (
-                                <div className="flex-1 flex flex-col min-h-0 items-center justify-center text-obsidian/60">
+                                <div className="flex-1 flex flex-col min-h-0 items-center justify-center text-barpel-slate/60">
                                     <div className="w-20 h-20 rounded-2xl bg-surgical-50 border border-surgical-200 flex items-center justify-center">
                                         <Phone className="w-10 h-10 text-surgical-500" />
                                     </div>
@@ -571,8 +571,8 @@ const TestAgentPageContent = () => {
                                             className={`flex ${t.speaker === 'user' ? 'justify-end' : 'justify-start'}`}
                                         >
                                             <div className={`max-w-[75%] sm:max-w-[70%] rounded-xl px-4 py-2.5 text-sm transition-all ${t.speaker === 'user'
-                                                ? 'bg-surgical-600 text-white shadow-lg shadow-surgical-600/20'
-                                                : 'bg-surgical-50 text-obsidian border border-surgical-200'
+                                                ? 'bg-barpel-teal text-white shadow-lg shadow-barpel-teal/20'
+                                                : 'bg-surgical-50 text-barpel-slate border border-surgical-200'
                                                 }`}>
                                                 <p className="leading-relaxed tracking-tight">
                                                     {t.text}
@@ -602,7 +602,7 @@ const TestAgentPageContent = () => {
                                     onClick={() => {
                                         transcriptEndRef.current?.scrollIntoView({ behavior: 'smooth' });
                                     }}
-                                    className="absolute bottom-24 right-6 z-20 bg-surgical-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-surgical-700 transition-colors flex items-center gap-2"
+                                    className="absolute bottom-24 right-6 z-20 bg-barpel-teal text-white px-4 py-2 rounded-full shadow-lg hover:bg-barpel-teal-dark transition-colors flex items-center gap-2"
                                     aria-label="Scroll to latest message"
                                 >
                                     <ArrowDown className="w-4 h-4" />
@@ -634,7 +634,7 @@ const TestAgentPageContent = () => {
                                 title={isMuted ? 'Unmute' : 'Mute'}
                                 className={`group relative w-11 h-11 sm:w-14 sm:h-14 rounded-full transition-all duration-300 flex items-center justify-center ${isMuted
                                     ? 'bg-red-50 text-red-700 border-2 border-red-200 hover:bg-red-100 shadow-lg shadow-red-500/10'
-                                    : 'bg-surgical-50 text-obsidian/60 hover:text-obsidian hover:bg-surgical-100 border border-surgical-200'
+                                    : 'bg-surgical-50 text-barpel-slate/60 hover:text-barpel-slate hover:bg-surgical-100 border border-surgical-200'
                                     } disabled:opacity-40 disabled:cursor-not-allowed`}
                             >
                                 {/* Glow effect on hover */}
@@ -665,7 +665,7 @@ const TestAgentPageContent = () => {
                                     title={isConnected ? 'End session' : 'Start session'}
                                     className={`w-12 h-12 rounded-full transition-all flex items-center justify-center relative z-10 ${isConnected
                                         ? 'bg-red-600 hover:bg-red-700 text-white'
-                                        : 'bg-surgical-600 hover:bg-surgical-700 text-white'
+                                        : 'bg-barpel-teal hover:bg-barpel-teal-dark text-white'
                                         } disabled:opacity-50 disabled:cursor-not-allowed shadow-sm`}
                                 >
                                     {callInitiating ? (
@@ -688,18 +688,18 @@ const TestAgentPageContent = () => {
 
                             {/* Header — always visible */}
                             <div className="text-center mb-8">
-                                <div className="w-16 h-16 bg-surgical-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-sm">
+                                <div className="w-16 h-16 bg-barpel-teal rounded-xl flex items-center justify-center mx-auto mb-4 shadow-sm">
                                     <Phone className="w-8 h-8 text-white" />
                                 </div>
-                                <h2 className="text-2xl font-semibold text-obsidian mb-2">Try a Live Call</h2>
-                                <p className="text-sm text-obsidian/70">Enter your number and your AI agent will call you instantly.</p>
+                                <h2 className="text-2xl font-semibold text-barpel-slate mb-2">Try a Live Call</h2>
+                                <p className="text-sm text-barpel-slate/70">Enter your number and your AI agent will call you instantly.</p>
 
                                 {/* Caller ID — shown only when a number is known */}
                                 {(outboundCallerIdNumber && outboundCallerIdNumber !== 'Auto-assigned at call time') || (inboundStatus?.configured && inboundStatus.inboundNumber) ? (
                                     <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-surgical-50 border border-surgical-200 rounded-full">
                                         <Phone className="w-3.5 h-3.5 text-surgical-500 flex-shrink-0" />
-                                        <span className="text-sm text-obsidian/70">Your agent will call from </span>
-                                        <span className="text-sm font-semibold text-obsidian font-mono">
+                                        <span className="text-sm text-barpel-slate/70">Your agent will call from </span>
+                                        <span className="text-sm font-semibold text-barpel-slate font-mono">
                                             {outboundCallerIdNumber && outboundCallerIdNumber !== 'Auto-assigned at call time'
                                                 ? outboundCallerIdNumber
                                                 : inboundStatus!.inboundNumber}
@@ -711,7 +711,7 @@ const TestAgentPageContent = () => {
                                 {outboundTrackingId && wsConnectionStatus === 'connected' && (
                                     <div className="mt-3 flex items-center justify-center gap-1.5">
                                         <div className="w-2 h-2 rounded-full bg-surgical-500 shadow-lg shadow-surgical-500/50 animate-pulse" />
-                                        <span className="text-xs text-obsidian/50">Live</span>
+                                        <span className="text-xs text-barpel-slate/50">Live</span>
                                     </div>
                                 )}
                             </div>
@@ -720,7 +720,7 @@ const TestAgentPageContent = () => {
                             {outboundConfigLoading && (
                                 <div className="text-center space-y-3">
                                     <Loader2 className="w-8 h-8 text-surgical-500 animate-spin mx-auto" />
-                                    <p className="text-sm text-obsidian/60">Getting your agent ready…</p>
+                                    <p className="text-sm text-barpel-slate/60">Getting your agent ready…</p>
                                 </div>
                             )}
 
@@ -731,14 +731,14 @@ const TestAgentPageContent = () => {
                                         <div className="w-12 h-12 bg-white border border-surgical-200 rounded-xl flex items-center justify-center mx-auto mb-3">
                                             <AlertCircle className="w-6 h-6 text-surgical-500" />
                                         </div>
-                                        <p className="font-semibold text-obsidian text-sm mb-1">Your agent isn't ready yet</p>
-                                        <p className="text-xs text-obsidian/60 leading-relaxed">
+                                        <p className="font-semibold text-barpel-slate text-sm mb-1">Your agent isn't ready yet</p>
+                                        <p className="text-xs text-barpel-slate/60 leading-relaxed">
                                             Finish setting up your AI agent before placing a test call.
                                         </p>
                                     </div>
                                     <button
                                         onClick={() => router.push('/dashboard/agent-config')}
-                                        className="w-full py-3 rounded-xl bg-surgical-600 hover:bg-surgical-700 text-white font-medium transition-all shadow-sm tracking-tight"
+                                        className="w-full py-3 rounded-xl bg-barpel-teal hover:bg-barpel-teal-dark text-white font-medium transition-all shadow-sm tracking-tight"
                                     >
                                         Finish Setup
                                     </button>
@@ -754,9 +754,9 @@ const TestAgentPageContent = () => {
                                                 <Phone className="w-5 h-5 text-surgical-600" />
                                             </div>
                                             <div>
-                                                <h3 className="text-base font-semibold text-obsidian tracking-tight">Call complete</h3>
+                                                <h3 className="text-base font-semibold text-barpel-slate tracking-tight">Call complete</h3>
                                                 {callSummary.durationSeconds ? (
-                                                    <p className="text-xs text-obsidian/50 mt-0.5">
+                                                    <p className="text-xs text-barpel-slate/50 mt-0.5">
                                                         {Math.floor(callSummary.durationSeconds / 60)}m {callSummary.durationSeconds % 60}s
                                                     </p>
                                                 ) : null}
@@ -765,13 +765,13 @@ const TestAgentPageContent = () => {
 
                                         {callSummary.transcripts && callSummary.transcripts.length > 0 && (
                                             <div className="border-t border-surgical-100 pt-4">
-                                                <p className="text-xs text-obsidian/50 font-medium mb-3 uppercase tracking-wider">How it went</p>
+                                                <p className="text-xs text-barpel-slate/50 font-medium mb-3 uppercase tracking-wider">How it went</p>
                                                 <div className="space-y-2">
                                                     {callSummary.transcripts.slice(-5).map((t: any, idx: number) => (
                                                         <div key={idx} className={`flex ${t.speaker === 'agent' ? 'justify-start' : 'justify-end'}`}>
                                                             <div className={`max-w-[85%] rounded-xl px-3 py-2 text-sm ${t.speaker === 'agent'
-                                                                ? 'bg-surgical-50 text-obsidian border border-surgical-200'
-                                                                : 'bg-surgical-600 text-white'
+                                                                ? 'bg-surgical-50 text-barpel-slate border border-surgical-200'
+                                                                : 'bg-barpel-teal text-white'
                                                             }`}>
                                                                 {t.text}
                                                             </div>
@@ -784,7 +784,7 @@ const TestAgentPageContent = () => {
                                     <div className="flex gap-3">
                                         <button
                                             onClick={() => router.push('/dashboard/calls?tab=outbound')}
-                                            className="flex-1 py-3 rounded-xl bg-surgical-600 hover:bg-surgical-700 text-white font-medium transition-all shadow-sm tracking-tight"
+                                            className="flex-1 py-3 rounded-xl bg-barpel-teal hover:bg-barpel-teal-dark text-white font-medium transition-all shadow-sm tracking-tight"
                                         >
                                             View Full Transcript
                                         </button>
@@ -794,7 +794,7 @@ const TestAgentPageContent = () => {
                                                 setPhoneNumber('');
                                                 setOutboundTranscripts([]);
                                             }}
-                                            className="px-6 py-3 rounded-xl border border-surgical-200 text-obsidian/60 hover:bg-surgical-50 font-medium transition-all tracking-tight"
+                                            className="px-6 py-3 rounded-xl border border-surgical-200 text-barpel-slate/60 hover:bg-surgical-50 font-medium transition-all tracking-tight"
                                         >
                                             Call Again
                                         </button>
@@ -806,7 +806,7 @@ const TestAgentPageContent = () => {
                             {!outboundConfigLoading && !outboundConfigError && !outboundTrackingId && !callSummary && (
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-obsidian mb-2">Your phone number</label>
+                                        <label className="block text-sm font-medium text-barpel-slate mb-2">Your phone number</label>
                                         <input
                                             type="tel"
                                             value={phoneNumber}
@@ -815,20 +815,20 @@ const TestAgentPageContent = () => {
                                                 setPhoneValidationError(null);
                                             }}
                                             placeholder="+1 (555) 000-0000"
-                                            className={`w-full px-4 py-3 rounded-xl border bg-white text-obsidian placeholder-obsidian/40 focus:ring-2 focus:ring-surgical-500 focus:border-surgical-500 outline-none text-lg transition-all ${phoneValidationError ? 'border-red-500' : 'border-surgical-200'}`}
+                                            className={`w-full px-4 py-3 rounded-xl border bg-white text-barpel-slate placeholder-obsidian/40 focus:ring-2 focus:ring-surgical-500 focus:border-surgical-500 outline-none text-lg transition-all ${phoneValidationError ? 'border-red-500' : 'border-surgical-200'}`}
                                         />
                                         {phoneValidationError && (
                                             <p className="text-xs text-red-600 mt-2">{phoneValidationError}</p>
                                         )}
                                         {!phoneValidationError && (
-                                            <p className="text-xs text-obsidian/40 mt-2">Include your country code, e.g. +1 for the US</p>
+                                            <p className="text-xs text-barpel-slate/40 mt-2">Include your country code, e.g. +1 for the US</p>
                                         )}
                                     </div>
 
                                     <button
                                         onClick={handleInitiateCall}
                                         disabled={isCallingPhone || !phoneNumber}
-                                        className="w-full px-6 py-4 rounded-xl bg-surgical-600 hover:bg-surgical-700 text-white font-semibold shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-base"
+                                        className="w-full px-6 py-4 rounded-xl bg-barpel-teal hover:bg-barpel-teal-dark text-white font-semibold shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-base"
                                     >
                                         {isCallingPhone ? (
                                             <>
@@ -853,12 +853,12 @@ const TestAgentPageContent = () => {
                                             {/* Pulsing ring animation */}
                                             <div className="relative w-16 h-16 mx-auto mb-4">
                                                 <div className="absolute inset-0 rounded-full bg-surgical-400/30 animate-ping" />
-                                                <div className="relative w-16 h-16 rounded-full bg-surgical-600 flex items-center justify-center shadow-lg">
+                                                <div className="relative w-16 h-16 rounded-full bg-barpel-teal flex items-center justify-center shadow-lg">
                                                     <Phone className="w-7 h-7 text-white" />
                                                 </div>
                                             </div>
-                                            <h3 className="text-lg font-semibold text-obsidian tracking-tight">Your phone is ringing</h3>
-                                            <p className="text-sm text-obsidian/60 mt-1">Pick up and start talking to your AI agent.</p>
+                                            <h3 className="text-lg font-semibold text-barpel-slate tracking-tight">Your phone is ringing</h3>
+                                            <p className="text-sm text-barpel-slate/60 mt-1">Pick up and start talking to your AI agent.</p>
                                         </div>
 
                                         <button
@@ -875,14 +875,14 @@ const TestAgentPageContent = () => {
                                             <div className="h-full bg-white rounded-xl border border-surgical-200 flex flex-col overflow-hidden">
                                                 <div className="flex items-center gap-2 px-4 py-2.5 border-b border-surgical-100 flex-none">
                                                     <div className="w-1.5 h-1.5 rounded-full bg-surgical-500 animate-pulse" />
-                                                    <p className="text-xs font-medium text-obsidian/60">Live conversation</p>
+                                                    <p className="text-xs font-medium text-barpel-slate/60">Live conversation</p>
                                                 </div>
                                                 <div className="flex-1 overflow-y-auto p-4 space-y-3">
                                                     {outboundTranscripts.map((t, i) => (
                                                         <div key={i} className={`flex ${t.speaker === 'agent' ? 'justify-start' : 'justify-end'}`}>
                                                             <div className={`max-w-[80%] rounded-xl px-3 py-2 text-sm ${t.speaker === 'agent'
-                                                                ? 'bg-surgical-50 text-obsidian border border-surgical-200'
-                                                                : 'bg-surgical-600 text-white'
+                                                                ? 'bg-surgical-50 text-barpel-slate border border-surgical-200'
+                                                                : 'bg-barpel-teal text-white'
                                                             }`}>
                                                                 {t.text}
                                                                 {!t.isFinal && <span className="animate-pulse opacity-60"> …</span>}
@@ -908,21 +908,21 @@ const TestAgentPageContent = () => {
                             animate={{ opacity: 1, scale: 1 }}
                             className="bg-white border border-surgical-200 rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl"
                         >
-                            <h3 className="text-xl font-semibold text-obsidian mb-2 tracking-tight">Ready to call?</h3>
-                            <p className="text-sm text-obsidian/60 mb-1 tracking-tight">
-                                Your AI agent will call <span className="font-semibold text-obsidian">{phoneNumber}</span> right now.
+                            <h3 className="text-xl font-semibold text-barpel-slate mb-2 tracking-tight">Ready to call?</h3>
+                            <p className="text-sm text-barpel-slate/60 mb-1 tracking-tight">
+                                Your AI agent will call <span className="font-semibold text-barpel-slate">{phoneNumber}</span> right now.
                             </p>
-                            <p className="text-xs text-obsidian/40 mb-6">Make sure you're available to answer.</p>
+                            <p className="text-xs text-barpel-slate/40 mb-6">Make sure you're available to answer.</p>
                             <div className="flex gap-3">
                                 <button
                                     onClick={() => setShowConfirmDialog(false)}
-                                    className="flex-1 px-4 py-2.5 rounded-xl border border-surgical-200 text-obsidian/60 hover:bg-surgical-50 font-medium transition-all tracking-tight"
+                                    className="flex-1 px-4 py-2.5 rounded-xl border border-surgical-200 text-barpel-slate/60 hover:bg-surgical-50 font-medium transition-all tracking-tight"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     onClick={handleConfirmCall}
-                                    className="flex-1 px-4 py-2.5 rounded-xl bg-surgical-600 hover:bg-surgical-700 text-white font-medium transition-all shadow-sm tracking-tight"
+                                    className="flex-1 px-4 py-2.5 rounded-xl bg-barpel-teal hover:bg-barpel-teal-dark text-white font-medium transition-all shadow-sm tracking-tight"
                                 >
                                     Yes, Call Me
                                 </button>
@@ -942,7 +942,7 @@ export default function TestAgentPage() {
             <div className="min-h-screen bg-surgical-50 flex items-center justify-center">
                 <div className="text-center">
                     <Loader2 className="w-10 h-10 text-surgical-500 animate-spin mx-auto mb-3" />
-                    <p className="text-sm text-obsidian/60 tracking-tight">Initializing test environment...</p>
+                    <p className="text-sm text-barpel-slate/60 tracking-tight">Initializing test environment...</p>
                 </div>
             </div>
         }>

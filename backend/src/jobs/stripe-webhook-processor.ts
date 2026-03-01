@@ -258,9 +258,9 @@ async function handleSubscriptionUpdated(subscription: any): Promise<void> {
   }
 
   // Detect tier from subscription metadata or items
-  const tier = subscription.metadata?.voxanne_tier;
+  const tier = subscription.metadata?.barpel_tier;
   if (!tier || !TIER_CONFIG[tier]) {
-    log.debug('StripeWebhookProcessor', 'No voxanne_tier metadata on subscription update', {
+    log.debug('StripeWebhookProcessor', 'No barpel_tier metadata on subscription update', {
       orgId: org.id,
       subscriptionId: subscription.id,
     });

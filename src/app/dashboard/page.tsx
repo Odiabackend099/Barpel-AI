@@ -108,8 +108,8 @@ export default function CallWaitingAIDashboard() {
         <div className="max-w-7xl mx-auto px-7 py-9 pb-32 space-y-7">
             {/* Header */}
             <div>
-                <h1 className="text-4xl font-bold text-obsidian tracking-tighter mb-2">Dashboard</h1>
-                <p className="text-base text-obsidian/70 font-normal">Welcome back. Here&apos;s your clinical system overview.</p>
+                <h1 className="text-4xl font-bold text-barpel-slate tracking-tighter mb-2">Dashboard</h1>
+                <p className="text-base text-barpel-slate/70 font-normal">Welcome back. Here&apos;s your clinical system overview.</p>
             </div>
 
             {/* Clinical Pulse (Top ROI Metrics) */}
@@ -122,12 +122,12 @@ export default function CallWaitingAIDashboard() {
             <div className="glass-panel rounded-2xl overflow-hidden">
                 <div className="px-7 py-6 border-b border-surgical-200 flex items-center justify-between">
                     <div>
-                        <h3 className="text-lg font-bold text-obsidian tracking-tight">Recent Activity</h3>
-                        <p className="text-xs text-obsidian/60">Real-time call logs</p>
+                        <h3 className="text-lg font-bold text-barpel-slate tracking-tight">Recent Activity</h3>
+                        <p className="text-xs text-barpel-slate/60">Real-time call logs</p>
                     </div>
                     <button
                         onClick={() => router.push('/dashboard/calls')}
-                        className="text-sm font-semibold text-surgical-600 bg-surgical-50 px-4 py-2.5 rounded-xl border border-surgical-200 shadow-sm hover:shadow-md hover:bg-surgical-100 hover:scale-105 hover:-translate-y-0.5 active:scale-100 focus:outline-none focus:ring-2 focus:ring-surgical-600/30 transition-all duration-200"
+                        className="text-sm font-semibold text-surgical-600 bg-surgical-50 px-4 py-2.5 rounded-xl border border-surgical-200 shadow-sm hover:shadow-md hover:bg-surgical-100 hover:scale-105 hover:-translate-y-0.5 active:scale-100 focus:outline-none focus:ring-2 focus:ring-barpel-teal/30 transition-all duration-200"
                     >
                         View All Activity
                     </button>
@@ -154,10 +154,10 @@ export default function CallWaitingAIDashboard() {
                     ) : recentEvents.length === 0 ? (
                         <div className="text-center py-16">
                             <div className="w-16 h-16 bg-surgical-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-surgical-200">
-                                <Phone className="w-8 h-8 text-obsidian/40" />
+                                <Phone className="w-8 h-8 text-barpel-slate/40" />
                             </div>
-                            <p className="text-obsidian font-medium">No recent activity yet</p>
-                            <p className="text-sm text-obsidian/60 mt-1">Waiting for your first call...</p>
+                            <p className="text-barpel-slate font-medium">No recent activity yet</p>
+                            <p className="text-sm text-barpel-slate/60 mt-1">Waiting for your first call...</p>
                         </div>
                     ) : (
                         <div className="divide-y divide-surgical-200">
@@ -177,7 +177,7 @@ export default function CallWaitingAIDashboard() {
                                     <div className="flex items-start justify-between gap-4">
                                         <div className="flex items-start gap-4 flex-1">
                                             {/* Event Type Icon */}
-                                            <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-surgical-600/10 text-surgical-600 border border-surgical-200 font-bold">
+                                            <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-barpel-teal/10 text-surgical-600 border border-surgical-200 font-bold">
                                                 {event.type === 'call_completed' ? '📞' :
                                                     event.type === 'hot_lead_detected' ? '🔥' :
                                                         '📅'}
@@ -185,7 +185,7 @@ export default function CallWaitingAIDashboard() {
 
                                             {/* Event Details */}
                                             <div className="flex-1 min-w-0">
-                                                <p className="font-medium text-obsidian truncate">
+                                                <p className="font-medium text-barpel-slate truncate">
                                                     {event.summary}
                                                 </p>
 
@@ -193,12 +193,12 @@ export default function CallWaitingAIDashboard() {
                                                 <div className="mt-2 space-y-1">
                                                     {event.type === 'call_completed' && event.metadata && (
                                                         <>
-                                                            <div className="text-xs text-obsidian/60">
+                                                            <div className="text-xs text-barpel-slate/60">
                                                                 <span className="font-medium">Sentiment:</span> {event.metadata.sentiment_label || 'neutral'}
                                                                 {event.metadata.sentiment_urgency && event.metadata.sentiment_urgency !== 'low' && ` • ${event.metadata.sentiment_urgency} urgency`}
                                                             </div>
                                                             {event.metadata.sentiment_summary && (
-                                                                <p className="text-xs text-obsidian/60 line-clamp-2">
+                                                                <p className="text-xs text-barpel-slate/60 line-clamp-2">
                                                                     {event.metadata.sentiment_summary}
                                                                 </p>
                                                             )}
@@ -206,18 +206,18 @@ export default function CallWaitingAIDashboard() {
                                                     )}
                                                     {event.type === 'hot_lead_detected' && event.metadata && (
                                                         <>
-                                                            <div className="text-xs text-obsidian/60">
+                                                            <div className="text-xs text-barpel-slate/60">
                                                                 <span className="font-medium">Score:</span> {event.metadata.lead_score}/100
                                                             </div>
                                                             {event.metadata.service_interest && (
-                                                                <div className="text-xs text-obsidian/60">
+                                                                <div className="text-xs text-barpel-slate/60">
                                                                     <span className="font-medium">Interested in:</span> {event.metadata.service_interest}
                                                                 </div>
                                                             )}
                                                         </>
                                                     )}
                                                     {event.type === 'appointment_booked' && event.metadata && (
-                                                        <div className="text-xs text-obsidian/60">
+                                                        <div className="text-xs text-barpel-slate/60">
                                                             {event.metadata.scheduled_at && (
                                                                 <span><span className="font-medium">Scheduled:</span> {new Date(event.metadata.scheduled_at).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                                                             )}
@@ -229,7 +229,7 @@ export default function CallWaitingAIDashboard() {
 
                                         {/* Time */}
                                         <div className="flex-shrink-0">
-                                            <p className="text-xs text-obsidian/60 text-right whitespace-nowrap">
+                                            <p className="text-xs text-barpel-slate/60 text-right whitespace-nowrap">
                                                 {formatTimeAgo(event.timestamp)}
                                             </p>
                                         </div>

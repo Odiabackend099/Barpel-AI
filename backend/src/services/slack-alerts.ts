@@ -38,7 +38,7 @@ export async function sendSlackAlert(title: string, details: any): Promise<void>
     const detailsText = typeof details === 'string' ? details : JSON.stringify(details, null, 2);
     
     await slackClient.chat.postMessage({
-      channel: process.env.SLACK_ALERTS_CHANNEL || '#voxanne-alerts',
+      channel: process.env.SLACK_ALERTS_CHANNEL || '#barpel-alerts',
       text: `*${title}*\n${detailsText}`,
       mrkdwn: true,
     });

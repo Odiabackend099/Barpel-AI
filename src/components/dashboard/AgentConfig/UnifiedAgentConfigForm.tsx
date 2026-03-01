@@ -234,7 +234,7 @@ export const UnifiedAgentConfigForm: React.FC<UnifiedAgentConfigFormProps> = ({
               saveSuccess
                 ? 'bg-surgical-50 text-surgical-600 border border-surgical-200'
                 : hasChanges
-                  ? 'bg-surgical-600 hover:bg-surgical-700 text-white shadow-surgical-500/20'
+                  ? 'bg-barpel-teal hover:bg-barpel-teal-dark text-white shadow-surgical-500/20'
                   : 'bg-gray-100 text-gray-400 cursor-not-allowed'
             }`}
             title={

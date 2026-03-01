@@ -18,15 +18,15 @@ async function regenerateEmbeddings() {
   console.log('═'.repeat(80));
   console.log('\nModel: text-embedding-3-small (1536 dimensions)\n');
 
-  // Find voxanne@demo.com organization
+  // Find barpel@demo.com organization
   const { data: orgs, error: orgError } = await supabase
     .from('organizations')
     .select('id, name, email')
-    .or('name.ilike.%voxanne%,email.ilike.%voxanne@demo.com%')
+    .or('name.ilike.%barpel%,email.ilike.%barpel@demo.com%')
     .limit(1);
 
   if (orgError || !orgs || orgs.length === 0) {
-    console.error('❌ Could not find voxanne@demo.com organization');
+    console.error('❌ Could not find barpel@demo.com organization');
     process.exit(1);
   }
 

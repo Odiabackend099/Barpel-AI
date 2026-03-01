@@ -14,7 +14,7 @@ async function findOrg() {
   const { data, error } = await supabase
     .from('organizations')
     .select('id, name, email')
-    .ilike('email', '%voxanne@demo.com%')
+    .ilike('email', '%barpel@demo.com%')
     .single();
   
   if (error) {

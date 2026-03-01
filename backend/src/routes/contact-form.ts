@@ -59,8 +59,8 @@ function isUrgentSubject(subject: string): boolean {
  * Send email to support team
  */
 async function sendSupportEmail(data: ContactFormData): Promise<void> {
-  const supportEmail = 'support@voxanne.ai';
-  const fromEmail = config.FROM_EMAIL || 'noreply@voxanne.ai';
+  const supportEmail = 'support@barpel.ai';
+  const fromEmail = config.FROM_EMAIL || 'noreply@barpel.ai';
 
   const html = `
     <!DOCTYPE html>
@@ -149,7 +149,7 @@ async function sendSupportEmail(data: ContactFormData): Promise<void> {
           </div>
         </div>
         <div class="footer">
-          <p>Voxanne AI Contact Form</p>
+          <p>Barpel AI Contact Form</p>
           <p>Received: ${new Date().toLocaleString('en-GB')}</p>
         </div>
       </div>
@@ -190,7 +190,7 @@ async function sendSupportEmail(data: ContactFormData): Promise<void> {
  * Send confirmation email to user
  */
 async function sendConfirmationEmail(data: ContactFormData): Promise<void> {
-  const fromEmail = config.FROM_EMAIL || 'noreply@voxanne.ai';
+  const fromEmail = config.FROM_EMAIL || 'noreply@barpel.ai';
 
   const html = `
     <!DOCTYPE html>
@@ -214,7 +214,7 @@ async function sendConfirmationEmail(data: ContactFormData): Promise<void> {
         <div class="content">
           <p>Hi ${data.name},</p>
 
-          <p>Thank you for contacting Voxanne AI! We've received your message and will get back to you within 24 hours.</p>
+          <p>Thank you for contacting Barpel AI! We've received your message and will get back to you within 24 hours.</p>
 
           <div class="highlight">
             <strong>Your Message:</strong><br>
@@ -233,15 +233,15 @@ async function sendConfirmationEmail(data: ContactFormData): Promise<void> {
 
           <p>In the meantime, you can:</p>
           <ul>
-            <li>Explore our documentation at <a href="https://voxanne.ai/docs">voxanne.ai/docs</a></li>
+            <li>Explore our documentation at <a href="https://barpel.ai/docs">barpel.ai/docs</a></li>
             <li>Book a demo call at <a href="https://calendly.com/austyneguale/30min">calendly.com/austyneguale/30min</a></li>
             <li>Call us at <a href="tel:+447424038250">+44 7424 038250</a></li>
           </ul>
 
-          <p>Best regards,<br>The Voxanne AI Team</p>
+          <p>Best regards,<br>The Barpel AI Team</p>
         </div>
         <div class="footer">
-          <p>Voxanne AI - Intelligent Voice Solutions</p>
+          <p>Barpel AI - Intelligent Voice Solutions</p>
           <p>This is an automated confirmation. Please do not reply to this email.</p>
         </div>
       </div>
@@ -261,7 +261,7 @@ async function sendConfirmationEmail(data: ContactFormData): Promise<void> {
     await resendClient.emails.send({
       from: fromEmail,
       to: data.email,
-      subject: 'We received your message - Voxanne AI',
+      subject: 'We received your message - Barpel AI',
       html,
     });
     log.info('ContactForm', 'Confirmation email sent', { email: data.email });
@@ -381,7 +381,7 @@ router.post('/', async (req: Request, res: Response) => {
 
     return res.status(500).json({
       success: false,
-      error: 'Failed to process your submission. Please try again or contact support@voxanne.ai directly.',
+      error: 'Failed to process your submission. Please try again or contact support@barpel.ai directly.',
     });
   }
 });

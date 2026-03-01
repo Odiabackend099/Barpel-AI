@@ -40,10 +40,10 @@ type ChatMessage = z.infer<typeof ChatMessageSchema>;
 type ChatRequest = z.infer<typeof ChatRequestSchema>;
 
 // System prompt for the chat widget (UK pricing and contact info)
-const SYSTEM_PROMPT = `You are Voxanne, an intelligent AI assistant for Voxanne AI - a Voice-as-a-Service platform that helps businesses automate phone calls with AI.
+const SYSTEM_PROMPT = `You are Barpel, an intelligent AI assistant for Barpel AI - a Voice-as-a-Service platform that helps businesses automate phone calls with AI.
 
 Your role is to:
-1. Answer questions about Voxanne AI's services
+1. Answer questions about Barpel AI's services
 2. Qualify leads by understanding their business needs
 3. Guide them to book a demo or contact sales
 4. Be professional, friendly, and concise
@@ -69,9 +69,9 @@ Your role is to:
 
 **CONTACT INFORMATION:**
 - Phone: +44 7424 038250
-- Email: support@voxanne.ai
+- Email: support@barpel.ai
 - Book a demo: https://calendly.com/austyneguale/30min
-- Website: https://voxanne.ai
+- Website: https://barpel.ai
 
 **CONVERSATION STYLE:**
 - Keep responses concise (2-4 sentences max unless asked for details)
@@ -228,7 +228,7 @@ router.post('/', async (req: Request, res: Response) => {
     if (!groqClient) {
       return res.status(503).json({
         success: false,
-        error: 'Chat service temporarily unavailable. Please contact support@voxanne.ai',
+        error: 'Chat service temporarily unavailable. Please contact support@barpel.ai',
       });
     }
 

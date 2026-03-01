@@ -2,21 +2,21 @@ import type { Metadata } from "next"
 import React from 'react';
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Voxanne AI",
-  description: "Voxanne AI Terms of Service. Review our platform usage terms, service agreements, and user responsibilities for AI voice automation.",
+  title: "Terms of Service | Barpel AI",
+  description: "Barpel AI Terms of Service. Review our platform usage terms, service agreements, and user responsibilities for AI voice automation.",
   keywords: ["terms of service", "user agreement", "legal terms"],
   robots: {
     index: true,
     follow: true,
   },
   openGraph: {
-    title: "Terms of Service | Voxanne AI",
-    url: 'https://voxanne.ai/terms',
+    title: "Terms of Service | Barpel AI",
+    url: 'https://barpel.ai/terms',
     images: ['/og-image.png'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Terms of Service | Voxanne AI",
+    title: "Terms of Service | Barpel AI",
     images: ['/og-image.png'],
   },
   alternates: {
@@ -61,9 +61,9 @@ export default function TermsOfService() {
                     <section id="acceptance" className="mb-12">
                         <h2 className="text-3xl font-bold text-deep-obsidian mb-6">1. Acceptance of Terms</h2>
                         <p className="mb-4">
-                            Welcome to Voxanne AI, a product of Call Waiting AI Ltd. ("Voxanne AI," "we," "us," or "our").
+                            Welcome to Barpel AI, a product of Call Waiting AI Ltd. ("Barpel AI," "we," "us," or "our").
                             These Terms of Service ("Terms") constitute a legally binding agreement between you ("you," "your,"
-                            or "User") and Voxanne AI governing your access to and use of our AI-powered voice receptionist
+                            or "User") and Barpel AI governing your access to and use of our AI-powered voice receptionist
                             platform (the "Service").
                         </p>
                         <p className="mb-4">
@@ -94,8 +94,8 @@ export default function TermsOfService() {
                             <div>
                                 <dt className="font-semibold text-deep-obsidian">"Service"</dt>
                                 <dd className="ml-4 text-slate-600">
-                                    Refers to Voxanne AI's AI-powered voice receptionist platform, including all software,
-                                    features, integrations, APIs, documentation, and related services provided by Voxanne AI.
+                                    Refers to Barpel AI's AI-powered voice receptionist platform, including all software,
+                                    features, integrations, APIs, documentation, and related services provided by Barpel AI.
                                 </dd>
                             </div>
                             <div>
@@ -149,7 +149,7 @@ export default function TermsOfService() {
                     <section id="service-description" className="mb-12">
                         <h2 className="text-3xl font-bold text-deep-obsidian mb-6">3. Service Description</h2>
                         <p className="mb-4">
-                            Voxanne AI provides an AI-powered voice receptionist platform designed specifically for
+                            Barpel AI provides an AI-powered voice receptionist platform designed specifically for
                             healthcare providers, medical practices, and aesthetic clinics. The Service includes:
                         </p>
                         <ul className="list-disc ml-6 mb-6 space-y-2">
@@ -227,7 +227,7 @@ export default function TermsOfService() {
                         <div className="bg-red-50 border-l-4 border-red-400 p-4 my-6">
                             <p className="text-sm text-red-800">
                                 <strong>Security Warning:</strong> You must not share your account credentials with
-                                unauthorized individuals. Voxanne AI will never ask for your password via email, phone,
+                                unauthorized individuals. Barpel AI will never ask for your password via email, phone,
                                 or instant message.
                             </p>
                         </div>
@@ -267,7 +267,7 @@ export default function TermsOfService() {
                             <li>Comply with all applicable healthcare privacy and security laws, including HIPAA</li>
                             <li>Obtain all necessary patient consents for call recording and data processing</li>
                             <li>Ensure your use of the Service aligns with your organization's HIPAA compliance program</li>
-                            <li>Request and execute a BAA with Voxanne AI if required by HIPAA (see Section 9)</li>
+                            <li>Request and execute a BAA with Barpel AI if required by HIPAA (see Section 9)</li>
                             <li>Train your staff on proper use of the Service in compliance with HIPAA regulations</li>
                         </ul>
 
@@ -290,13 +290,13 @@ export default function TermsOfService() {
                         <h3 className="text-xl font-semibold text-deep-obsidian mb-4">6.1 Pricing and Billing</h3>
                         <p className="mb-4">
                             Pricing for the Service is available on our website at{' '}
-                            <a href="https://voxanne.ai/pricing" className="text-clinical-blue hover:text-surgical-blue underline">
-                                voxanne.ai/pricing
+                            <a href="https://barpel.ai/pricing" className="text-clinical-blue hover:text-surgical-blue underline">
+                                barpel.ai/pricing
                             </a>. You agree to pay all fees and charges incurred under your account at the rates in effect
                             when the charges were incurred.
                         </p>
                         <ul className="list-disc ml-6 mb-6 space-y-2">
-                            <li><strong>Billing Model:</strong> Voxanne AI operates on a prepaid credit (pay-as-you-go) basis. You purchase credits which are deducted based on actual call usage</li>
+                            <li><strong>Billing Model:</strong> Barpel AI operates on a prepaid credit (pay-as-you-go) basis. You purchase credits which are deducted based on actual call usage</li>
                             <li><strong>Payment Method:</strong> Payments are processed via Stripe. You may purchase credits via one-time card payments</li>
                             <li><strong>Auto-Recharge:</strong> You may optionally enable automatic top-ups when your balance falls below a configured threshold</li>
                             <li><strong>Minimum Top-Up:</strong> The minimum credit purchase is $25</li>
@@ -337,7 +337,7 @@ export default function TermsOfService() {
                         </p>
                         <ul className="list-disc ml-6 mb-6 space-y-2">
                             <li>Navigate to Account Settings → Close Account in your dashboard</li>
-                            <li>Or contact our support team at support@voxanne.ai</li>
+                            <li>Or contact our support team at support@barpel.ai</li>
                         </ul>
                         <p className="mb-4">
                             Unused credits remain in your wallet for 12 months from the date of your last top-up.
@@ -368,7 +368,7 @@ export default function TermsOfService() {
                         <h3 className="text-xl font-semibold text-deep-obsidian mb-4">8.1 Our Intellectual Property</h3>
                         <p className="mb-4">
                             The Service, including all software, algorithms, AI models, trademarks, logos, and content
-                            (excluding Customer Data), is owned by Voxanne AI and protected by copyright, trademark, patent,
+                            (excluding Customer Data), is owned by Barpel AI and protected by copyright, trademark, patent,
                             trade secret, and other intellectual property laws.
                         </p>
                         <p className="mb-4">
@@ -416,7 +416,7 @@ export default function TermsOfService() {
                             <strong>To request a BAA:</strong>
                         </p>
                         <ul className="list-disc ml-6 mb-6 space-y-2">
-                            <li>Email legal@voxanne.ai with subject "BAA Request"</li>
+                            <li>Email legal@barpel.ai with subject "BAA Request"</li>
                             <li>Include your organization name, contact information, and practice type</li>
                             <li>We will provide our standard BAA template within 5 business days</li>
                             <li>Enterprise customers may negotiate custom BAA terms</li>
@@ -517,7 +517,7 @@ export default function TermsOfService() {
                             </tbody>
                         </table>
                         <p className="mb-4">
-                            <strong>To claim service credits:</strong> Email support@voxanne.ai within 30 days of the
+                            <strong>To claim service credits:</strong> Email support@barpel.ai within 30 days of the
                             downtime incident with details of the outage. Credits will be applied to your next monthly invoice.
                         </p>
 
@@ -560,7 +560,7 @@ export default function TermsOfService() {
                                 Limitation of Liability
                             </p>
                             <p className="text-sm text-red-800">
-                                TO THE MAXIMUM EXTENT PERMITTED BY LAW, VOXANNE AI'S TOTAL LIABILITY TO YOU FOR ALL
+                                TO THE MAXIMUM EXTENT PERMITTED BY LAW, BARPEL AI'S TOTAL LIABILITY TO YOU FOR ALL
                                 CLAIMS ARISING OUT OF OR RELATED TO THESE TERMS OR THE SERVICE SHALL NOT EXCEED THE
                                 GREATER OF: (A) THE AMOUNT YOU PAID US IN THE 12 MONTHS PRECEDING THE CLAIM, OR (B) $5,000 USD.
                             </p>
@@ -572,7 +572,7 @@ export default function TermsOfService() {
                                 No Consequential Damages
                             </p>
                             <p className="text-sm text-red-800">
-                                IN NO EVENT SHALL VOXANNE AI BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL,
+                                IN NO EVENT SHALL BARPEL AI BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL,
                                 CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING WITHOUT LIMITATION LOST PROFITS,
                                 LOST REVENUE, LOST DATA, OR BUSINESS INTERRUPTION, EVEN IF WE HAVE BEEN ADVISED
                                 OF THE POSSIBILITY OF SUCH DAMAGES.
@@ -593,7 +593,7 @@ export default function TermsOfService() {
 
                         <h3 className="text-xl font-semibold text-deep-obsidian mb-4">12.1 Your Indemnification Obligations</h3>
                         <p className="mb-4">
-                            You agree to indemnify, defend, and hold harmless Voxanne AI, its affiliates, officers,
+                            You agree to indemnify, defend, and hold harmless Barpel AI, its affiliates, officers,
                             directors, employees, and agents from and against any claims, liabilities, damages, losses,
                             and expenses (including reasonable attorneys' fees) arising out of or related to:
                         </p>
@@ -632,7 +632,7 @@ export default function TermsOfService() {
 
                         <h3 className="text-xl font-semibold text-deep-obsidian mb-4">13.1 Informal Negotiation</h3>
                         <p className="mb-4">
-                            Before filing any formal dispute, you agree to contact us at legal@voxanne.ai and attempt to
+                            Before filing any formal dispute, you agree to contact us at legal@barpel.ai and attempt to
                             resolve the dispute informally for at least 30 days.
                         </p>
 
@@ -677,7 +677,7 @@ export default function TermsOfService() {
                     <section id="governing-law" className="mb-12">
                         <h2 className="text-3xl font-bold text-deep-obsidian mb-6">14. Governing Law & Jurisdiction</h2>
                         <p className="mb-4">
-                            <strong>Voxanne AI is registered in England and Wales (Company Number 16917594).</strong> These Terms and any dispute arising out of or related to these Terms or the Service shall be governed by and construed in accordance with the laws of England and Wales, without regard to its conflict of law provisions.
+                            <strong>Barpel AI is registered in England and Wales (Company Number 16917594).</strong> These Terms and any dispute arising out of or related to these Terms or the Service shall be governed by and construed in accordance with the laws of England and Wales, without regard to its conflict of law provisions.
                         </p>
                         <div className="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-r-lg mb-6">
                             <p className="text-blue-800 font-semibold mb-2">Exclusive Jurisdiction</p>
@@ -757,7 +757,7 @@ export default function TermsOfService() {
                         <h3 className="text-xl font-semibold text-deep-obsidian mb-4">17.1 Entire Agreement</h3>
                         <p className="mb-4">
                             These Terms, together with our Privacy Policy and any other agreements referenced herein,
-                            constitute the entire agreement between you and Voxanne AI regarding the Service and supersede
+                            constitute the entire agreement between you and Barpel AI regarding the Service and supersede
                             all prior agreements and understandings.
                         </p>
 
@@ -811,7 +811,7 @@ export default function TermsOfService() {
                             reach out to:
                         </p>
                         <div className="bg-clinical-blue/5 border border-clinical-blue/20 rounded-lg p-6 mt-6">
-                            <h3 className="font-semibold text-deep-obsidian mb-4">Voxanne AI</h3>
+                            <h3 className="font-semibold text-deep-obsidian mb-4">Barpel AI</h3>
                             <p className="text-slate-600 mb-2">
                                 A product of Call Waiting AI Ltd.
                             </p>
@@ -824,26 +824,26 @@ export default function TermsOfService() {
                             <div className="space-y-2">
                                 <p className="text-slate-600">
                                     <strong>General Support:</strong>{' '}
-                                    <a href="mailto:support@voxanne.ai" className="text-clinical-blue hover:text-surgical-blue underline">
-                                        support@voxanne.ai
+                                    <a href="mailto:support@barpel.ai" className="text-clinical-blue hover:text-surgical-blue underline">
+                                        support@barpel.ai
                                     </a>
                                 </p>
                                 <p className="text-slate-600">
                                     <strong>Legal Matters:</strong>{' '}
-                                    <a href="mailto:legal@voxanne.ai" className="text-clinical-blue hover:text-surgical-blue underline">
-                                        legal@voxanne.ai
+                                    <a href="mailto:legal@barpel.ai" className="text-clinical-blue hover:text-surgical-blue underline">
+                                        legal@barpel.ai
                                     </a>
                                 </p>
                                 <p className="text-slate-600">
                                     <strong>Privacy Inquiries:</strong>{' '}
-                                    <a href="mailto:privacy@voxanne.ai" className="text-clinical-blue hover:text-surgical-blue underline">
-                                        privacy@voxanne.ai
+                                    <a href="mailto:privacy@barpel.ai" className="text-clinical-blue hover:text-surgical-blue underline">
+                                        privacy@barpel.ai
                                     </a>
                                 </p>
                                 <p className="text-slate-600">
                                     <strong>Security Issues:</strong>{' '}
-                                    <a href="mailto:security@voxanne.ai" className="text-clinical-blue hover:text-surgical-blue underline">
-                                        security@voxanne.ai
+                                    <a href="mailto:security@barpel.ai" className="text-clinical-blue hover:text-surgical-blue underline">
+                                        security@barpel.ai
                                     </a>
                                 </p>
                             </div>
@@ -859,7 +859,7 @@ export default function TermsOfService() {
                         </p>
                         <p className="text-sm text-slate-600 mt-4">
                             By using the Service, you acknowledge that you have read and understood these Terms of Service
-                            and agree to be bound by them. Thank you for choosing Voxanne AI.
+                            and agree to be bound by them. Thank you for choosing Barpel AI.
                         </p>
                     </div>
                 </div>

@@ -10,8 +10,8 @@ export default function Logo({ className = "", width = 150, height = 40 }: LogoP
     return (
         <div className={`relative ${className}`}>
             <Image
-                src="/Brand/8.png"
-                alt="Voxanne AI Logo"
+                src="/images/logos/logo_dark.png"
+                alt="Barpel AI Logo"
                 width={width}
                 height={height}
                 className="object-contain"

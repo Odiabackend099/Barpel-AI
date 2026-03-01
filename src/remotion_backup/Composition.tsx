@@ -4,7 +4,7 @@ import { CallInterface } from './components/CallInterface';
 import { TranscriptionOverlay } from './components/TranscriptionOverlay';
 import scriptData from './data/script.json';
 
-export const VoxanneDemo = () => {
+export const BarpelDemo = () => {
     // Cast script data to expected type
     const events = (scriptData.timeline || []).map(e => ({
         ...e,

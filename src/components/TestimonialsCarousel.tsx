@@ -8,7 +8,7 @@ const testimonials = [
     {
         id: 1,
         rating: 5,
-        quote: "We were missing 30+ calls a week. Since Voxanne, we've booked $47,000 in additional procedures in just the first month.",
+        quote: "We were missing 30+ calls a week. Since Barpel, we've booked $47,000 in additional procedures in just the first month.",
         author: 'Dr. Jennifer Martinez',
         title: 'Owner',
         practice: 'Radiant Skin Dermatology',
@@ -68,7 +68,7 @@ export function TestimonialsCarousel() {
                         Loved by <span className="font-sans font-semibold text-surgical-300">Leading Clinics</span>
                     </h2>
                     <p className="text-lg text-white/50 max-w-2xl mx-auto">
-                        See why top medical practices trust Voxanne to handle their patient communications.
+                        See why top medical practices trust Barpel to handle their patient communications.
                     </p>
                 </motion.div>
 

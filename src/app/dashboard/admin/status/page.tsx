@@ -49,7 +49,7 @@ export default function SystemStatusPage() {
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-12 h-12 text-surgical-500 animate-spin" />
-          <p className="text-obsidian/60">Loading system status...</p>
+          <p className="text-barpel-slate/60">Loading system status...</p>
         </div>
       </div>
     );
@@ -63,7 +63,7 @@ export default function SystemStatusPage() {
             <AlertCircle className="w-6 h-6 text-red-600" />
             <h1 className="text-xl font-bold text-red-700">System Error</h1>
           </div>
-          <p className="text-obsidian/60">{error || 'Could not load status'}</p>
+          <p className="text-barpel-slate/60">{error || 'Could not load status'}</p>
         </div>
       </div>
     );
@@ -80,7 +80,7 @@ export default function SystemStatusPage() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-obsidian mb-2 flex items-center gap-3">
+          <h1 className="text-3xl font-bold text-barpel-slate mb-2 flex items-center gap-3">
             {isHealthy ? (
               <CheckCircle2 className="w-8 h-8 text-green-600" />
             ) : (
@@ -88,7 +88,7 @@ export default function SystemStatusPage() {
             )}
             System Status
           </h1>
-          <p className="text-obsidian/40">
+          <p className="text-barpel-slate/40">
             Last updated: {new Date(data.timestamp).toLocaleTimeString()}
           </p>
         </div>
@@ -103,10 +103,10 @@ export default function SystemStatusPage() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-obsidian mb-1">
+              <h2 className="text-lg font-semibold text-barpel-slate mb-1">
                 {isHealthy ? 'System Healthy' : 'System Issues Detected'}
               </h2>
-              <p className="text-sm text-obsidian/60">
+              <p className="text-sm text-barpel-slate/60">
                 {data.status === 'healthy'
                   ? 'All systems operational'
                   : `Status: ${data.status}`}
@@ -120,7 +120,7 @@ export default function SystemStatusPage() {
 
         {/* Session Status */}
         <div className="bg-white border border-surgical-200 rounded-lg p-6 mb-6">
-          <h3 className="text-lg font-semibold text-obsidian mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-barpel-slate mb-4 flex items-center gap-2">
             {data.session_valid ? (
               <CheckCircle2 className="w-5 h-5 text-green-600" />
             ) : (
@@ -130,25 +130,25 @@ export default function SystemStatusPage() {
           </h3>
           <div className="grid grid-cols-1 gap-3">
             <div>
-              <p className="text-xs text-obsidian/40 uppercase tracking-widest mb-1">
+              <p className="text-xs text-barpel-slate/40 uppercase tracking-widest mb-1">
                 User ID
               </p>
-              <p className="text-sm font-mono text-obsidian/70">
+              <p className="text-sm font-mono text-barpel-slate/70">
                 {data.user_id || 'Not available'}
               </p>
             </div>
             <div>
-              <p className="text-xs text-obsidian/40 uppercase tracking-widest mb-1">
+              <p className="text-xs text-barpel-slate/40 uppercase tracking-widest mb-1">
                 Email
               </p>
-              <p className="text-sm text-obsidian/70">{data.user_email}</p>
+              <p className="text-sm text-barpel-slate/70">{data.user_email}</p>
             </div>
           </div>
         </div>
 
         {/* Organization Status */}
         <div className="bg-white border border-surgical-200 rounded-lg p-6 mb-6">
-          <h3 className="text-lg font-semibold text-obsidian mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-barpel-slate mb-4 flex items-center gap-2">
             {data.organization_id ? (
               <CheckCircle2 className="w-5 h-5 text-green-600" />
             ) : (
@@ -158,18 +158,18 @@ export default function SystemStatusPage() {
           </h3>
           <div className="grid grid-cols-1 gap-3">
             <div>
-              <p className="text-xs text-obsidian/40 uppercase tracking-widest mb-1">
+              <p className="text-xs text-barpel-slate/40 uppercase tracking-widest mb-1">
                 Org ID
               </p>
-              <p className="text-sm font-mono text-obsidian/70">
+              <p className="text-sm font-mono text-barpel-slate/70">
                 {data.organization_id || 'Not found'}
               </p>
             </div>
             <div>
-              <p className="text-xs text-obsidian/40 uppercase tracking-widest mb-1">
+              <p className="text-xs text-barpel-slate/40 uppercase tracking-widest mb-1">
                 Org Name
               </p>
-              <p className="text-sm text-obsidian/70">
+              <p className="text-sm text-barpel-slate/70">
                 {data.organization_name || 'Organization name not found'}
               </p>
             </div>
@@ -178,7 +178,7 @@ export default function SystemStatusPage() {
 
         {/* Database Status */}
         <div className="bg-white border border-surgical-200 rounded-lg p-6 mb-6">
-          <h3 className="text-lg font-semibold text-obsidian mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-barpel-slate mb-4 flex items-center gap-2">
             {data.database_connected ? (
               <CheckCircle2 className="w-5 h-5 text-green-600" />
             ) : (
@@ -188,10 +188,10 @@ export default function SystemStatusPage() {
           </h3>
           <div className="grid grid-cols-1 gap-3">
             <div>
-              <p className="text-xs text-obsidian/40 uppercase tracking-widest mb-1">
+              <p className="text-xs text-barpel-slate/40 uppercase tracking-widest mb-1">
                 Connection Status
               </p>
-              <p className="text-sm text-obsidian/70">
+              <p className="text-sm text-barpel-slate/70">
                 {data.database_connected
                   ? 'Connected to Supabase'
                   : 'Cannot connect to database'}
@@ -203,17 +203,17 @@ export default function SystemStatusPage() {
         {/* Recent Queries */}
         {data.recent_queries && data.recent_queries.length > 0 && (
           <div className="bg-white border border-surgical-200 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-obsidian mb-4">
+            <h3 className="text-lg font-semibold text-barpel-slate mb-4">
               Recent Database Queries
             </h3>
             <div className="space-y-3">
               {data.recent_queries.map((query, idx) => (
                 <div key={idx} className="flex items-center justify-between p-3 bg-surgical-50 rounded border border-surgical-200">
                   <div>
-                    <p className="text-sm font-mono text-obsidian/60">
+                    <p className="text-sm font-mono text-barpel-slate/60">
                       {query.operation} {query.table}
                     </p>
-                    <p className="text-xs text-obsidian/40">
+                    <p className="text-xs text-barpel-slate/40">
                       {new Date(query.timestamp).toLocaleTimeString()} - {query.row_count} row(s)
                     </p>
                   </div>
@@ -224,7 +224,7 @@ export default function SystemStatusPage() {
         )}
 
         {/* Diagnostic Info */}
-        <div className="mt-8 p-4 bg-surgical-50 border border-surgical-200 rounded text-xs text-obsidian/40 font-mono">
+        <div className="mt-8 p-4 bg-surgical-50 border border-surgical-200 rounded text-xs text-barpel-slate/40 font-mono">
           <p className="mb-2">Debug Info:</p>
           <pre className="overflow-x-auto">
             {JSON.stringify(

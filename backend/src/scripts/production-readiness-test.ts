@@ -400,7 +400,7 @@ async function runProductionReadinessTests(): Promise<void> {
 
   logger.info('Starting Production Readiness Test Suite');
   console.log('\n' + '='.repeat(80));
-  console.log('VOXANNE AI - PRODUCTION READINESS TEST SUITE');
+  console.log('BARPEL AI - PRODUCTION READINESS TEST SUITE');
   console.log('Testing Five Production Priorities');
   console.log('='.repeat(80) + '\n');
 

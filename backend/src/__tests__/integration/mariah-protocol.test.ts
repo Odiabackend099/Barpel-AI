@@ -55,7 +55,7 @@ describe('Mariah Protocol Certification', () => {
           .from('organizations')
           .insert({
             name: 'Mariah Protocol Test Org',
-            email: `test-${randomUUID().substring(0, 8)}@voxanne.test`,
+            email: `test-${randomUUID().substring(0, 8)}@barpel.test`,
           })
           .select()
           .single();
@@ -192,7 +192,7 @@ describe('Mariah Protocol Certification', () => {
         .from('organizations')
         .insert({
           name: 'Empty KB Test Org',
-          email: `empty-kb-${randomUUID().substring(0, 8)}@voxanne.test`,
+          email: `empty-kb-${randomUUID().substring(0, 8)}@barpel.test`,
         })
         .select()
         .single();
@@ -1037,7 +1037,7 @@ describe('Mariah Protocol Certification', () => {
         .from('organizations')
         .insert({
           name: 'No KB Org',
-          email: `no-kb-${randomUUID().substring(0, 8)}@voxanne.test`,
+          email: `no-kb-${randomUUID().substring(0, 8)}@barpel.test`,
         })
         .select()
         .single();

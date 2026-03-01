@@ -18,8 +18,8 @@ import NavbarRedesigned from "@/components/NavbarRedesigned";
 import FooterRedesigned from "@/components/FooterRedesigned";
 
 export const metadata: Metadata = {
-  title: "Documentation - Voxanne AI",
-  description: "Complete guide to setting up and using Voxanne AI. Learn about agent configuration, integrations, and best practices.",
+  title: "Documentation - Barpel AI",
+  description: "Complete guide to setting up and using Barpel AI. Learn about agent configuration, integrations, and best practices.",
 };
 
 const docSections = [
@@ -48,7 +48,7 @@ const docSections = [
   {
     title: "Integrations",
     icon: Plug,
-    description: "Connect Voxanne AI with your existing tools and workflows",
+    description: "Connect Barpel AI with your existing tools and workflows",
     articles: [
       { title: "Google Calendar Integration", href: "#google-calendar", time: "10 min" },
       { title: "Outlook Calendar Integration", href: "#outlook-calendar", time: "10 min" },
@@ -276,7 +276,7 @@ export default function DocsPage() {
           >
             <Rocket className="w-8 h-8 text-surgical-600 mx-auto mb-3" />
             <h3 className="font-semibold text-navy-900 mb-2">Live Demo</h3>
-            <p className="text-sm text-slate-600">See Voxanne AI in action</p>
+            <p className="text-sm text-slate-600">See Barpel AI in action</p>
           </Link>
           <Link
             href="/case-studies"

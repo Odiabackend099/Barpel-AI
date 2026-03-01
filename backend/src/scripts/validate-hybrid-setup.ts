@@ -19,7 +19,7 @@ import twilio from 'twilio';
 // CONFIGURATION
 // ============================================
 
-const TARGET_ORG_EMAIL = 'voxanne@demo.com';
+const TARGET_ORG_EMAIL = 'barpel@demo.com';
 const TARGET_PHONE = '+2348141995397';
 
 // ============================================

@@ -33,7 +33,7 @@ export default function BenefitsSection() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-obsidian">
-            Why Aesthetic Clinics Choose Voxanne
+            Why Aesthetic Clinics Choose Barpel
           </h2>
           <p className="text-xl text-obsidian/70 max-w-2xl mx-auto">
             Three key benefits that transform your practice

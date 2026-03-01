@@ -663,7 +663,7 @@ appointmentsRouter.post('/:appointmentId/send-reminder', async (req: Request, re
       try {
         const emailResult = await withResendRetry(() =>
           resend.emails.send({
-            from: 'noreply@voxanne.ai',
+            from: 'noreply@barpel.ai',
             to: contact.email,
             subject: emailSubject,
             text: reminderContent

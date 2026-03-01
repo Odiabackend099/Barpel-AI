@@ -165,7 +165,7 @@ export class ManagedTelephonyService {
 
       // Create subaccount via Twilio Master API
       const masterClient = getMasterClient();
-      const friendlyName = `Voxanne - ${orgName}`.slice(0, 64); // Twilio max 64 chars
+      const friendlyName = `Barpel - ${orgName}`.slice(0, 64); // Twilio max 64 chars
 
       log.info('ManagedTelephony', 'Creating Twilio subaccount', { orgId, friendlyName });
 
@@ -443,7 +443,7 @@ export class ManagedTelephonyService {
               region: regionMap[country] ?? '',
               postalCode: postalMap[country] || 'EC1A 1BB',
               isoCountry: country,
-              friendlyName: `${org.name || 'Voxanne'} - Managed Number Address`,
+              friendlyName: `${org.name || 'Barpel'} - Managed Number Address`,
             });
             addressSid = address.sid;
             log.info('ManagedTelephony', 'Created address resource', { orgId, addressSid, country });
