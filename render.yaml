@@ -1,0 +1,71 @@
+services:
+  # Backend Service (Frontend deploys to Vercel separately)
+  - type: web
+    name: voxanne-backend
+    env: node
+    plan: standard
+    buildCommand: cd backend && npm install && npm run build
+    startCommand: cd backend && npm run start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3001"
+      - key: BACKEND_URL
+        value: https://api.voxanne.ai
+      - key: FRONTEND_URL
+        value: https://voxanne.ai
+      - key: CORS_ORIGIN
+        value: https://voxanne.ai
+      - key: SUPABASE_URL
+        fromDatabase:
+          name: callwaiting-ai-db
+          property: supabaseUrl
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        fromDatabase:
+          name: callwaiting-ai-db
+          property: supabaseServiceRoleKey
+      - key: SUPABASE_ANON_KEY
+        fromDatabase:
+          name: callwaiting-ai-db
+          property: supabaseAnonKey
+      - key: GOOGLE_CLIENT_ID
+        fromDatabase:
+          name: callwaiting-ai-db
+          property: googleClientId
+      - key: GOOGLE_CLIENT_SECRET
+        fromDatabase:
+          name: callwaiting-ai-db
+          property: googleClientSecret
+      - key: GOOGLE_REDIRECT_URI
+        value: https://api.voxanne.ai/api/google-oauth/callback
+      - key: VAPI_PRIVATE_KEY
+        fromDatabase:
+          name: callwaiting-ai-db
+          property: vapiApiKey
+      - key: TWILIO_ACCOUNT_SID
+        fromDatabase:
+          name: callwaiting-ai-db
+          property: twilioAccountSid
+      - key: TWILIO_AUTH_TOKEN
+        fromDatabase:
+          name: callwaiting-ai-db
+          property: twilioAuthToken
+      - key: ENCRYPTION_KEY
+        fromDatabase:
+          name: callwaiting-ai-db
+          property: encryptionKey
+      - key: JWT_SECRET
+        fromDatabase:
+          name: callwaiting-ai-db
+          property: jwtSecret
+    routes:
+      - path: /api
+        matchType: prefix
+
+databases:
+  - name: callwaiting-ai-db
+    databaseName: callwaiting_ai_prod
+    user: postgres
+    region: us-east  # Change based on your preference

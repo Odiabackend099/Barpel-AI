@@ -1,0 +1,162 @@
+import React, { useState, useRef } from 'react';
+import { Play, Pause, Download, Volume2 } from 'lucide-react';
+import { authedBackendFetch } from '@/lib/authed-backend-fetch';
+
+interface RecordingPlayerProps {
+  callId: string;
+  recordingUrl?: string;
+  duration?: number;
+}
+
+export function RecordingPlayer({ callId, recordingUrl, duration }: RecordingPlayerProps) {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Set audio source or fetch recording URL
+  React.useEffect(() => {
+    // If recordingUrl is provided, set it directly
+    if (recordingUrl) {
+      if (audioRef.current) {
+        audioRef.current.src = recordingUrl;
+      }
+      return;
+    }
+
+    // Otherwise, fetch from API
+    const fetchRecordingUrl = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await authedBackendFetch<{ recording_url: string }>(
+          `/api/calls-dashboard/${callId}/recording-url`
+        );
+        if (audioRef.current && data.recording_url) {
+          audioRef.current.src = data.recording_url;
+        } else {
+          setError('No recording URL available');
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load recording');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecordingUrl();
+  }, [callId, recordingUrl]);
+
+  const handlePlayPause = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const handleDownload = async () => {
+    if (!audioRef.current?.src) return;
+    try {
+      const response = await fetch(audioRef.current.src);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `call-${callId}.wav`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error('Download failed:', err);
+    }
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  if (error) {
+    return (
+      <div className="p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 rounded text-red-700 dark:text-red-400 text-sm">
+        {error}
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="p-4 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded text-gray-600 dark:text-slate-400 text-sm">
+        Loading recording...
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
+      <div className="flex items-center gap-4">
+        <button
+          onClick={handlePlayPause}
+          className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full transition"
+          title={isPlaying ? 'Pause' : 'Play'}
+        >
+          {isPlaying ? (
+            <Pause className="w-5 h-5 text-blue-600" />
+          ) : (
+            <Play className="w-5 h-5 text-blue-600" />
+          )}
+        </button>
+
+        <div className="flex-1">
+          <audio
+            ref={audioRef}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+            onTimeUpdate={() => setCurrentTime(audioRef.current?.currentTime || 0)}
+            onError={(e) => {
+              console.error('Audio playback error:', e);
+              setError('Failed to play recording. The audio file may be corrupted or in an unsupported format.');
+              setIsPlaying(false);
+            }}
+            onLoadedMetadata={() => {
+              // Clear any previous errors once audio loads successfully
+              setError(null);
+            }}
+            className="w-full"
+            crossOrigin="anonymous"
+          />
+          <input
+            type="range"
+            min="0"
+            max={audioRef.current?.duration || 0}
+            value={currentTime}
+            onChange={(e) => {
+              if (audioRef.current) {
+                audioRef.current.currentTime = Number(e.target.value);
+              }
+            }}
+            className="w-full h-2 bg-gray-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer"
+          />
+          <div className="flex justify-between text-xs text-gray-600 dark:text-slate-400 mt-1">
+            <span>{formatTime(currentTime)}</span>
+            <span>{formatTime(audioRef.current?.duration || 0)}</span>
+          </div>
+        </div>
+
+        <button
+          onClick={handleDownload}
+          className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full transition"
+          title="Download"
+        >
+          <Download className="w-5 h-5 text-gray-600 dark:text-slate-400" />
+        </button>
+      </div>
+    </div>
+  );
+}

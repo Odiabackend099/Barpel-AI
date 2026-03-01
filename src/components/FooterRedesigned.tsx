@@ -1,0 +1,251 @@
+"use client";
+
+import { motion } from "framer-motion";
+import Link from "next/link";
+import Image from "next/image";
+import { FadeInOnScroll } from "./ParallaxSection";
+import { Mail, Phone, MapPin, Linkedin, Twitter, Facebook, Lock, Settings } from "lucide-react";
+import Logo from "./Logo";
+
+interface FooterRedesignedProps {
+    disableAnimations?: boolean;
+}
+
+export default function FooterRedesigned({ disableAnimations = false }: FooterRedesignedProps) {
+    const currentYear = new Date().getFullYear();
+
+    // Wrapper component that conditionally applies animation
+    const AnimationWrapper = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
+        if (disableAnimations) {
+            return <div>{children}</div>;
+        }
+        return <FadeInOnScroll delay={delay}>{children}</FadeInOnScroll>;
+    };
+
+    // Motion div that's conditional
+    const MotionDiv = disableAnimations ? 'div' : motion.div;
+
+    const footerLinks = {
+        Product: [
+            { label: "Features", href: "#features" },
+            { label: "Pricing", href: "#pricing" },
+            { label: "How It Works", href: "#how-it-works" },
+            { label: "Security", href: "/security" },
+        ],
+        Company: [
+            { label: "About", href: "/about" },
+            { label: "Blog", href: "/blog" },
+            { label: "Case Studies", href: "/case-studies" },
+            { label: "Careers", href: "/careers" },
+        ],
+        Resources: [
+            { label: "Documentation", href: "/docs" },
+            { label: "API Reference", href: "/api-reference" },
+            { label: "Support", href: "/support" },
+            { label: "Contact", href: "/contact" },
+        ],
+        Legal: [
+            { label: "Privacy Policy", href: "/privacy" },
+            { label: "Cookie Policy", href: "/cookie-policy" },
+            { label: "Data Processing Agreement", href: "/dpa" },
+            { label: "Sub-Processors", href: "/sub-processors" },
+            { label: "Terms of Service", href: "/terms" },
+            { label: "Healthcare Compliance", href: "/hipaa-compliance" },
+            { label: "Cookie Settings", href: "#cookie-settings", isButton: true },
+        ],
+    };
+
+    return (
+        <footer className="relative bg-obsidian text-white overflow-hidden">
+            <div className="section-container relative z-10">
+                {/* Main Footer Content */}
+                <div className="py-16 md:py-20 grid md:grid-cols-5 gap-12">
+                    {/* Brand Section */}
+                    <AnimationWrapper>
+                        <MotionDiv
+                            {...(!disableAnimations && {
+                                initial: { opacity: 0, y: 20 },
+                                whileInView: { opacity: 1, y: 0 },
+                                transition: { duration: 0.6 },
+                                viewport: { once: true }
+                            })}
+                        >
+                            <div className="mb-6">
+                                <Logo
+                                    variant="icon-white"
+                                    size="lg"
+                                    href="/"
+                                    priority={false}
+                                    showText={true}
+                                />
+                            </div>
+                            <p className="text-pure-white/70 mb-6 leading-relaxed">
+                                AI-powered receptionist for aesthetic clinics, med spas, and plastic surgery practices.
+                            </p>
+                            <div className="space-y-3">
+                                <div className="flex items-center gap-3 text-pure-white/70 hover:text-pure-white transition-colors">
+                                    <Mail className="w-5 h-5" />
+                                    <a href="mailto:support@voxanne.ai">support@voxanne.ai</a>
+                                </div>
+                                <div className="flex items-center gap-3 text-pure-white/70 hover:text-pure-white transition-colors">
+                                    <Phone className="w-5 h-5" />
+                                    <a href="tel:+447424038250">+44 7424 038250</a>
+                                </div>
+                                <div className="flex items-start gap-3 text-pure-white/70">
+                                    <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                                    <div className="text-sm leading-relaxed">
+                                        <div className="font-medium text-pure-white/80 mb-1">Global Headquarters</div>
+                                        <div>Collage House, 2nd Floor</div>
+                                        <div>17 King Edward Road</div>
+                                        <div>Ruislip, London HA4 7AE</div>
+                                        <div>United Kingdom</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </MotionDiv>
+                    </AnimationWrapper>
+
+                    {/* Link Sections */}
+                    {Object.entries(footerLinks).map(([category, links], index) => (
+                        <AnimationWrapper key={category} delay={index * 0.1}>
+                            <MotionDiv
+                                {...(!disableAnimations && {
+                                    initial: { opacity: 0, y: 20 },
+                                    whileInView: { opacity: 1, y: 0 },
+                                    transition: { duration: 0.6, delay: index * 0.1 },
+                                    viewport: { once: true }
+                                })}
+                            >
+                                <h3 className="font-semibold text-white text-sm uppercase tracking-widest mb-4">{category}</h3>
+                                <ul className="space-y-3">
+                                    {links.map((link: any) => (
+                                        <li key={link.href}>
+                                            {link.isButton ? (
+                                                <button
+                                                    onClick={() => window.dispatchEvent(new Event('openCookieSettings'))}
+                                                    className="flex items-center gap-2 text-pure-white/70 hover:text-pure-white transition-colors cursor-pointer"
+                                                >
+                                                    <Settings className="w-4 h-4" />
+                                                    {link.label}
+                                                </button>
+                                            ) : (
+                                                <Link
+                                                    href={link.href}
+                                                    className="text-pure-white/70 hover:text-pure-white transition-colors"
+                                                >
+                                                    {link.label}
+                                                </Link>
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </MotionDiv>
+                        </AnimationWrapper>
+                    ))}
+                </div>
+
+                {/* Compliance Badges Strip */}
+                <AnimationWrapper>
+                    <MotionDiv
+                        {...(!disableAnimations && {
+                            initial: { opacity: 0, y: 20 },
+                            whileInView: { opacity: 1, y: 0 },
+                            transition: { duration: 0.6 },
+                            viewport: { once: true }
+                        })}
+                        className="py-12 border-t border-cream/10"
+                    >
+                        <div className="flex items-center justify-center gap-8 flex-wrap">
+                            <div className="flex flex-col items-center">
+                                <div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+                                    <Image
+                                        src="/badges/gdpr-ready.png"
+                                        alt="GDPR Ready - UK & EU data protection standards compliance"
+                                        width={120}
+                                        height={60}
+                                        className="w-28 h-14 md:w-32 md:h-16 object-contain opacity-100 hover:opacity-90 transition-opacity"
+                                        loading="lazy"
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 hover:border-white/30 transition-colors backdrop-blur-sm">
+                                <Lock className="w-4 h-4 text-pure-white/80" />
+                                <span className="text-xs text-pure-white/80 font-medium">SOC 2 Type II</span>
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+                                    <Image
+                                        src="/badges/hipaa-compliant.jpg"
+                                        alt="HIPAA Compliant - Full compliance with Business Associate Agreement"
+                                        width={120}
+                                        height={60}
+                                        className="w-28 h-14 md:w-32 md:h-16 object-contain opacity-100 hover:opacity-90 transition-opacity"
+                                        loading="lazy"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </MotionDiv>
+                </AnimationWrapper>
+
+                {/* Divider */}
+                <div className="border-t border-cream/10" />
+
+                {/* Bottom Section */}
+                <div className="py-8 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <AnimationWrapper>
+                        <MotionDiv
+                            {...(!disableAnimations && {
+                                initial: { opacity: 0 },
+                                whileInView: { opacity: 1 },
+                                transition: { duration: 0.6 },
+                                viewport: { once: true }
+                            })}
+                            className="text-pure-white/60 text-sm space-y-2"
+                        >
+                            <p>{currentYear} Voxanne AI. All rights reserved. UK GDPR & HIPAA Compliant.</p>
+                            <div className="flex items-center gap-2 text-sm text-pure-white/70">
+                                <span>A product of</span>
+                                <a href="https://www.callwaitingai.dev/" target="_blank" rel="noopener noreferrer" className="font-medium text-surgical-blue hover:text-surgical-blue/80 transition-colors underline">
+                                    Call Waiting AI
+                                </a>
+                            </div>
+                        </MotionDiv>
+                    </AnimationWrapper>
+
+                    {/* Social Links */}
+                    <AnimationWrapper>
+                        <MotionDiv
+                            {...(!disableAnimations && {
+                                initial: { opacity: 0 },
+                                whileInView: { opacity: 1 },
+                                transition: { duration: 0.6, delay: 0.1 },
+                                viewport: { once: true }
+                            })}
+                            className="flex gap-4"
+                        >
+                            <a
+                                href="#"
+                                className="w-10 h-10 rounded-full bg-cream/10 hover:bg-clinical-blue/20 flex items-center justify-center transition-colors"
+                            >
+                                <Linkedin className="w-5 h-5" />
+                            </a>
+                            <a
+                                href="#"
+                                className="w-10 h-10 rounded-full bg-cream/10 hover:bg-clinical-blue/20 flex items-center justify-center transition-colors"
+                            >
+                                <Twitter className="w-5 h-5" />
+                            </a>
+                            <a
+                                href="#"
+                                className="w-10 h-10 rounded-full bg-cream/10 hover:bg-clinical-blue/20 flex items-center justify-center transition-colors"
+                            >
+                                <Facebook className="w-5 h-5" />
+                            </a>
+                        </MotionDiv>
+                    </AnimationWrapper>
+                </div>
+            </div>
+        </footer>
+    );
+}

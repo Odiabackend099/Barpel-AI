@@ -1,0 +1,246 @@
+#!/usr/bin/env ts-node
+/**
+ * Knowledge Base Audit Script
+ *
+ * Audits the Supabase database to verify:
+ * 1. Organization exists
+ * 2. Knowledge base documents are stored correctly
+ * 3. Documents are retrievable via queries
+ */
+
+import { createClient } from '@supabase/supabase-js';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+
+const SUPABASE_URL = process.env.SUPABASE_URL || '';
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+
+if (!SUPABASE_URL || !SUPABASE_KEY) {
+  console.error('❌ Missing Supabase credentials in .env');
+  process.exit(1);
+}
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function auditKnowledgeBase(): Promise<void> {
+  console.log('\n' + '═'.repeat(70));
+  console.log('📋 KNOWLEDGE BASE AUDIT - Supabase Database');
+  console.log('═'.repeat(70));
+  console.log('\nTarget: voxanne@demo.com organization\n');
+
+  // ==================== PHASE 1: Find Organization ====================
+  console.log('📁 PHASE 1: Finding Organization...\n');
+
+  const { data: orgs, error: orgError } = await supabase
+    .from('organizations')
+    .select('id, name, email, created_at')
+    .or('name.ilike.%voxanne%,email.ilike.%voxanne@demo.com%')
+    .limit(5);
+
+  if (orgError) {
+    console.error('❌ Error fetching organizations:', orgError.message);
+    process.exit(1);
+  }
+
+  console.log(`   Organizations found: ${orgs?.length || 0}`);
+
+  if (!orgs || orgs.length === 0) {
+    console.log('\n❌ No organization found with voxanne@demo.com');
+    console.log('   Searching all organizations...\n');
+
+    const { data: allOrgs } = await supabase
+      .from('organizations')
+      .select('id, name, email')
+      .limit(10);
+
+    if (allOrgs && allOrgs.length > 0) {
+      console.log('   Available organizations:');
+      for (const org of allOrgs) {
+        console.log(`     - ${org.name} (${org.email})`);
+      }
+    }
+
+    process.exit(1);
+  }
+
+  for (const org of orgs) {
+    const orgIdShort = org.id.substring(0, 8);
+    console.log(`   ✅ ${org.name} (${orgIdShort}...) - ${org.email}`);
+  }
+
+  const targetOrg = orgs[0];
+  const orgId = targetOrg.id;
+  const orgIdShort = orgId.substring(0, 8);
+
+  console.log(`\n   Selected: ${targetOrg.name} (${orgIdShort}...)\n`);
+
+  // ==================== PHASE 2: Check Knowledge Base Table ====================
+  console.log('📚 PHASE 2: Checking Knowledge Base Documents...\n');
+
+  const { data: kbDocs, error: kbError } = await supabase
+    .from('knowledge_base')
+    .select('*')
+    .eq('org_id', orgId)
+    .order('created_at', { ascending: false });
+
+  if (kbError) {
+    console.error('   ❌ Error fetching knowledge base:', kbError.message);
+    process.exit(1);
+  }
+
+  console.log(`   Total documents: ${kbDocs?.length || 0}\n`);
+
+  if (!kbDocs || kbDocs.length === 0) {
+    console.log('   ❌ No documents found in knowledge_base table');
+    console.log('   This means documents may not have been synced to Supabase.\n');
+    process.exit(1);
+  }
+
+  // Check how many chunks exist for each document
+  const { data: allChunks, error: chunksError } = await supabase
+    .from('knowledge_base_chunks')
+    .select('knowledge_base_id, chunk_index, token_count, embedding')
+    .eq('org_id', orgId);
+
+  // Group chunks by document ID
+  const chunksByDoc = new Map<string, any[]>();
+  if (allChunks) {
+    for (const chunk of allChunks) {
+      const docChunks = chunksByDoc.get(chunk.knowledge_base_id) || [];
+      docChunks.push(chunk);
+      chunksByDoc.set(chunk.knowledge_base_id, docChunks);
+    }
+  }
+
+  // Display each document with chunk info
+  for (let i = 0; i < kbDocs.length; i++) {
+    const doc = kbDocs[i];
+    const docChunks = chunksByDoc.get(doc.id) || [];
+    const totalTokens = docChunks.reduce((sum, c) => sum + (c.token_count || 0), 0);
+    const chunksWithEmbeddings = docChunks.filter(c => c.embedding).length;
+
+    console.log(`   Document ${i + 1}: ${doc.filename || 'Untitled'}`);
+    console.log(`     ID: ${doc.id}`);
+    console.log(`     Category: ${doc.category || 'N/A'}`);
+    console.log(`     Content Length: ${doc.content?.length || 0} characters`);
+    console.log(`     Chunks: ${docChunks.length}`);
+    console.log(`     Total Tokens: ${totalTokens}`);
+    console.log(`     Has Embeddings: ${chunksWithEmbeddings}/${docChunks.length} chunks`);
+    console.log(`     Version: ${doc.version || 'v1'}`);
+    console.log(`     Created: ${new Date(doc.created_at).toLocaleString()}`);
+    console.log('');
+  }
+
+  // ==================== PHASE 3: Test Retrieval ====================
+  console.log('🔍 PHASE 3: Testing Document Retrieval...\n');
+
+  const testQueries = [
+    'pricing',
+    'consultation',
+    'botox',
+    'services',
+    'team',
+    'contact',
+    'best practices'
+  ];
+
+  let totalMatches = 0;
+
+  for (const query of testQueries) {
+    const { data: searchResults, error: searchError } = await supabase
+      .from('knowledge_base')
+      .select('filename, content')
+      .eq('org_id', orgId)
+      .or(`filename.ilike.%${query}%,content.ilike.%${query}%`)
+      .limit(5);
+
+    if (searchError) {
+      console.log(`   ❌ Query "${query}": Error - ${searchError.message}`);
+    } else {
+      const matchCount = searchResults?.length || 0;
+      totalMatches += matchCount;
+
+      if (matchCount > 0) {
+        console.log(`   ✅ Query "${query}": ${matchCount} match(es)`);
+        for (const result of searchResults || []) {
+          console.log(`      - ${result.filename}`);
+        }
+      } else {
+        console.log(`   ⚠️  Query "${query}": 0 matches`);
+      }
+    }
+  }
+
+  console.log(`\n   Total matches across all queries: ${totalMatches}\n`);
+
+  // ==================== PHASE 4: Check Vector Embeddings ====================
+  console.log('🧠 PHASE 4: Checking Vector Embeddings...\n');
+
+  // Count chunks with and without embeddings
+  const totalChunks = allChunks?.length || 0;
+  const chunksWithEmbeddings = allChunks?.filter(c => c.embedding).length || 0;
+  const chunksWithoutEmbeddings = totalChunks - chunksWithEmbeddings;
+
+  console.log(`   Total chunks: ${totalChunks}`);
+  console.log(`   Chunks with embeddings: ${chunksWithEmbeddings}`);
+  console.log(`   Chunks without embeddings: ${chunksWithoutEmbeddings}`);
+
+  // Show which documents have missing embeddings
+  const docsWithMissingEmbeddings: string[] = [];
+  for (const doc of kbDocs) {
+    const docChunks = chunksByDoc.get(doc.id) || [];
+    const docChunksWithEmbeddings = docChunks.filter(c => c.embedding).length;
+    if (docChunksWithEmbeddings < docChunks.length) {
+      docsWithMissingEmbeddings.push(doc.filename || 'Untitled');
+    }
+  }
+
+  if (docsWithMissingEmbeddings.length > 0) {
+    console.log('\n   ⚠️  Documents with missing embeddings:');
+    for (const filename of docsWithMissingEmbeddings) {
+      console.log(`      - ${filename}`);
+    }
+  }
+
+  // ==================== SUMMARY ====================
+  console.log('\n' + '═'.repeat(70));
+  console.log('📊 AUDIT SUMMARY');
+  console.log('═'.repeat(70) + '\n');
+
+  console.log(`Organization:           ${targetOrg.name}`);
+  console.log(`Organization ID:        ${orgId}`);
+  console.log(`Total Documents:        ${kbDocs.length}`);
+  console.log(`Total Chunks:           ${totalChunks}`);
+  console.log(`Chunks with Embeddings: ${chunksWithEmbeddings}`);
+  console.log(`Chunks without Embeddings: ${chunksWithoutEmbeddings}`);
+  console.log(`Retrieval Test Matches: ${totalMatches}`);
+
+  console.log('\n🎯 Recommendations:\n');
+
+  if (totalChunks === 0) {
+    console.log('   ⚠️  No chunks found - documents need to be chunked');
+    console.log('      Run the chunking process for these documents');
+  } else if (chunksWithoutEmbeddings > 0) {
+    console.log('   ⚠️  Generate embeddings for chunks without them');
+    console.log('      This will improve AI retrieval accuracy');
+  }
+
+  if (kbDocs.length < 8) {
+    console.log('   ⚠️  Only ' + kbDocs.length + ' documents found, but UI shows 8');
+    console.log('      Some documents may not have synced to Supabase');
+  }
+
+  if (kbDocs.length >= 8 && chunksWithoutEmbeddings === 0 && totalChunks > 0) {
+    console.log('   ✅ All documents are properly stored, chunked, and indexed!');
+    console.log('   ✅ AI can successfully retrieve data during live calls');
+  }
+
+  console.log('\n✅ Audit complete!\n');
+}
+
+auditKnowledgeBase().catch(err => {
+  console.error('\n💥 Fatal error:', err.message);
+  process.exit(1);
+});

@@ -1,0 +1,306 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Cross-browser range slider (used in Advanced Voice Settings) ─────────
+   surgical-600 = #1D4ED8  |  surgical-100 = #E0F2FE  |  surgical-700 = #1e40af
+   accent-color alone is enough for modern browsers (Chrome 93+, Firefox 92+,
+   Safari 15.4+), but the track and thumb cannot be styled with accent-color,
+   so we style them explicitly here for pixel-perfect consistency.
+   ─────────────────────────────────────────────────────────────────────── */
+.voice-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 9999px;
+  background: #E0F2FE;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Webkit (Chrome, Safari, Edge) */
+.voice-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: #E0F2FE;
+}
+.voice-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #1D4ED8;
+  cursor: pointer;
+  margin-top: -6px;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.voice-slider::-webkit-slider-thumb:hover {
+  background: #1e40af;
+  transform: scale(1.15);
+}
+.voice-slider:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid #1D4ED8;
+  outline-offset: 2px;
+}
+
+/* Firefox */
+.voice-slider::-moz-range-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: #E0F2FE;
+  border: none;
+}
+.voice-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #1D4ED8;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.voice-slider::-moz-range-thumb:hover {
+  background: #1e40af;
+  transform: scale(1.15);
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+:root {
+  /* ✅ APPROVED Clinical Trust Theme - Light Mode Only */
+  /* Based on approved color palette (Brand/9.png) */
+
+  --background: #FFFFFF;
+  /* Pure White */
+  --foreground: #020412;
+  /* ✅ FIXED: Deep Obsidian (was Slate 900) */
+
+  --card: #FFFFFF;
+  /* Pure White */
+  --card-foreground: #020412;
+  /* ✅ FIXED: Deep Obsidian */
+
+  --popover: #FFFFFF;
+  /* Pure White */
+  --popover-foreground: #020412;
+  /* ✅ FIXED: Deep Obsidian */
+
+  --primary: #1D4ED8;
+  /* ✅ FIXED: Surgical Blue (was Calendly Blue #006BFF) */
+  --primary-foreground: #FFFFFF;
+  /* Pure White */
+
+  --secondary: #F0F9FF;
+  /* ✅ FIXED: Sterile Wash (was Slate 100) */
+  --secondary-foreground: #020412;
+  /* ✅ FIXED: Deep Obsidian */
+
+  --muted: #F0F9FF;
+  /* Sterile Wash */
+  --muted-foreground: #3B82F6;
+  /* ✅ FIXED: Clinical Blue (was Slate 500) */
+
+  --accent: #BFDBFE;
+  /* ✅ FIXED: Sky Mist (was Slate 100) */
+  --accent-foreground: #020412;
+  /* ✅ FIXED: Deep Obsidian */
+
+  --destructive: #EF4444;
+  /* Red (error states) - acceptable */
+  --destructive-foreground: #FFFFFF;
+  /* Pure White */
+
+  --border: #BFDBFE;
+  /* ✅ FIXED: Sky Mist (was Slate 200) */
+  --input: #BFDBFE;
+  /* ✅ FIXED: Sky Mist */
+  --ring: #1D4ED8;
+  /* ✅ FIXED: Surgical Blue (was Calendly Blue) */
+
+  --radius: 0.5rem;
+
+  /* Chart colors */
+  --chart-1: 220 70% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
+}
+
+/* Enforce Light Mode even if system is dark */
+/* ✅ UPDATED to match approved color palette */
+.dark {
+  --background: #FFFFFF;
+  /* Pure White */
+  --foreground: #020412;
+  /* ✅ FIXED: Deep Obsidian */
+  --card: #FFFFFF;
+  /* Pure White */
+  --card-foreground: #020412;
+  /* ✅ FIXED: Deep Obsidian */
+  --popover: #FFFFFF;
+  /* Pure White */
+  --popover-foreground: #020412;
+  /* ✅ FIXED: Deep Obsidian */
+  --primary: #1D4ED8;
+  /* ✅ FIXED: Surgical Blue */
+  --primary-foreground: #FFFFFF;
+  /* Pure White */
+  --secondary: #F0F9FF;
+  /* ✅ FIXED: Sterile Wash */
+  --secondary-foreground: #020412;
+  /* ✅ FIXED: Deep Obsidian */
+  --muted: #F0F9FF;
+  /* Sterile Wash */
+  --muted-foreground: #3B82F6;
+  /* ✅ FIXED: Clinical Blue */
+  --accent: #BFDBFE;
+  /* ✅ FIXED: Sky Mist */
+  --accent-foreground: #020412;
+  /* ✅ FIXED: Deep Obsidian */
+  --destructive: #EF4444;
+  /* Red (error states) */
+  --destructive-foreground: #FFFFFF;
+  /* Pure White */
+  --border: #BFDBFE;
+  /* ✅ FIXED: Sky Mist */
+  --input: #BFDBFE;
+  /* ✅ FIXED: Sky Mist */
+  --ring: #1D4ED8;
+  /* ✅ FIXED: Surgical Blue */
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure all form inputs have proper text color */
+input,
+textarea,
+select {
+  color: inherit !important;
+  font-size: 16px;
+}
+
+/* Clinical Glassmorphism - Premium Depth (kept for dashboard) */
+.glass-panel {
+  @apply bg-white/90 backdrop-blur-md border border-surgical-200 transition-shadow duration-200;
+  box-shadow: 0 10px 15px -3px rgba(0, 102, 255, 0.08), 0 4px 6px -4px rgba(0, 102, 255, 0.08);
+}
+
+.glass-panel:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 102, 255, 0.12), 0 8px 10px -6px rgba(0, 102, 255, 0.12);
+}
+
+.glass-card {
+  @apply bg-white/70 backdrop-blur-sm border border-surgical-200 transition-all duration-300;
+  box-shadow: 0 1px 3px 0 rgba(0, 102, 255, 0.05);
+}
+
+.glass-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 102, 255, 0.1), 0 4px 6px -4px rgba(0, 102, 255, 0.1);
+}
+
+/* Swiss Typography Utilities */
+.tracking-tight-swiss {
+  letter-spacing: -0.02em;
+}
+
+/* ═══ IEQ-INSPIRED PREMIUM UTILITIES ═══ */
+
+/* Section container: 90% width, max 1300px (IEQ pattern) */
+.section-container {
+  @apply w-[90%] max-w-[1300px] mx-auto;
+}
+
+/* Nav link underline reveal (IEQ signature hover) */
+.nav-link-premium {
+  position: relative;
+}
+.nav-link-premium::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #1D4ED8;
+  transition: width 0.5s ease-in-out;
+}
+.nav-link-premium:hover::after {
+  width: 100%;
+}
+
+/* Button fill animation from left (IEQ CTA style) */
+.btn-fill {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.btn-fill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: #1e40af;
+  transition: width 0.4s ease-in-out;
+  z-index: -1;
+}
+.btn-fill:hover::before {
+  width: 100%;
+}
+
+/* Scroll-triggered reveal (CSS replacement for Framer Motion whileInView) */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Accessibility: Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .nav-link-premium::after {
+    transition: none;
+  }
+  .btn-fill::before {
+    transition: none;
+  }
+}
+
+/* Ripple Animation for Button Click Effect */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}

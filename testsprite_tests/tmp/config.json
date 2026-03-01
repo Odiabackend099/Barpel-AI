@@ -1,0 +1,20 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "loginUser": "ceo@demo.com",
+  "loginPassword": "demo123",
+  "executionArgs": {
+    "projectName": "Callwaiting-AI-Voxanne-2026",
+    "projectPath": "/Users/mac/Desktop/Callwaiting-AI-Voxanne-2026",
+    "testIds": [],
+    "additionalInstruction": "",
+    "serverMode": "production",
+    "envs": {
+      "API_KEY": "sk-user-OyHv2wjbmwkZypLSi9UOdr4SCaCuJSmmVXtnhabZgeKDQ6f8g-4cjH9rftqc2Ugisvq5RIHRQW1htEBqxBWPl11qBGrssHKGVJZUODyjz9Zc_TZA00xjhGEcOLXJJ6Dh5KI"
+    }
+  },
+  "serverPort": 52331,
+  "proxy": "http://e07afd54-be91-4d3d-8e36-5b7e95719ff8:7JP5AluJGohh6m8oQFz0yBhv6ayV5A9D@tun.testsprite.com:8080"
+}

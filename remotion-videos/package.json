@@ -1,0 +1,36 @@
+{
+  "name": "voxanne-remotion-videos",
+  "version": "1.0.0",
+  "description": "Voxanne AI Product Tour Video Generator",
+  "scripts": {
+    "start": "remotion studio",
+    "build": "remotion render src/index.ts VoxanneDemo out/voxanne-demo.mp4",
+    "upgrade": "remotion upgrade",
+    "render:scene": "ts-node scripts/render-scene-by-scene.ts",
+    "merge:scenes": "bash scripts/merge-scenes.sh",
+    "workflow": "npm run render:scene && npm run merge:scenes",
+    "generate:voiceovers": "ts-node scripts/generate-voiceovers.ts",
+    "render:testimonial": "remotion render src/index.ts VoxanneTestimonial out/voxanne-testimonial.mp4",
+    "clean": "rm -rf out/*.mp4 public/audio/voiceovers/*.mp3 public/audio/cache/*"
+  },
+  "dependencies": {
+    "@remotion/google-fonts": "^4.0.414",
+    "@remotion/motion-blur": "4.0.414",
+    "@remotion/paths": "4.0.414",
+    "@remotion/shapes": "4.0.414",
+    "@remotion/transitions": "4.0.414",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.284"
+  },
+  "devDependencies": {
+    "@remotion/cli": "^4.0.284",
+    "@remotion/tailwind": "^4.0.414",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "screenshotName": "00_signin_page.png",
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "capturedAt": "2026-02-20T12:35:00.249Z",
+  "elements": [
+    {
+      "name": "email-input",
+      "selector": "input[type=\"email\"]",
+      "x": 128,
+      "y": 467,
+      "width": 704,
+      "height": 40,
+      "centerX": 480,
+      "centerY": 487
+    },
+    {
+      "name": "password-input",
+      "selector": "input[type=\"password\"]",
+      "x": 128,
+      "y": 559,
+      "width": 704,
+      "height": 40,
+      "centerX": 480,
+      "centerY": 579
+    },
+    {
+      "name": "sign-in-button",
+      "selector": "button:has-text(\"Sign In\")",
+      "x": 128,
+      "y": 623,
+      "width": 704,
+      "height": 48,
+      "centerX": 480,
+      "centerY": 647
+    },
+    {
+      "name": "logo",
+      "selector": "svg",
+      "x": 804,
+      "y": 571,
+      "width": 16,
+      "height": 16,
+      "centerX": 812,
+      "centerY": 579
+    }
+  ]
+}
