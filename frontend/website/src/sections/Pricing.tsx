@@ -1,9 +1,6 @@
 import { Check, ArrowRight } from 'lucide-react';
 import { ctaLinks } from '@/lib/brand.config';
 
-// Pricing configuration - easy to update
-const RATE_PER_MINUTE = '$0.14'; // Per minute rate for display
-const RATE_NUMERIC = 0.14; // Numeric value
 
 const plans = [
   {
