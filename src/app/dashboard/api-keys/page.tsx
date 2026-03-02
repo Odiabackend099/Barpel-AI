@@ -365,29 +365,31 @@ export default function ApiKeysPage() {
 
                     <div className="flex items-center justify-between p-4 bg-surgical-50 border border-surgical-200 rounded-xl">
                         <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${calendarStatus.connected
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${(calendarStatus.connected || !!calendarSuccess)
                                 ? 'bg-surgical-50'
                                 : 'bg-surgical-50'
                                 }`}>
-                                <Calendar className={`w-5 h-5 ${calendarStatus.connected
+                                <Calendar className={`w-5 h-5 ${(calendarStatus.connected || !!calendarSuccess)
                                     ? 'text-surgical-600'
                                     : 'text-surgical-600'
                                     }`} />
                             </div>
                             <div>
                                 <p className="text-sm font-medium text-barpel-slate">Google Calendar</p>
-                                <p className={`text-xs ${calendarStatus.connected
+                                <p className={`text-xs ${(calendarStatus.connected || !!calendarSuccess)
                                     ? 'text-surgical-600'
                                     : 'text-barpel-slate/60'
                                     }`}>
                                     {calendarStatus.connected
                                         ? (calendarStatus.email ? `Connected as ${calendarStatus.email}` : 'Connected')
+                                        : calendarSuccess
+                                        ? 'Connected'
                                         : 'Not Linked'}
                                 </p>
                             </div>
                         </div>
                         <div className="flex gap-2">
-                            {calendarStatus.connected && (
+                            {(calendarStatus.connected || !!calendarSuccess) && (
                                 <button
                                     onClick={() => setShowDisconnectConfirm(true)}
                                     disabled={isConnectingCalendar}
@@ -398,13 +400,13 @@ export default function ApiKeysPage() {
                             )}
                             <button
                                 onClick={handleConnectCalendar}
-                                disabled={isConnectingCalendar || calendarStatus.connected}
-                                className={`px-6 py-2 text-sm font-bold rounded-lg transition-all ${calendarStatus.connected
+                                disabled={isConnectingCalendar || calendarStatus.connected || !!calendarSuccess}
+                                className={`px-6 py-2 text-sm font-bold rounded-lg transition-all ${(calendarStatus.connected || !!calendarSuccess)
                                     ? 'bg-surgical-50 text-surgical-600 cursor-default border border-surgical-200'
                                     : 'bg-barpel-teal text-white hover:bg-barpel-teal-dark disabled:opacity-60 disabled:cursor-not-allowed'
                                     }`}
                             >
-                                {isConnectingCalendar ? 'Working...' : calendarStatus.connected ? 'Connected' : 'Link My Google Calendar'}
+                                {isConnectingCalendar ? 'Working...' : (calendarStatus.connected || !!calendarSuccess) ? 'Connected' : 'Link My Google Calendar'}
                             </button>
                         </div>
                     </div>
