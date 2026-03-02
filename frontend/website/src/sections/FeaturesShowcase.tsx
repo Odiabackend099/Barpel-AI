@@ -4,7 +4,7 @@ import {
   Zap,
   FileText,
   Mic,
-  GitBranch,
+  ArrowLeftRight,
   BarChart3,
   Globe,
 } from 'lucide-react';
@@ -37,7 +37,7 @@ export default function FeaturesShowcase() {
       description: 'Choose from multiple AI voices or create a custom branded voice for your business.',
     },
     {
-      icon: GitBranch,
+      icon: ArrowLeftRight,
       title: 'CRM Integration',
       description: 'Seamlessly sync with your existing tools like HubSpot, Salesforce, and more.',
     },

@@ -7,6 +7,7 @@ import AudioDemo from '@/sections/AudioDemo';
 import HowItWorks from '@/sections/HowItWorks';
 import Industries from '@/sections/Industries';
 import FeaturesShowcase from '@/sections/FeaturesShowcase';
+import Testimonials from '@/sections/Testimonials';
 import SecurityTrust from '@/sections/SecurityTrust';
 import Pricing from '@/sections/Pricing';
 import FinalCTA from '@/sections/FinalCTA';
@@ -34,6 +35,7 @@ function LandingPage() {
       <HowItWorks />
       <Industries />
       <FeaturesShowcase />
+      <Testimonials />
       <SecurityTrust />
       <Pricing />
       <FinalCTA />

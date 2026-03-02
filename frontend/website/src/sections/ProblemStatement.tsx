@@ -1,34 +1,47 @@
 import { Phone, Clock, TrendingDown } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+
+interface Problem {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}
+
+// Module-level constant — no need to recreate on every render
+const problems: Problem[] = [
+  {
+    icon: Phone,
+    title: 'Missed Calls = Lost Revenue',
+    description: 'When your phone rings and no one answers, that customer calls a competitor instead.',
+  },
+  {
+    icon: Clock,
+    title: 'Expensive Receptionists',
+    description: 'Hiring a receptionist costs $25k+/year and only works during business hours.',
+  },
+  {
+    icon: TrendingDown,
+    title: 'No-Shows & Cancellations',
+    description: 'No-shows and missed appointments drain your revenue every single week.',
+  },
+];
 
 export default function ProblemStatement() {
-  const problems = [
-    {
-      icon: Phone,
-      title: 'Missed Calls = Lost Revenue',
-      description: 'When your phone rings and no one answers, that customer calls a competitor instead.',
-    },
-    {
-      icon: Clock,
-      title: 'Expensive Receptionists',
-      description: 'Hiring a receptionist costs £25k+/year and only works during business hours.',
-    },
-    {
-      icon: TrendingDown,
-      description: 'No-shows and missed appointments drain your revenue every single week.',
-      title: 'No-Shows & Cancellations',
-    },
-  ];
-
   return (
     <section id="problem" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left: Stat Block */}
-          <div>
-            <div className="bg-[#E8F5F2] rounded-2xl p-12 text-center">
-              <p className="text-5xl sm:text-6xl font-bold text-[#37A195] mb-4">78%</p>
-              <p className="text-xl text-[#102A33] font-semibold mb-2">of missed calls</p>
-              <p className="text-[#6B7280]">result in lost business opportunities</p>
+          {/* Left: Stat Blocks */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+            <div className="bg-[#E8F5F2] rounded-2xl p-10 text-center">
+              <p className="text-5xl sm:text-6xl font-bold text-barpel-teal mb-3">78%</p>
+              <p className="text-lg text-[#102A33] font-semibold mb-1">of missed calls</p>
+              <p className="text-[#6B7280] text-sm">result in lost business opportunities</p>
+            </div>
+            <div className="bg-[#102A33] rounded-2xl p-10 text-center">
+              <p className="text-5xl sm:text-6xl font-bold text-barpel-teal mb-3">$25k+</p>
+              <p className="text-lg text-white font-semibold mb-1">per year</p>
+              <p className="text-white/50 text-sm">average cost of a full-time receptionist</p>
             </div>
           </div>
 
@@ -48,7 +61,7 @@ export default function ProblemStatement() {
                   <div key={problem.title} className="flex gap-4">
                     <div className="flex-shrink-0">
                       <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-[#E8F5F2]">
-                        <Icon className="h-6 w-6 text-[#37A195]" />
+                        <Icon className="h-6 w-6 text-barpel-teal" />
                       </div>
                     </div>
                     <div>

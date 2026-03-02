@@ -3,7 +3,7 @@ import { ctaLinks } from '@/lib/brand.config';
 
 // Actual rates from backend/src/config/index.ts
 // RATE_PER_MINUTE_USD_CENTS = 70  →  $0.70/min
-// WALLET_MIN_TOPUP_PENCE = 2500   →  £25 minimum top-up
+// WALLET_MIN_TOPUP_USD_CENTS = 2500   →  $25 minimum top-up
 // Bundle $99 at $0.70/min = ~141 min raw, +10% bonus = ~155 min
 
 const plans = [
@@ -15,7 +15,7 @@ const plans = [
     features: [
       'No monthly commitment',
       '$0.70 per minute of AI call time',
-      'Minimum top-up of £25',
+      'Minimum top-up of $25',
       'Credits never expire',
       'All core features included',
       'Email support',

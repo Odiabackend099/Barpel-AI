@@ -96,6 +96,10 @@ module.exports = {
           "0%, 100%": { transform: "scale(1)", opacity: "1" },
           "50%": { transform: "scale(1.06)", opacity: "0.9" },
         },
+        "marquee": {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -104,6 +108,7 @@ module.exports = {
         "waveform": "waveform 2.5s ease-in-out infinite",
         "float": "float 4s ease-in-out infinite",
         "pulse-soft": "pulse-soft 3s ease-in-out infinite",
+        "marquee": "marquee 28s linear infinite",
       },
     },
   },

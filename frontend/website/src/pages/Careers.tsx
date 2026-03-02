@@ -4,7 +4,7 @@ import Footer from '@/sections/Footer';
 const perks = [
   { title: 'Remote-First', desc: 'Work from anywhere in the world, on your own schedule.' },
   { title: 'Equity', desc: 'Own a meaningful piece of what you help build.' },
-  { title: 'Learning Budget', desc: '£1,000/year for courses, books, and conferences.' },
+  { title: 'Learning Budget', desc: '$1,000/year for courses, books, and conferences.' },
   { title: 'Health Coverage', desc: 'Private health insurance for you and your family.' },
 ];
 
