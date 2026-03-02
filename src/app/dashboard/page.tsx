@@ -120,7 +120,7 @@ export default function CallWaitingAIDashboard() {
 
             {/* Recent Calls Table */}
             <div className="glass-panel rounded-2xl overflow-hidden">
-                <div className="px-7 py-6 border-b border-surgical-200 flex items-center justify-between">
+                <div className="px-7 py-6 border-b border-barpel-border flex items-center justify-between">
                     <div>
                         <h3 className="text-lg font-bold text-barpel-slate tracking-tight">Recent Activity</h3>
                         <p className="text-xs text-barpel-slate/60">Real-time call logs</p>
@@ -141,30 +141,30 @@ export default function CallWaitingAIDashboard() {
                                     {/* Shimmer overlay */}
                                     <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/60 to-transparent" />
                                     <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-surgical-100 to-surgical-200 animate-pulse" />
+                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-barpel-slate/5 to-barpel-slate/10 animate-pulse" />
                                         <div className="space-y-2">
-                                            <div className="h-4 w-32 bg-gradient-to-r from-surgical-100 to-surgical-200 rounded animate-pulse" />
-                                            <div className="h-3 w-20 bg-gradient-to-r from-surgical-100 to-surgical-200 rounded animate-pulse" />
+                                            <div className="h-4 w-32 bg-gradient-to-r from-barpel-slate/5 to-barpel-slate/10 rounded animate-pulse" />
+                                            <div className="h-3 w-20 bg-gradient-to-r from-barpel-slate/5 to-barpel-slate/10 rounded animate-pulse" />
                                         </div>
                                     </div>
-                                    <div className="h-6 w-20 bg-gradient-to-r from-surgical-100 to-surgical-200 rounded-full animate-pulse" />
+                                    <div className="h-6 w-20 bg-gradient-to-r from-barpel-slate/5 to-barpel-slate/10 rounded-full animate-pulse" />
                                 </div>
                             ))}
                         </div>
                     ) : recentEvents.length === 0 ? (
                         <div className="text-center py-16">
-                            <div className="w-16 h-16 bg-surgical-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-surgical-200">
+                            <div className="w-16 h-16 bg-barpel-slate/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-barpel-border">
                                 <Phone className="w-8 h-8 text-barpel-slate/40" />
                             </div>
                             <p className="text-barpel-slate font-medium">No recent activity yet</p>
                             <p className="text-sm text-barpel-slate/60 mt-1">Waiting for your first call...</p>
                         </div>
                     ) : (
-                        <div className="divide-y divide-surgical-200">
+                        <div className="divide-y divide-barpel-border">
                             {recentEvents.map((event) => (
                                 <div
                                     key={event.id}
-                                    className={`px-6 py-4 hover:bg-surgical-50 transition-colors ${(event.type === 'call_completed' || (event.type === 'hot_lead_detected' && event.metadata?.call_id)) ? 'cursor-pointer' : ''}`}
+                                    className={`px-6 py-4 hover:bg-barpel-slate/5 transition-colors ${(event.type === 'call_completed' || (event.type === 'hot_lead_detected' && event.metadata?.call_id)) ? 'cursor-pointer' : ''}`}
                                     onClick={() => {
                                         if (event.type === 'call_completed') {
                                             const callId = event.id.replace('call_', '');

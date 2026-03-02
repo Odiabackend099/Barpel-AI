@@ -316,7 +316,7 @@ router.post('/sync-agents', async (req: Request, res: Response): Promise<void> =
                   appointmentBooked: { type: 'boolean', description: 'Whether an appointment was successfully booked during this call' },
                   serviceDiscussed: { type: 'string', description: 'The main service or topic discussed (e.g., Botox, consultation, teeth cleaning)' }
                 },
-                required: ['sentimentScore', 'sentimentUrgency', 'shortOutcome', 'appointmentBooked']
+                required: ['sentimentScore', 'sentimentUrgency', 'shortOutcome', 'appointmentBooked', 'serviceDiscussed']
               },
               successEvaluationPrompt: 'Evaluate if this call achieved its goal. A call is successful if: the caller got the information they needed, OR an appointment was booked, OR they were properly directed to the right resource. A call fails if: the caller was frustrated, the AI could not help, tools failed, or the caller hung up without resolution.',
               successEvaluationRubric: 'PassFail' as any
@@ -367,7 +367,7 @@ router.post('/sync-agents', async (req: Request, res: Response): Promise<void> =
                   appointmentBooked: { type: 'boolean', description: 'Whether an appointment was successfully booked during this call' },
                   serviceDiscussed: { type: 'string', description: 'The main service or topic discussed (e.g., Botox, consultation, teeth cleaning)' }
                 },
-                required: ['sentimentScore', 'sentimentUrgency', 'shortOutcome', 'appointmentBooked']
+                required: ['sentimentScore', 'sentimentUrgency', 'shortOutcome', 'appointmentBooked', 'serviceDiscussed']
               },
               successEvaluationPrompt: 'Evaluate if this call achieved its goal. A call is successful if: the caller got the information they needed, OR an appointment was booked, OR they were properly directed to the right resource. A call fails if: the caller was frustrated, the AI could not help, tools failed, or the caller hung up without resolution.',
               successEvaluationRubric: 'PassFail' as any

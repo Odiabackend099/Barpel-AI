@@ -68,7 +68,7 @@ export default function ClinicalPulse() {
     return (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
             {/* Metric Card 1: Total Calls */}
-            <div className="bg-white rounded-2xl p-6 relative overflow-hidden group border border-surgical-200 shadow-md shadow-surgical-500/5 hover:shadow-lg hover:shadow-surgical-500/10 hover:-translate-y-0.5 transition-all duration-200">
+            <div className="bg-white rounded-2xl p-6 relative overflow-hidden group border border-barpel-border shadow-md shadow-barpel-teal/5 hover:shadow-lg hover:shadow-barpel-teal/10 hover:-translate-y-0.5 transition-all duration-200">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-15 transition-opacity">
                     <Phone className="w-24 h-24 text-barpel-teal transform rotate-12 translate-x-4 -translate-y-4" />
                 </div>
@@ -80,7 +80,7 @@ export default function ClinicalPulse() {
                         <span className="text-xs font-semibold uppercase tracking-wider text-barpel-slate/60">Total Calls</span>
                     </div>
                     <h3 className="text-4xl font-bold text-barpel-slate tracking-tight mb-2">
-                        {isLoading ? <span className="animate-pulse bg-surgical-200/30 rounded h-10 w-20 inline-block" /> : safeStats.total_calls}
+                        {isLoading ? <span className="animate-pulse bg-barpel-slate/10 rounded h-10 w-20 inline-block" /> : safeStats.total_calls}
                     </h3>
                     <div className="flex items-center gap-2 text-xs font-medium text-barpel-slate/60 mt-3">
                         <span className="text-barpel-teal bg-barpel-teal/10 px-2 py-1 rounded-full font-semibold border border-barpel-teal/20 flex items-center gap-1">
@@ -95,7 +95,7 @@ export default function ClinicalPulse() {
 
 
             {/* Metric Card 2: Avg Duration */}
-            <div className="bg-white rounded-2xl p-6 relative overflow-hidden group border border-surgical-200 shadow-md shadow-surgical-500/5 hover:shadow-lg hover:shadow-surgical-500/10 hover:-translate-y-0.5 transition-all duration-200">
+            <div className="bg-white rounded-2xl p-6 relative overflow-hidden group border border-barpel-border shadow-md shadow-barpel-teal/5 hover:shadow-lg hover:shadow-barpel-teal/10 hover:-translate-y-0.5 transition-all duration-200">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-15 transition-opacity">
                     <Clock className="w-24 h-24 text-barpel-teal transform rotate-12 translate-x-4 -translate-y-4" />
                 </div>
@@ -107,7 +107,7 @@ export default function ClinicalPulse() {
                         <span className="text-xs font-semibold uppercase tracking-wider text-barpel-slate/60">Avg Duration</span>
                     </div>
                     <h3 className="text-4xl font-bold text-barpel-slate tracking-tight mb-2">
-                        {isLoading ? <span className="animate-pulse bg-surgical-200/30 rounded h-10 w-20 inline-block" /> : formatDuration(safeStats.avg_duration_seconds)}
+                        {isLoading ? <span className="animate-pulse bg-barpel-slate/10 rounded h-10 w-20 inline-block" /> : formatDuration(safeStats.avg_duration_seconds)}
                     </h3>
                     <div className="flex items-center gap-2 text-xs font-medium text-barpel-slate/60 mt-3">
                         <span className="text-barpel-gray bg-barpel-teal/5 px-2 py-1 rounded-full font-semibold border border-barpel-border">
@@ -118,7 +118,7 @@ export default function ClinicalPulse() {
             </div>
 
             {/* Metric Card 3: Appointments */}
-            <div className="bg-white rounded-2xl p-6 relative overflow-hidden group border border-surgical-200 shadow-md shadow-surgical-500/5 hover:shadow-lg hover:shadow-surgical-500/10 hover:-translate-y-0.5 transition-all duration-200">
+            <div className="bg-white rounded-2xl p-6 relative overflow-hidden group border border-barpel-border shadow-md shadow-barpel-teal/5 hover:shadow-lg hover:shadow-barpel-teal/10 hover:-translate-y-0.5 transition-all duration-200">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-15 transition-opacity">
                     <Calendar className="w-24 h-24 text-barpel-teal transform rotate-12 translate-x-4 -translate-y-4" />
                 </div>
@@ -130,7 +130,7 @@ export default function ClinicalPulse() {
                         <span className="text-xs font-semibold uppercase tracking-wider text-barpel-slate/60">Appointments</span>
                     </div>
                     <h3 className="text-4xl font-bold text-barpel-slate tracking-tight mb-2">
-                        {isLoading ? <span className="animate-pulse bg-surgical-200/30 rounded h-10 w-20 inline-block" /> : safeStats.appointments_booked}
+                        {isLoading ? <span className="animate-pulse bg-barpel-slate/10 rounded h-10 w-20 inline-block" /> : safeStats.appointments_booked}
                     </h3>
                     <div className="flex items-center gap-2 text-xs font-medium text-barpel-slate/60 mt-3">
                         <span className="text-barpel-teal bg-barpel-teal/10 px-2 py-1 rounded-full font-semibold border border-barpel-teal/20">
@@ -141,7 +141,7 @@ export default function ClinicalPulse() {
             </div>
 
             {/* Metric Card 4: Average Sentiment */}
-            <div className="bg-white rounded-2xl p-6 relative overflow-hidden group border border-surgical-200 shadow-md shadow-surgical-500/5 hover:shadow-lg hover:shadow-surgical-500/10 hover:-translate-y-0.5 transition-all duration-200">
+            <div className="bg-white rounded-2xl p-6 relative overflow-hidden group border border-barpel-border shadow-md shadow-barpel-teal/5 hover:shadow-lg hover:shadow-barpel-teal/10 hover:-translate-y-0.5 transition-all duration-200">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-15 transition-opacity">
                     <AlertCircle className="w-24 h-24 text-barpel-teal transform rotate-12 translate-x-4 -translate-y-4" />
                 </div>
@@ -153,7 +153,7 @@ export default function ClinicalPulse() {
                         <span className="text-xs font-semibold uppercase tracking-wider text-barpel-slate/60">Average Sentiment</span>
                     </div>
                     <h3 className="text-4xl font-bold text-barpel-slate tracking-tight mb-2">
-                        {isLoading ? <span className="animate-pulse bg-surgical-200/30 rounded h-10 w-20 inline-block" /> : `${(safeStats.avg_sentiment * 100).toFixed(0)}%`}
+                        {isLoading ? <span className="animate-pulse bg-barpel-slate/10 rounded h-10 w-20 inline-block" /> : `${((safeStats.avg_sentiment ?? 0) * 100).toFixed(0)}%`}
                     </h3>
                     <div className="flex items-center gap-2 text-xs font-medium text-barpel-slate/60 mt-3">
                         <span className="text-barpel-gray bg-barpel-teal/5 px-2 py-1 rounded-full font-semibold border border-barpel-border">

@@ -22,6 +22,7 @@ import { Resend } from 'resend';
 import { rateLimitAction } from '../middleware/rate-limit-actions';
 import { withTwilioRetry, withResendRetry } from '../services/retry-strategy';
 import { sanitizeError, handleDatabaseError, sanitizeValidationError } from '../utils/error-sanitizer';
+import { getCached, setCached } from '../services/cache';
 
 const callsRouter = Router();
 

@@ -144,8 +144,23 @@ analyticsRouter.get('/leads', requireAuth, async (req: Request, res: Response) =
             .eq('org_id', orgId);
 
         if (error) {
-            log.error('AnalyticsAPI', 'Failed to fetch leads', { error: error.message });
-            return res.status(500).json({ error: 'Database error' });
+            // Fallback: query contacts table directly if VIEW doesn't exist or errors
+            log.info('AnalyticsAPI', 'view_actionable_leads not available, using direct query fallback', { error: error.message });
+
+            const { data: fallbackLeads, error: fallbackError } = await supabase
+                .from('contacts')
+                .select('id, name, phone, email, lead_status, lead_score, service_interest, created_at, updated_at')
+                .eq('org_id', orgId)
+                .in('lead_status', ['hot', 'warm'])
+                .order('lead_score', { ascending: false })
+                .limit(50);
+
+            if (fallbackError) {
+                log.error('AnalyticsAPI', 'Fallback leads query also failed', { error: fallbackError.message });
+                return res.json({ leads: [] });
+            }
+
+            return res.json({ leads: fallbackLeads || [] });
         }
 
         return res.json({ leads: data || [] });
