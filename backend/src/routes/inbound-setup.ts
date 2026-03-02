@@ -315,6 +315,7 @@ router.post('/setup', requireAuthOrDev, async (req: Request, res: Response): Pro
       authToken: EncryptionService.encrypt(twilioAuthToken),
       phoneNumber: twilioPhoneNumber,
       vapiPhoneNumberId,
+      vapiApiKeyLast4Used: currentVapiKeyLast4,
       status: 'active',
       activatedAt: new Date().toISOString(),
       agentId: agentId || null

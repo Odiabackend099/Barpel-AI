@@ -91,7 +91,7 @@ function detectCountryCode(phone: string): string {
   if (phone.startsWith('+27')) return 'ZA';
   if (phone.startsWith('+254')) return 'KE';
   if (phone.startsWith('+971')) return 'AE';
-  return 'US';
+  return 'NG';
 }
 
 function getCountryName(code: string): string {
@@ -197,9 +197,9 @@ export default function PhoneSettingsPage() {
     }
   }, [phoneNumber]);
 
-  const fetchPhoneSettings = async () => {
+  const fetchPhoneSettings = async (silent = false) => {
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
       setError(null);
       const data = await authedBackendFetch<PhoneSettingsStatus>('/api/phone-settings/status');
       setStatus(data);
@@ -240,7 +240,7 @@ export default function PhoneSettingsPage() {
       console.error('Failed to fetch phone settings:', err);
       setError(err.message || 'Failed to load phone settings');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
@@ -288,7 +288,7 @@ export default function PhoneSettingsPage() {
         body: JSON.stringify({ phoneNumberType: direction, agentId, vapiPhoneId }),
       });
       showSuccessToast('Agent linked successfully');
-      await Promise.all([fetchPhoneSettings(), fetchAgents()]);
+      await Promise.all([fetchPhoneSettings(true), fetchAgents()]);
     } catch (e: any) {
       showErrorToast(e.message || 'Failed to link agent. Please try again.');
     } finally {
@@ -314,7 +314,7 @@ export default function PhoneSettingsPage() {
       if (response.verified) {
         showSuccessToast(`${phoneNumber} is already verified!`, 3000);
         setVerificationStep('success');
-        await fetchPhoneSettings();
+        await fetchPhoneSettings(true);
         return;
       }
 
@@ -344,7 +344,7 @@ export default function PhoneSettingsPage() {
       });
       setVerificationStep('success');
       // Refresh status to show the new verified number
-      await fetchPhoneSettings();
+      await fetchPhoneSettings(true);
     } catch (err: any) {
       setVerificationError(err.message || 'Verification not yet complete. Wait 30 seconds after entering the code on your phone, then click "Verify & Complete Setup" again.');
     } finally {
@@ -382,7 +382,7 @@ export default function PhoneSettingsPage() {
         { method: 'DELETE' }
       );
       setConfirmDeleteManaged(false);
-      await fetchPhoneSettings();
+      await fetchPhoneSettings(true);
 
       // Success confirmation (Stripe pattern)
       showSuccessToast(`${status.inbound.managedNumber} successfully deleted`, 3000);
@@ -403,7 +403,7 @@ export default function PhoneSettingsPage() {
         { method: 'DELETE' }
       );
       setConfirmDeleteManagedOutbound(false);
-      await fetchPhoneSettings();
+      await fetchPhoneSettings(true);
       showSuccessToast(`${status.outbound.managedOutboundNumber} successfully deleted`, 3000);
     } catch (err: any) {
       showErrorToast(err.message || 'Failed to delete number');
@@ -422,7 +422,7 @@ export default function PhoneSettingsPage() {
         body: JSON.stringify({ phoneNumber: status.outbound.verifiedNumber })
       });
       setConfirmDeleteVerified(false);
-      await fetchPhoneSettings();
+      await fetchPhoneSettings(true);
 
       // Success confirmation (Stripe pattern)
       showSuccessToast(`${status.outbound.verifiedNumber} successfully deleted`, 3000);
@@ -442,16 +442,16 @@ export default function PhoneSettingsPage() {
       await authedBackendFetch('/api/inbound/setup', {
         method: 'POST',
         body: JSON.stringify({
-          accountSid: byocInboundForm.accountSid,
-          authToken: byocInboundForm.authToken,
-          phoneNumber: byocInboundForm.phoneNumber,
+          twilioAccountSid: byocInboundForm.accountSid,
+          twilioAuthToken: byocInboundForm.authToken,
+          twilioPhoneNumber: byocInboundForm.phoneNumber,
         }),
       });
       showSuccessToast('Inbound number connected');
       setByocInboundForm(emptyByocForm);
-      await fetchPhoneSettings();
+      await fetchPhoneSettings(true);
     } catch (e: any) {
-      showErrorToast(e.message || 'Failed to activate BYOC inbound number');
+      showErrorToast(e.message || 'Failed to connect inbound number');
     } finally {
       setSavingByocInbound(false);
     }
@@ -465,16 +465,16 @@ export default function PhoneSettingsPage() {
       await authedBackendFetch('/api/inbound/setup-outbound', {
         method: 'POST',
         body: JSON.stringify({
-          accountSid: byocOutboundForm.accountSid,
-          authToken: byocOutboundForm.authToken,
-          phoneNumber: byocOutboundForm.phoneNumber,
+          twilioAccountSid: byocOutboundForm.accountSid,
+          twilioAuthToken: byocOutboundForm.authToken,
+          twilioPhoneNumber: byocOutboundForm.phoneNumber,
         }),
       });
       showSuccessToast('Outbound number connected');
       setByocOutboundForm(emptyByocForm);
-      await fetchPhoneSettings();
+      await fetchPhoneSettings(true);
     } catch (e: any) {
-      showErrorToast(e.message || 'Failed to activate BYOC outbound number');
+      showErrorToast(e.message || 'Failed to connect outbound number');
     } finally {
       setSavingByocOutbound(false);
     }
@@ -486,9 +486,9 @@ export default function PhoneSettingsPage() {
       await authedBackendFetch('/api/inbound/setup', { method: 'DELETE' });
       setConfirmDeleteByocInbound(false);
       showSuccessToast('Inbound number disconnected');
-      await fetchPhoneSettings();
+      await fetchPhoneSettings(true);
     } catch (e: any) {
-      showErrorToast(e.message || 'Failed to remove BYOC inbound number');
+      showErrorToast(e.message || 'Failed to disconnect inbound number');
     } finally {
       setDeletingByocInbound(false);
     }
@@ -500,9 +500,9 @@ export default function PhoneSettingsPage() {
       await authedBackendFetch('/api/inbound/setup-outbound', { method: 'DELETE' });
       setConfirmDeleteByocOutbound(false);
       showSuccessToast('Outbound number disconnected');
-      await fetchPhoneSettings();
+      await fetchPhoneSettings(true);
     } catch (e: any) {
-      showErrorToast(e.message || 'Failed to remove BYOC outbound number');
+      showErrorToast(e.message || 'Failed to disconnect outbound number');
     } finally {
       setDeletingByocOutbound(false);
     }
@@ -516,7 +516,7 @@ export default function PhoneSettingsPage() {
         body: JSON.stringify({ phoneNumberType: 'inbound', agentId }),
       });
       showSuccessToast('Agent linked to inbound number');
-      await fetchPhoneSettings();
+      await fetchPhoneSettings(true);
     } catch (e: any) {
       showErrorToast(e.message || 'Failed to assign agent');
     } finally {
@@ -532,7 +532,7 @@ export default function PhoneSettingsPage() {
         body: JSON.stringify({ phoneNumberType: 'outbound', agentId }),
       });
       showSuccessToast('Agent linked to outbound number');
-      await fetchPhoneSettings();
+      await fetchPhoneSettings(true);
     } catch (e: any) {
       showErrorToast(e.message || 'Failed to assign agent');
     } finally {
@@ -1348,7 +1348,7 @@ export default function PhoneSettingsPage() {
                   <button
                     onClick={() => {
                       resetVerification();
-                      fetchPhoneSettings();
+                      fetchPhoneSettings(true);
                     }}
                     className="w-full px-4 py-2 bg-barpel-teal text-white rounded-lg hover:bg-barpel-teal-dark transition-colors font-medium"
                   >
@@ -1366,7 +1366,7 @@ export default function PhoneSettingsPage() {
         <BuyNumberModal
           onClose={() => {
             setShowBuyNumberModal(false);
-            fetchPhoneSettings();
+            fetchPhoneSettings(true);
           }}
           currentMode={status?.mode || 'none'}
           defaultDirection={buyModalDirection}
