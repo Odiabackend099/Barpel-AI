@@ -18,8 +18,8 @@ export const brand = {
     'Barpel AI gives your business a 24/7 AI voice agent that books appointments, answers questions, and follows up with leads automatically.',
 
   // URLs
-  appUrl: import.meta.env.VITE_APP_URL ?? 'https://app.barpel.ai',
-  domain: 'barpel.ai',
+  appUrl: import.meta.env.VITE_APP_URL ?? 'https://app-barpelai.odia.dev',
+  domain: 'barpelai.odia.dev',
   supportEmail: 'support@barpel.ai',
 
   // Social

@@ -14,13 +14,13 @@ services:
       # PORT intentionally omitted — Render injects its own PORT env var
       # The server already uses process.env.PORT || 6001
       - key: BACKEND_URL
-        value: https://api.barpel.ai
+        value: https://barpel-ai.onrender.com
       - key: FRONTEND_URL
-        value: https://app.barpel.ai
+        value: https://app-barpelai.odia.dev
       - key: CORS_ORIGIN
-        value: https://app.barpel.ai,https://barpel.ai
+        value: https://app-barpelai.odia.dev,https://barpelai.odia.dev,https://barpel-ai.onrender.com
       - key: GOOGLE_REDIRECT_URI
-        value: https://api.barpel.ai/api/google-oauth/callback
+        value: https://barpel-ai.onrender.com/api/google-oauth/callback
       # ── Secrets: set manually in Render dashboard ──────────────────────────
       - key: SUPABASE_URL
         sync: false

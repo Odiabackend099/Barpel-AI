@@ -1,10 +1,48 @@
 # Barpel AI – Product Requirements Document (PRD)
 
-**Version:** 2026.03.01
-**Last Updated:** 2026-03-01 UTC
-**Status:** ✅ DEMO READY - Barpel AI Production Platform
+**Version:** 2026.03.02
+**Last Updated:** 2026-03-02 UTC
+**Status:** 🚀 PRODUCTION DEPLOYED - Barpel AI Platform Live
 **Project Foundation:** Enterprise voice receptionist platform for Nigerian SMEs/Small Businesses
 **Verification Status:** ✅ FULL STACK OPERATIONAL - Frontend (Next.js on port 8000) + Backend (Express on port 8001) + Supabase (wifcmvgwzicgyrvaoiwi) + Teal-and-white branding + 5-step onboarding wizard (business verticals)
+
+---
+
+## PRODUCTION DEPLOYMENT ARCHITECTURE (2026-03-02)
+
+**Temporary domains (pending barpel.ai purchase):**
+
+| Domain | Platform | Source | Status |
+|--------|----------|--------|--------|
+| `barpelai.odia.dev` | Vercel (Vite/React) | `frontend/website/` | ✅ LIVE |
+| `www.barpelai.odia.dev` | Vercel (Vite/React) | `frontend/website/` | ✅ LIVE |
+| `app-barpelai.odia.dev` | Vercel (Next.js 14) | `src/` | ✅ LIVE |
+| `barpel-ai.onrender.com` | Render (Express/Node) | `backend/` | ✅ LIVE |
+
+**Permanent domains (once barpel.ai is purchased — update same files):**
+- `barpel.ai` → marketing, `app.barpel.ai` → dashboard, `api.barpel.ai` → backend
+
+**Dev Ports:**
+- Dashboard: `http://localhost:8000` (`npm run dev`)
+- Marketing site: `http://localhost:8002` (`npm run dev:site`)
+- Backend: `http://localhost:8001` (`cd backend && npm run dev`)
+
+**GitHub:** `https://github.com/Odiabackend099/Barpel-AI`
+
+**Vercel Projects:**
+- Dashboard: `odia-backends-projects/barpel-dashboard` — token in `.agent/vercel cli.md`
+- Marketing: `odia-backends-projects/barpel-marketing` — token in `.agent/vercel cli.md`
+
+**Render Service:** `barpel-ai.onrender.com` (`barpel-backend`) — secrets set manually in Render Dashboard
+
+**Required Render Dashboard secrets:**
+`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`, `VAPI_PRIVATE_KEY`, `ENCRYPTION_KEY`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_ENCRYPTION_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `RESEND_API_KEY`, `FROM_EMAIL`, `OPENAI_API_KEY`, `REDIS_URL`, `SENTRY_DSN`
+
+**Render env vars to update in dashboard (currently set in render.yaml):**
+- `BACKEND_URL` → `https://barpel-ai.onrender.com`
+- `FRONTEND_URL` → `https://app-barpelai.odia.dev`
+- `CORS_ORIGIN` → `https://app-barpelai.odia.dev,https://barpelai.odia.dev,https://barpel-ai.onrender.com`
+- `GOOGLE_REDIRECT_URI` → `https://barpel-ai.onrender.com/api/google-oauth/callback`
 
 ---
 
