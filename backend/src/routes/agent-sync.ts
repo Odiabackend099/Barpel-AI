@@ -12,7 +12,6 @@ import express, { Request, Response } from 'express';
 import { supabase } from '../services/supabase-client';
 import { log } from '../services/logger';
 import { VapiClient } from '../services/vapi-client';
-import { ToolSyncService } from '../services/tool-sync-service';
 import { getVoiceById, toVapiProvider } from '../config/voice-registry';
 
 const router = express.Router();
@@ -328,25 +327,6 @@ router.post('/sync-agents', async (req: Request, res: Response): Promise<void> =
             requestId,
             assistantId: inboundConfig.vapi_assistant_id.slice(0, 20) + '...'
           });
-
-          // CRITICAL: Sync tools after updating assistant to clean up stale toolIds
-          try {
-            await ToolSyncService.syncAllToolsForAssistant(
-              inboundConfig.vapi_assistant_id,
-              orgId,
-              'inbound',
-              vapiApiKey
-            );
-            log.info('AgentSync', 'Synced tools for inbound assistant', {
-              requestId,
-              assistantId: inboundConfig.vapi_assistant_id.slice(0, 20) + '...'
-            });
-          } catch (toolError: any) {
-            log.warn('AgentSync', 'Failed to sync tools for inbound assistant (non-blocking)', {
-              requestId,
-              error: toolError?.message
-            });
-          }
         } catch (e: any) {
           log.warn('AgentSync', 'Failed to update inbound Vapi assistant (non-blocking)', {
             requestId,
@@ -398,25 +378,6 @@ router.post('/sync-agents', async (req: Request, res: Response): Promise<void> =
             requestId,
             assistantId: outboundConfig.vapi_assistant_id.slice(0, 20) + '...'
           });
-
-          // CRITICAL: Sync tools after updating assistant to clean up stale toolIds
-          try {
-            await ToolSyncService.syncAllToolsForAssistant(
-              outboundConfig.vapi_assistant_id,
-              orgId,
-              'outbound',
-              vapiApiKey
-            );
-            log.info('AgentSync', 'Synced tools for outbound assistant', {
-              requestId,
-              assistantId: outboundConfig.vapi_assistant_id.slice(0, 20) + '...'
-            });
-          } catch (toolError: any) {
-            log.warn('AgentSync', 'Failed to sync tools for outbound assistant (non-blocking)', {
-              requestId,
-              error: toolError?.message
-            });
-          }
         } catch (e: any) {
           log.warn('AgentSync', 'Failed to update outbound Vapi assistant (non-blocking)', {
             requestId,

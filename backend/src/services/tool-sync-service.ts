@@ -261,13 +261,42 @@ export class ToolSyncService {
       existingHash = globalTools[0].definition_hash;
 
       if (existingHash === currentHash) {
-        log.info('ToolSyncService', '📌 Tool already registered globally with current definition', {
-          orgId,
-          toolId: existingToolId,
-          hash: currentHash.substring(0, 8),
-          registeredByOrg: globalTools[0].org_id.substring(0, 8)
-        });
-        return existingToolId;
+        // CRITICAL FIX: Verify the tool still exists in Vapi before trusting the DB record
+        // If a Vapi tool gets deleted (via API, manual cleanup, etc), our DB still has the old ID
+        // This verification prevents passing stale toolIds to assistants
+        try {
+          await vapi.getTool(existingToolId);
+          log.info('ToolSyncService', '📌 Tool verified alive in Vapi — reusing existing ID', {
+            orgId,
+            toolId: existingToolId,
+            hash: currentHash.substring(0, 8),
+            registeredByOrg: globalTools[0].org_id.substring(0, 8)
+          });
+          return existingToolId;
+        } catch (error: any) {
+          // Tool no longer exists in Vapi — clean up stale DB record and fall through to re-register
+          log.warn('ToolSyncService', '🗑️ Stale tool ID found in DB — tool was deleted from Vapi. Re-registering.', {
+            orgId,
+            staleToolId: existingToolId,
+            toolName: toolBlueprint.name,
+            error: error?.message
+          });
+
+          // Delete the stale record so we don't try to reuse it again
+          try {
+            await supabase
+              .from('org_tools')
+              .delete()
+              .eq('vapi_tool_id', existingToolId);
+          } catch (deleteError: any) {
+            log.error('ToolSyncService', 'Failed to delete stale tool record', {
+              error: deleteError?.message,
+              staleToolId: existingToolId
+            });
+          }
+
+          // Fall through to re-registration below
+        }
       } else {
         // Definition changed - need to re-register
         log.info('ToolSyncService', '🔄 Tool definition changed - re-registering globally', {
