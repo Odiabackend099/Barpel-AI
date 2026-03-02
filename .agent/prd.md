@@ -1,8 +1,8 @@
 # Barpel AI – Product Requirements Document (PRD)
 
-**Version:** 2026.03.02
-**Last Updated:** 2026-03-02 UTC
-**Status:** 🚀 PRODUCTION DEPLOYED - Barpel AI Platform Live
+**Version:** 2026.03.03
+**Last Updated:** 2026-03-03 UTC
+**Status:** 🚀 PRODUCTION DEPLOYED - Barpel AI Platform Live (Console errors resolved, Redis crash loop fixed)
 **Project Foundation:** Enterprise voice receptionist platform for Nigerian SMEs/Small Businesses
 **Verification Status:** ✅ FULL STACK OPERATIONAL - Frontend (Next.js on port 8000) + Backend (Express on port 8001) + Supabase (wifcmvgwzicgyrvaoiwi) + Teal-and-white branding + 5-step onboarding wizard (business verticals)
 
@@ -41,7 +41,7 @@
 **Render env vars to update in dashboard (currently set in render.yaml):**
 - `BACKEND_URL` → `https://barpel-ai.onrender.com`
 - `FRONTEND_URL` → `https://app-barpelai.odia.dev`
-- `CORS_ORIGIN` → `https://app-barpelai.odia.dev,https://barpelai.odia.dev,https://barpel-ai.onrender.com`
+- `CORS_ORIGIN` → `https://app.barpel.ai,https://barpel.ai,https://www.barpel.ai,https://app-barpelai.odia.dev,https://barpelai.odia.dev,https://barpel-ai.onrender.com`
 - `GOOGLE_REDIRECT_URI` → `https://barpel-ai.onrender.com/api/google-oauth/callback`
 
 ---
@@ -167,10 +167,18 @@ These rules NEVER change and are enforced by the database and RLS policies:
 
 **Render Infrastructure:**
 - Backend service: `barpel-backend` at `barpel-ai.onrender.com`
-- Redis: `redis://red-d636tj7pm1nc73efjljg:6379` (Render internal URL — only resolvable within Render's private network)
+- Redis: Render-managed `barpel-redis` (free, oregon). Auto-injected via `fromDatabase` in `render.yaml` — Blueprint sync provisions it automatically. No manual `REDIS_URL` entry needed.
 - Render env reference file: `render/renderenv` (local only, gitignored)
 - Build fix: eslint downgraded `^9` → `^8` (commit `05e72ca`), `.npmrc` `legacy-peer-deps=true`
 - **Render Dashboard required:** Set Root Directory = `backend`, enter all secrets from `render/renderenv`
+
+**Production Fixes Applied (2026-03-03 — commit `beebf9a`):**
+- ✅ **Redis crash loop eliminated:** `vapi-reconciliation-worker.ts` completely rewritten to lazy-init pattern using `createRedisConnection()` with null guard — matches the pattern of all other queue files (wallet-queue, webhook-queue). Previously created `new Redis()` / `new Queue()` / `new Worker()` at module load, bypassing the circuit-breaker and causing ENOTFOUND flood every ~100ms.
+- ✅ **`billing-reconciliation.ts` null guards:** `/history` and `/health` endpoints now return graceful empty responses when `vapiReconcileQueue === null` instead of throwing `TypeError`.
+- ✅ **CSP fixed:** `next.config.mjs` `connect-src` now includes `wss://api.barpel.ai`, `wss://api.vapi.ai`, correct `https://barpel-ai.onrender.com` (was `https://barpel.onrender.com`). Eliminates all browser console CSP violations.
+- ✅ **`NEXT_PUBLIC_BACKEND_URL` fixed in Vercel:** Was incorrectly set to `https://api.barpel.ai` (domain not owned). Updated via Vercel CLI to `https://barpel-ai.onrender.com`. Redeployed — 69 pages compiled successfully.
+- ✅ **CORS_ORIGIN expanded:** `render.yaml` now includes all 6 origins (odia.dev + future barpel.ai domains).
+- ⚠️ **User action required:** Delete wrong DNS record — `barpel-ai.onrender.com` CNAME pointing to Vercel (was added by mistake). Should be deleted from DNS provider.
 
 **Stripe Webhook Configuration (Production):**
 - Endpoint: `https://barpel-ai.onrender.com/api/webhooks/stripe`
@@ -236,7 +244,9 @@ Supporting services: wallet auto-recharge processor, webhook verification API, a
 
 ## 5. Recent Releases & Verification
 
-**Latest (2026-03-01):** Barpel AI Production Platform fully operational. 5-step post-signup onboarding wizard, real-time prepaid billing, managed telephony, and teal-and-white design system.
+**Latest (2026-03-03 — commit `beebf9a`):** Production stability fixes. Eliminated Render backend Redis crash loop (VapiReconciliationWorker ENOTFOUND flood). Fixed all browser console errors: CSP violations (`wss://` missing, wrong Render URL), ERR_FAILED API calls (wrong `NEXT_PUBLIC_BACKEND_URL`). Vercel env updated and redeployed (69 pages, ✓ compiled).
+
+**Previous (2026-03-01):** Barpel AI Production Platform fully operational. 5-step post-signup onboarding wizard, real-time prepaid billing, managed telephony, and teal-and-white design system.
 
 **See APPENDIX: Release History** for all releases, deployment timelines, and verification details.
 
