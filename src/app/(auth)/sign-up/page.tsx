@@ -264,7 +264,7 @@ export default function SignUpPage() {
               variant="dark"
             />
             <Link
-              href="/"
+              href="https://barpelai.odia.dev"
               className="text-sm font-medium text-[#37A195] hover:text-[#2F8E88] transition-colors"
             >
               ← Back to home

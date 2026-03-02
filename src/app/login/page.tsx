@@ -86,7 +86,7 @@ function LoginContent() {
             {/* Top Navigation */}
             <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-6 py-4">
                 <Link
-                    href="/"
+                    href="https://barpelai.odia.dev"
                     className="flex items-center gap-2 text-sm font-medium text-[#6B7280] hover:text-[#37A195] transition-colors"
                 >
                     <span>←</span>
@@ -291,7 +291,7 @@ function LoginContent() {
 
                 <div className="mt-8 text-center">
                     <Link
-                        href="/"
+                        href="https://barpelai.odia.dev"
                         className="text-sm text-[#6B7280] hover:text-[#102A33] transition-colors"
                     >
                         Back to Home Page
