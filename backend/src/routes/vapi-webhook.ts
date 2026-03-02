@@ -15,6 +15,7 @@ import { RAG_CONFIG } from '../config/rag-config';
 import { hasEnoughBalance, checkBalance, reserveCallCredits, commitReservedCredits, getActiveReservation } from '../services/wallet-service';
 import { processCallBilling } from '../services/billing-manager';
 import { uploadCallRecording } from '../services/call-recording-storage';
+import { sendSlackAlert } from '../services/slack-alerts';
 
 const vapiWebhookRouter = Router();
 
@@ -157,8 +158,8 @@ vapiWebhookRouter.post('/webhook', webhookLimiter, async (req: Request, res: Res
 
     const message = body.message;
 
-    // DEBUG - Log COMPLETE webhook payload (verbose details)
-    log.info('Vapi-Webhook', 'RAW WEBHOOK PAYLOAD:', JSON.stringify(body, null, 2));
+    // Webhook payload logged at debug level only (avoid PII leaks and log bloat in production)
+    log.debug('Vapi-Webhook', 'Raw webhook payload', { payloadSize: JSON.stringify(body).length });
 
     // DEBUG - Log ALL webhook types
     log.info('Vapi-Webhook', 'Received webhook', {
@@ -1357,8 +1358,11 @@ vapiWebhookRouter.post('/webhook', webhookLimiter, async (req: Request, res: Res
               commitResultAvailable: false
             }
           });
-          // TODO: Send alert to monitoring system (Sentry, Slack, etc.)
-          // await sendBillingFailureAlert({ orgId, callId: call.id, error: billingErr });
+          sendSlackAlert('CRITICAL: Call Billing Failed', {
+            orgId,
+            callId: call?.id,
+            error: billingErr?.message,
+          }).catch(() => {});
         }
       }
 

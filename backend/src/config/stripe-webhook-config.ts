@@ -4,13 +4,13 @@
  * ⚠️ IMPORTANT: Production webhook URL must be configured manually in Stripe Dashboard
  * This function is for reference only - DO NOT rely on automatic webhook creation
  *
- * PRODUCTION CONFIGURATION (2026-02-16):
+ * PRODUCTION CONFIGURATION (2026-03-02):
  * - Frontend: Vercel at barpel.ai
- * - Backend: Render at barpel.onrender.com
- * - Stripe Webhook URL: https://barpel.onrender.com/api/webhooks/stripe
+ * - Backend: Render at barpel-ai.onrender.com
+ * - Stripe Webhook URL: https://barpel-ai.onrender.com/api/webhooks/stripe
  * - Webhook Secret: Stored in Render environment variable STRIPE_WEBHOOK_SECRET
  *
- * IMPORTANT: DO NOT use api.barpel.ai - this domain does not exist!
+ * IMPORTANT: The Render service name is "barpel-ai", NOT "barpel"!
  */
 
 export function getWebhookUrlForEnvironment(): string {
@@ -29,9 +29,9 @@ export function getWebhookUrlForEnvironment(): string {
   }
 
   // Production environment
-  // CRITICAL: Updated 2026-02-16 to correct production URL
-  // Old incorrect default was: 'api.barpel.ai' (domain doesn't exist)
-  const productionDomain = process.env.PRODUCTION_DOMAIN || 'barpel.onrender.com';
+  // CRITICAL: Updated 2026-03-02 to correct Render service name
+  // Old incorrect default was: 'barpel.onrender.com' (wrong service name)
+  const productionDomain = process.env.PRODUCTION_DOMAIN || 'barpel-ai.onrender.com';
   return `https://${productionDomain}/api/webhooks/stripe`;
 }
 

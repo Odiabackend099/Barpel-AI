@@ -6,22 +6,8 @@ const envPath = path.join(process.cwd(), '.env');
 // @ts-ignore
 require('dotenv').config({ path: envPath });
 
-// CRITICAL: Initialize Sentry BEFORE other imports if in production
+// Sentry is initialized via initializeSentry() below (single source of truth)
 import * as Sentry from '@sentry/node';
-import * as Tracing from '@sentry/tracing';
-
-// Initialize Sentry early if configured
-if (process.env.NODE_ENV === 'production' && process.env.SENTRY_DSN) {
-  Sentry.init({
-    dsn: process.env.SENTRY_DSN,
-    environment: process.env.NODE_ENV || 'development',
-    tracesSampleRate: 0.1,
-    integrations: [
-      new Sentry.Integrations.Http({ tracing: true }),
-      new Tracing.Integrations.Express({ app: undefined }) // Will attach to app after it's created
-    ]
-  });
-}
 
 // Import centralized configuration (single source of truth for env variables)
 import { config } from './config';
@@ -299,7 +285,9 @@ app.get('/api/csrf-token', csrfTokenEndpoint);
 app.use('/api/webhooks', webhooksRouter);
 app.use('/api/webhooks', smsStatusWebhookRouter);
 app.use('/api/webhook', webhookHealthRouter); // Health check endpoint (no rate limiting)
-app.use('/test-error', testErrorRouter); // Test endpoint for exception handling
+if (process.env.NODE_ENV !== 'production') {
+  app.use('/test-error', testErrorRouter); // Test endpoint for exception handling (dev/staging only)
+}
 app.use('/api/calls', callsRouter);
 app.use('/api/calls-dashboard', callsDashboardRouter);
 app.use('/api/assistants', assistantsRouter);
@@ -524,11 +512,11 @@ const server = createServer(app);
 
 // WebSocket server for Web Test (noServer for manual upgrade handling)
 const webTestWss = new WebSocketServer({ noServer: true });
-console.log('[WebSocket] Server initialized for /api/web-voice/*');
+log.info('WebSocket', 'Server initialized for /api/web-voice/*');
 
 // WebSocket server for live calls (noServer: manual upgrade handling to avoid conflicts)
 const liveCallsWss = new WebSocketServer({ noServer: true });
-console.log('[WebSocket] Server initialized for /ws/live-calls/*');
+log.info('WebSocket', 'Server initialized for /ws/live-calls/*');
 
 // Initialize WebSocket service (pass noServer wss, not HTTP server)
 initWebSocket(liveCallsWss);
@@ -538,17 +526,7 @@ server.on('upgrade', (request, socket, head) => {
   const pathname = request.url || '';
   const origin = request.headers.origin || 'unknown';
 
-  console.log('[WebSocket] Upgrade request received', {
-    pathname,
-    origin,
-    method: request.method,
-    headers: {
-      upgrade: request.headers.upgrade,
-      connection: request.headers.connection,
-      'sec-websocket-key': request.headers['sec-websocket-key'],
-      'sec-websocket-version': request.headers['sec-websocket-version'],
-    },
-  });
+  log.debug('WebSocket', 'Upgrade request received', { pathname, origin });
 
   // Validate origin for CORS security (allow localhost and production domains)
   const allowedOrigins = [
@@ -564,21 +542,21 @@ server.on('upgrade', (request, socket, head) => {
   const isOriginAllowed = !origin || origin === 'unknown' || allowedOrigins.some(allowed => origin === allowed);
 
   if (!isOriginAllowed) {
-    console.error('[WebSocket] Origin not allowed', { origin, allowedOrigins });
+    log.warn('WebSocket', 'Origin not allowed', { origin });
     socket.write('HTTP/1.1 403 Forbidden\r\n\r\n');
     socket.destroy();
     return;
   }
 
   if (pathname.startsWith('/api/web-voice')) {
-    console.log('[WebSocket] Handling /api/web-voice upgrade');
+    log.debug('WebSocket', 'Handling /api/web-voice upgrade');
     try {
       webTestWss.handleUpgrade(request, socket, head, (ws) => {
-        console.log('[WebSocket] Upgrade successful, emitting connection event');
+        log.debug('WebSocket', 'Upgrade successful, emitting connection event');
         webTestWss.emit('connection', ws, request);
       });
     } catch (err) {
-      console.error('[WebSocket] handleUpgrade error', { pathname, error: err instanceof Error ? err.message : String(err) });
+      log.error('WebSocket', 'handleUpgrade error', { pathname, error: err instanceof Error ? err.message : String(err) });
       try {
         socket.write('HTTP/1.1 500 Internal Server Error\r\n\r\n');
         socket.destroy();
@@ -587,14 +565,14 @@ server.on('upgrade', (request, socket, head) => {
       }
     }
   } else if (pathname.startsWith('/ws/live-calls')) {
-    console.log('[WebSocket] Handling /ws/live-calls upgrade');
+    log.debug('WebSocket', 'Handling /ws/live-calls upgrade');
     try {
       liveCallsWss.handleUpgrade(request, socket, head, (ws) => {
-        console.log('[WebSocket] /ws/live-calls upgrade successful, emitting connection event');
+        log.debug('WebSocket', '/ws/live-calls upgrade successful');
         liveCallsWss.emit('connection', ws, request);
       });
     } catch (err) {
-      console.error('[WebSocket] /ws/live-calls handleUpgrade error', { pathname, error: err instanceof Error ? err.message : String(err) });
+      log.error('WebSocket', '/ws/live-calls handleUpgrade error', { pathname, error: err instanceof Error ? err.message : String(err) });
       try {
         socket.write('HTTP/1.1 500 Internal Server Error\r\n\r\n');
         socket.destroy();
@@ -603,7 +581,7 @@ server.on('upgrade', (request, socket, head) => {
       }
     }
   } else {
-    console.log('[WebSocket] Unknown path, sending 404', { pathname });
+    log.warn('WebSocket', 'Unknown upgrade path, sending 404', { pathname });
     socket.write('HTTP/1.1 404 Not Found\r\n\r\n');
     socket.destroy();
   }
@@ -618,17 +596,15 @@ webTestWss.on('connection', (ws, req) => {
 
     // CRITICAL SSOT FIX: Removed userIdParam - no query param fallback allowed
     const attach = (effectiveUserId: string, effectiveOrgId?: string) => {
-      console.log('[WebVoice] WS connection attempt', {
+      log.info('WebVoice', 'WS connection attempt', {
         trackingId,
         userId: effectiveUserId,
         orgId: effectiveOrgId || 'unknown',
-        path: req.url
       });
 
       const attached = attachClientWebSocket(trackingId, ws, effectiveUserId);
       if (!attached) {
-        console.error('[WebVoice] Failed to attach to session', { trackingId, userId: effectiveUserId });
-        console.error('[WebVoice] Session may have expired or been cleaned up. Closing connection.');
+        log.warn('WebVoice', 'Failed to attach to session (expired or cleaned up)', { trackingId, userId: effectiveUserId });
         setTimeout(() => {
           try {
             if (ws.readyState === WebSocket.OPEN) {
@@ -641,7 +617,7 @@ webTestWss.on('connection', (ws, req) => {
         return;
       }
 
-      console.log('[WebVoice] ✅ Client attached to session', { trackingId, userId: effectiveUserId, orgId: effectiveOrgId });
+      log.info('WebVoice', 'Client attached to session', { trackingId, userId: effectiveUserId, orgId: effectiveOrgId });
     };
 
     // CRITICAL SSOT FIX: Always require auth message (even in dev mode, use a dev JWT token)
@@ -716,14 +692,14 @@ webTestWss.on('connection', (ws, req) => {
     // This prevents unauthorized access via query params
 
     ws.on('close', (code, reason) => {
-      console.log('[WebVoice] WS closed', { trackingId, code, reason: reason.toString() });
+      log.debug('WebVoice', 'WS closed', { trackingId, code, reason: reason.toString() });
     });
 
     ws.on('error', (err) => {
-      console.error('[WebVoice] WS error', { trackingId, error: err.message });
+      log.error('WebVoice', 'WS error', { trackingId, error: err.message });
     });
   } catch (err) {
-    console.error('[WebVoice] Connection handler error', err);
+    log.error('WebVoice', 'Connection handler error', { error: err instanceof Error ? err.message : String(err) });
     ws.close(1011, 'Internal error');
   }
 });
@@ -733,14 +709,13 @@ if (process.env.NODE_ENV !== 'test') {
   // Initialize database views before starting server
   import('./services/db-migrations').then(({ initializeDatabase }) => {
     initializeDatabase().catch((err) => {
-      console.error('Failed to initialize database:', err);
+      log.error('Database', 'Failed to initialize database', { error: err?.message });
     });
   });
 
   // Setup Stripe webhook endpoint automatically (no manual Stripe Dashboard config needed)
   ensureWebhookEndpoint().catch((err) => {
-    console.warn('Failed to auto-setup Stripe webhook endpoint (non-critical):', err.message);
-    console.warn('You can manually configure webhook endpoint in Stripe Dashboard');
+    log.warn('Stripe', 'Failed to auto-setup webhook endpoint (non-critical)', { error: err.message });
   });
 
   server.listen(PORT, '0.0.0.0', () => {
@@ -800,23 +775,23 @@ if (process.env.NODE_ENV !== 'test') {
 
     try {
       scheduleTelephonyVerificationCleanup();
-      console.log('Telephony verification cleanup job scheduled');
+      log.info('Jobs', 'Telephony verification cleanup job scheduled');
     } catch (error: any) {
-      console.warn('Failed to schedule telephony verification cleanup job:', error.message);
+      log.warn('Jobs', 'Failed to schedule telephony verification cleanup', { error: error.message });
     }
 
     try {
       scheduleWebhookEventsCleanup();
-      console.log('Webhook events cleanup job scheduled');
+      log.info('Jobs', 'Webhook events cleanup job scheduled');
     } catch (error: any) {
-      console.warn('Failed to schedule webhook events cleanup job:', error.message);
+      log.warn('Jobs', 'Failed to schedule webhook events cleanup', { error: error.message });
     }
 
     try {
       scheduleReservationCleanup();
-      console.log('Reservation cleanup job scheduled');
+      log.info('Jobs', 'Reservation cleanup job scheduled');
     } catch (error: any) {
-      console.warn('Failed to schedule reservation cleanup job:', error.message);
+      log.warn('Jobs', 'Failed to schedule reservation cleanup', { error: error.message });
     }
 
     // DISABLED: recording_upload_queue table deleted in migration 20260209_delete_empty_tables_phase1.sql
@@ -846,31 +821,30 @@ if (process.env.NODE_ENV !== 'test') {
 
     try {
       gdprCleanupModule.scheduleGDPRCleanup();
-      console.log('GDPR data retention cleanup job scheduled (daily at 5 AM UTC)');
+      log.info('Jobs', 'GDPR data retention cleanup scheduled (daily at 5 AM UTC)');
     } catch (error: any) {
-      console.warn('Failed to schedule GDPR cleanup job:', error.message);
+      log.warn('Jobs', 'Failed to schedule GDPR cleanup', { error: error.message });
     }
 
     try {
       scheduleVapiReconciliation();
-      console.log('✅ Vapi reconciliation job scheduled (daily at 3 AM UTC)');
-      console.log('   Revenue protection: Recovers 2-5% of missed webhooks (~$108-1080/year)');
+      log.info('Jobs', 'Vapi reconciliation scheduled (daily at 3 AM UTC)');
     } catch (error: any) {
-      console.warn('Failed to schedule Vapi reconciliation job:', error.message);
+      log.warn('Jobs', 'Failed to schedule Vapi reconciliation', { error: error.message });
     }
 
     try {
       scheduleAbandonmentEmails();
-      console.log('Onboarding abandonment email job scheduled (every 15 minutes)');
+      log.info('Jobs', 'Onboarding abandonment email job scheduled (every 15 min)');
     } catch (error: any) {
-      console.warn('Failed to schedule abandonment email job:', error.message);
+      log.warn('Jobs', 'Failed to schedule abandonment email job', { error: error.message });
     }
 
     try {
       scheduleTwilioSubaccountHealth();
-      console.log('✅ Twilio subaccount health monitor scheduled (every 6 hours)');
+      log.info('Jobs', 'Twilio subaccount health monitor scheduled (every 6 hours)');
     } catch (error: any) {
-      console.warn('Failed to schedule Twilio subaccount health monitor:', error.message);
+      log.warn('Jobs', 'Failed to schedule Twilio subaccount health monitor', { error: error.message });
     }
 
     // DISABLED: Vapi and Twilio pollers removed in favor of webhook-only architecture
@@ -893,7 +867,7 @@ if (process.env.NODE_ENV !== 'test') {
     //   console.warn('Failed to schedule Vapi call poller:', error.message);
     // }
 
-    console.log('✅ Recording pollers disabled - using webhook-only architecture');
+    log.info('Jobs', 'Recording pollers disabled — using webhook-only architecture');
 
     // Verify Twilio master credentials (non-blocking)
     const twilioSid = process.env.TWILIO_MASTER_ACCOUNT_SID;
@@ -906,18 +880,16 @@ if (process.env.NODE_ENV !== 'test') {
       })
         .then((r) => {
           if (r.ok) {
-            console.log('✅ Twilio master credentials verified');
+            log.info('Twilio', 'Master credentials verified');
           } else {
-            console.error(
-              `⚠️  Twilio master credentials FAILED (HTTP ${r.status}) — number search will not work`
-            );
+            log.error('Twilio', `Master credentials FAILED (HTTP ${r.status}) — number search will not work`);
           }
         })
         .catch((err) => {
-          console.warn('⚠️  Could not reach Twilio API:', err.message);
+          log.warn('Twilio', 'Could not reach Twilio API', { error: err.message });
         });
     } else {
-      console.warn('⚠️  TWILIO_MASTER_ACCOUNT_SID/TOKEN not set — managed telephony disabled');
+      log.warn('Twilio', 'TWILIO_MASTER_ACCOUNT_SID/TOKEN not set — managed telephony disabled');
     }
   });
 }
@@ -926,71 +898,47 @@ if (process.env.NODE_ENV !== 'test') {
 app.use('/api/auth', authRouter);
 app.use('/oauth-test', oauthTestRouter);
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received');
+// Graceful shutdown (single handler for both SIGTERM and SIGINT)
+let isShuttingDown = false;
 
-  closeRedis().then(() => {
-    console.log('Redis connection closed');
-  });
+async function gracefulShutdown(signal: string) {
+  if (isShuttingDown) return;
+  isShuttingDown = true;
 
-  closeWebhookQueue().then(() => {
-    console.log('Webhook queue closed');
-  });
+  log.info('Process', `${signal} received — starting graceful shutdown`);
 
-  closeWalletQueue().then(() => {
-    console.log('Wallet queue closed');
-  });
+  // Close queues and connections with a 30s timeout
+  const shutdownTimeout = setTimeout(() => {
+    log.error('Process', 'Graceful shutdown timed out after 30s, forcing exit');
+    process.exit(1);
+  }, 30_000);
 
-  closeBillingQueue().then(() => {
-    console.log('Billing queue closed');
-  });
+  const results = await Promise.allSettled([
+    closeRedis(),
+    closeWebhookQueue(),
+    closeWalletQueue(),
+    closeBillingQueue(),
+    shutdownSmsQueue(),
+    shutdownReconciliationWorker(),
+  ]);
 
-  shutdownSmsQueue().then(() => {
-    console.log('SMS queue closed');
-  });
-
-  shutdownReconciliationWorker().then(() => {
-    console.log('Vapi reconciliation worker closed');
-  });
-
-  server.close(() => {
-    console.log('HTTP server closed');
-    process.exit(0);
-  });
-});
-
-process.on('SIGINT', () => {
-  console.log('SIGINT signal received');
-
-  closeRedis().then(() => {
-    console.log('Redis connection closed');
-  });
-
-  closeWebhookQueue().then(() => {
-    console.log('Webhook queue closed');
-  });
-
-  closeWalletQueue().then(() => {
-    console.log('Wallet queue closed');
-  });
-
-  closeBillingQueue().then(() => {
-    console.log('Billing queue closed');
-  });
-
-  shutdownSmsQueue().then(() => {
-    console.log('SMS queue closed');
-  });
-
-  shutdownReconciliationWorker().then(() => {
-    console.log('Vapi reconciliation worker closed');
+  results.forEach((result, i) => {
+    const names = ['Redis', 'WebhookQueue', 'WalletQueue', 'BillingQueue', 'SmsQueue', 'ReconciliationWorker'];
+    if (result.status === 'fulfilled') {
+      log.info('Process', `${names[i]} closed`);
+    } else {
+      log.error('Process', `${names[i]} close failed`, { error: (result.reason as Error)?.message });
+    }
   });
 
   server.close(() => {
-    console.log('HTTP server closed');
+    clearTimeout(shutdownTimeout);
+    log.info('Process', 'HTTP server closed — exiting');
     process.exit(0);
   });
-});
+}
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 export default app;

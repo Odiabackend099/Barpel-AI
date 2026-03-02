@@ -1,8 +1,11 @@
 /**
  * Authentication Rate Limiters (P0-3 Fix)
  *
- * Implements Redis-backed rate limiting for all authentication endpoints
+ * Implements rate limiting for all authentication endpoints
  * to prevent brute-force attacks, MFA code guessing, and account enumeration.
+ *
+ * Uses Redis-backed store when REDIS_URL is available, otherwise falls back
+ * to the default in-memory store (safe for single-instance deployments).
  *
  * Security: Prevents attackers from:
  * - Brute-forcing MFA codes (6-digit = 1M combinations)
@@ -14,9 +17,10 @@
  * by preventing automated attacks that could compromise user authentication.
  */
 
-import rateLimit from 'express-rate-limit';
+import rateLimit, { type Store } from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
 import Redis from 'ioredis';
+import { log } from '../services/logger';
 
 /**
  * IPv6-compatible IP key generator
@@ -29,8 +33,59 @@ function generateIPKey(req: any): string {
   return req.ip || '127.0.0.1';
 }
 
-// Initialize Redis client for rate limiting
-const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
+// Lazy-initialized Redis client for rate limiting
+let redis: Redis | null = null;
+
+function getRedisForRateLimiting(): Redis | null {
+  if (redis) return redis;
+
+  const redisUrl = process.env.REDIS_URL;
+  if (!redisUrl) {
+    log.warn('RateLimiter', 'REDIS_URL not set — using in-memory rate limiting');
+    return null;
+  }
+
+  try {
+    redis = new Redis(redisUrl, {
+      maxRetriesPerRequest: null,
+      enableReadyCheck: false,
+      lazyConnect: true,
+      retryStrategy: (times) => {
+        if (times > 3) return null; // Stop retrying after 3 attempts
+        return Math.min(times * 100, 2000);
+      },
+    });
+
+    redis.on('error', (err) => {
+      log.error('RateLimiter', 'Redis error', { error: err.message });
+    });
+
+    redis.connect().catch(() => {
+      log.warn('RateLimiter', 'Redis connect failed — falling back to in-memory');
+      redis = null;
+    });
+
+    return redis;
+  } catch {
+    log.warn('RateLimiter', 'Failed to create Redis client — using in-memory rate limiting');
+    return null;
+  }
+}
+
+/**
+ * Create a Redis store if Redis is available, otherwise return undefined
+ * (express-rate-limit uses its built-in MemoryStore as default)
+ */
+function createStore(prefix: string): Store | undefined {
+  const client = getRedisForRateLimiting();
+  if (!client) return undefined;
+
+  return new RedisStore({
+    client,
+    prefix,
+    sendCommand: (...args: string[]) => client.call(...args),
+  });
+}
 
 /**
  * CRITICAL: MFA Verification Rate Limiter
@@ -48,11 +103,7 @@ const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
  * - Distributed attack from botnet
  */
 export const mfaRateLimiter = rateLimit({
-  store: new RedisStore({
-    client: redis,
-    prefix: 'rl:mfa:',
-    sendCommand: (...args: string[]) => redis.call(...args)
-  }),
+  store: createStore('rl:mfa:'),
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 3, // 3 attempts per window
   keyGenerator: (req) => {
@@ -84,11 +135,7 @@ export const mfaRateLimiter = rateLimit({
  * - 15 min lockout = short enough to not frustrate users
  */
 export const loginRateLimiter = rateLimit({
-  store: new RedisStore({
-    client: redis,
-    prefix: 'rl:login:',
-    sendCommand: (...args: string[]) => redis.call(...args)
-  }),
+  store: createStore('rl:login:'),
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 10, // 10 attempts per window
   keyGenerator: (req) => generateIPKey(req),
@@ -119,11 +166,7 @@ export const loginRateLimiter = rateLimit({
  * but prevents bot creating thousands of accounts
  */
 export const signupRateLimiter = rateLimit({
-  store: new RedisStore({
-    client: redis,
-    prefix: 'rl:signup:',
-    sendCommand: (...args: string[]) => redis.call(...args)
-  }),
+  store: createStore('rl:signup:'),
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 5, // 5 attempts per hour
   keyGenerator: (req) => generateIPKey(req),
@@ -156,11 +199,7 @@ export const signupRateLimiter = rateLimit({
  * - 3 attempts/hour = legitimate user can retry a few times
  */
 export const passwordResetRateLimiter = rateLimit({
-  store: new RedisStore({
-    client: redis,
-    prefix: 'rl:reset:',
-    sendCommand: (...args: string[]) => redis.call(...args)
-  }),
+  store: createStore('rl:reset:'),
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 3, // 3 attempts per hour
   keyGenerator: (req) => {
@@ -191,8 +230,13 @@ export async function checkRateLimiterHealth(): Promise<{
   redisConnected: boolean;
   error?: string;
 }> {
+  const client = getRedisForRateLimiting();
+  if (!client) {
+    return { healthy: true, redisConnected: false, error: 'Using in-memory store (Redis not available)' };
+  }
+
   try {
-    await redis.ping();
+    await client.ping();
     return { healthy: true, redisConnected: true };
   } catch (error: any) {
     return {
@@ -209,13 +253,16 @@ export async function checkRateLimiterHealth(): Promise<{
  * Allows support team to manually reset rate limits for locked-out users
  */
 export async function clearUserRateLimit(userId: string): Promise<void> {
+  const client = getRedisForRateLimiting();
+  if (!client) return;
+
   const patterns = [
     `rl:mfa:${userId}`,
     `rl:login:${userId}`
   ];
 
   for (const pattern of patterns) {
-    await redis.del(pattern);
+    await client.del(pattern);
   }
 }
 
@@ -225,16 +272,18 @@ export async function clearUserRateLimit(userId: string): Promise<void> {
  * Allows support team to manually reset rate limits for specific IPs
  */
 export async function clearIPRateLimit(ipAddress: string): Promise<void> {
-  // Use SCAN to find all keys matching the patterns (safer than KEYS)
+  const client = getRedisForRateLimiting();
+  if (!client) return;
+
   const prefixes = [
     `rl:login:${ipAddress}*`,
     `rl:signup:${ipAddress}*`
   ];
 
   for (const prefix of prefixes) {
-    const keys = await redis.keys(prefix);
+    const keys = await client.keys(prefix);
     if (keys.length > 0) {
-      await redis.del(...keys);
+      await client.del(...keys);
     }
   }
 }
@@ -248,19 +297,27 @@ export async function getUserRateLimitStatus(userId: string): Promise<{
   mfa: { remaining: number; resetAt: Date | null };
   login: { remaining: number; resetAt: Date | null };
 }> {
+  const client = getRedisForRateLimiting();
+  if (!client) {
+    return {
+      mfa: { remaining: 3, resetAt: null },
+      login: { remaining: 10, resetAt: null },
+    };
+  }
+
   const mfaKey = `rl:mfa:${userId}`;
   const loginKey = `rl:login:${userId}`;
 
-  const mfaTTL = await redis.ttl(mfaKey);
-  const loginTTL = await redis.ttl(loginKey);
+  const mfaTTL = await client.ttl(mfaKey);
+  const loginTTL = await client.ttl(loginKey);
 
   return {
     mfa: {
-      remaining: mfaTTL > 0 ? 3 - (await redis.get(mfaKey) ? 1 : 0) : 3,
+      remaining: mfaTTL > 0 ? 3 - (await client.get(mfaKey) ? 1 : 0) : 3,
       resetAt: mfaTTL > 0 ? new Date(Date.now() + mfaTTL * 1000) : null
     },
     login: {
-      remaining: loginTTL > 0 ? 10 - (await redis.get(loginKey) ? 1 : 0) : 10,
+      remaining: loginTTL > 0 ? 10 - (await client.get(loginKey) ? 1 : 0) : 10,
       resetAt: loginTTL > 0 ? new Date(Date.now() + loginTTL * 1000) : null
     }
   };

@@ -33,13 +33,7 @@ export function setupExceptionHandlers(): void {
     }).catch(() => {});
   });
 
-  // SIGTERM handling
-  process.on('SIGTERM', () => {
-    log.info('Process', 'SIGTERM received - starting graceful shutdown');
-    
-    // Flush Sentry
-    Sentry.close(2000)
-      .then(() => log.info('Sentry', 'Events flushed'))
-      .finally(() => process.exit(0));
-  });
+  // Note: SIGTERM/SIGINT handlers are in server.ts (gracefulShutdown)
+  // to avoid duplicate handler conflicts. Sentry flush happens via
+  // Sentry.close() during the graceful shutdown sequence.
 }

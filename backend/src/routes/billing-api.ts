@@ -669,6 +669,13 @@ router.post('/wallet/auto-recharge', requireAuth, async (req: Request, res: Resp
       updateData.wallet_low_balance_pence = threshold_pence;
     }
 
+    // Cross-validate: recharge amount must exceed threshold to prevent infinite recharge loop
+    const effectiveAmount = amount_pence ?? updateData.wallet_recharge_amount_pence;
+    const effectiveThreshold = threshold_pence ?? updateData.wallet_low_balance_pence;
+    if (effectiveAmount && effectiveThreshold && effectiveAmount <= effectiveThreshold) {
+      return res.status(400).json({ error: 'Recharge amount must exceed threshold to prevent infinite recharge loop' });
+    }
+
     const { error } = await supabase
       .from('organizations')
       .update(updateData)

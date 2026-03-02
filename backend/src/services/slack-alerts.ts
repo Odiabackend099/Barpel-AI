@@ -33,10 +33,15 @@ export function incrementErrorCount(): void {
  * @param details Additional details
  */
 export async function sendSlackAlert(title: string, details: any): Promise<void> {
+  if (!process.env.SLACK_BOT_TOKEN) {
+    log.warn('Slack', 'SLACK_BOT_TOKEN not configured — skipping alert', { title });
+    return;
+  }
+
   try {
     // Format the details as a string
     const detailsText = typeof details === 'string' ? details : JSON.stringify(details, null, 2);
-    
+
     await slackClient.chat.postMessage({
       channel: process.env.SLACK_ALERTS_CHANNEL || '#barpel-alerts',
       text: `*${title}*\n${detailsText}`,
