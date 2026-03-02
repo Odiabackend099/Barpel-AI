@@ -53,7 +53,7 @@ export default function LeftSidebar() {
             description: 'Configure, train, and test your AI agents',
             items: [
                 { label: 'Agent Configuration', href: '/dashboard/agent-config', icon: Bot },
-                { label: 'Escalation Rules', href: '/dashboard/escalation-rules', icon: Zap },
+                { label: 'Call Transfer', href: '/dashboard/escalation-rules', icon: Zap },
                 { label: 'Knowledge Base', href: '/dashboard/knowledge-base', icon: BookOpen },
                 { label: 'Test Agents', href: '/dashboard/test', icon: Phone },
             ],

@@ -1,333 +1,215 @@
 'use client';
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { Plus, Edit2, Trash2, AlertCircle, CheckCircle, XCircle, Loader } from 'lucide-react';
+import { useState, useCallback, useEffect } from 'react';
+import { Phone, ArrowRight, Clock, CheckCircle2, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import useSWR from 'swr';
 import { authedBackendFetch } from '@/lib/authed-backend-fetch';
-import { RuleForm } from './components/RuleForm';
-import { ConfirmDialog } from '@/components/ConfirmDialog';
 
 const fetcher = (url: string) => authedBackendFetch<any>(url);
 
-interface EscalationRule {
-    id: string;
-    org_id: string;
-    name: string;
-    agent_id?: string;
-    agent_email?: string;
-    trigger_type: 'wait_time' | 'sentiment' | 'ai_request' | 'manual';
-    transfer_number: string;
-    max_wait_seconds?: number;
-    sentiment_threshold?: number;
-    enabled: boolean;
-    priority: number;
-    created_at: string;
-    updated_at: string;
+interface TransferSettings {
+    transfer_number: string | null;
+    last_updated: string | null;
 }
 
-const EscalationRulesPage = () => {
-    const router = useRouter();
-    const { user, loading } = useAuth();
-    const [showRuleModal, setShowRuleModal] = useState(false);
-    const [editingRule, setEditingRule] = useState<EscalationRule | null>(null);
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
-    const [deletingRuleId, setDeletingRuleId] = useState<string | null>(null);
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const [ruleToDelete, setRuleToDelete] = useState<EscalationRule | null>(null);
+interface TransferHistoryItem {
+    id: string;
+    created_at: string;
+    from_number: string;
+    status: string;
+    outcome: string | null;
+}
 
-    // Fetch escalation rules
-    const { data: rulesData, error: rulesError, mutate: mutateRules, isLoading: isRulesLoading } = useSWR(
-        user ? '/api/escalation-rules' : null,
+const E164_REGEX = /^\+\d{7,15}$/;
+
+function formatRelativeTime(iso: string): string {
+    const diff = Date.now() - new Date(iso).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    return `${Math.floor(hrs / 24)}d ago`;
+}
+
+function formatTime(iso: string): string {
+    return new Date(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+}
+
+export default function CallTransferPage() {
+    const { user } = useAuth();
+    const [phoneInput, setPhoneInput] = useState('');
+    const [saving, setSaving] = useState(false);
+    const [successMsg, setSuccessMsg] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
+
+    const { data: settings, isLoading, mutate } = useSWR<TransferSettings>(
+        user ? '/api/transfer-settings' : null,
         fetcher,
-        {
-            revalidateOnFocus: false,
-            refreshInterval: 0,
-        }
+        { revalidateOnFocus: false }
     );
 
-    const rules = (rulesData as EscalationRule[]) || [];
+    const { data: history } = useSWR<TransferHistoryItem[]>(
+        user ? '/api/transfer-settings/history' : null,
+        fetcher,
+        { revalidateOnFocus: false }
+    );
 
-    // Auth check
+    // Pre-fill input from saved settings (only once on load)
     useEffect(() => {
-        if (!loading && !user) {
-            router.push('/login');
+        if (settings?.transfer_number && !phoneInput) {
+            setPhoneInput(settings.transfer_number);
         }
-    }, [user, loading, router]);
+    }, [settings?.transfer_number]);
 
-    // Error handling
-    useEffect(() => {
-        if (rulesError) {
-            setError('Failed to load escalation rules. Please try again.');
+    const handleSave = useCallback(async () => {
+        const val = phoneInput.trim();
+        if (!val) {
+            setErrorMsg('Please enter a phone number');
+            return;
         }
-    }, [rulesError]);
-
-    // Clear success message after 3 seconds
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => setSuccess(null), 3000);
-            return () => clearTimeout(timer);
+        if (!E164_REGEX.test(val)) {
+            setErrorMsg('Use E.164 format — start with + followed by your country code (e.g. +2348012345678)');
+            return;
         }
-    }, [success]);
-
-    const handleDeleteRule = async (ruleId: string) => {
-        setDeletingRuleId(ruleId);
+        setErrorMsg('');
+        setSaving(true);
         try {
-            await authedBackendFetch<any>(`/api/escalation-rules/${ruleId}`, {
-                method: 'DELETE',
+            await authedBackendFetch('/api/transfer-settings', {
+                method: 'PUT',
+                body: JSON.stringify({ transfer_number: val }),
             });
-
-            setSuccess('Rule deleted successfully');
-            mutateRules();
-        } catch (err) {
-            const error = err as any;
-            setError(error?.message || 'Error deleting rule. Please try again.');
-            console.error('Delete error:', err);
+            setSuccessMsg('Saved');
+            mutate();
+            setTimeout(() => setSuccessMsg(''), 3000);
+        } catch (err: any) {
+            setErrorMsg(err?.message || 'Failed to save. Please try again.');
         } finally {
-            setDeletingRuleId(null);
+            setSaving(false);
         }
-    };
-
-    const handleToggleEnabled = async (rule: EscalationRule) => {
-        try {
-            await authedBackendFetch<any>(`/api/escalation-rules/${rule.id}`, {
-                method: 'PATCH',
-                body: JSON.stringify({
-                    enabled: !rule.enabled,
-                }),
-            });
-
-            setSuccess(`Rule ${!rule.enabled ? 'enabled' : 'disabled'} successfully`);
-            mutateRules();
-        } catch (err) {
-            const error = err as any;
-            setError(error?.message || 'Error updating rule. Please try again.');
-            console.error('Update error:', err);
-        }
-    };
-
-    const handleDeleteClick = (rule: EscalationRule) => {
-        setRuleToDelete(rule);
-        setShowDeleteConfirm(true);
-    };
-
-    const handleDeleteConfirm = async () => {
-        if (!ruleToDelete) return;
-
-        setShowDeleteConfirm(false);
-        await handleDeleteRule(ruleToDelete.id);
-        setRuleToDelete(null);
-    };
-
-    const getTriggerLabel = (triggerType: string) => {
-        const labels: Record<string, string> = {
-            wait_time: 'Wait Time',
-            sentiment: 'Sentiment',
-            ai_request: 'AI Request',
-            manual: 'Manual',
-        };
-        return labels[triggerType] || triggerType;
-    };
-
-    if (!user) {
-        return (
-            <div className="flex items-center justify-center h-screen">
-                <Loader className="w-8 h-8 animate-spin" />
-            </div>
-        );
-    }
+    }, [phoneInput, mutate]);
 
     return (
-        <div className="p-6">
-            <div className="max-w-6xl mx-auto">
+        <div className="min-h-screen bg-gray-50 p-6">
+            <div className="max-w-xl mx-auto space-y-6">
+
                 {/* Header */}
-                <div className="flex justify-between items-center mb-6">
-                    <div>
-                        <h1 className="text-3xl font-bold text-barpel-slate">Escalation Rules</h1>
-                        <p className="text-barpel-slate/60 mt-2">Manage call transfer rules and escalation triggers</p>
-                    </div>
-                    <button
-                        onClick={() => {
-                            setEditingRule(null);
-                            setShowRuleModal(true);
-                        }}
-                        className="bg-barpel-teal text-white px-4 py-2 rounded-lg hover:bg-barpel-teal-dark flex items-center gap-2"
-                    >
-                        <Plus className="w-5 h-5" />
-                        Create Rule
-                    </button>
+                <div>
+                    <h1 className="text-2xl font-semibold text-[#102A33] tracking-tight">Call Transfer</h1>
+                    <p className="mt-1 text-sm text-gray-500">
+                        When a caller asks to speak to a person, or your AI identifies a serious buyer,
+                        it will transfer the call directly to your phone.
+                    </p>
                 </div>
 
-                {/* Alert Messages */}
-                {error && (
-                    <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700">
-                        <AlertCircle className="w-5 h-5" />
-                        {error}
-                        <button onClick={() => setError(null)} className="ml-auto text-red-700 hover:text-red-800">
-                            x
-                        </button>
+                {/* Settings card */}
+                <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm space-y-4">
+                    <div className="flex items-center gap-2 text-sm font-medium text-[#102A33]">
+                        <Phone size={15} className="text-[#37A195]" />
+                        Transfer calls to
                     </div>
-                )}
 
-                {success && (
-                    <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2 text-green-700">
-                        <CheckCircle className="w-5 h-5" />
-                        {success}
-                    </div>
-                )}
-
-                {/* Rules Table */}
-                <div className="bg-white rounded-lg shadow overflow-hidden border border-surgical-200">
-                    {isRulesLoading ? (
-                        <div className="p-8 flex justify-center">
-                            <Loader className="w-6 h-6 animate-spin text-surgical-600" />
+                    <div className="space-y-1">
+                        <div className="relative">
+                            <input
+                                type="tel"
+                                value={phoneInput}
+                                onChange={e => { setPhoneInput(e.target.value); setErrorMsg(''); }}
+                                onKeyDown={e => e.key === 'Enter' && handleSave()}
+                                placeholder="+2348012345678"
+                                className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm text-[#102A33] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#37A195]/40 focus:border-[#37A195] transition"
+                                disabled={saving || isLoading}
+                            />
                         </div>
-                    ) : rules.length === 0 ? (
-                        <div className="p-8 text-center">
-                            <p className="text-barpel-slate/60 mb-4">No escalation rules created yet</p>
-                            <button
-                                onClick={() => {
-                                    setEditingRule(null);
-                                    setShowRuleModal(true);
-                                }}
-                                className="text-surgical-600 hover:text-surgical-700 font-medium"
-                            >
-                                Create your first rule
-                            </button>
+                        <p className="text-xs text-gray-400">
+                            International format — start with + then your country code
+                        </p>
+                        {errorMsg && (
+                            <p className="text-xs text-red-500 mt-1">{errorMsg}</p>
+                        )}
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={handleSave}
+                            disabled={saving || isLoading}
+                            className="inline-flex items-center gap-1.5 rounded-lg bg-[#37A195] px-4 py-2 text-sm font-medium text-white hover:bg-[#2e8a7f] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                        >
+                            {saving ? (
+                                <><Loader2 size={13} className="animate-spin" /> Saving…</>
+                            ) : (
+                                <><ArrowRight size={13} /> Save</>
+                            )}
+                        </button>
+
+                        {successMsg && (
+                            <span className="flex items-center gap-1 text-sm text-[#37A195]">
+                                <CheckCircle2 size={13} />
+                                {successMsg}
+                            </span>
+                        )}
+
+                        {settings?.last_updated && !successMsg && (
+                            <span className="text-xs text-gray-400">
+                                Last saved {formatRelativeTime(settings.last_updated)}
+                            </span>
+                        )}
+                    </div>
+                </div>
+
+                {/* How it works */}
+                <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
+                    <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">How it works</p>
+                    <ul className="space-y-2 text-sm text-gray-600">
+                        <li className="flex gap-2">
+                            <span className="mt-0.5 h-4 w-4 shrink-0 rounded-full bg-[#37A195]/10 text-[#37A195] flex items-center justify-center text-[10px] font-bold">1</span>
+                            Caller asks your AI: <em>"Can I speak to someone?"</em>
+                        </li>
+                        <li className="flex gap-2">
+                            <span className="mt-0.5 h-4 w-4 shrink-0 rounded-full bg-[#37A195]/10 text-[#37A195] flex items-center justify-center text-[10px] font-bold">2</span>
+                            AI says: <em>"Of course, connecting you now…"</em>
+                        </li>
+                        <li className="flex gap-2">
+                            <span className="mt-0.5 h-4 w-4 shrink-0 rounded-full bg-[#37A195]/10 text-[#37A195] flex items-center justify-center text-[10px] font-bold">3</span>
+                            Your phone rings with the warm lead already on the line.
+                        </li>
+                    </ul>
+                </div>
+
+                {/* Transfer history */}
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+                        <Clock size={14} className="text-gray-400" />
+                        <span className="text-sm font-medium text-[#102A33]">Recent transfers</span>
+                    </div>
+
+                    {!history || history.length === 0 ? (
+                        <div className="px-5 py-8 text-center text-sm text-gray-400">
+                            No transfers yet. Transfers appear here once your AI starts routing calls.
                         </div>
                     ) : (
-                        <table className="w-full divide-y divide-surgical-200">
-                            <thead className="bg-surgical-50">
-                                <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-barpel-slate/60 uppercase tracking-wider">
-                                        Name
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-barpel-slate/60 uppercase tracking-wider">
-                                        Trigger
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-barpel-slate/60 uppercase tracking-wider">
-                                        Transfer Number
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-barpel-slate/60 uppercase tracking-wider">
-                                        Priority
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-barpel-slate/60 uppercase tracking-wider">
-                                        Status
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-barpel-slate/60 uppercase tracking-wider">
-                                        Actions
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-surgical-200">
-                                {rules.map(rule => (
-                                    <tr key={rule.id} className="hover:bg-surgical-50">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className="font-medium text-barpel-slate">{rule.name}</span>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className="px-3 py-1 bg-surgical-50 text-surgical-600 rounded-full text-sm">
-                                                {getTriggerLabel(rule.trigger_type)}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-barpel-slate/60">
-                                            {rule.transfer_number}
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className="font-medium text-barpel-slate">{rule.priority}</span>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <button
-                                                onClick={() => handleToggleEnabled(rule)}
-                                                className={`px-3 py-1 rounded-full text-sm font-medium ${rule.enabled
-                                                        ? 'bg-green-50 text-green-700 hover:bg-green-100'
-                                                        : 'bg-surgical-50 text-barpel-slate/60 hover:bg-surgical-100'
-                                                    }`}
-                                            >
-                                                {rule.enabled ? 'Enabled' : 'Disabled'}
-                                            </button>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap space-x-2">
-                                            <button
-                                                onClick={() => {
-                                                    setEditingRule(rule);
-                                                    setShowRuleModal(true);
-                                                }}
-                                                className="text-surgical-600 hover:text-surgical-700 inline-flex items-center gap-1"
-                                            >
-                                                <Edit2 className="w-4 h-4" />
-                                                Edit
-                                            </button>
-                                            <button
-                                                onClick={() => handleDeleteClick(rule)}
-                                                disabled={deletingRuleId === rule.id}
-                                                className="text-red-700 hover:text-red-800 inline-flex items-center gap-1 disabled:opacity-50"
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                                {deletingRuleId === rule.id ? 'Deleting...' : 'Delete'}
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                        <ul className="divide-y divide-gray-100">
+                            {history.map(item => (
+                                <li key={item.id} className="flex items-center justify-between px-5 py-3">
+                                    <div className="flex items-center gap-3">
+                                        <Phone size={13} className="text-[#37A195] shrink-0" />
+                                        <div>
+                                            <p className="text-sm text-[#102A33] font-medium">{item.from_number}</p>
+                                            <p className="text-xs text-gray-400">{formatTime(item.created_at)}</p>
+                                        </div>
+                                    </div>
+                                    <span className="text-xs rounded-full px-2 py-0.5 bg-[#37A195]/10 text-[#37A195] font-medium capitalize">
+                                        {item.outcome === 'assistant-forwarded-call' ? 'Transferred' : item.status}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
                     )}
                 </div>
 
-                {/* Stats Footer */}
-                {rules.length > 0 && (
-                    <div className="mt-6 grid grid-cols-3 gap-4">
-                        <div className="bg-white p-4 rounded-lg shadow border border-surgical-200">
-                            <p className="text-barpel-slate/60 text-sm">Total Rules</p>
-                            <p className="text-2xl font-bold text-barpel-slate">{rules.length}</p>
-                        </div>
-                        <div className="bg-white p-4 rounded-lg shadow border border-surgical-200">
-                            <p className="text-barpel-slate/60 text-sm">Enabled</p>
-                            <p className="text-2xl font-bold text-green-700">{rules.filter(r => r.enabled).length}</p>
-                        </div>
-                        <div className="bg-white p-4 rounded-lg shadow border border-surgical-200">
-                            <p className="text-barpel-slate/60 text-sm">Disabled</p>
-                            <p className="text-2xl font-bold text-barpel-slate/60">{rules.filter(r => !r.enabled).length}</p>
-                        </div>
-                    </div>
-                )}
-
-                {/* Rule Modal */}
-                {showRuleModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                        <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 border border-surgical-200">
-                            <h2 className="text-2xl font-bold mb-4 text-barpel-slate">
-                                {editingRule ? 'Edit Rule' : 'Create New Rule'}
-                            </h2>
-                            <RuleForm
-                                rule={editingRule}
-                                onClose={() => setShowRuleModal(false)}
-                                onSuccess={() => mutateRules()}
-                            />
-                        </div>
-                    </div>
-                )}
-
-                {/* Delete Confirmation Dialog */}
-                <ConfirmDialog
-                    isOpen={showDeleteConfirm}
-                    title="Delete Escalation Rule"
-                    message={`Are you sure you want to delete the rule "${ruleToDelete?.name}"? This action cannot be undone.`}
-                    confirmText="Delete"
-                    cancelText="Cancel"
-                    isDestructive={true}
-                    onConfirm={handleDeleteConfirm}
-                    onCancel={() => {
-                        setShowDeleteConfirm(false);
-                        setRuleToDelete(null);
-                    }}
-                />
             </div>
         </div>
     );
-};
-
-export default EscalationRulesPage;
+}

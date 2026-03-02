@@ -127,14 +127,36 @@ const WalletPageContent = () => {
         }
     }, [wallet]);
 
-    // Handle Stripe redirect
+    // Handle Stripe redirect — poll for balance update (webhook may take 5-30s)
     useEffect(() => {
         const param = searchParams.get('topup');
         if (param === 'success') {
-            showSuccess('Credits added successfully! Your balance has been updated.');
-            mutateWallet();
-            mutateTx();
             window.history.replaceState({}, '', '/dashboard/wallet');
+            showInfo('Payment received — updating your balance...');
+            mutateTx();
+
+            const initialBalance = wallet?.balance_pence ?? 0;
+            let attempts = 0;
+            const maxAttempts = 4;
+            const intervalMs = 3000;
+
+            const pollId = setInterval(async () => {
+                attempts++;
+                const fresh = await mutateWallet();
+                const newBalance = fresh?.balance_pence ?? 0;
+
+                if (newBalance > initialBalance) {
+                    clearInterval(pollId);
+                    showSuccess('Credits added successfully! Your balance has been updated.');
+                    mutateTx();
+                } else if (attempts >= maxAttempts) {
+                    clearInterval(pollId);
+                    showSuccess('Payment received! Your balance will update shortly.');
+                    mutateTx();
+                }
+            }, intervalMs);
+
+            return () => clearInterval(pollId);
         } else if (param === 'canceled') {
             showInfo('Top-up was cancelled. No charges were made.');
             window.history.replaceState({}, '', '/dashboard/wallet');
