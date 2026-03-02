@@ -72,6 +72,7 @@ async function resolveOrgPhoneNumberIdInner(
     // Step 1: Check managed_phone_numbers for an active OUTBOUND number with vapi_phone_id
     // Only outbound-tagged numbers should be used for outbound calls
     // Short-circuits the entire BYOC resolution chain for managed orgs
+    // CRITICAL FIX: No fallback to inbound numbers — require explicit outbound configuration
     try {
       const { data: managedNumber } = await supabaseAdmin
         .from('managed_phone_numbers')
@@ -92,25 +93,18 @@ async function resolveOrgPhoneNumberIdInner(
         return { phoneNumberId: managedNumber.vapi_phone_id, callerNumber: managedNumber.phone_number };
       }
 
-      // Fallback: if no outbound-tagged number exists, try any active managed number
-      // This preserves backward compatibility for existing single-number orgs
-      const { data: anyManagedNumber } = await supabaseAdmin
-        .from('managed_phone_numbers')
-        .select('vapi_phone_id, phone_number')
-        .eq('org_id', orgId)
-        .eq('status', 'active')
-        .not('vapi_phone_id', 'is', null)
-        .limit(1)
-        .maybeSingle();
+      // CRITICAL FIX: Removed permissive fallback that allowed inbound numbers to be used for outbound calls
+      // Reasoning:
+      // 1. Inbound numbers are provisioned for receiving calls only
+      // 2. Using inbound for outbound violates phone number assignment rules
+      // 3. Single-number orgs MUST explicitly configure their number for outbound use
+      // 4. This prevents accidental cross-direction phone number misuse
 
-      if (anyManagedNumber?.vapi_phone_id) {
-        logger.info('Resolved managed phone number fallback (Step 1 — no outbound-tagged number)', {
-          orgId,
-          vapiPhoneNumberId: anyManagedNumber.vapi_phone_id,
-          phoneLast4: anyManagedNumber.phone_number?.slice(-4),
-        });
-        return { phoneNumberId: anyManagedNumber.vapi_phone_id, callerNumber: anyManagedNumber.phone_number };
-      }
+      logger.info('No outbound-tagged managed number found for org (Step 1 complete)', {
+        orgId,
+        reason: 'User must explicitly provision an outbound number or connect BYOC'
+      });
+      // Continue to BYOC resolution chain (Steps 2-5)
     } catch {
       // Step 1 is best-effort; fall through to BYOC chain
     }

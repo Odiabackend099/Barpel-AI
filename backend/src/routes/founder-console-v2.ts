@@ -3839,9 +3839,18 @@ router.post(
             orgId, agentId: agent.id, phoneNumberId, requestId
           });
         } else {
+          logger.warn('No outbound phone number available for org', {
+            orgId,
+            agentId: agent.id,
+            hasInboundOnly: true,
+            reason: 'User must provision a separate outbound number',
+            requestId
+          });
+
           res.status(400).json({
-            error: 'No phone number available for outbound calls. Please import a Twilio number in Settings > Telephony.',
-            action: 'Go to Settings > Telephony to import a phone number',
+            error: 'No outbound phone number provisioned. Inbound numbers cannot be used for outbound calls.',
+            action: 'Go to Settings > Telephony to provision an outbound number',
+            details: 'You currently have an inbound number. You need a separate number for making calls. Choose "Managed Telephony" to buy a new number or "BYOC" to connect your own.',
             requestId
           });
           return;
