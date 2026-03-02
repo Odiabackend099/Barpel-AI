@@ -178,7 +178,7 @@ These rules NEVER change and are enforced by the database and RLS policies:
 - ✅ **CSP fixed:** `next.config.mjs` `connect-src` now includes `wss://api.barpel.ai`, `wss://api.vapi.ai`, correct `https://barpel-ai.onrender.com` (was `https://barpel.onrender.com`). Eliminates all browser console CSP violations.
 - ✅ **`NEXT_PUBLIC_BACKEND_URL` fixed in Vercel:** Was incorrectly set to `https://api.barpel.ai` (domain not owned). Updated via Vercel CLI to `https://barpel-ai.onrender.com`. Redeployed — 69 pages compiled successfully.
 - ✅ **CORS_ORIGIN expanded:** `render.yaml` now includes all 6 origins (odia.dev + future barpel.ai domains).
-- ⚠️ **User action required:** Delete wrong DNS record — `barpel-ai.onrender.com` CNAME pointing to Vercel (was added by mistake). Should be deleted from DNS provider.
+- ✅ **Wrong DNS record deleted:** `barpel-ai.onrender.com` CNAME that was incorrectly pointing to Vercel has been removed from DNS provider (2026-03-03).
 
 **Stripe Webhook Configuration (Production):**
 - Endpoint: `https://barpel-ai.onrender.com/api/webhooks/stripe`
