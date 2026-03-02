@@ -99,10 +99,12 @@ import { ctaLinks } from '@/lib/brand.config';
 ### What Barpel AI Is
 An AI-powered receptionist platform that handles phone calls 24/7 for businesses. Powered by Vapi (voice), Twilio (telephony), and Groq AI (intelligence).
 
-### Pricing (current)
-- **Pay-As-You-Go**: Free to start, ~$0.14/min, no upfront cost
-- **Growth Bundle**: $99 one-time, ~750 minutes included (~$0.132/min)
+### Pricing (current — from backend/src/config/index.ts)
+- **Pay-As-You-Go**: Free to start, **$0.70/min** (RATE_PER_MINUTE_USD_CENTS=70), minimum top-up £25
+- **Growth Bundle**: $99 one-time, **~155 minutes** included ($99 / $0.70 = 141 min raw + 10% bonus), better rate than PAYG
 - **Enterprise**: Custom pricing, contact sales
+- Internal rate: **56 pence/min GBP** (USD_TO_GBP_RATE=0.79 × $0.70 = £0.553 ≈ 56p)
+- DO NOT use $0.14/min — that is incorrect
 
 ### Key Features
 - 24/7 call answering

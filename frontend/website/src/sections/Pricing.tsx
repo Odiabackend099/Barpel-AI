@@ -1,16 +1,22 @@
 import { Check, ArrowRight } from 'lucide-react';
 import { ctaLinks } from '@/lib/brand.config';
 
+// Actual rates from backend/src/config/index.ts
+// RATE_PER_MINUTE_USD_CENTS = 70  →  $0.70/min
+// WALLET_MIN_TOPUP_PENCE = 2500   →  £25 minimum top-up
+// Bundle $99 at $0.70/min = ~141 min raw, +10% bonus = ~155 min
+
 const plans = [
   {
     name: 'Pay-As-You-Go',
     priceLabel: 'Free to start',
-    priceNote: '~$0.14 per minute',
-    description: 'No upfront cost. Pay only for the calls your AI handles.',
+    priceNote: '$0.70 per minute',
+    description: 'No upfront cost. Top up anytime and only pay for the calls your AI handles.',
     features: [
       'No monthly commitment',
-      'Charged per minute of AI call time',
-      'Credits top up anytime',
+      '$0.70 per minute of AI call time',
+      'Minimum top-up of £25',
+      'Credits never expire',
       'All core features included',
       'Email support',
     ],
@@ -22,11 +28,11 @@ const plans = [
   {
     name: 'Growth Bundle',
     priceLabel: '$99',
-    priceNote: '~750 minutes included',
-    description: 'Buy a bundle and get more minutes at a better rate.',
+    priceNote: '~155 minutes included',
+    description: 'Buy a bundle and get more minutes at a better per-minute rate.',
     features: [
-      '~750 minutes of AI call time',
-      '~$0.132/min (save 6% vs PAYG)',
+      '~155 minutes of AI call time',
+      '+10% bonus vs pay-as-you-go',
       'Credits never expire',
       'All core features included',
       'Priority support',
@@ -40,7 +46,7 @@ const plans = [
     name: 'Enterprise',
     priceLabel: 'Custom',
     priceNote: 'Volume pricing available',
-    description: 'High-volume businesses with dedicated support and SLA.',
+    description: 'High-volume businesses with dedicated support and custom SLA.',
     features: [
       'Custom call volume pricing',
       'Dedicated account manager',
