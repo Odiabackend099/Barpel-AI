@@ -12,10 +12,10 @@ import {
   ShoppingCart,
   Loader2,
   Trash2,
-  ChevronDown,
-  ChevronUp,
-  ExternalLink,
-  User
+  User,
+  Lock,
+  Save,
+  RefreshCw
 } from 'lucide-react';
 import { BuyNumberModal } from '@/components/dashboard/BuyNumberModal';
 import CarrierForwardingInstructions from './components/CarrierForwardingInstructions';
@@ -39,6 +39,11 @@ interface PhoneSettingsStatus {
     vapiPhoneId: string | null;
     countryCode: string | null;
     forwardingConfig: ForwardingConfig | null;
+    // BYOC inbound (shown when no managed number)
+    hasByocInboundNumber?: boolean;
+    byocInboundNumber?: string | null;
+    byocInboundVapiPhoneId?: string | null;
+    byocInboundAgentId?: string | null;
   };
   outbound: {
     hasVerifiedNumber: boolean;
@@ -55,6 +60,11 @@ interface PhoneSettingsStatus {
     hasManagedOutboundNumber?: boolean;
     managedOutboundNumber?: string | null;
     managedOutboundVapiPhoneId?: string | null;
+    // BYOC outbound (shown when no managed outbound number)
+    hasByocOutboundNumber?: boolean;
+    byocOutboundNumber?: string | null;
+    byocOutboundVapiPhoneId?: string | null;
+    byocOutboundAgentId?: string | null;
   };
   mode: 'managed' | 'byoc' | 'none';
   numbers?: {
@@ -104,6 +114,16 @@ function getCountryName(code: string): string {
   return countryNames[code] || code;
 }
 
+interface ByocForm { accountSid: string; authToken: string; phoneNumber: string; }
+const emptyByocForm: ByocForm = { accountSid: '', authToken: '', phoneNumber: '' };
+
+function validateByocForm(f: ByocForm): string | null {
+  if (!f.accountSid.match(/^AC[a-z0-9]{32}$/i)) return 'Account SID must start with "AC" and be 34 characters';
+  if (f.authToken.length !== 32) return 'Auth Token must be exactly 32 characters';
+  if (!/^\+[1-9]\d{1,14}$/.test(f.phoneNumber)) return 'Phone number must be E.164 format (e.g. +442012345678)';
+  return null;
+}
+
 export default function PhoneSettingsPage() {
   const { user, loading: authLoading } = useAuth();
   const { success: showSuccessToast, error: showErrorToast } = useToast();
@@ -128,21 +148,34 @@ export default function PhoneSettingsPage() {
   const autoRecoveryAttempted = useRef(false);
   const [recovering, setRecovering] = useState(false);
 
-  // Advanced section
-  const [showAdvanced, setShowAdvanced] = useState(false);
-
-  // Delete confirmations
+  // Delete confirmations (managed)
   const [confirmDeleteManaged, setConfirmDeleteManaged] = useState(false);
   const [confirmDeleteManagedOutbound, setConfirmDeleteManagedOutbound] = useState(false);
   const [confirmDeleteVerified, setConfirmDeleteVerified] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  // Agent linking
+  // Agent linking (managed numbers)
   const [agents, setAgents] = useState<{
     inbound: { id: string; name: string; vapiAssistantId: string | null } | null;
     outbound: { id: string; name: string; vapiAssistantId: string | null; vapiPhoneNumberId: string | null } | null;
   }>({ inbound: null, outbound: null });
   const [assigningAgent, setAssigningAgent] = useState<'inbound' | 'outbound' | null>(null);
+
+  // BYOC forms
+  const [byocInboundForm, setByocInboundForm] = useState<ByocForm>(emptyByocForm);
+  const [byocOutboundForm, setByocOutboundForm] = useState<ByocForm>(emptyByocForm);
+  const [savingByocInbound, setSavingByocInbound] = useState(false);
+  const [savingByocOutbound, setSavingByocOutbound] = useState(false);
+  const [deletingByocInbound, setDeletingByocInbound] = useState(false);
+  const [deletingByocOutbound, setDeletingByocOutbound] = useState(false);
+  const [assigningByocInbound, setAssigningByocInbound] = useState(false);
+  const [assigningByocOutbound, setAssigningByocOutbound] = useState(false);
+  const [confirmDeleteByocInbound, setConfirmDeleteByocInbound] = useState(false);
+  const [confirmDeleteByocOutbound, setConfirmDeleteByocOutbound] = useState(false);
+
+  // All agents arrays (for BYOC assignment dropdowns)
+  const [allInboundAgents, setAllInboundAgents] = useState<Array<{ id: string; name: string; vapiAssistantId: string | null }>>([]);
+  const [allOutboundAgents, setAllOutboundAgents] = useState<Array<{ id: string; name: string; vapiAssistantId: string | null }>>([]);
 
   // Fetch phone settings status
   useEffect(() => {
@@ -221,29 +254,43 @@ export default function PhoneSettingsPage() {
           inbound: inbound ? { id: inbound.id, name: inbound.name, vapiAssistantId: inbound.vapiAssistantId } : null,
           outbound: outbound ? { id: outbound.id, name: outbound.name, vapiAssistantId: outbound.vapiAssistantId, vapiPhoneNumberId: outbound.vapiPhoneNumberId ?? null } : null,
         });
+        // Populate arrays for BYOC assignment dropdowns
+        setAllInboundAgents(
+          data.agents
+            .filter(a => a.role === 'inbound')
+            .map(a => ({ id: a.id, name: a.name, vapiAssistantId: a.vapiAssistantId }))
+        );
+        setAllOutboundAgents(
+          data.agents
+            .filter(a => a.role === 'outbound')
+            .map(a => ({ id: a.id, name: a.name, vapiAssistantId: a.vapiAssistantId }))
+        );
       }
     } catch {
       // Non-critical — agent info is best-effort
     }
   };
 
-  const handleLinkAgent = async (direction: 'inbound' | 'outbound') => {
+  const handleAssignManagedAgent = async (direction: 'inbound' | 'outbound', agentId: string) => {
     const vapiPhoneId = direction === 'inbound'
       ? status?.inbound.vapiPhoneId
       : status?.outbound.managedOutboundVapiPhoneId;
 
-    if (!vapiPhoneId) return;
+    if (!vapiPhoneId) {
+      showErrorToast('Phone number not yet linked to Vapi. Please contact support.');
+      return;
+    }
 
     setAssigningAgent(direction);
     try {
-      await authedBackendFetch('/api/integrations/vapi/assign-number', {
-        method: 'POST',
-        body: JSON.stringify({ phoneNumberId: vapiPhoneId, role: direction }),
+      await authedBackendFetch('/api/inbound/assign-agent', {
+        method: 'PATCH',
+        body: JSON.stringify({ phoneNumberType: direction, agentId, vapiPhoneId }),
       });
       showSuccessToast('Agent linked successfully');
       await Promise.all([fetchPhoneSettings(), fetchAgents()]);
-    } catch {
-      showErrorToast('Failed to link agent. Please try again.');
+    } catch (e: any) {
+      showErrorToast(e.message || 'Failed to link agent. Please try again.');
     } finally {
       setAssigningAgent(null);
     }
@@ -386,6 +433,113 @@ export default function PhoneSettingsPage() {
     }
   };
 
+  // BYOC handlers
+  const handleSaveByocInbound = async () => {
+    const err = validateByocForm(byocInboundForm);
+    if (err) { showErrorToast(err); return; }
+    setSavingByocInbound(true);
+    try {
+      await authedBackendFetch('/api/inbound/setup', {
+        method: 'POST',
+        body: JSON.stringify({
+          accountSid: byocInboundForm.accountSid,
+          authToken: byocInboundForm.authToken,
+          phoneNumber: byocInboundForm.phoneNumber,
+        }),
+      });
+      showSuccessToast('Inbound number connected');
+      setByocInboundForm(emptyByocForm);
+      await fetchPhoneSettings();
+    } catch (e: any) {
+      showErrorToast(e.message || 'Failed to activate BYOC inbound number');
+    } finally {
+      setSavingByocInbound(false);
+    }
+  };
+
+  const handleSaveByocOutbound = async () => {
+    const err = validateByocForm(byocOutboundForm);
+    if (err) { showErrorToast(err); return; }
+    setSavingByocOutbound(true);
+    try {
+      await authedBackendFetch('/api/inbound/setup-outbound', {
+        method: 'POST',
+        body: JSON.stringify({
+          accountSid: byocOutboundForm.accountSid,
+          authToken: byocOutboundForm.authToken,
+          phoneNumber: byocOutboundForm.phoneNumber,
+        }),
+      });
+      showSuccessToast('Outbound number connected');
+      setByocOutboundForm(emptyByocForm);
+      await fetchPhoneSettings();
+    } catch (e: any) {
+      showErrorToast(e.message || 'Failed to activate BYOC outbound number');
+    } finally {
+      setSavingByocOutbound(false);
+    }
+  };
+
+  const handleDeleteByocInbound = async () => {
+    setDeletingByocInbound(true);
+    try {
+      await authedBackendFetch('/api/inbound/setup', { method: 'DELETE' });
+      setConfirmDeleteByocInbound(false);
+      showSuccessToast('Inbound number disconnected');
+      await fetchPhoneSettings();
+    } catch (e: any) {
+      showErrorToast(e.message || 'Failed to remove BYOC inbound number');
+    } finally {
+      setDeletingByocInbound(false);
+    }
+  };
+
+  const handleDeleteByocOutbound = async () => {
+    setDeletingByocOutbound(true);
+    try {
+      await authedBackendFetch('/api/inbound/setup-outbound', { method: 'DELETE' });
+      setConfirmDeleteByocOutbound(false);
+      showSuccessToast('Outbound number disconnected');
+      await fetchPhoneSettings();
+    } catch (e: any) {
+      showErrorToast(e.message || 'Failed to remove BYOC outbound number');
+    } finally {
+      setDeletingByocOutbound(false);
+    }
+  };
+
+  const handleAssignByocInboundAgent = async (agentId: string) => {
+    setAssigningByocInbound(true);
+    try {
+      await authedBackendFetch('/api/inbound/assign-agent', {
+        method: 'PATCH',
+        body: JSON.stringify({ phoneNumberType: 'inbound', agentId }),
+      });
+      showSuccessToast('Agent linked to inbound number');
+      await fetchPhoneSettings();
+    } catch (e: any) {
+      showErrorToast(e.message || 'Failed to assign agent');
+    } finally {
+      setAssigningByocInbound(false);
+    }
+  };
+
+  const handleAssignByocOutboundAgent = async (agentId: string) => {
+    setAssigningByocOutbound(true);
+    try {
+      await authedBackendFetch('/api/inbound/assign-agent', {
+        method: 'PATCH',
+        body: JSON.stringify({ phoneNumberType: 'outbound', agentId }),
+      });
+      showSuccessToast('Agent linked to outbound number');
+      await fetchPhoneSettings();
+    } catch (e: any) {
+      showErrorToast(e.message || 'Failed to assign agent');
+    } finally {
+      setAssigningByocOutbound(false);
+    }
+  };
+
   if (authLoading || loading || recovering) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -490,6 +644,45 @@ export default function PhoneSettingsPage() {
                 </p>
               </div>
 
+              {/* Agent Assignment — always visible */}
+              <div className="bg-white border border-barpel-slate/10 rounded-lg p-3 space-y-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <User className="w-3.5 h-3.5 text-barpel-teal" />
+                  <p className="text-xs text-barpel-slate/60 font-medium">AI Agent</p>
+                </div>
+                {allInboundAgents.length > 0 ? (
+                  <div className="flex gap-2">
+                    <select
+                      value={agents.inbound?.id || ''}
+                      onChange={(e) => e.target.value && handleAssignManagedAgent('inbound', e.target.value)}
+                      disabled={assigningAgent === 'inbound'}
+                      className="flex-1 px-3 py-2 border border-barpel-slate/10 rounded-lg text-sm text-barpel-slate bg-white focus:ring-2 focus:ring-barpel-teal outline-none disabled:opacity-50"
+                    >
+                      <option value="">Select an agent…</option>
+                      {allInboundAgents.map(a => (
+                        <option key={a.id} value={a.id}>{a.name}</option>
+                      ))}
+                    </select>
+                    {agents.inbound && (
+                      <button
+                        onClick={() => handleAssignManagedAgent('inbound', agents.inbound!.id)}
+                        disabled={assigningAgent === 'inbound'}
+                        title="Sync agent to Vapi"
+                        className="px-3 py-2 border border-barpel-teal/30 text-barpel-teal rounded-lg hover:bg-barpel-teal/5 transition-colors text-xs flex items-center gap-1.5 disabled:opacity-40"
+                      >
+                        {assigningAgent === 'inbound' ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
+                        Sync
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-xs text-barpel-slate/50 py-1">No agents configured yet — go to <strong>Agent Configuration</strong> to set one up.</p>
+                )}
+                {assigningAgent === 'inbound' && (
+                  <p className="text-xs text-barpel-teal">Linking agent to phone number…</p>
+                )}
+              </div>
+
               {/* What happens next */}
               <div className="bg-barpel-teal/5 border border-barpel-slate/10 rounded-lg p-3">
                 <p className="text-xs font-medium text-barpel-slate mb-1">✓ Number active and ready</p>
@@ -501,30 +694,6 @@ export default function PhoneSettingsPage() {
                 savedConfig={status.inbound.forwardingConfig}
               />
 
-              {/* Agent Linking */}
-              {agents.inbound && (
-                <div className="bg-white border border-barpel-slate/10 rounded-lg p-3">
-                  <p className="text-xs text-barpel-slate/60 mb-2 font-medium">Linked Agent</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-barpel-teal" />
-                      <p className="text-sm font-medium text-barpel-slate">{agents.inbound.name}</p>
-                    </div>
-                    <button
-                      onClick={() => handleLinkAgent('inbound')}
-                      disabled={assigningAgent === 'inbound'}
-                      className="text-xs px-3 py-1.5 border border-barpel-slate/10 text-barpel-teal rounded-lg hover:bg-barpel-teal/5 transition-colors font-medium disabled:opacity-50 flex items-center gap-1.5"
-                    >
-                      {assigningAgent === 'inbound' ? (
-                        <><Loader2 className="w-3 h-3 animate-spin" />Syncing...</>
-                      ) : (
-                        'Re-sync Agent'
-                      )}
-                    </button>
-                  </div>
-                </div>
-              )}
-
               <button
                 onClick={() => setConfirmDeleteManaged(true)}
                 className="w-full px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors font-medium flex items-center justify-center gap-2"
@@ -533,28 +702,155 @@ export default function PhoneSettingsPage() {
                 Delete Number
               </button>
             </div>
-          ) : (
-            // Empty state - buy number
-            <div className="text-center py-8">
-              <div className="w-16 h-16 rounded-full bg-barpel-teal/5 mx-auto flex items-center justify-center mb-4 border border-barpel-slate/10">
-                <Smartphone className="w-8 h-8 text-barpel-teal/40" />
+          ) : status?.inbound.hasByocInboundNumber ? (
+            // Active BYOC inbound number
+            <div className="space-y-4">
+              <div className="bg-barpel-teal/5 border border-barpel-slate/10 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-2xl font-mono font-bold text-barpel-teal">
+                    {status.inbound.byocInboundNumber}
+                  </p>
+                  <span className="text-xs bg-barpel-teal/10 text-barpel-teal px-2 py-1 rounded-full font-medium border border-barpel-slate/10">
+                    Active
+                  </span>
+                </div>
+                <p className="text-xs text-barpel-slate/60">Your number</p>
               </div>
-              <h3 className="text-lg font-semibold text-barpel-slate mb-2">
-                Get Your AI Phone Number
-              </h3>
-              <p className="text-sm text-barpel-slate/60 mb-6 max-w-sm mx-auto">
-                Purchase a dedicated number for your AI receptionist. Forward your office calls using a simple carrier code.
-              </p>
+
+              <div className="bg-barpel-teal/5 border border-barpel-slate/10 rounded-lg p-3">
+                <p className="text-xs font-medium text-barpel-slate mb-1">✓ Number active and ready</p>
+                <p className="text-xs text-barpel-slate/60">Forward your office calls to this number using the carrier code below</p>
+              </div>
+
+              <CarrierForwardingInstructions
+                managedNumber={status.inbound.byocInboundNumber!}
+                savedConfig={status.inbound.forwardingConfig}
+              />
+
+              {/* Agent Assignment — always visible */}
+              <div className="bg-white border border-barpel-slate/10 rounded-lg p-3 space-y-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <User className="w-3.5 h-3.5 text-barpel-teal" />
+                  <p className="text-xs text-barpel-slate/60 font-medium">AI Agent</p>
+                </div>
+                {allInboundAgents.length > 0 ? (
+                  <div className="flex gap-2">
+                    <select
+                      value={status.inbound.byocInboundAgentId || ''}
+                      onChange={(e) => e.target.value && handleAssignByocInboundAgent(e.target.value)}
+                      disabled={assigningByocInbound}
+                      className="flex-1 px-3 py-2 border border-barpel-slate/10 rounded-lg text-sm text-barpel-slate bg-white focus:ring-2 focus:ring-barpel-teal outline-none disabled:opacity-50"
+                    >
+                      <option value="">Select an agent…</option>
+                      {allInboundAgents.map(a => (
+                        <option key={a.id} value={a.id}>{a.name}</option>
+                      ))}
+                    </select>
+                    {status.inbound.byocInboundAgentId && (
+                      <button
+                        onClick={() => handleAssignByocInboundAgent(status.inbound.byocInboundAgentId!)}
+                        disabled={assigningByocInbound}
+                        title="Sync agent to Vapi"
+                        className="px-3 py-2 border border-barpel-teal/30 text-barpel-teal rounded-lg hover:bg-barpel-teal/5 transition-colors text-xs flex items-center gap-1.5 disabled:opacity-40"
+                      >
+                        {assigningByocInbound ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
+                        Sync
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-xs text-barpel-slate/50 py-1">No agents configured yet — go to <strong>Agent Configuration</strong> to set one up.</p>
+                )}
+                {assigningByocInbound && (
+                  <p className="text-xs text-barpel-teal">Linking agent to phone number…</p>
+                )}
+              </div>
+
               <button
-                onClick={() => { setBuyModalDirection('inbound'); setShowBuyNumberModal(true); }}
-                className="px-6 py-3 bg-barpel-teal text-white rounded-lg hover:bg-barpel-teal-dark transition-colors font-medium inline-flex items-center gap-2"
+                onClick={() => setConfirmDeleteByocInbound(true)}
+                className="w-full px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors font-medium flex items-center justify-center gap-2"
               >
-                <ShoppingCart className="w-4 h-4" />
-                Buy Inbound Number
+                <Trash2 className="w-4 h-4" />
+                Disconnect Number
               </button>
-              <p className="text-xs text-barpel-slate/60 mt-3">
-                {PHONE_NUMBER_PRICING.costDisplay} {PHONE_NUMBER_PRICING.costType} + usage-based pricing
-              </p>
+            </div>
+          ) : (
+            // Empty state - buy number or connect BYOC
+            <div className="space-y-6">
+              <div className="text-center py-8">
+                <div className="w-16 h-16 rounded-full bg-barpel-teal/5 mx-auto flex items-center justify-center mb-4 border border-barpel-slate/10">
+                  <Smartphone className="w-8 h-8 text-barpel-teal/40" />
+                </div>
+                <h3 className="text-lg font-semibold text-barpel-slate mb-2">
+                  Get Your AI Phone Number
+                </h3>
+                <p className="text-sm text-barpel-slate/60 mb-6 max-w-sm mx-auto">
+                  Purchase a dedicated number for your AI receptionist. Forward your office calls using a simple carrier code.
+                </p>
+                <button
+                  onClick={() => { setBuyModalDirection('inbound'); setShowBuyNumberModal(true); }}
+                  className="px-6 py-3 bg-barpel-teal text-white rounded-lg hover:bg-barpel-teal-dark transition-colors font-medium inline-flex items-center gap-2"
+                >
+                  <ShoppingCart className="w-4 h-4" />
+                  Buy Inbound Number
+                </button>
+                <p className="text-xs text-barpel-slate/60 mt-3">
+                  {PHONE_NUMBER_PRICING.costDisplay} {PHONE_NUMBER_PRICING.costType} + usage-based pricing
+                </p>
+              </div>
+
+              {/* Connect your own number option */}
+              <div className="border-t border-barpel-slate/10 pt-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <Lock className="w-4 h-4 text-barpel-slate/40" />
+                  <p className="text-sm font-semibold text-barpel-slate">Use your own phone number</p>
+                </div>
+                <p className="text-xs text-barpel-slate/50 mb-4">Connect a Twilio number you already own</p>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-medium text-barpel-slate/60 mb-1">Twilio Account SID</label>
+                    <input
+                      type="text"
+                      value={byocInboundForm.accountSid}
+                      onChange={e => setByocInboundForm(p => ({ ...p, accountSid: e.target.value }))}
+                      placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                      className="w-full px-3 py-2 border border-barpel-slate/10 rounded-lg focus:ring-2 focus:ring-barpel-teal outline-none font-mono text-sm text-barpel-slate bg-white placeholder-barpel-slate/30"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-barpel-slate/60 mb-1">Twilio Auth Token</label>
+                    <input
+                      type="password"
+                      value={byocInboundForm.authToken}
+                      onChange={e => setByocInboundForm(p => ({ ...p, authToken: e.target.value }))}
+                      placeholder="••••••••••••••••••••••••••••••••"
+                      className="w-full px-3 py-2 border border-barpel-slate/10 rounded-lg focus:ring-2 focus:ring-barpel-teal outline-none font-mono text-sm text-barpel-slate bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-barpel-slate/60 mb-1">Phone Number</label>
+                    <input
+                      type="text"
+                      value={byocInboundForm.phoneNumber}
+                      onChange={e => setByocInboundForm(p => ({ ...p, phoneNumber: e.target.value }))}
+                      placeholder="+442012345678"
+                      className="w-full px-3 py-2 border border-barpel-slate/10 rounded-lg focus:ring-2 focus:ring-barpel-teal outline-none font-mono text-sm text-barpel-slate bg-white placeholder-barpel-slate/30"
+                    />
+                    <p className="text-xs text-barpel-slate/40 mt-1">Include country code, e.g. +1 (US), +44 (UK), +234 (Nigeria)</p>
+                  </div>
+                  <button
+                    onClick={handleSaveByocInbound}
+                    disabled={savingByocInbound || !byocInboundForm.accountSid || !byocInboundForm.authToken || !byocInboundForm.phoneNumber}
+                    className="w-full px-4 py-2 bg-barpel-teal text-white rounded-lg hover:bg-barpel-teal-dark transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {savingByocInbound ? (
+                      <><Loader2 className="w-4 h-4 animate-spin" />Connecting…</>
+                    ) : (
+                      <><Save className="w-4 h-4" />Connect Number</>
+                    )}
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -594,36 +890,44 @@ export default function PhoneSettingsPage() {
                 <p className="text-xs text-barpel-slate/60">Hosted by Barpel AI</p>
               </div>
 
-              {/* Agent Linking */}
-              {agents.outbound && (
-                <div className="bg-white border border-barpel-slate/10 rounded-lg p-3">
-                  <p className="text-xs text-barpel-slate/60 mb-2 font-medium">Linked Agent</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-barpel-teal" />
-                      <p className="text-sm font-medium text-barpel-slate">{agents.outbound.name}</p>
-                      {agents.outbound.vapiPhoneNumberId === status.outbound.managedOutboundVapiPhoneId ? (
-                        <span className="text-xs bg-barpel-teal/10 text-barpel-teal px-2 py-0.5 rounded-full">Active</span>
-                      ) : (
-                        <span className="text-xs bg-gray-100 text-barpel-gray px-2 py-0.5 rounded-full">Not synced</span>
-                      )}
-                    </div>
-                    {agents.outbound.vapiPhoneNumberId !== status.outbound.managedOutboundVapiPhoneId && (
+              {/* Agent Assignment — always visible */}
+              <div className="bg-white border border-barpel-slate/10 rounded-lg p-3 space-y-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <User className="w-3.5 h-3.5 text-barpel-teal" />
+                  <p className="text-xs text-barpel-slate/60 font-medium">AI Agent</p>
+                </div>
+                {allOutboundAgents.length > 0 ? (
+                  <div className="flex gap-2">
+                    <select
+                      value={agents.outbound?.id || ''}
+                      onChange={(e) => e.target.value && handleAssignManagedAgent('outbound', e.target.value)}
+                      disabled={assigningAgent === 'outbound'}
+                      className="flex-1 px-3 py-2 border border-barpel-slate/10 rounded-lg text-sm text-barpel-slate bg-white focus:ring-2 focus:ring-barpel-teal outline-none disabled:opacity-50"
+                    >
+                      <option value="">Select an agent…</option>
+                      {allOutboundAgents.map(a => (
+                        <option key={a.id} value={a.id}>{a.name}</option>
+                      ))}
+                    </select>
+                    {agents.outbound && (
                       <button
-                        onClick={() => handleLinkAgent('outbound')}
+                        onClick={() => handleAssignManagedAgent('outbound', agents.outbound!.id)}
                         disabled={assigningAgent === 'outbound'}
-                        className="text-xs px-3 py-1.5 bg-barpel-teal text-white rounded-lg hover:bg-barpel-teal-dark transition-colors font-medium disabled:opacity-50 flex items-center gap-1.5"
+                        title="Sync agent to Vapi"
+                        className="px-3 py-2 border border-barpel-teal/30 text-barpel-teal rounded-lg hover:bg-barpel-teal/5 transition-colors text-xs flex items-center gap-1.5 disabled:opacity-40"
                       >
-                        {assigningAgent === 'outbound' ? (
-                          <><Loader2 className="w-3 h-3 animate-spin" />Syncing...</>
-                        ) : (
-                          'Sync Agent'
-                        )}
+                        {assigningAgent === 'outbound' ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
+                        Sync
                       </button>
                     )}
                   </div>
-                </div>
-              )}
+                ) : (
+                  <p className="text-xs text-barpel-slate/50 py-1">No agents configured yet — go to <strong>Agent Configuration</strong> to set one up.</p>
+                )}
+                {assigningAgent === 'outbound' && (
+                  <p className="text-xs text-barpel-teal">Linking agent to phone number…</p>
+                )}
+              </div>
 
               <button
                 onClick={() => setConfirmDeleteManagedOutbound(true)}
@@ -633,18 +937,136 @@ export default function PhoneSettingsPage() {
                 Delete Outbound Number
               </button>
             </div>
-          ) : (
-            <div className="mb-6">
+          ) : status?.outbound.hasByocOutboundNumber ? (
+            // Active BYOC outbound number
+            <div className="mb-6 space-y-3">
+              <h3 className="text-base font-semibold text-barpel-slate">Outbound Number</h3>
+              <div className="bg-barpel-teal/5 border border-barpel-slate/10 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-2xl font-mono font-bold text-barpel-teal">
+                    {status.outbound.byocOutboundNumber}
+                  </p>
+                  <span className="text-xs bg-barpel-teal/10 text-barpel-teal px-2 py-1 rounded-full font-medium border border-barpel-slate/10">
+                    Active
+                  </span>
+                </div>
+                <p className="text-xs text-barpel-slate/60">Your number — customers see this when AI calls them</p>
+              </div>
+
+              {/* Agent Assignment — always visible */}
+              <div className="bg-white border border-barpel-slate/10 rounded-lg p-3 space-y-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <User className="w-3.5 h-3.5 text-barpel-teal" />
+                  <p className="text-xs text-barpel-slate/60 font-medium">AI Agent</p>
+                </div>
+                {allOutboundAgents.length > 0 ? (
+                  <div className="flex gap-2">
+                    <select
+                      value={status.outbound.byocOutboundAgentId || ''}
+                      onChange={(e) => e.target.value && handleAssignByocOutboundAgent(e.target.value)}
+                      disabled={assigningByocOutbound}
+                      className="flex-1 px-3 py-2 border border-barpel-slate/10 rounded-lg text-sm text-barpel-slate bg-white focus:ring-2 focus:ring-barpel-teal outline-none disabled:opacity-50"
+                    >
+                      <option value="">Select an agent…</option>
+                      {allOutboundAgents.map(a => (
+                        <option key={a.id} value={a.id}>{a.name}</option>
+                      ))}
+                    </select>
+                    {status.outbound.byocOutboundAgentId && (
+                      <button
+                        onClick={() => handleAssignByocOutboundAgent(status.outbound.byocOutboundAgentId!)}
+                        disabled={assigningByocOutbound}
+                        title="Sync agent to Vapi"
+                        className="px-3 py-2 border border-barpel-teal/30 text-barpel-teal rounded-lg hover:bg-barpel-teal/5 transition-colors text-xs flex items-center gap-1.5 disabled:opacity-40"
+                      >
+                        {assigningByocOutbound ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
+                        Sync
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-xs text-barpel-slate/50 py-1">No agents configured yet — go to <strong>Agent Configuration</strong> to set one up.</p>
+                )}
+                {assigningByocOutbound && (
+                  <p className="text-xs text-barpel-teal">Linking agent to phone number…</p>
+                )}
+              </div>
+
               <button
-                onClick={() => { setBuyModalDirection('outbound'); setShowBuyNumberModal(true); }}
-                className="w-full px-6 py-3 bg-barpel-teal text-white rounded-lg hover:bg-barpel-teal-dark transition-colors font-medium inline-flex items-center justify-center gap-2"
+                onClick={() => setConfirmDeleteByocOutbound(true)}
+                className="w-full px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors font-medium flex items-center justify-center gap-2"
               >
-                <ShoppingCart className="w-4 h-4" />
-                Buy Outbound Number
+                <Trash2 className="w-4 h-4" />
+                Disconnect Number
               </button>
-              <p className="text-xs text-barpel-slate/60 mt-2 text-center">
-                Purchase a dedicated number for outbound AI calls
-              </p>
+            </div>
+          ) : (
+            <div className="mb-6 space-y-6">
+              <div>
+                <button
+                  onClick={() => { setBuyModalDirection('outbound'); setShowBuyNumberModal(true); }}
+                  className="w-full px-6 py-3 bg-barpel-teal text-white rounded-lg hover:bg-barpel-teal-dark transition-colors font-medium inline-flex items-center justify-center gap-2"
+                >
+                  <ShoppingCart className="w-4 h-4" />
+                  Buy Outbound Number
+                </button>
+                <p className="text-xs text-barpel-slate/60 mt-2 text-center">
+                  Purchase a dedicated number for outbound AI calls
+                </p>
+              </div>
+
+              {/* Connect your own number option */}
+              <div className="border-t border-barpel-slate/10 pt-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <Lock className="w-4 h-4 text-barpel-slate/40" />
+                  <p className="text-sm font-semibold text-barpel-slate">Use your own phone number</p>
+                </div>
+                <p className="text-xs text-barpel-slate/50 mb-4">Connect a Twilio number you already own</p>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-medium text-barpel-slate/60 mb-1">Twilio Account SID</label>
+                    <input
+                      type="text"
+                      value={byocOutboundForm.accountSid}
+                      onChange={e => setByocOutboundForm(p => ({ ...p, accountSid: e.target.value }))}
+                      placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                      className="w-full px-3 py-2 border border-barpel-slate/10 rounded-lg focus:ring-2 focus:ring-barpel-teal outline-none font-mono text-sm text-barpel-slate bg-white placeholder-barpel-slate/30"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-barpel-slate/60 mb-1">Twilio Auth Token</label>
+                    <input
+                      type="password"
+                      value={byocOutboundForm.authToken}
+                      onChange={e => setByocOutboundForm(p => ({ ...p, authToken: e.target.value }))}
+                      placeholder="••••••••••••••••••••••••••••••••"
+                      className="w-full px-3 py-2 border border-barpel-slate/10 rounded-lg focus:ring-2 focus:ring-barpel-teal outline-none font-mono text-sm text-barpel-slate bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-barpel-slate/60 mb-1">Phone Number</label>
+                    <input
+                      type="text"
+                      value={byocOutboundForm.phoneNumber}
+                      onChange={e => setByocOutboundForm(p => ({ ...p, phoneNumber: e.target.value }))}
+                      placeholder="+442012345678"
+                      className="w-full px-3 py-2 border border-barpel-slate/10 rounded-lg focus:ring-2 focus:ring-barpel-teal outline-none font-mono text-sm text-barpel-slate bg-white placeholder-barpel-slate/30"
+                    />
+                    <p className="text-xs text-barpel-slate/40 mt-1">Include country code, e.g. +1 (US), +44 (UK), +234 (Nigeria)</p>
+                  </div>
+                  <button
+                    onClick={handleSaveByocOutbound}
+                    disabled={savingByocOutbound || !byocOutboundForm.accountSid || !byocOutboundForm.authToken || !byocOutboundForm.phoneNumber}
+                    className="w-full px-4 py-2 bg-barpel-teal text-white rounded-lg hover:bg-barpel-teal-dark transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {savingByocOutbound ? (
+                      <><Loader2 className="w-4 h-4 animate-spin" />Connecting…</>
+                    ) : (
+                      <><Save className="w-4 h-4" />Connect Number</>
+                    )}
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 
@@ -939,43 +1361,6 @@ export default function PhoneSettingsPage() {
         </div>
       </div>
 
-      {/* Advanced Section - BYOC */}
-      <div className="border border-barpel-slate/10 rounded-xl overflow-hidden">
-        <button
-          onClick={() => setShowAdvanced(!showAdvanced)}
-          className="w-full px-6 py-4 bg-white hover:bg-barpel-teal/5 transition-colors flex items-center justify-between"
-        >
-          <div className="text-left">
-            <h3 className="text-sm font-semibold text-barpel-slate">
-              Advanced: Connect Your Own Phone Provider
-            </h3>
-            <p className="text-xs text-barpel-slate/60 mt-0.5">
-              Already have a Twilio account? Connect it directly
-            </p>
-          </div>
-          {showAdvanced ? (
-            <ChevronUp className="w-5 h-5 text-barpel-slate/60" />
-          ) : (
-            <ChevronDown className="w-5 h-5 text-barpel-slate/60" />
-          )}
-        </button>
-
-        {showAdvanced && (
-          <div className="px-6 py-4 bg-barpel-teal/5 border-t border-barpel-slate/10">
-            <p className="text-sm text-barpel-slate/60 mb-4">
-              If you already have a Twilio account and phone number, you can configure it manually:
-            </p>
-            <a
-              href="/dashboard/inbound-config"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-barpel-slate/10 text-barpel-teal rounded-lg hover:bg-barpel-teal/5 transition-colors font-medium"
-            >
-              Configure Your Own Provider
-              <ExternalLink className="w-4 h-4" />
-            </a>
-          </div>
-        )}
-      </div>
-
       {/* Buy Number Modal */}
       {showBuyNumberModal && (
         <BuyNumberModal
@@ -1042,6 +1427,74 @@ export default function PhoneSettingsPage() {
                 className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:opacity-50"
               >
                 {deleting ? 'Deleting...' : 'Delete Number'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete BYOC Inbound Confirmation */}
+      {confirmDeleteByocInbound && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-6 max-w-md w-full">
+            <h3 className="text-lg font-semibold text-barpel-slate mb-2">
+              Disconnect Inbound Number?
+            </h3>
+            <p className="text-sm text-barpel-slate/60 mb-4">
+              This will disconnect {status?.inbound.byocInboundNumber} from your AI receptionist. Your Twilio number itself won't be deleted.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setConfirmDeleteByocInbound(false)}
+                disabled={deletingByocInbound}
+                className="flex-1 px-4 py-2 border border-barpel-slate/10 text-barpel-slate rounded-lg hover:bg-barpel-teal/5 transition-colors font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteByocInbound}
+                disabled={deletingByocInbound}
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {deletingByocInbound ? (
+                  <><Loader2 className="w-4 h-4 animate-spin" />Removing…</>
+                ) : (
+                  'Remove Number'
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete BYOC Outbound Confirmation */}
+      {confirmDeleteByocOutbound && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-6 max-w-md w-full">
+            <h3 className="text-lg font-semibold text-barpel-slate mb-2">
+              Disconnect Outbound Number?
+            </h3>
+            <p className="text-sm text-barpel-slate/60 mb-4">
+              This will disconnect {status?.outbound.byocOutboundNumber} from outbound AI calls. Your Twilio number itself won't be deleted.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setConfirmDeleteByocOutbound(false)}
+                disabled={deletingByocOutbound}
+                className="flex-1 px-4 py-2 border border-barpel-slate/10 text-barpel-slate rounded-lg hover:bg-barpel-teal/5 transition-colors font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteByocOutbound}
+                disabled={deletingByocOutbound}
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {deletingByocOutbound ? (
+                  <><Loader2 className="w-4 h-4 animate-spin" />Removing…</>
+                ) : (
+                  'Remove Number'
+                )}
               </button>
             </div>
           </div>

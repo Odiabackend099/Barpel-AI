@@ -46,6 +46,23 @@ router.get('/status', async (req: Request, res: Response): Promise<void> => {
     const inboundNumbers = managedStatus.numbers.filter(n => n.routingDirection === 'inbound');
     const outboundNumbers = managedStatus.numbers.filter(n => n.routingDirection === 'outbound');
 
+    // Get BYOC numbers from integrations table (used when no managed number is provisioned)
+    let byocInboundConfig: any = null;
+    let byocOutboundConfig: any = null;
+    try {
+      const { data: byocIntegrations } = await supabaseAdmin
+        .from('integrations')
+        .select('provider, config')
+        .eq('org_id', orgId)
+        .in('provider', ['twilio_inbound', 'twilio_outbound']);
+      if (byocIntegrations) {
+        byocInboundConfig = byocIntegrations.find(i => i.provider === 'twilio_inbound')?.config ?? null;
+        byocOutboundConfig = byocIntegrations.find(i => i.provider === 'twilio_outbound')?.config ?? null;
+      }
+    } catch {
+      // Best-effort — BYOC lookup is non-critical
+    }
+
     // Backward-compatible: first inbound number (existing behavior)
     const hasManagedNumber = inboundNumbers.length > 0;
     const managedNumber = hasManagedNumber ? inboundNumbers[0] : null;
@@ -134,6 +151,10 @@ router.get('/status', async (req: Request, res: Response): Promise<void> => {
       // Best-effort — forwarding config is non-critical
     }
 
+    // BYOC active flags (only surfaced when no managed number exists for that direction)
+    const hasByocInboundNumber = !hasManagedNumber && !!byocInboundConfig && byocInboundConfig.status === 'active';
+    const hasByocOutboundNumber = !hasOutboundManagedNumber && !!byocOutboundConfig && byocOutboundConfig.status === 'active';
+
     // Return combined response (backward-compatible + new direction-aware fields)
     res.json({
       inbound: {
@@ -143,6 +164,11 @@ router.get('/status', async (req: Request, res: Response): Promise<void> => {
         vapiPhoneId: managedNumber?.vapiPhoneId || null,
         countryCode: managedNumber?.countryCode || null,
         forwardingConfig,
+        // BYOC inbound (shown when no managed number)
+        hasByocInboundNumber,
+        byocInboundNumber: hasByocInboundNumber ? (byocInboundConfig?.phoneNumber ?? null) : null,
+        byocInboundVapiPhoneId: hasByocInboundNumber ? (byocInboundConfig?.vapiPhoneNumberId ?? null) : null,
+        byocInboundAgentId: hasByocInboundNumber ? (byocInboundConfig?.agentId ?? null) : null,
       },
       outbound: {
         hasVerifiedNumber,
@@ -155,6 +181,11 @@ router.get('/status', async (req: Request, res: Response): Promise<void> => {
         hasManagedOutboundNumber: hasOutboundManagedNumber,
         managedOutboundNumber: outboundManagedNumber?.phoneNumber || null,
         managedOutboundVapiPhoneId: outboundManagedNumber?.vapiPhoneId || null,
+        // BYOC outbound (shown when no managed outbound number)
+        hasByocOutboundNumber,
+        byocOutboundNumber: hasByocOutboundNumber ? (byocOutboundConfig?.phoneNumber ?? null) : null,
+        byocOutboundVapiPhoneId: hasByocOutboundNumber ? (byocOutboundConfig?.vapiPhoneNumberId ?? null) : null,
+        byocOutboundAgentId: hasByocOutboundNumber ? (byocOutboundConfig?.agentId ?? null) : null,
       },
       mode: managedStatus.mode,
       // New: all numbers grouped by direction (for multi-number UI)
