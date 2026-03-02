@@ -1,10 +1,10 @@
 # Barpel AI - Database Schema SSOT (Single Source of Truth)
 
-**Status:** ✅ PRODUCTION READY - Barpel AI Platform (2026-03-01)
+**Status:** ✅ PRODUCTION READY - Barpel AI Platform (2026-03-05)
 **Project ID:** `wifcmvgwzicgyrvaoiwi` (Barpel-specific Supabase project)
 **Database URL:** `https://wifcmvgwzicgyrvaoiwi.supabase.co`
 **Generated:** Barpel AI production database for Nigerian SMEs
-**Database State:** Production-ready with enterprise-grade schema (prepaid billing, security hardening, multi-tenancy, managed telephony)
+**Database State:** Production-ready with enterprise-grade schema (prepaid billing, security hardening, multi-tenancy, managed telephony, Google OAuth)
 **Migrations Deployed:** ✅ 79 total
   - Includes: Prepaid billing (3 phases), Security hardening, Multi-tenancy RLS, Onboarding wizard, Verified caller ID
 **Onboarding Schema:** ✅ Business-focused terminology
@@ -17,7 +17,7 @@
   - Phase 3 (Kill Switch): Real-time balance monitoring with automatic termination
   - **Rate:** 56 pence/minute GBP (TBD customization for Nigerian NG₦ post-launch)
 **Deployment Status:** ✅ FULLY OPERATIONAL - Fresh Barpel project, all migrations live, demo tested
-**Latest Change:** Barpel AI Platform Production Release (2026-03-01) - Enterprise features, business vocabulary, teal-and-white design, SME optimization
+**Latest Change:** (2026-03-05) Call Transfer feature end-to-end fixed: added `transfer_phone_number`, `transfer_sip_uri`, `transfer_departments` columns to `integration_settings`; new `/api/transfer-settings` route (3 endpoints); `transferCall` Vapi tool now filters by `provider = 'transfer'`; Escalation Rules UI replaced with simple Call Transfer page
 **Foundation:** Barpel AI production schema (2026-03-01) - Onboarding Wizard, Security hardening, Prepaid Billing
 
 ---
@@ -31,7 +31,7 @@
 | **Marketing Site** | Vercel | `https://barpelai.odia.dev` | ✅ LIVE |
 | **Backend API** | Render | `https://barpel-ai.onrender.com` | ✅ LIVE |
 | **Database** | Supabase | `https://wifcmvgwzicgyrvaoiwi.supabase.co` | ✅ LIVE |
-| **Redis** | Render | `redis://red-d636tj7pm1nc73efjljg:6379` | ✅ LIVE (Render internal) |
+| **Redis** | Upstash | `rediss://hip-flounder-31845.upstash.io:6379` | ✅ LIVE (Upstash cloud, TLS) |
 | **Stripe Webhooks** | Stripe → Render | `https://barpel-ai.onrender.com/api/webhooks/stripe` | ✅ LIVE |
 
 **Render Service Details:**
@@ -43,6 +43,29 @@
 **Permanent Domain Target (once barpel.ai is purchased):**
 - `barpel.ai` → marketing, `app.barpel.ai` → dashboard, `api.barpel.ai` → backend
 - When switching: update CORS_ORIGIN, FRONTEND_URL, BACKEND_URL, GOOGLE_REDIRECT_URI in Render + Vercel env vars
+- When switching: also update Supabase Dashboard Site URL + Redirect allowlist (Authentication → URL Configuration)
+
+**Google OAuth Configuration (CRITICAL — do not break):**
+
+Two separate OAuth flows exist. Do not confuse them:
+
+| Flow | Purpose | Callback URL | Configured In |
+|------|---------|-------------|---------------|
+| **Supabase Auth** | User sign-in/sign-up with Google | `https://wifcmvgwzicgyrvaoiwi.supabase.co/auth/v1/callback` | Supabase Dashboard + Google Cloud Console |
+| **Google Calendar OAuth** | Connecting org's calendar for availability | `https://barpel-ai.onrender.com/api/google-oauth/callback` | Render `GOOGLE_REDIRECT_URI` env var + Google Cloud Console |
+
+**Supabase Auth URL Configuration** (Authentication → URL Configuration):
+- Site URL: `https://app-barpelai.odia.dev`
+- Redirect URLs allowlist: `https://app-barpelai.odia.dev/**`
+- **Rule:** If a domain is not in the allowlist, Supabase ignores `redirectTo` and falls back to Site URL. This is why Google Sign-In was redirecting to `localhost:8000` — Site URL was never updated from development.
+
+**Google Cloud Console** (Client ID: `750045445755-najs38gvm8dudvtrq7mkm6legetn9bos`):
+- Authorized redirect URI for Supabase Auth: `https://wifcmvgwzicgyrvaoiwi.supabase.co/auth/v1/callback`
+- Authorized redirect URI for Calendar OAuth: `https://barpel-ai.onrender.com/api/google-oauth/callback`
+
+**Frontend auth redirect** (`src/lib/auth-redirect.ts`):
+- Browser-side: always uses `window.location.origin` — dynamically correct
+- SSR fallback: uses `NEXT_PUBLIC_APP_URL` env var; if unset, falls back to `https://app-barpelai.odia.dev` (production) or `http://localhost:8000` (dev)
 
 **Local Development:**
 - ✅ Frontend: `http://localhost:8000` (`.env.local`: `NEXT_PUBLIC_BACKEND_URL=http://localhost:8001`)
@@ -50,7 +73,7 @@
 - ✅ Supabase: `wifcmvgwzicgyrvaoiwi` (Barpel-specific project)
 - ✅ Stripe: Test mode keys in `backend/.env`
 - ✅ Vapi: Private key in `backend/.env`
-- ✅ Redis: `redis://localhost:6379` (local) → `redis://red-d636tj7pm1nc73efjljg:6379` (Render)
+- ✅ Redis: `redis://localhost:6379` (local) → Upstash `rediss://hip-flounder-31845.upstash.io:6379` (production, TLS)
 
 **Environment Variables (Local Dev):**
 ```bash
@@ -77,10 +100,12 @@ STRIPE_SECRET_KEY=sk_test_...
 - ✅ Dashboard deployed to Vercel (`app-barpelai.odia.dev`)
 - ✅ Marketing site deployed to Vercel (`barpelai.odia.dev`)
 - ✅ Backend deployed to Render (`barpel-ai.onrender.com`)
-- ✅ Render Redis instance provisioned (`redis://red-d636tj7pm1nc73efjljg:6379`)
+- ✅ Redis switched to Upstash (`rediss://hip-flounder-31845.upstash.io:6379`) — Render private networking cannot cross workspace boundaries
 - ✅ Render build failure fixed (eslint peer dep, commit `05e72ca`)
-- ⏳ Render secrets: enter all vars from `render/renderenv` into Render dashboard
-- ⏳ `GOOGLE_ENCRYPTION_KEY`: generate with `openssl rand -hex 32`, enter in Render
+- ✅ Render secrets entered (all vars from `render/renderenv` set in Render dashboard)
+- ✅ Supabase Auth Site URL updated to `https://app-barpelai.odia.dev` — fixes Google Sign-In redirect
+- ✅ Google Cloud Console Calendar OAuth URI corrected (`/api/google-oauth/callback` path added)
+- ⏳ `TWILIO_MASTER_ACCOUNT_SID` + `TWILIO_MASTER_AUTH_TOKEN`: add to Render dashboard to enable managed phone provisioning (onboarding wizard Step 0)
 - ⏳ Purchase `barpel.ai`, update all URLs to final domains
 - ⏳ Stripe production keys (currently test mode)
 - ⏳ Local payment gateways (Flutterwave/PayStack for NG₦)
@@ -282,7 +307,7 @@ All 3 phases now complete and operational. No legacy data population issues rema
 ---
 
 ### Table: `call_tracking`
-**Purpose:** Analytics and tracking metrics for calls
+**Purpose:** Analytics and tracking metrics for calls (also used by test endpoints to record test call state)
 
 **Columns:**
 - `id` (uuid) - Unique tracking record ID
@@ -299,11 +324,18 @@ All 3 phases now complete and operational. No legacy data population issues rema
 - `ip_address` (text, nullable) - Caller IP
 - `location` (text, nullable) - Geographic location
 - `created_at` (timestamp) - When tracked
+- **`agent_id` (uuid, nullable)** - Agent used for the call ✨ ADDED (2026-03-04)
+- **`lead_id` (uuid, nullable)** - Contact/lead associated with the test call ✨ ADDED (2026-03-04)
+- **`phone` (text, nullable)** - Phone number called ✨ ADDED (2026-03-04)
+- **`called_at` (timestamptz, default NOW())** - When the call was initiated ✨ ADDED (2026-03-04)
+- **`call_outcome` (text, nullable)** - Outcome of the call (e.g., "completed", "failed", "pending") ✨ ADDED (2026-03-04)
 
 **Primary Key:** id
-**Foreign Keys:** org_id → organizations.id, call_id → calls.id
+**Foreign Keys:** org_id → organizations.id, call_id → calls.id, agent_id → agents.id (ON DELETE SET NULL), lead_id → contacts.id (ON DELETE SET NULL)
 **Indexes:** org_id, call_id, created_at, utm_source
 **Row Count:** 85
+
+> ⚠️ **Usage Note:** The `agent_id`, `lead_id`, `phone`, `called_at`, `call_outcome` columns are used by `POST /api/founder-console/agent/test-call` and `POST /api/founder-console/agent/web-test` to record a tracking row before the Vapi call is made. The row uses `vapi_call_id: 'pending-{requestId}'` as a placeholder until the real call ID arrives from Vapi. If the Vapi call fails after the row is inserted, the cleanup `DELETE` is attempted — check for orphaned `pending-*` rows if tracking data seems inconsistent.
 
 ---
 
@@ -325,21 +357,37 @@ All 3 phases now complete and operational. No legacy data population issues rema
 ---
 
 ### Table: `org_tools`
-**Purpose:** Organization-specific tool configurations
+**Purpose:** Organization-specific tool configurations — tracks which Vapi tools are registered for each org, including their Vapi tool IDs and hash-based versioning
 
 **Columns:**
 - `id` (uuid) - Unique tool config ID
 - `org_id` (uuid) - Organization owner
-- `tool_name` (text) - Tool identifier
-- `enabled` (boolean) - Whether tool is active
+- `tool_name` (text) - Tool identifier (matches Vapi tool name)
+- `enabled` (boolean) - Whether tool is active for this org
 - `config` (jsonb, nullable) - Tool-specific configuration
 - `created_at` (timestamp)
 - `updated_at` (timestamp)
+- **`vapi_tool_id` (text, nullable)** - Vapi platform tool ID (UUID assigned by Vapi on registration) ✨ ADDED
+- **`description` (text, nullable)** - Human-readable tool description ✨ ADDED
+- **`definition_hash` (text, nullable)** - SHA-256 hash of tool definition; used to detect changes and trigger re-registration ✨ ADDED
 
 **Primary Key:** id
 **Foreign Keys:** org_id → organizations.id
 **Indexes:** org_id, tool_name
-**Row Count:** 10
+**Row Count:** 7 (✅ 7 tools registered after infrastructure audit 2026-03-04)
+
+**Active Tools (7 — confirmed via `SELECT * FROM org_tools WHERE org_id = '...' AND enabled = true`):**
+| tool_name | Purpose | Vapi Tool ID Present |
+|-----------|---------|---------------------|
+| `checkAvailability` | Calendar slot check | ✅ |
+| `bookClinicAppointment` | Atomic appointment booking | ✅ |
+| `transferCall` | Handoff to human agent | ✅ |
+| `lookupCaller` | Contact lookup by phone | ✅ |
+| `endCall` | Graceful call termination | ✅ |
+| `queryKnowledgeBase` | RAG knowledge base query | ✅ |
+| `sendSms` | Standalone SMS tool (sync, `async: false` to prevent false confirmations) | ✅ |
+
+> ⚠️ **Tool Sync Invariant:** When calling `linkToolsToAssistant()` in `tool-sync-service.ts`, always fetch the existing Vapi assistant first to preserve `model.provider` and `model.model` fields. Vapi's PATCH endpoint requires all discriminated union fields — sending only `{ model: { toolIds } }` returns HTTP 400 "model.provider must be one of..."
 
 ---
 
@@ -694,10 +742,90 @@ SELECT count_rls_policies();
 | org_feature_flags | Feature toggles | Feature system |
 | twilio_subaccounts | Twilio multi-tenant mapping | Account routing |
 | escalation_rules | Call escalation config | Call routing |
-| integration_settings | Global integration config | Backend |
+| integration_settings | Global integration config — including Call Transfer phone number (`provider='transfer'` row) | Backend + transferCall Vapi tool |
 | backup_verification_log | Backup health checks | Ops monitoring |
 
-**Note:** For detailed column-level schema on any table, refer to Supabase Studio or production database.
+**Note:** For detailed column-level schema on config tables not listed below, refer to Supabase Studio or production database.
+
+---
+
+### Table: `integration_settings` (CRITICAL — Call Transfer SSOT)
+**Purpose:** Stores per-org integration configuration rows, keyed by `(org_id, provider)`. The `provider = 'transfer'` row is the source of truth for the Call Transfer feature — the `transferCall` Vapi tool reads this row on every live call to get the destination phone number.
+
+**Constraint:** `UNIQUE(org_id, provider)` — one row per provider per org. This is critical: **always filter by `provider` when querying**, or `.maybeSingle()` will throw if multiple provider rows exist.
+
+**Key Columns (Call Transfer row — `provider = 'transfer'`):**
+- `org_id` (uuid) — Organization owner
+- `provider` (text) — `'transfer'` for call transfer settings
+- `transfer_phone_number` (text, nullable) — E.164 destination number the AI transfers calls to (e.g. `+2348012345678`) ✨ ADDED (2026-03-05)
+- `transfer_sip_uri` (text, nullable) — SIP URI for SIP-based transfer (optional, future use) ✨ ADDED (2026-03-05)
+- `transfer_departments` (jsonb, default '{}') — Department routing map (optional, future use) ✨ ADDED (2026-03-05)
+- `is_active` (boolean) — Whether this row is active
+- `updated_at` (timestamptz) — When last saved
+
+**Migration:** `backend/supabase/migrations/20260305_create_integration_settings.sql`
+```sql
+ALTER TABLE integration_settings ADD COLUMN IF NOT EXISTS transfer_phone_number TEXT;
+ALTER TABLE integration_settings ADD COLUMN IF NOT EXISTS transfer_sip_uri TEXT;
+ALTER TABLE integration_settings ADD COLUMN IF NOT EXISTS transfer_departments JSONB DEFAULT '{}';
+```
+
+**API Layer:** `backend/src/routes/transfer-settings.ts`
+- `GET /api/transfer-settings` → `{ transfer_number: string|null, last_updated: string|null }`
+- `PUT /api/transfer-settings` → body `{ transfer_number: string }` (E.164 validated), UPSERT on `(org_id, provider='transfer')`
+- `GET /api/transfer-settings/history` → last 10 calls where `transferCall` tool was used
+
+**Vapi Tool Integration:** `backend/src/routes/vapi-tools-routes.ts` (`transferCall` tool handler)
+- Query: `.eq('org_id', orgId).eq('provider', 'transfer').maybeSingle()`
+- If `transfer_phone_number` is null → tool returns error "No transfer number configured"
+- If set → Vapi executes warm transfer to that number during the live call
+
+**Frontend:** `src/app/dashboard/escalation-rules/page.tsx` (Call Transfer settings page)
+- Single phone input field (E.164 format)
+- "Save" button with inline success/error feedback
+- Transfer history table (last 10 calls where transfer was triggered)
+- SWR-based — no full page reload on save
+
+**Critical Invariant:** Always filter `.eq('provider', 'transfer')` when reading Call Transfer settings. The table has `UNIQUE(org_id, provider)`, meaning an org may have multiple rows (one per provider). Omitting the provider filter causes `.maybeSingle()` to throw `PGRST116` when >1 row exists.
+
+---
+
+### Table: `agents` (CRITICAL — AI Voice Agent Config)
+**Purpose:** Per-org AI agent configuration. Each org has exactly 1 inbound + 1 outbound agent. Synced to Vapi via `ensureAssistantSynced()`.
+
+**Columns:**
+- `id` (uuid) - Unique agent ID
+- `org_id` (uuid) - Organization owner
+- `name` (text) - Agent display name (also used as Vapi assistant name)
+- `role` (text) - **`'inbound'`** or **`'outbound'`** — determines prompt fallback and test endpoint routing
+- `system_prompt` (text, nullable) - Agent's system prompt; falls back to role-aware default if NULL
+- `voice` (text) - Vapi voice ID (e.g., `"jennifer"`, `"ryan"`, custom ElevenLabs voice ID)
+- `voice_provider` (text, nullable) - Voice provider: `'vapi'`, `'11labs'`, `'azure'`. Stored when registry lookup fails for custom voices.
+- `voice_stability` (float, nullable) - ElevenLabs stability setting (0.0–1.0); only used if provider is `'11labs'`
+- `voice_similarity_boost` (float, nullable) - ElevenLabs similarity boost; only used if provider is `'11labs'`
+- `language` (text) - Language code (e.g., `'en'`), defaults to `'en'`
+- `first_message` (text, nullable) - Agent's opening message on call start
+- `max_call_duration` (integer, nullable) - Maximum call length in seconds (default 600 = 10 min)
+- `vapi_assistant_id` (text, nullable) - **CRITICAL:** Vapi UUID for this agent's assistant. If NULL, agent has never been synced to Vapi. Must never be set to phone numbers — UUID format only.
+- `vapi_phone_number_id` (text, nullable) - **CRITICAL:** Vapi phone number UUID for outbound calls. Set by agent-save flow; used by `createOutboundCall()`. Never use E.164 phone strings here.
+- `linked_phone_number_id` (uuid, nullable) - FK to `managed_phone_numbers.id`; the managed number associated with this agent
+- `knowledge_base_id` (uuid, nullable) - FK to knowledge base record if RAG is enabled
+- `is_active` (boolean) - Whether this agent is active. **Column is `is_active`, NOT `active`.** Queries that use `active` will return null data — always use `is_active`.
+- `last_synced_at` (timestamptz, nullable) - When agent was last synced to Vapi (written after successful `ensureAssistantSynced()`)
+- `prompt_synced_at` (timestamptz, nullable) - When system prompt was last synced; used to skip redundant sync on unchanged prompts
+- `created_at` (timestamptz)
+- `updated_at` (timestamptz)
+
+**Primary Key:** id
+**Foreign Keys:** org_id → organizations.id
+**Indexes:** org_id, role, is_active, vapi_assistant_id
+**Row Count:** ~54 (2 per org: 1 inbound + 1 outbound)
+
+**Critical Invariants:**
+1. `vapi_phone_number_id` must be a Vapi UUID (e.g., `abc123-def456`), NOT an E.164 phone number. The pre-flight check in `VapiClient.createOutboundCall()` throws if it detects a `+` prefix.
+2. Never remove `vapi_phone_number_id` from agent-sync writes — if NULL, outbound calls fail silently.
+3. The `is_active` column gates which agent the test endpoints query. Always use `is_active`, never `active`.
+4. Role fallback prompt in `ensureAssistantSynced()`: outbound agents use SDR template; inbound agents use generic receptionist prompt. If an agent has `system_prompt = null`, this fallback is used — it is role-aware.
 
 ---
 
@@ -788,11 +916,74 @@ Organization (organizations)
 
 ---
 
+---
+
+## 🛠️ Infrastructure Audit: Wallet + Test Endpoints + Tools (2026-03-04)
+
+**Status:** ✅ ALL VERIFIED — Stripe→Wallet, test-call, web-test, 7 tools, time awareness
+
+### Changes Applied (Infrastructure Audit Session)
+
+#### 1. founder-console-v2.ts — 4 bug fixes
+| Bug | Root Cause | Fix Location | Fix |
+|-----|-----------|-------------|-----|
+| `ReferenceError: agents is not defined` | Debug log referenced `agents?.length` after query changed to `.maybeSingle()` (returns object, not array) | Lines 3121, 3583 | Changed to `total_agents: 1` |
+| "Agent not configured" on web-test | SELECT query included `active` column — DB column is `is_active`. PostgREST returned null data. | Lines 3102, 3120, 3562, 3582 | Changed `active` → `is_active` everywhere |
+| call_tracking insert failed | Table missing `agent_id`, `lead_id`, `phone`, `called_at`, `call_outcome` columns | DB migration | Added 5 columns via Supabase Management API |
+| Vapi PATCH 400 "model.provider must be one of..." | `linkToolsToAssistant()` sent `{ model: { toolIds } }` without required `provider`+`model` fields | tool-sync-service.ts | Pre-fetch existing assistant, merge provider+model into PATCH payload |
+
+#### 2. tool-sync-service.ts — linkToolsToAssistant() fix
+```typescript
+// Before: sent only toolIds — Vapi rejected with 400
+await vapi.updateAssistant(assistantId, { model: { toolIds } });
+
+// After: fetch existing assistant first, then merge
+const existing = await vapi.getAssistant(assistantId);
+await vapi.updateAssistant(assistantId, {
+  model: {
+    provider: existing?.model?.provider || 'openai',
+    model: existing?.model?.model || 'gpt-4',
+    toolIds: toolIds
+  }
+});
+```
+
+#### 3. Stripe CLI local dev setup
+- `backend/package.json`: added `"stripe:listen": "stripe listen --forward-to localhost:8001/api/webhooks/stripe"`
+- When running locally, replace `STRIPE_WEBHOOK_SECRET` in `backend/.env` with the CLI's signing secret (printed on startup as `whsec_...`). This secret changes per `stripe listen` session.
+
+#### 4. Wallet page polling (wallet/page.tsx)
+- Replaced single `mutateWallet()` with polling loop (4 attempts × 3s intervals)
+- Shows "Payment received, balance updating shortly" until balance increases
+- Prevents false "Credits added" message before Stripe webhook fires
+
+#### 5. Time awareness per-call (vapi-webhook.ts:1505)
+- Confirmed at `assistant-request` handler, line ~1505
+- Injects: today's date (en-GB) + current time in WAT (Africa/Lagos, UTC+1)
+- Fresh per call — not stale from sync time
+
+#### 6. 7 tools verified end-to-end
+All 7 tools confirmed in `org_tools` with `enabled=true` and `vapi_tool_id` populated:
+checkAvailability, bookClinicAppointment, transferCall, lookupCaller, endCall, queryKnowledgeBase, **sendSms** (new — standalone SMS tool, `async: false`)
+
+#### 7. Wallet gate on test endpoints
+Both `POST /api/founder-console/agent/test-call` and `POST /api/founder-console/agent/web-test` now check `hasEnoughBalance()` before creating a Vapi call. Returns HTTP 402 with clear message if balance is zero.
+
+### Verified Test Results (2026-03-04)
+- ✅ Zero balance → 402 on both test endpoints
+- ✅ Stripe CLI → `checkout.session.completed` → `addCredits()` → balance 0 → 2000p (£20.00)
+- ✅ `POST /api/founder-console/agent/web-test` → 200 with `vapiCallId` + `bridgeWebsocketUrl`
+- ✅ 7 `toolIds` included in inline assistant config returned to Vapi
+- ✅ Time awareness confirmed in vapi-webhook.ts `assistant-request` handler
+
+---
+
 ## 📝 Status & Last Updated
 
-**Current:** March 2, 2026
-**Latest:** Production deployment live — temp domains, Redis confirmed, Render build fixed (commit `05e72ca`)
-**Key Metrics:** ✅ 32 tables, 183 indexes, 23 RLS policies, 56p/min billing enforced
+**Current:** March 5, 2026
+**Latest:** Call Transfer end-to-end fixed — `transfer_phone_number` column added to `integration_settings`, `transferCall` Vapi tool now reads the correct row (`provider='transfer'`), new `/api/transfer-settings` route (3 endpoints), Escalation Rules UI replaced with simple Call Transfer page, jsonb `.filter('tools_used', 'cs', '["transferCall"]')` bug fixed.
+**Previous:** Infrastructure audit complete — wallet gating, 7 tools, time awareness, test endpoints all verified. 4 bugs found and fixed in founder-console-v2.ts + tool-sync-service.ts. Schema updated with new columns.
+**Key Metrics:** ✅ 32 tables, 183 indexes, 23 RLS policies, 56p/min billing enforced, 7 Vapi tools live
 
 **For what changed recently, see APPENDIX: Release History**
 

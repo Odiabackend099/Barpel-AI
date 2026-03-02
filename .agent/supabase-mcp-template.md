@@ -11,22 +11,24 @@
 
 ```bash
 # Supabase Project Details
-PROJECT_REF="[AI: INSERT_PROJECT_REF_HERE]"
-PROJECT_URL="https://[PROJECT_REF].supabase.co"
+PROJECT_REF="wifcmvgwzicgyrvaoiwi"
+PROJECT_URL="https://wifcmvgwzicgyrvaoiwi.supabase.co"
 
 # Authentication
-ACCESS_TOKEN="[AI: INSERT_ACCESS_TOKEN_HERE]"
+ACCESS_TOKEN="sbp_62c06aa0b851e28dd60ce34170bca62982e26562"
+ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpZmNtdmd3emljZ3lydmFvaXdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNDA2MTIsImV4cCI6MjA4NzgxNjYxMn0.vpmQ7nMDgkSSTcjNL3UXKVIsQ9exo4Gi7y67bEx71IY"
+SERVICE_ROLE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpZmNtdmd3emljZ3lydmFvaXdpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjI0MDYxMiwiZXhwIjoyMDg3ODE2NjEyfQ.oyu-CcLe-vY3DkfQs-b9LshefyqjxwFQ-E_xThysB14"
 
 # Database Connection
-DB_HOST="db.[PROJECT_REF].supabase.co"
+DB_HOST="db.wifcmvgwzicgyrvaoiwi.supabase.co"
 DB_PORT="5432"
 DB_NAME="postgres"
 DB_USER="postgres"
 DB_PASSWORD="Eguale@2021?"
-DB_URL="postgresql://postgres:Eguale%402021%3F%5C@db.[PROJECT_REF].supabase.co:5432/postgres"
+DB_URL="postgresql://postgres:Eguale%402021%3F%5C@db.wifcmvgwzicgyrvaoiwi.supabase.co:5432/postgres"
 
 # MCP Server
-MCP_URL="https://mcp.supabase.com/mcp?project_ref=[PROJECT_REF]"
+MCP_URL="https://mcp.supabase.com/mcp?project_ref=wifcmvgwzicgyrvaoiwi"
 ```
 
 **Note:** These credentials are typically stored in `backend/.env` file. Always check there first for the latest values.
@@ -428,9 +430,9 @@ When applying migrations, verify you:
 **User-Provided Variables (Request from User):**
 - `PROJECT_REF` = [AI: Ask user for Supabase project reference]
 - `ACCESS_TOKEN` = [AI: Ask user for Supabase access token]
-- `PROJECT_URL` = `https://[PROJECT_REF].supabase.co`
-- `DB_HOST` = `db.[PROJECT_REF].supabase.co`
-- `DB_URL` = `postgresql://postgres:Eguale%402021%3F%5C@db.[PROJECT_REF].supabase.co:5432/postgres`
+- `PROJECT_URL` = `https://wifcmvgwzicgyrvaoiwi.supabase.co`
+- `DB_HOST` = `db.wifcmvgwzicgyrvaoiwi.supabase.co`
+- `DB_URL` = `postgresql://postgres:Eguale%402021%3F%5C@db.wifcmvgwzicgyrvaoiwi.supabase.co:5432/postgres`
 
 **AI Instructions:**
 1. Check the project's `.env` file for `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`

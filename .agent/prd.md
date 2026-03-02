@@ -1,10 +1,10 @@
 # Barpel AI – Product Requirements Document (PRD)
 
-**Version:** 2026.03.04-a
-**Last Updated:** 2026-03-04 UTC
-**Status:** 🚀 PRODUCTION DEPLOYED - Full Platform Live (Marketing site complete: all pages live, pricing correct, skill documented)
+**Version:** 2026.03.05
+**Last Updated:** 2026-03-05 UTC
+**Status:** 🚀 PRODUCTION DEPLOYED - Full Platform Live (Call Transfer feature live: transferCall Vapi tool end-to-end fixed, Escalation Rules UI replaced with simple Call Transfer settings page)
 **Project Foundation:** Enterprise voice receptionist platform for Nigerian SMEs/Small Businesses
-**Verification Status:** ✅ FULL STACK OPERATIONAL - Frontend (Next.js port 8000) + Backend (Express port 8001) + Supabase (wifcmvgwzicgyrvaoiwi) + Teal-and-white branding + 5-step onboarding wizard + Google OAuth sign-in + Marketing site all 6 pages live
+**Verification Status:** ✅ FULL STACK OPERATIONAL - Frontend (Next.js port 8000) + Backend (Express port 8001) + Supabase (wifcmvgwzicgyrvaoiwi) + Teal-and-white branding + 5-step onboarding wizard + Google OAuth sign-in + Marketing site all 6 pages live + 7 Vapi tools linked + Wallet gating enforced + Call Transfer end-to-end verified
 
 ---
 
@@ -228,6 +228,7 @@ These rules NEVER change and are enforced by the database and RLS policies:
    - **See Section 2.5 below for full details**
 4. **Wallet Billing** – Stripe Checkout top-ups (£25 minimum), auto-recharge, credit ledger, webhook verification, and fixed-rate per-minute deductions (56 pence/min GBP).
 5. **Managed Telephony** – Purchase Twilio subaccount numbers (1 inbound + 1 outbound per org), surface in Agent Config, support manual AI Forwarding.
+5a. **Call Transfer** – Business owners configure a single transfer phone number (E.164) in the Call Transfer settings page (`/dashboard/escalation-rules`). When a caller asks to speak to a human, or the AI detects a serious buyer, the `transferCall` Vapi tool reads `integration_settings.transfer_phone_number` (provider='transfer') and routes the live call to that number. History of transferred calls visible in the same settings page. Route: `/api/transfer-settings` (GET, PUT, GET /history). DB: `integration_settings` table, row with `provider = 'transfer'` per org.
 6. **Dashboards & Leads** – Production dashboards for call stats (Total Calls, Appointments, Average Sentiment, Avg Duration), call log filters (status, date range, search with clear), call detail modal (cost, appointment ID, tools used), activity click-through to call detail, appointment-to-call linkage, lead enrichment, conversion tracking, and Geo/SEO telemetry.
 7. **Pre-Sales Lead Intake Form** – Public intake form at `/start` (unauthenticated, marketing-facing) for prospects who have not yet signed up. Collects company info, greeting script, voice preference, and optional pricing PDF. Auto-sends confirmation email to user and support notification to support@barpel.ai. Stores submissions in `onboarding_submissions` table. ⚠️ **This is NOT the New User Onboarding Wizard** — it is a lead-capture form for pre-signup prospects only.
 8. **New User Onboarding Wizard** – 5-step conversion wizard at `/dashboard/onboarding` for newly registered authenticated users. Flow: (0) Choose Number (direction + country + area code + search) → (1) Payment (Stripe Checkout + auto-provision) → (2) Telecom Routing (forwarding/caller ID) → (3) Agent Personality (name, voice, prompt) → (4) Sync & Go Live (phone ↔ agent sync + celebration). Back/Skip navigation on all steps. Zustand store persisted to `sessionStorage` for Stripe redirect resilience. Dashboard home page auto-redirects users with `onboarding_completed_at = NULL`. Cart abandonment emails (3-step: 1hr soft nudge / 24hr pain reminder / 48hr £10 credit). Funnel telemetry via `onboarding_events` table. ⚠️ **This is NOT the pre-sales form at `/start`** — it is the post-signup conversion flow for authenticated users.
@@ -256,7 +257,21 @@ Supporting services: wallet auto-recharge processor, webhook verification API, a
 
 ## 5. Recent Releases & Verification
 
-**Latest (2026-03-04 — commits `dbcafc8`, `5415a07`):** Marketing website fully completed.
+**Latest (2026-03-05 — Call Transfer):** End-to-end call transfer feature fixed and verified. Escalation Rules UI replaced with a simple one-field Call Transfer settings page. 3 new API endpoints live. Root cause: `integration_settings` table existed but was missing `transfer_phone_number` column, so the `transferCall` Vapi tool always got `null` and calls never transferred. See APPENDIX for full details.
+
+**Previous (2026-03-04 — Infrastructure Audit):** Wallet gating, 7 tools, time awareness, test endpoints — all verified end-to-end. Four bugs found and fixed.
+- ✅ **Wallet gate added** to `POST /agent/test-call` + `POST /agent/web-test` — both return 402 when org balance = 0. `hasEnoughBalance()` imported from `wallet-service`.
+- ✅ **Time awareness per-call** — `vapi-webhook.ts` `assistant-request` handler injects current date + WAT time (Africa/Lagos, UTC+1) fresh on every call. Never stale.
+- ✅ **7 tools registered and linked** — checkAvailability, bookClinicAppointment, transferCall, lookupCaller, endCall, queryKnowledgeBase, **sendSms** (new standalone SMS tool, `async: false` to prevent false confirmations). All 7 `toolIds` now included in inline assistant config returned to Vapi in browser test.
+- ✅ **Stripe CLI local dev** — `npm run stripe:listen` in `backend/` forwards webhooks to `localhost:8001`. Wallet top-up flow verified: 0 → 2000p (£20.00) in ~5s.
+- ✅ **Wallet page polling** — replaced single `mutateWallet()` with 4×3s polling loop after `?topup=success`.
+- 🐛 **4 bugs fixed in `founder-console-v2.ts` + `tool-sync-service.ts`:**
+  1. `ReferenceError: agents is not defined` — stale array reference after `.maybeSingle()` change → fixed `total_agents: 1`
+  2. "Agent not configured" → wrong column `active` (DB is `is_active`) → fixed all 4 references
+  3. `call_tracking` missing columns → added `agent_id`, `lead_id`, `phone`, `called_at`, `call_outcome` via Supabase migration
+  4. Vapi PATCH 400 "model.provider required" → `linkToolsToAssistant()` now pre-fetches existing assistant to preserve `provider`+`model` fields in PATCH payload
+
+**Previous (2026-03-04 — commits `dbcafc8`, `5415a07`):** Marketing website fully completed.
 - ✅ **6 missing pages created** (were all "Section coming soon" placeholders in App.tsx): Careers, Demo, Features, Security, Terms of Service, Cookie Policy
 - ✅ **Pricing.tsx corrected** — rates now sourced from `backend/src/config/index.ts`: $0.70/min (RATE_PER_MINUTE_USD_CENTS=70), ~155 min for $99 bundle (141 raw + 10% bonus), £25 minimum top-up. Previous rates ($0.14/min, 750 min) were wrong by 5×.
 - ✅ **App.tsx cleaned** — `PlaceholderSection` component and all 6 inline placeholder page definitions removed; replaced with proper imports.
@@ -492,6 +507,48 @@ Form for unauthenticated prospects. Stores to `onboarding_submissions` table (di
 ---
 
 ## APPENDIX: Release History
+
+### 2026-03-05: Call Transfer Feature — End-to-End Fixed ✅ COMPLETE
+
+**Root Cause (why call transfers were silently failing):**
+The `transferCall` Vapi tool always returned `null` for the transfer phone number. `integration_settings` table existed but was missing `transfer_phone_number`, `transfer_sip_uri`, and `transfer_departments` columns. The table also has a `UNIQUE(org_id, provider)` constraint — the `transferCall` tool was not filtering by `provider = 'transfer'`, so `.maybeSingle()` would throw if multiple provider rows existed.
+
+The Escalation Rules UI (priority 1-100, sentiment threshold, max wait seconds) was managing the `escalation_rules` table — a completely disconnected table the Vapi tool never reads.
+
+**What was fixed:**
+
+1. **DB migration** (`backend/supabase/migrations/20260305_create_integration_settings.sql`):
+   - `ALTER TABLE integration_settings ADD COLUMN IF NOT EXISTS transfer_phone_number TEXT`
+   - `ALTER TABLE integration_settings ADD COLUMN IF NOT EXISTS transfer_sip_uri TEXT`
+   - `ALTER TABLE integration_settings ADD COLUMN IF NOT EXISTS transfer_departments JSONB DEFAULT '{}'`
+
+2. **`transferCall` Vapi tool** (`backend/src/routes/vapi-tools-routes.ts`):
+   - Added `.eq('provider', 'transfer')` filter to prevent `.maybeSingle()` error when org has multiple provider rows
+
+3. **New backend route** (`backend/src/routes/transfer-settings.ts`):
+   - `GET /api/transfer-settings` — returns `{ transfer_number, last_updated }` (null if not set yet)
+   - `PUT /api/transfer-settings` — saves E.164 number, UPSERT on `(org_id, provider='transfer')`
+   - `GET /api/transfer-settings/history` — last 10 calls where `transferCall` was used (from `calls.tools_used` jsonb array)
+   - Bug fixed during testing: `.contains('tools_used', ['transferCall'])` sends PostgreSQL text array syntax `cs.{transferCall}` which fails on jsonb columns. Fixed with `.filter('tools_used', 'cs', '["transferCall"]')`.
+
+4. **Frontend** (`src/app/dashboard/escalation-rules/page.tsx`):
+   - Replaced 334-line complex escalation form (priority slider, sentiment threshold, trigger type selector) with a simple one-field settings page
+   - Industry benchmark: ElevenLabs, OpenAI Operator, Dialpad all use a single "transfer to" number field
+   - Follows wallet page SWR + useCallback + optimistic mutate pattern exactly
+   - Shows transfer history (empty state if no transfers yet)
+   - `src/app/dashboard/escalation-rules/components/RuleForm.tsx` deleted (352 lines, no longer needed)
+
+5. **Sidebar** (`src/components/dashboard/LeftSidebar.tsx`):
+   - "Escalation Rules" → "Call Transfer" (route stays `/dashboard/escalation-rules`)
+
+**Verified endpoints (all passing):**
+- `GET /api/transfer-settings` → `{ transfer_number: null, last_updated: null }` for new org ✅
+- `PUT /api/transfer-settings` with `+2348012345678` → `{ success: true }` ✅
+- `PUT /api/transfer-settings` with `08012345678` → `400 { error: "Phone number must be in E.164 format..." }` ✅
+- `GET /api/transfer-settings` after save → `{ transfer_number: "+2348012345678", last_updated: "..." }` ✅
+- `GET /api/transfer-settings/history` → `[]` (correct — no transfers yet) ✅
+
+---
 
 ### 2026-03-04: Marketing Website — All Pages Live ✅ COMPLETE
 - **Scope:** Complete the Barpel AI marketing site at `barpelai.odia.dev`
