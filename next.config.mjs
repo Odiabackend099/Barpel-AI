@@ -85,10 +85,10 @@ const withPWA = withPWAInit({
         },
         // API calls (NetworkFirst - prefer fresh data, fallback to cache)
         {
-            urlPattern: /^https:\/\/api\.barpel\.ai\/api\/.*/i,
+            urlPattern: /^https:\/\/barpel-ai\.onrender\.com\/api\/.*/i,
             handler: 'NetworkFirst',
             options: {
-                cacheName: 'api-cache',
+                cacheName: 'api-cache-v2',
                 networkTimeoutSeconds: 10,
                 expiration: {
                     maxEntries: 100,
@@ -113,7 +113,7 @@ const withPWA = withPWAInit({
             },
             handler: 'NetworkFirst',
             options: {
-                cacheName: 'pages-cache',
+                cacheName: 'pages-cache-v2',
                 networkTimeoutSeconds: 10,
                 expiration: {
                     maxEntries: 50,
