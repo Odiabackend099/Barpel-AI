@@ -1,55 +1,74 @@
 import { Check, ArrowRight } from 'lucide-react';
 import { ctaLinks } from '@/lib/brand.config';
 
-
 const plans = [
   {
-    name: 'Starter Pack',
-    price: '$25',
-    minutes: '~180 minutes',
-    description: 'Perfect for small businesses starting out.',
-    features: ['~180 minutes of AI calls', 'Pay-as-you-go pricing', 'Credits never expire', 'Email support'],
+    name: 'Pay-As-You-Go',
+    priceLabel: 'Free to start',
+    priceNote: '~$0.14 per minute',
+    description: 'No upfront cost. Pay only for the calls your AI handles.',
+    features: [
+      'No monthly commitment',
+      'Charged per minute of AI call time',
+      'Credits top up anytime',
+      'All core features included',
+      'Email support',
+    ],
     cta: 'Get Started Free',
     href: ctaLinks.signUp,
     highlighted: false,
+    badge: null,
   },
   {
-    name: 'Growth Pack',
-    price: '$50',
-    minutes: '~400 minutes (+ 11% bonus)',
-    description: 'For growing teams handling more calls.',
-    features: ['~400 minutes of AI calls', '11% bonus credits', 'Pay-as-you-go pricing', 'Priority support'],
+    name: 'Growth Bundle',
+    priceLabel: '$99',
+    priceNote: '~750 minutes included',
+    description: 'Buy a bundle and get more minutes at a better rate.',
+    features: [
+      '~750 minutes of AI call time',
+      '~$0.132/min (save 6% vs PAYG)',
+      'Credits never expire',
+      'All core features included',
+      'Priority support',
+    ],
     cta: 'Get Started Free',
     href: ctaLinks.signUp,
     highlighted: true,
     badge: 'BEST VALUE',
   },
   {
-    name: 'Scale Pack',
-    price: '$100',
-    minutes: '~900 minutes (+ 25% bonus)',
-    description: 'For high-volume businesses.',
-    features: ['~900 minutes of AI calls', '25% bonus credits', 'Pay-as-you-go pricing', 'Dedicated support'],
-    cta: 'Get Started Free',
-    href: ctaLinks.signUp,
+    name: 'Enterprise',
+    priceLabel: 'Custom',
+    priceNote: 'Volume pricing available',
+    description: 'High-volume businesses with dedicated support and SLA.',
+    features: [
+      'Custom call volume pricing',
+      'Dedicated account manager',
+      'Custom SLA & uptime guarantee',
+      'Advanced integrations & API access',
+      'Onboarding & training included',
+    ],
+    cta: 'Talk to Sales',
+    href: '/contact',
     highlighted: false,
+    badge: null,
   },
 ];
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="py-24 bg-barpel-bg">
+    <section id="pricing" className="py-24 bg-[#F9FAFB]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="font-display font-bold text-3xl sm:text-4xl text-barpel-text mb-4">
-            Simple Pay-As-You-Go Pricing
+          <h2 className="font-bold text-3xl sm:text-4xl text-[#102A33] mb-4">
+            Simple, Transparent Pricing
           </h2>
-          <p className="text-barpel-text-secondary text-lg max-w-2xl mx-auto">
-            Buy credits, use them, top up anytime. No monthly commitments. Credits never expire.
+          <p className="text-[#6B7280] text-lg max-w-2xl mx-auto">
+            Start free with pay-as-you-go, or buy a bundle for better rates. No subscriptions. Credits never expire.
           </p>
-          <p className="text-barpel-text text-sm mt-4">
-            All amounts in USD · Cancel anytime · Secure Stripe checkout
+          <p className="text-[#6B7280] text-sm mt-4">
+            All amounts in USD · Secure Stripe checkout · Cancel anytime
           </p>
         </div>
 
@@ -60,32 +79,32 @@ export default function Pricing() {
               key={plan.name}
               className={`relative rounded-3xl p-8 transition-all duration-300 ${
                 plan.highlighted
-                  ? 'bg-barpel-navy text-white shadow-card-elevated scale-105'
-                  : 'bg-white text-barpel-text shadow-card hover:shadow-card-elevated'
+                  ? 'bg-[#102A33] text-white shadow-2xl scale-105'
+                  : 'bg-white text-[#102A33] shadow-md hover:shadow-xl'
               }`}
             >
               {plan.badge && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="px-3 py-1 rounded-pill bg-barpel-teal text-white text-xs font-bold tracking-wider">
+                  <span className="px-3 py-1 rounded-full bg-[#37A195] text-white text-xs font-bold tracking-wider">
                     {plan.badge}
                   </span>
                 </div>
               )}
 
               <div className="mb-6">
-                <h3 className={`font-display font-bold text-xl mb-1 ${plan.highlighted ? 'text-white' : 'text-barpel-text'}`}>
+                <h3 className={`font-bold text-xl mb-1 ${plan.highlighted ? 'text-white' : 'text-[#102A33]'}`}>
                   {plan.name}
                 </h3>
-                <p className={`text-sm mb-4 ${plan.highlighted ? 'text-white/60' : 'text-barpel-text-secondary'}`}>
+                <p className={`text-sm mb-4 ${plan.highlighted ? 'text-white/60' : 'text-[#6B7280]'}`}>
                   {plan.description}
                 </p>
-                <div className="mb-2">
-                  <span className={`font-display font-bold text-4xl ${plan.highlighted ? 'text-white' : 'text-barpel-text'}`}>
-                    {plan.price}
+                <div className="mb-1">
+                  <span className={`font-bold text-4xl ${plan.highlighted ? 'text-white' : 'text-[#102A33]'}`}>
+                    {plan.priceLabel}
                   </span>
                 </div>
-                <div className={`text-sm ${plan.highlighted ? 'text-white/70' : 'text-barpel-text-secondary'}`}>
-                  {plan.minutes}
+                <div className={`text-sm ${plan.highlighted ? 'text-white/70' : 'text-[#6B7280]'}`}>
+                  {plan.priceNote}
                 </div>
               </div>
 
@@ -93,8 +112,8 @@ export default function Pricing() {
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-center gap-3 text-sm">
-                    <Check className={`w-4 h-4 flex-shrink-0 ${plan.highlighted ? 'text-barpel-teal' : 'text-barpel-teal'}`} />
-                    <span className={plan.highlighted ? 'text-white/80' : 'text-barpel-text'}>
+                    <Check className="w-4 h-4 flex-shrink-0 text-[#37A195]" />
+                    <span className={plan.highlighted ? 'text-white/80' : 'text-[#102A33]'}>
                       {feature}
                     </span>
                   </li>
@@ -104,10 +123,10 @@ export default function Pricing() {
               {/* CTA */}
               <a
                 href={plan.href}
-                className={`group w-full py-3 rounded-pill font-medium text-sm transition-all flex items-center justify-center gap-2 ${
+                className={`group w-full py-3 rounded-full font-medium text-sm transition-all flex items-center justify-center gap-2 ${
                   plan.highlighted
-                    ? 'bg-barpel-teal text-white hover:bg-barpel-teal-dark'
-                    : 'bg-barpel-teal/10 text-barpel-teal hover:bg-barpel-teal hover:text-white border border-barpel-teal/30'
+                    ? 'bg-[#37A195] text-white hover:bg-[#2F8E88]'
+                    : 'bg-[#37A195]/10 text-[#37A195] hover:bg-[#37A195] hover:text-white border border-[#37A195]/30'
                 }`}
               >
                 {plan.cta}
