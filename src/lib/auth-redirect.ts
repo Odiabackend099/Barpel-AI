@@ -18,8 +18,11 @@ export function getRedirectUrl(path: string = '/auth/callback'): string {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL;
   
   if (!appUrl) {
-    // Server-side fallback
-    return `http://localhost:3000${normalizedPath}`;
+    // Server-side fallback when NEXT_PUBLIC_APP_URL is not set
+    const fallback = process.env.NODE_ENV === 'production'
+      ? 'https://app-barpelai.odia.dev'
+      : 'http://localhost:8000';
+    return `${fallback}${normalizedPath}`;
   }
   
   // Ensure appUrl doesn't have trailing slash
