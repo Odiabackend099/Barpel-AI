@@ -83,6 +83,17 @@ function LoginContent() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-[#E8F5F2] via-white to-[#F3F4F6] flex flex-col items-center justify-center px-4 py-12">
+            {/* Top Navigation */}
+            <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-6 py-4">
+                <Link
+                    href="/"
+                    className="flex items-center gap-2 text-sm font-medium text-[#6B7280] hover:text-[#37A195] transition-colors"
+                >
+                    <span>←</span>
+                    <span>Back to barpel.ai</span>
+                </Link>
+            </div>
+
             <FadeIn>
                 {/* Logo and Tagline */}
                 <div className="mb-12 text-center max-w-md mx-auto">

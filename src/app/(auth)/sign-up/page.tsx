@@ -256,7 +256,7 @@ export default function SignUpPage() {
       {/* Right Column: Sign Up Form */}
       <div className="flex flex-col justify-center px-8 py-12 lg:px-12 xl:px-16 bg-white relative overflow-y-auto">
         <FadeIn>
-          <div className="mb-8 flex items-center justify-between lg:hidden">
+          <div className="mb-8 flex items-center justify-between">
             <Logo
               width={120}
               height={32}
@@ -267,7 +267,7 @@ export default function SignUpPage() {
               href="/"
               className="text-sm font-medium text-[#37A195] hover:text-[#2F8E88] transition-colors"
             >
-              Home
+              ← Back to home
             </Link>
           </div>
 
