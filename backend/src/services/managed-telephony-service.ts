@@ -32,6 +32,7 @@ export interface ProvisionRequest {
   country: string;        // 'US', 'GB'
   numberType?: string;    // 'local' | 'toll_free'
   areaCode?: string;      // Optional area code preference
+  phoneNumber?: string;   // Specific number to purchase (skips search if provided)
   direction?: 'inbound' | 'outbound' | 'unassigned';  // Routing direction
 }
 
@@ -382,44 +383,54 @@ export class ManagedTelephonyService {
         accountSid: subaccountSid,
       });
 
-      // Step 4: Search available numbers
-      log.info('ManagedTelephony', 'Searching available numbers', { orgId, country, numberType, areaCode });
+      // Step 4: Search available numbers (or use specific number if provided)
+      let selectedNumber: string;
 
-      let searchResults: any[];
-      try {
-        const searchParams: any = { voiceEnabled: true, limit: 1 };
-        if (areaCode) searchParams.areaCode = areaCode;
+      if (request.phoneNumber) {
+        // Specific number requested — skip search and use it directly
+        selectedNumber = request.phoneNumber;
+        log.info('ManagedTelephony', 'Using specific requested number (skipping search)', {
+          orgId, number: redactPhone(selectedNumber),
+        });
+      } else {
+        log.info('ManagedTelephony', 'Searching available numbers', { orgId, country, numberType, areaCode });
 
-        if (numberType === 'toll_free') {
-          searchResults = await subClient.availablePhoneNumbers(country).tollFree.list(searchParams);
-        } else {
-          searchResults = await subClient.availablePhoneNumbers(country).local.list(searchParams);
-        }
+        let searchResults: any[];
+        try {
+          const searchParams: any = { voiceEnabled: true, limit: 1 };
+          if (areaCode) searchParams.areaCode = areaCode;
 
-        if (!searchResults || searchResults.length === 0) {
+          if (numberType === 'toll_free') {
+            searchResults = await subClient.availablePhoneNumbers(country).tollFree.list(searchParams);
+          } else {
+            searchResults = await subClient.availablePhoneNumbers(country).local.list(searchParams);
+          }
+
+          if (!searchResults || searchResults.length === 0) {
+            return {
+              success: false,
+              error: `No ${numberType} numbers available in ${country}${areaCode ? ` (area code ${areaCode})` : ''}`,
+              failedStep: 'search',
+              canRetry: true,
+              userMessage: areaCode
+                ? `No numbers available in area code ${areaCode}. Try a different area code.`
+                : `No ${numberType} numbers available in ${country}. Please try a different number type or contact support.`
+            };
+          }
+        } catch (searchErr: any) {
+          log.error('ManagedTelephony', 'Number search failed', { orgId, error: searchErr.message });
           return {
             success: false,
-            error: `No ${numberType} numbers available in ${country}${areaCode ? ` (area code ${areaCode})` : ''}`,
+            error: `Twilio search failed: ${searchErr.message}`,
             failedStep: 'search',
             canRetry: true,
-            userMessage: areaCode
-              ? `No numbers available in area code ${areaCode}. Try a different area code.`
-              : `No ${numberType} numbers available in ${country}. Please try a different number type or contact support.`
+            userMessage: 'Unable to search for available numbers. Please try again.'
           };
         }
-      } catch (searchErr: any) {
-        log.error('ManagedTelephony', 'Number search failed', { orgId, error: searchErr.message });
-        return {
-          success: false,
-          error: `Twilio search failed: ${searchErr.message}`,
-          failedStep: 'search',
-          canRetry: true,
-          userMessage: 'Unable to search for available numbers. Please try again.'
-        };
-      }
 
-      const selectedNumber = searchResults[0].phoneNumber;
-      log.info('ManagedTelephony', 'Number selected', { orgId, number: redactPhone(selectedNumber) });
+        selectedNumber = searchResults[0].phoneNumber;
+        log.info('ManagedTelephony', 'Number selected from search', { orgId, number: redactPhone(selectedNumber) });
+      }
 
       // Step 4.5: For countries requiring regulatory address (UK, DE, FR, AU, etc.),
       // create or reuse a Twilio Address resource before purchasing.

@@ -104,7 +104,7 @@ const AppointmentsDashboardContent = () => {
 
     // WebSocket real-time updates
     useEffect(() => {
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8001';
         const wsProtocol = backendUrl.startsWith('https') ? 'wss:' : 'ws:';
         const wsHost = backendUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
         const wsUrl = `${wsProtocol}//${wsHost}/ws/live-calls`;
@@ -223,19 +223,19 @@ const AppointmentsDashboardContent = () => {
     const getStatusBadgeColor = (status: string) => {
         switch (status) {
             case 'pending':
-                return 'bg-surgical-50 text-surgical-600 border-surgical-200';
+                return 'bg-barpel-teal/5 text-barpel-teal border-barpel-slate/10';
             case 'confirmed':
                 return 'bg-green-50 text-green-700 border-green-200';
             case 'in_progress':
                 return 'bg-blue-50 text-blue-700 border-blue-200';
             case 'completed':
-                return 'bg-surgical-50 text-barpel-slate/60 border-surgical-200';
+                return 'bg-barpel-teal/5 text-barpel-slate/60 border-barpel-slate/10';
             case 'cancelled':
                 return 'bg-red-50 text-red-700 border-red-200';
             case 'no_show':
                 return 'bg-yellow-50 text-yellow-700 border-yellow-200';
             default:
-                return 'bg-surgical-50 text-barpel-slate/60 border-surgical-200';
+                return 'bg-barpel-teal/5 text-barpel-slate/60 border-barpel-slate/10';
         }
     };
 
@@ -262,9 +262,9 @@ const AppointmentsDashboardContent = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-surgical-50 flex items-center justify-center">
+            <div className="min-h-screen bg-barpel-teal/5 flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
-                    <div className="w-8 h-8 border-4 border-surgical-200 border-t-surgical-600 rounded-full animate-spin" />
+                    <div className="w-8 h-8 border-4 border-barpel-slate/10 border-t-barpel-teal rounded-full animate-spin" />
                     <p className="text-barpel-slate/60">Loading...</p>
                 </div>
             </div>
@@ -301,7 +301,7 @@ const AppointmentsDashboardContent = () => {
                                 setSearchQuery(e.target.value);
                                 setCurrentPage(1);
                             }}
-                            className="w-full pl-10 pr-4 py-2 border border-surgical-200 rounded-lg text-sm bg-white text-barpel-slate focus:outline-none focus:ring-2 focus:ring-surgical-500"
+                            className="w-full pl-10 pr-4 py-2 border border-barpel-slate/10 rounded-lg text-sm bg-white text-barpel-slate focus:outline-none focus:ring-2 focus:ring-barpel-teal"
                         />
                     </div>
 
@@ -311,7 +311,7 @@ const AppointmentsDashboardContent = () => {
                             setFilterStatus(e.target.value);
                             setCurrentPage(1);
                         }}
-                        className="px-4 py-2 border border-surgical-200 rounded-lg text-sm bg-white text-barpel-slate focus:outline-none focus:ring-2 focus:ring-surgical-500"
+                        className="px-4 py-2 border border-barpel-slate/10 rounded-lg text-sm bg-white text-barpel-slate focus:outline-none focus:ring-2 focus:ring-barpel-teal"
                     >
                         <option value="">All Status</option>
                         <option value="pending">Pending</option>
@@ -328,7 +328,7 @@ const AppointmentsDashboardContent = () => {
                             setFilterDate(e.target.value);
                             setCurrentPage(1);
                         }}
-                        className="px-4 py-2 border border-surgical-200 rounded-lg text-sm bg-white text-barpel-slate focus:outline-none focus:ring-2 focus:ring-surgical-500"
+                        className="px-4 py-2 border border-barpel-slate/10 rounded-lg text-sm bg-white text-barpel-slate focus:outline-none focus:ring-2 focus:ring-barpel-teal"
                     >
                         <option value="">All Time</option>
                         <option value="week">This Week</option>
@@ -337,7 +337,7 @@ const AppointmentsDashboardContent = () => {
 
                     <button
                         onClick={() => fetchAppointments()}
-                        className="p-2 border border-surgical-200 rounded-lg hover:bg-surgical-50 transition-colors"
+                        className="p-2 border border-barpel-slate/10 rounded-lg hover:bg-barpel-teal/5 transition-colors"
                         title="Refresh"
                     >
                         <RotateCw className="w-4 h-4 text-barpel-slate/60" />
@@ -345,10 +345,10 @@ const AppointmentsDashboardContent = () => {
                 </div>
 
                 {/* Appointments List */}
-                <div className="bg-white border border-surgical-200 rounded-2xl overflow-hidden shadow-sm">
+                <div className="bg-white border border-barpel-slate/10 rounded-2xl overflow-hidden shadow-sm">
                     <div className="overflow-x-auto">
                         <table className="w-full">
-                            <thead className="bg-surgical-50 border-b border-surgical-200">
+                            <thead className="bg-barpel-teal/5 border-b border-barpel-slate/10">
                                 <tr>
                                     <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/60 uppercase">Date & Time</th>
                                     <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/60 uppercase">Service</th>
@@ -359,12 +359,12 @@ const AppointmentsDashboardContent = () => {
                                     <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/60 uppercase">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-surgical-200">
+                            <tbody className="divide-y divide-barpel-slate/10">
                                 {isLoading ? (
                                     <tr>
                                         <td colSpan={7} className="px-6 py-12 text-center">
                                             <div className="flex flex-col items-center gap-3">
-                                                <div className="w-8 h-8 border-4 border-surgical-200 border-t-surgical-600 rounded-full animate-spin" />
+                                                <div className="w-8 h-8 border-4 border-barpel-slate/10 border-t-barpel-teal rounded-full animate-spin" />
                                                 <p className="text-barpel-slate/60">Loading appointments...</p>
                                             </div>
                                         </td>
@@ -380,7 +380,7 @@ const AppointmentsDashboardContent = () => {
                                     appointments.map((apt) => (
                                         <tr
                                             key={apt.id}
-                                            className="hover:bg-surgical-50 transition-colors cursor-pointer"
+                                            className="hover:bg-barpel-teal/5 transition-colors cursor-pointer"
                                             onClick={() => fetchAppointmentDetail(apt.id)}
                                         >
                                             <td className="px-6 py-4 whitespace-nowrap">
@@ -447,10 +447,10 @@ const AppointmentsDashboardContent = () => {
                                                                     console.error('Failed to get recording URL:', err);
                                                                 }
                                                             }}
-                                                            className="p-2 hover:bg-surgical-50 rounded-lg transition-colors"
+                                                            className="p-2 hover:bg-barpel-teal/5 rounded-lg transition-colors"
                                                             title="Download recording"
                                                         >
-                                                            <Download className="w-4 h-4 text-surgical-600" />
+                                                            <Download className="w-4 h-4 text-barpel-teal" />
                                                         </button>
                                                     )}
                                                     <button
@@ -458,10 +458,10 @@ const AppointmentsDashboardContent = () => {
                                                             e.stopPropagation();
                                                             fetchAppointmentDetail(apt.id);
                                                         }}
-                                                        className="p-2 hover:bg-surgical-50 rounded-lg transition-colors"
+                                                        className="p-2 hover:bg-barpel-teal/5 rounded-lg transition-colors"
                                                         title="Edit"
                                                     >
-                                                        <Edit2 className="w-4 h-4 text-surgical-600" />
+                                                        <Edit2 className="w-4 h-4 text-barpel-teal" />
                                                     </button>
                                                 </div>
                                             </td>
@@ -474,7 +474,7 @@ const AppointmentsDashboardContent = () => {
 
                     {/* Pagination */}
                     {totalPages > 1 && (
-                        <div className="px-6 py-4 border-t border-surgical-200 flex items-center justify-between">
+                        <div className="px-6 py-4 border-t border-barpel-slate/10 flex items-center justify-between">
                             <div className="text-sm text-barpel-slate/60">
                                 Showing {(currentPage - 1) * appointmentsPerPage + 1} to {Math.min(currentPage * appointmentsPerPage, totalAppointments)} of {totalAppointments} appointments
                             </div>
@@ -482,7 +482,7 @@ const AppointmentsDashboardContent = () => {
                                 <button
                                     onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                                     disabled={currentPage === 1}
-                                    className="px-3 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/60 hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+                                    className="px-3 py-2 rounded-lg border border-barpel-slate/10 text-sm font-medium text-barpel-slate/70 hover:bg-barpel-teal/5 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
                                 >
                                     <ChevronLeft className="w-4 h-4" />
                                     Previous
@@ -505,7 +505,7 @@ const AppointmentsDashboardContent = () => {
                                                 onClick={() => setCurrentPage(pageNum)}
                                                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${currentPage === pageNum
                                                     ? 'bg-barpel-teal text-white'
-                                                    : 'border border-surgical-200 text-barpel-slate/60 hover:bg-surgical-50'
+                                                    : 'border border-barpel-slate/10 text-barpel-slate/60 hover:bg-barpel-teal/5'
                                                     }`}
                                             >
                                                 {pageNum}
@@ -516,7 +516,7 @@ const AppointmentsDashboardContent = () => {
                                 <button
                                     onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                                     disabled={currentPage === totalPages}
-                                    className="px-3 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/60 hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+                                    className="px-3 py-2 rounded-lg border border-barpel-slate/10 text-sm font-medium text-barpel-slate/70 hover:bg-barpel-teal/5 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
                                 >
                                     Next
                                     <ChevronRight className="w-4 h-4" />
@@ -534,15 +534,15 @@ const AppointmentsDashboardContent = () => {
                         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                             <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-xl">
                                 {/* Modal Header */}
-                                <div className="sticky top-0 bg-white border-b border-surgical-200 px-6 py-4 flex items-center justify-between">
+                                <div className="sticky top-0 bg-white border-b border-barpel-slate/10 px-6 py-4 flex items-center justify-between">
                                     <div>
-                                        <p className="text-xs font-semibold text-surgical-600 uppercase tracking-wider mb-1">Appointment Details</p>
+                                        <p className="text-xs font-semibold text-barpel-teal uppercase tracking-wider mb-1">Appointment Details</p>
                                         <h2 className="text-2xl font-bold text-barpel-slate">{selectedAppointment.contact_name}</h2>
                                         <p className="text-sm text-barpel-slate/60">{selectedAppointment.service_type}</p>
                                     </div>
                                     <button
                                         onClick={() => setShowDetailModal(false)}
-                                        className="p-2 hover:bg-surgical-50 rounded-lg transition-colors"
+                                        className="p-2 hover:bg-barpel-teal/5 rounded-lg transition-colors"
                                     >
                                         <X className="w-6 h-6 text-barpel-slate/60" />
                                     </button>
@@ -574,7 +574,7 @@ const AppointmentsDashboardContent = () => {
                                     </div>
 
                                     {/* Contact Information */}
-                                    <div className="bg-surgical-50 rounded-lg p-4">
+                                    <div className="bg-barpel-teal/5 rounded-lg p-4">
                                         <p className="text-sm font-bold text-barpel-slate mb-3">Contact Information</p>
                                         <div className="space-y-2">
                                             <div className="flex items-center gap-2">
@@ -592,7 +592,7 @@ const AppointmentsDashboardContent = () => {
 
                                     {/* Linked Call */}
                                     {selectedAppointment.call_id && (
-                                        <div className="bg-surgical-50 rounded-lg p-4">
+                                        <div className="bg-barpel-teal/5 rounded-lg p-4">
                                             <p className="text-sm font-bold text-barpel-slate mb-3">Linked Call</p>
                                             <div className="space-y-2">
                                                 <div className="flex items-center gap-2">
@@ -621,7 +621,7 @@ const AppointmentsDashboardContent = () => {
                                                         setShowDetailModal(false);
                                                         router.push(`/dashboard/calls?callId=${selectedAppointment.call_id}`);
                                                     }}
-                                                    className="text-sm text-surgical-600 hover:text-surgical-700 font-medium underline"
+                                                    className="text-sm text-barpel-teal hover:text-barpel-teal-dark font-medium underline"
                                                 >
                                                     View Call Details
                                                 </button>
@@ -631,7 +631,7 @@ const AppointmentsDashboardContent = () => {
 
                                     {/* Notes */}
                                     {selectedAppointment.notes && (
-                                        <div className="bg-surgical-50 rounded-lg p-4">
+                                        <div className="bg-barpel-teal/5 rounded-lg p-4">
                                             <p className="text-sm font-bold text-barpel-slate mb-2">Notes</p>
                                             <p className="text-sm text-barpel-slate">{selectedAppointment.notes}</p>
                                         </div>
@@ -648,13 +648,13 @@ const AppointmentsDashboardContent = () => {
 
                                 {/* Inline Reschedule Form */}
                                 {showRescheduleForm && (
-                                    <div className="border-t border-surgical-200 px-6 py-4 space-y-3">
+                                    <div className="border-t border-barpel-slate/10 px-6 py-4 space-y-3">
                                         <p className="text-sm font-medium text-barpel-slate">New date and time</p>
                                         <input
                                             type="datetime-local"
                                             value={rescheduleDate}
                                             onChange={(e) => { setRescheduleDate(e.target.value); setRescheduleError(null); }}
-                                            className="w-full border border-surgical-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-barpel-teal/30"
+                                            className="w-full border border-barpel-slate/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-barpel-teal/30"
                                             aria-label="New date"
                                         />
                                         {rescheduleError && (
@@ -669,7 +669,7 @@ const AppointmentsDashboardContent = () => {
                                             </button>
                                             <button
                                                 onClick={() => setShowRescheduleForm(false)}
-                                                className="px-4 py-2 border border-surgical-200 rounded-lg text-sm font-medium text-barpel-slate/60 hover:bg-surgical-50 transition-colors"
+                                                className="px-4 py-2 border border-barpel-slate/10 rounded-lg text-sm font-medium text-barpel-slate/60 hover:bg-barpel-teal/5 transition-colors"
                                             >
                                                 Cancel
                                             </button>
@@ -678,12 +678,12 @@ const AppointmentsDashboardContent = () => {
                                 )}
 
                                 {/* Modal Footer */}
-                                <div className="border-t border-surgical-200 px-6 py-4 flex items-center justify-end gap-3">
+                                <div className="border-t border-barpel-slate/10 px-6 py-4 flex items-center justify-end gap-3">
                                     {(selectedAppointment.status === 'pending' || selectedAppointment.status === 'confirmed') && (
                                         <>
                                             <button
                                                 onClick={handleReschedule}
-                                                className="flex items-center gap-2 px-4 py-2 bg-surgical-50 text-surgical-600 rounded-lg hover:bg-surgical-100 transition-colors text-sm font-medium"
+                                                className="flex items-center gap-2 px-4 py-2 bg-barpel-teal/5 text-barpel-teal rounded-lg hover:bg-barpel-teal/10 transition-colors text-sm font-medium"
                                             >
                                                 <RotateCw className="w-4 h-4" />
                                                 Reschedule
@@ -708,7 +708,7 @@ const AppointmentsDashboardContent = () => {
                                     )}
                                     <button
                                         onClick={() => setShowDetailModal(false)}
-                                        className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/60 hover:bg-surgical-50 transition-colors"
+                                        className="px-4 py-2 rounded-lg border border-barpel-slate/10 text-sm font-medium text-barpel-slate/70 hover:bg-barpel-teal/5 transition-colors"
                                     >
                                         Close
                                     </button>
@@ -740,9 +740,9 @@ const AppointmentsDashboardContent = () => {
 export default function AppointmentsPage() {
     return (
         <React.Suspense fallback={
-            <div className="min-h-screen bg-surgical-50 flex items-center justify-center">
+            <div className="min-h-screen bg-barpel-teal/5 flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
-                    <div className="w-8 h-8 border-4 border-surgical-200 border-t-surgical-600 rounded-full animate-spin" />
+                    <div className="w-8 h-8 border-4 border-barpel-slate/10 border-t-barpel-teal rounded-full animate-spin" />
                     <p className="text-barpel-slate/60">Loading...</p>
                 </div>
             </div>

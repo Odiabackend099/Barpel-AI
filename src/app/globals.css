@@ -74,37 +74,35 @@ body {
   overflow-x: hidden;
 }
 
-/* BARPEL AI - Dim & Brandy dark theme.
-   Legacy Barpel aliases (clinical-bg, surgical, obsidian) remapped.
-   New components use barpel-brandy / barpel-dim tokens directly. */
+/* BARPEL AI - Light theme. Teal & White design system (2026). */
 :root {
-  --background:            #1C1C1E;
-  --foreground:            #F3F4F6;
+  --background:            #FFFFFF;
+  --foreground:            #102A33;
 
-  --card:                  #2C2C2E;
-  --card-foreground:       #F3F4F6;
+  --card:                  #FFFFFF;
+  --card-foreground:       #102A33;
 
-  --popover:               #2C2C2E;
-  --popover-foreground:    #F3F4F6;
+  --popover:               #FFFFFF;
+  --popover-foreground:    #102A33;
 
-  --primary:               #8D4A43;
+  --primary:               #37A195;
   --primary-foreground:    #FFFFFF;
 
-  --secondary:             #2C2C2E;
-  --secondary-foreground:  #F3F4F6;
+  --secondary:             #F3F4F6;
+  --secondary-foreground:  #102A33;
 
-  --muted:                 #2C2C2E;
-  --muted-foreground:      #9CA3AF;
+  --muted:                 #F3F4F6;
+  --muted-foreground:      #6B7280;
 
-  --accent:                #B26A62;
-  --accent-foreground:     #FFFFFF;
+  --accent:                #E8F5F2;
+  --accent-foreground:     #102A33;
 
   --destructive:           #DC2626;
   --destructive-foreground: #FFFFFF;
 
-  --border:                #3C3C3E;
-  --input:                 #2C2C2E;
-  --ring:                  #8D4A43;
+  --border:                #E5E7EB;
+  --input:                 #E5E7EB;
+  --ring:                  #37A195;
 
   --radius: 0.5rem;
 
@@ -115,7 +113,7 @@ body {
   --chart-4: 280 65% 60%;
   --chart-5: 340 75% 55%;
 
-  /* NEW Barpel Design System Colors (Teal & White, 2026) */
+  /* Barpel Design System Colors */
   --barpel-teal: #37A195;
   --barpel-teal-dark: #2F8E88;
   --barpel-slate: #102A33;
@@ -123,27 +121,27 @@ body {
   --barpel-border: #E5E7EB;
 }
 
-/* Barpel is always dark — .dark mirrors :root exactly */
+/* Barpel is light-mode only — .dark mirrors :root */
 .dark {
-  --background:            #1C1C1E;
-  --foreground:            #F3F4F6;
-  --card:                  #2C2C2E;
-  --card-foreground:       #F3F4F6;
-  --popover:               #2C2C2E;
-  --popover-foreground:    #F3F4F6;
-  --primary:               #8D4A43;
+  --background:            #FFFFFF;
+  --foreground:            #102A33;
+  --card:                  #FFFFFF;
+  --card-foreground:       #102A33;
+  --popover:               #FFFFFF;
+  --popover-foreground:    #102A33;
+  --primary:               #37A195;
   --primary-foreground:    #FFFFFF;
-  --secondary:             #2C2C2E;
-  --secondary-foreground:  #F3F4F6;
-  --muted:                 #2C2C2E;
-  --muted-foreground:      #9CA3AF;
-  --accent:                #B26A62;
-  --accent-foreground:     #FFFFFF;
+  --secondary:             #F3F4F6;
+  --secondary-foreground:  #102A33;
+  --muted:                 #F3F4F6;
+  --muted-foreground:      #6B7280;
+  --accent:                #E8F5F2;
+  --accent-foreground:     #102A33;
   --destructive:           #DC2626;
   --destructive-foreground: #FFFFFF;
-  --border:                #3C3C3E;
-  --input:                 #2C2C2E;
-  --ring:                  #8D4A43;
+  --border:                #E5E7EB;
+  --input:                 #E5E7EB;
+  --ring:                  #37A195;
 }
 
 body {

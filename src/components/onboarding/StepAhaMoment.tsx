@@ -18,7 +18,7 @@ function formatPhoneNumber(phone: string): string {
 
 export default function StepAhaMoment() {
   const router = useRouter();
-  const { phoneNumber, businessName, specialty } = useOnboardingStore();
+  const { phoneNumber, businessName } = useOnboardingStore();
   const { track } = useOnboardingTelemetry();
   const [completing, setCompleting] = useState(false);
 
@@ -28,7 +28,6 @@ export default function StepAhaMoment() {
         method: 'POST',
         body: JSON.stringify({
           clinic_name: businessName,
-          specialty,
         }),
       });
     } catch {
@@ -83,7 +82,7 @@ export default function StepAhaMoment() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="inline-flex items-center gap-3 px-5 py-3 rounded-xl bg-barpel-teal/10 border border-barpel-border mb-6"
         >
-          <Phone className="w-4 h-4 text-surgical-500" />
+          <Phone className="w-4 h-4 text-barpel-teal" />
           <p className="text-lg font-mono font-semibold text-barpel-slate tracking-tight">
             {displayNumber}
           </p>

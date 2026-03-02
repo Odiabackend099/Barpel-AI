@@ -223,10 +223,14 @@ integrationsRouter.get('/vapi/numbers', async (req: express.Request, res: expres
         orgId,
         error: mnErr.message,
       });
-    } else if (managedNumbers && managedNumbers.length > 0) {
+    }
+
+    // Null-safe: treat undefined/null result as empty array (e.g. on query error)
+    const activeManaged = managedNumbers ?? [];
+    if (activeManaged.length > 0) {
       // Managed org: return all active managed numbers with their routing direction.
       // Filter to only rows where vapi_phone_id is populated (Vapi import completed).
-      const numbers = managedNumbers
+      const numbers = activeManaged
         .filter((n: any) => n.vapi_phone_id)
         .map((n: any) => ({
           id: n.vapi_phone_id,
@@ -236,10 +240,10 @@ integrationsRouter.get('/vapi/numbers', async (req: express.Request, res: expres
           routingDirection: n.routing_direction,
         }));
 
-      if (numbers.length < managedNumbers.length) {
+      if (numbers.length < activeManaged.length) {
         log.warn('integrations', 'Some managed numbers have no vapi_phone_id — excluded from response', {
           orgId,
-          total: managedNumbers.length,
+          total: activeManaged.length,
           withVapiId: numbers.length,
         });
       }

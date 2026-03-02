@@ -22,59 +22,71 @@
  */
 
 /**
- * ✅ APPROVED Barpel AI Clinical Trust Palette
+ * ✅ APPROVED Barpel AI Teal & White Palette
  *
- * Based on official approved color palette (Brand/9.png)
- * Updated: 2026-01-29
+ * Based on official Barpel brand guidelines (2026)
+ * Updated: 2026-03-01
  *
- * The color palette is carefully designed to communicate:
- * - **Clinical Trust** (Deep Obsidian, medical-grade surgical blues)
- * - **Technology** (Surgical Blue, Clinical Blue for modern AI aesthetic)
- * - **Cleanliness** (Sterile Wash, Sky Mist for medical professionalism)
- * - **Professionalism** (Pure White, monochromatic constraint for clarity)
+ * The color palette communicates:
+ * - **Trust** (Deep Slate for authority and professionalism)
+ * - **Technology** (Barpel Teal for modern AI aesthetic)
+ * - **Cleanliness** (White/Light backgrounds for clarity)
+ * - **Professionalism** (Muted Gray for body text, clean borders)
  *
- * Design Philosophy: Monochromatic blue scale for hierarchy without clutter
+ * Design Philosophy: Teal primary on white, with neutral gray supporting colors
  *
  * @constant
  * @type {Record<string, string>}
  */
 export const brandColors = {
-  /** ✅ Deep Obsidian (#020412) - Primary dark bg, footer, headers, primary text */
-  deepObsidian: '#020412',
+  /** ✅ Barpel Teal (#37A195) - Primary CTA buttons, active states, highlights */
+  barpelTeal: '#37A195',
 
-  /** ✅ Surgical Blue (#1D4ED8) - Primary CTA buttons, active states, main interactive elements */
-  surgicalBlue: '#1D4ED8',
+  /** ✅ Barpel Teal Dark (#2F8E88) - Hover states, pressed states */
+  barpelTealDark: '#2F8E88',
 
-  /** ✅ Clinical Blue (#3B82F6) - Secondary actions, hover states, focus indicators */
-  clinicalBlue: '#3B82F6',
+  /** ✅ Deep Slate (#102A33) - Headings, primary text, dark elements */
+  deepSlate: '#102A33',
 
-  /** ✅ Sky Mist (#BFDBFE) - Borders, subtle accents, active input borders */
-  skyMist: '#BFDBFE',
+  /** ✅ Muted Gray (#6B7280) - Body text, subtitles, secondary text */
+  mutedGray: '#6B7280',
 
-  /** ✅ Sterile Wash (#F0F9FF) - Light backgrounds, sidebars, section backgrounds */
-  sterileWash: '#F0F9FF',
+  /** ✅ Border Gray (#E5E7EB) - Borders, dividers, subtle separation */
+  borderGray: '#E5E7EB',
 
-  /** ✅ Pure White (#FFFFFF) - Main backgrounds, text on dark, surface color */
+  /** ✅ Teal Light (#E8F5F2) - Accent backgrounds, selected states */
+  tealLight: '#E8F5F2',
+
+  /** ✅ Pure White (#FFFFFF) - Main backgrounds, surface color */
   pureWhite: '#FFFFFF',
 
   // ⚠️ DEPRECATED: Legacy colors kept for backwards compatibility
-  // TODO: Migrate all usages to approved palette above
-  /** @deprecated Use deepObsidian instead */
-  navyDark: '#020412',
-  /** @deprecated Use surgicalBlue instead */
-  blueBright: '#1D4ED8',
-  /** @deprecated Use clinicalBlue instead */
-  blueMedium: '#3B82F6',
-  /** @deprecated Use sterileWash instead */
-  blueLight: '#F0F9FF',
-  /** @deprecated Use skyMist instead */
-  blueSubtle: '#BFDBFE',
+  /** @deprecated Use deepSlate instead */
+  deepObsidian: '#102A33',
+  /** @deprecated Use deepSlate instead */
+  navyDark: '#102A33',
+  /** @deprecated Use barpelTeal instead */
+  surgicalBlue: '#37A195',
+  /** @deprecated Use barpelTeal instead */
+  blueBright: '#37A195',
+  /** @deprecated Use barpelTealDark instead */
+  clinicalBlue: '#2F8E88',
+  /** @deprecated Use barpelTealDark instead */
+  blueMedium: '#2F8E88',
+  /** @deprecated Use tealLight instead */
+  sterileWash: '#E8F5F2',
+  /** @deprecated Use tealLight instead */
+  blueLight: '#E8F5F2',
+  /** @deprecated Use borderGray instead */
+  skyMist: '#E5E7EB',
+  /** @deprecated Use borderGray instead */
+  blueSubtle: '#E5E7EB',
   /** @deprecated Use pureWhite instead */
   offWhite: '#FFFFFF',
-  /** @deprecated Use sterileWash instead */
-  cream: '#F0F9FF',
-  /** @deprecated Use skyMist instead */
-  sage: '#BFDBFE',
+  /** @deprecated Use tealLight instead */
+  cream: '#E8F5F2',
+  /** @deprecated Use borderGray instead */
+  sage: '#E5E7EB',
 } as const;
 
 /** Type-safe brand color names */
@@ -271,19 +283,19 @@ export function getContrastPair(bgColor: BrandColorName): {
   dark: string;
 } {
   // Dark background colors need light text
-  const darkBgs = ['navyDark', 'blueBright', 'blueMedium'];
+  const darkBgs = ['deepSlate', 'barpelTeal', 'barpelTealDark', 'navyDark', 'blueBright', 'blueMedium'];
 
   if (darkBgs.includes(bgColor)) {
     return {
-      light: brandColors.offWhite,
-      dark: brandColors.navyDark,
+      light: brandColors.pureWhite,
+      dark: brandColors.deepSlate,
     };
   }
 
   // Light background colors need dark text
   return {
-    light: brandColors.offWhite,
-    dark: brandColors.navyDark,
+    light: brandColors.pureWhite,
+    dark: brandColors.deepSlate,
   };
 }
 
@@ -344,7 +356,7 @@ export function getCSSVariables(): string {
  */
 export function getColor(
   colorName: string,
-  fallback: string = brandColors.blueBright
+  fallback: string = brandColors.barpelTeal
 ): string {
   if (colorName in brandColors) {
     return brandColors[colorName as BrandColorName];
@@ -360,14 +372,14 @@ export function getColor(
  * Helpful when animating between brand colors
  */
 export const animationColors = {
-  /** Smooth transition between navy and bright blue */
-  navyToBlueBright: [brandColors.navyDark, brandColors.blueBright],
+  /** Smooth transition between slate and teal */
+  slateToBarpelTeal: [brandColors.deepSlate, brandColors.barpelTeal],
 
   /** Gradient sweep for loading states */
   gradientSweep: [
-    brandColors.blueBright,
-    brandColors.blueMedium,
-    brandColors.blueLight,
+    brandColors.barpelTeal,
+    brandColors.barpelTealDark,
+    brandColors.tealLight,
   ],
 
   /** Accessibility-focused status colors */
@@ -375,7 +387,7 @@ export const animationColors = {
     success: '#10b981', // Emerald for success
     warning: '#f59e0b', // Amber for warning
     error: '#ef4444', // Red for errors
-    info: brandColors.blueBright,
+    info: brandColors.barpelTeal,
   },
 } as const;
 

@@ -11,6 +11,13 @@ export const PHONE_NUMBER_PRICING = {
   costPence: 1000,
 };
 
+/**
+ * Single source of truth for the local backend URL fallback.
+ * Every file that needs a backend URL default should import this
+ * instead of hardcoding 'http://localhost:8001'.
+ */
+export const DEFAULT_BACKEND_URL = 'http://localhost:8001';
+
 export const COMPANY_INFO = {
     name: "Barpel AI",
     tagline: "Surgical-Grade AI Receptionists",

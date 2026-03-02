@@ -31,7 +31,7 @@
 ### Required Credentials
 
 - **Vercel Token:** Personal access token from Vercel account
-  - Value: `aF8XCJ7H06Xr6gA7lcfXJ4Az`
+  - Value: `$VERCEL_TOKEN`
   - Purpose: Authenticate CLI without login prompt
   - Storage: Use as environment variable `VERCEL_TOKEN`
 
@@ -91,7 +91,7 @@ vercel --version
 **Set the token as an environment variable:**
 
 ```bash
-export VERCEL_TOKEN=aF8XCJ7H06Xr6gA7lcfXJ4Az
+export VERCEL_TOKEN=$VERCEL_TOKEN
 ```
 
 **Verify the token is set:**
@@ -102,7 +102,7 @@ echo $VERCEL_TOKEN
 
 **Expected Output:**
 ```
-aF8XCJ7H06Xr6gA7lcfXJ4Az
+$VERCEL_TOKEN
 ```
 
 ### Method 2: Pass Token as CLI Flag
@@ -110,7 +110,7 @@ aF8XCJ7H06Xr6gA7lcfXJ4Az
 **Deploy with token flag (one-time):**
 
 ```bash
-vercel deploy --prod --token=aF8XCJ7H06Xr6gA7lcfXJ4Az
+vercel deploy --prod --token=$VERCEL_TOKEN
 ```
 
 ### Method 3: Interactive Authentication (For Manual Use)
@@ -151,7 +151,7 @@ package.json
 **Option A: Set token in current shell session (temporary):**
 
 ```bash
-export VERCEL_TOKEN=aF8XCJ7H06Xr6gA7lcfXJ4Az
+export VERCEL_TOKEN=$VERCEL_TOKEN
 ```
 
 **Option B: Verify token is already set:**
@@ -165,13 +165,13 @@ echo $VERCEL_TOKEN
 **Deploy with production flag:**
 
 ```bash
-vercel deploy --prod --token=aF8XCJ7H06Xr6gA7lcfXJ4Az
+vercel deploy --prod --token=$VERCEL_TOKEN
 ```
 
 **Or with environment variable:**
 
 ```bash
-export VERCEL_TOKEN=aF8XCJ7H06Xr6gA7lcfXJ4Az
+export VERCEL_TOKEN=$VERCEL_TOKEN
 vercel deploy --prod
 ```
 
@@ -217,25 +217,25 @@ vercel inspect callwaiting-ai-voxanne-2026-o3alssuf4-odia-backends-projects.verc
 ### Quick Deploy (Default)
 
 ```bash
-vercel deploy --prod --token=aF8XCJ7H06Xr6gA7lcfXJ4Az
+vercel deploy --prod --token=$VERCEL_TOKEN
 ```
 
 ### Deploy with Custom Build Command
 
 ```bash
-vercel deploy --prod --token=aF8XCJ7H06Xr6gA7lcfXJ4Az --build-env NEXT_PUBLIC_API_URL=https://api.example.com
+vercel deploy --prod --token=$VERCEL_TOKEN --build-env NEXT_PUBLIC_API_URL=https://api.example.com
 ```
 
 ### Deploy Specific Directory
 
 ```bash
-vercel deploy --prod --token=aF8XCJ7H06Xr6gA7lcfXJ4Az /path/to/subdirectory
+vercel deploy --prod --token=$VERCEL_TOKEN /path/to/subdirectory
 ```
 
 ### Preview Deployment (Non-Production)
 
 ```bash
-vercel deploy --token=aF8XCJ7H06Xr6gA7lcfXJ4Az
+vercel deploy --token=$VERCEL_TOKEN
 ```
 
 **Note:** This creates a preview URL without affecting production.
@@ -348,10 +348,10 @@ Error: No existing credentials found. Please run `vercel login` or pass "--token
 
 ```bash
 # Option A: Use token flag
-vercel deploy --prod --token=aF8XCJ7H06Xr6gA7lcfXJ4Az
+vercel deploy --prod --token=$VERCEL_TOKEN
 
 # Option B: Set environment variable
-export VERCEL_TOKEN=aF8XCJ7H06Xr6gA7lcfXJ4Az
+export VERCEL_TOKEN=$VERCEL_TOKEN
 vercel deploy --prod
 ```
 
@@ -385,7 +385,7 @@ vercel inspect <deployment-url> --logs
 npm run build
 
 # Fix any errors then redeploy
-vercel deploy --prod --token=aF8XCJ7H06Xr6gA7lcfXJ4Az
+vercel deploy --prod --token=$VERCEL_TOKEN
 ```
 
 ### Issue 4: Environment Variables Missing
@@ -405,7 +405,7 @@ vercel env list
 vercel env add SUPABASE_URL <value>
 
 # Or deploy with env vars
-vercel deploy --prod --token=aF8XCJ7H06Xr6gA7lcfXJ4Az \
+vercel deploy --prod --token=$VERCEL_TOKEN \
   --build-env SUPABASE_URL=https://example.supabase.co
 ```
 
@@ -455,7 +455,7 @@ DATABASE_URL=<your-url>
 ### Deployment Command
 
 ```bash
-export VERCEL_TOKEN=aF8XCJ7H06Xr6gA7lcfXJ4Az
+export VERCEL_TOKEN=$VERCEL_TOKEN
 cd /Users/mac/Desktop/Callwaiting-AI-Voxanne-2026
 vercel deploy --prod
 ```
@@ -494,7 +494,7 @@ jobs:
 #!/bin/bash
 set -e
 
-export VERCEL_TOKEN=aF8XCJ7H06Xr6gA7lcfXJ4Az
+export VERCEL_TOKEN=$VERCEL_TOKEN
 cd /Users/mac/Desktop/Callwaiting-AI-Voxanne-2026
 
 echo "🚀 Starting Vercel deployment..."
@@ -535,7 +535,7 @@ https://vercel.com/odia-backends-projects/callwaiting-ai-voxanne-2026
 
 ```bash
 # 1. Set authentication token
-export VERCEL_TOKEN=aF8XCJ7H06Xr6gA7lcfXJ4Az
+export VERCEL_TOKEN=$VERCEL_TOKEN
 
 # 2. Navigate to project
 cd /Users/mac/Desktop/Callwaiting-AI-Voxanne-2026
@@ -555,7 +555,7 @@ echo "Production URL: https://callwaiting-ai-voxanne-2026-o3alssuf4-odia-backend
 vercel --version
 
 # 2. Deploy
-vercel deploy --prod --token=aF8XCJ7H06Xr6gA7lcfXJ4Az
+vercel deploy --prod --token=$VERCEL_TOKEN
 
 # 3. View logs
 vercel logs <deployment-url> --follow
@@ -580,7 +580,7 @@ vercel status
 
 3. **Use the token flag explicitly:**
    ```bash
-   vercel deploy --prod --token=aF8XCJ7H06Xr6gA7lcfXJ4Az
+   vercel deploy --prod --token=$VERCEL_TOKEN
    ```
 
 4. **Monitor deployments:**
@@ -606,19 +606,19 @@ vercel status
 ### Rollback to Previous Deployment
 
 ```bash
-vercel rollback --token=aF8XCJ7H06Xr6gA7lcfXJ4Az
+vercel rollback --token=$VERCEL_TOKEN
 ```
 
 ### Promote Deployment to Production
 
 ```bash
-vercel promote <deployment-url> --token=aF8XCJ7H06Xr6gA7lcfXJ4Az
+vercel promote <deployment-url> --token=$VERCEL_TOKEN
 ```
 
 ### Remove Deployment
 
 ```bash
-vercel remove <deployment-url> --token=aF8XCJ7H06Xr6gA7lcfXJ4Az
+vercel remove <deployment-url> --token=$VERCEL_TOKEN
 ```
 
 ### View Project Configuration
@@ -642,7 +642,7 @@ vercel ls
 **To deploy Voxanne AI to Vercel using CLI:**
 
 ```bash
-export VERCEL_TOKEN=aF8XCJ7H06Xr6gA7lcfXJ4Az
+export VERCEL_TOKEN=$VERCEL_TOKEN
 cd /Users/mac/Desktop/Callwaiting-AI-Voxanne-2026
 vercel deploy --prod
 ```

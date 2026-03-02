@@ -248,7 +248,7 @@ export default function CommandPalette() {
       {/* Overlay and Modal */}
       {open && (
         <div
-          className="fixed inset-0 z-50 bg-obsidian/50 flex items-start justify-center pt-20"
+          className="fixed inset-0 z-50 bg-black/50 flex items-start justify-center pt-20"
           onClick={() => setOpen(false)}
         >
           <div
@@ -267,7 +267,7 @@ export default function CommandPalette() {
                   setSearch(e.target.value);
                   setSelectedIndex(0);
                 }}
-                className="flex-1 bg-transparent text-base outline-none placeholder-obsidian/40"
+                className="flex-1 bg-transparent text-base outline-none placeholder-barpel-gray/60"
               />
               <button
                 onClick={() => setOpen(false)}

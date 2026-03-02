@@ -173,7 +173,7 @@ export default function ApiKeysPage() {
 
                         // Directly call backend status endpoint with retry
                         // Use explicit backend URL (port 3001) instead of relative path
-                        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+                        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8001';
                         const statusResponse = await fetch(`${backendUrl}/api/google-oauth/status/${orgId}`, {
                             headers: {
                                 'Content-Type': 'application/json',
@@ -401,7 +401,7 @@ export default function ApiKeysPage() {
                                 disabled={isConnectingCalendar || calendarStatus.connected}
                                 className={`px-6 py-2 text-sm font-bold rounded-lg transition-all ${calendarStatus.connected
                                     ? 'bg-surgical-50 text-surgical-600 cursor-default border border-surgical-200'
-                                    : 'bg-obsidian text-white hover:bg-obsidian/80 disabled:opacity-60 disabled:cursor-not-allowed'
+                                    : 'bg-barpel-teal text-white hover:bg-barpel-teal-dark disabled:opacity-60 disabled:cursor-not-allowed'
                                     }`}
                             >
                                 {isConnectingCalendar ? 'Working...' : calendarStatus.connected ? 'Connected' : 'Link My Google Calendar'}

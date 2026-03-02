@@ -893,6 +893,31 @@ if (process.env.NODE_ENV !== 'test') {
     // }
 
     console.log('✅ Recording pollers disabled - using webhook-only architecture');
+
+    // Verify Twilio master credentials (non-blocking)
+    const twilioSid = process.env.TWILIO_MASTER_ACCOUNT_SID;
+    const twilioToken = process.env.TWILIO_MASTER_AUTH_TOKEN;
+    if (twilioSid && twilioToken) {
+      fetch(`https://api.twilio.com/2010-04-01/Accounts/${twilioSid}.json`, {
+        headers: {
+          Authorization: 'Basic ' + Buffer.from(`${twilioSid}:${twilioToken}`).toString('base64'),
+        },
+      })
+        .then((r) => {
+          if (r.ok) {
+            console.log('✅ Twilio master credentials verified');
+          } else {
+            console.error(
+              `⚠️  Twilio master credentials FAILED (HTTP ${r.status}) — number search will not work`
+            );
+          }
+        })
+        .catch((err) => {
+          console.warn('⚠️  Could not reach Twilio API:', err.message);
+        });
+    } else {
+      console.warn('⚠️  TWILIO_MASTER_ACCOUNT_SID/TOKEN not set — managed telephony disabled');
+    }
   });
 }
 

@@ -203,8 +203,8 @@ router.post('/provision-number', async (req: Request, res: Response): Promise<vo
   const PHONE_NUMBER_COST_PENCE = 1000; // £10.00
 
   try {
-    const { area_code } = req.body;
-    const direction: 'inbound' = 'inbound';
+    const { area_code, direction: reqDirection, phone_number } = req.body;
+    const direction: 'inbound' | 'outbound' = reqDirection === 'outbound' ? 'outbound' : 'inbound';
 
     // Validate master Twilio credentials (fast fail before touching billing)
     if (!process.env.TWILIO_MASTER_ACCOUNT_SID || !process.env.TWILIO_MASTER_AUTH_TOKEN) {
@@ -260,6 +260,7 @@ router.post('/provision-number', async (req: Request, res: Response): Promise<vo
       country: 'US',
       numberType: 'local',
       areaCode: area_code || undefined,
+      phoneNumber: phone_number || undefined,
       direction,
     });
 

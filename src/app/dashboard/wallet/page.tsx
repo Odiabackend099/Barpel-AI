@@ -421,7 +421,7 @@ const WalletPageContent = () => {
                                 role="switch"
                                 aria-checked={arEnabled}
                                 onClick={() => setArEnabled(!arEnabled)}
-                                className={`relative w-11 h-6 rounded-full transition-colors ${arEnabled ? 'bg-barpel-teal' : 'bg-obsidian/20'}`}
+                                className={`relative w-11 h-6 rounded-full transition-colors ${arEnabled ? 'bg-barpel-teal' : 'bg-gray-300'}`}
                             >
                                 <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${arEnabled ? 'translate-x-5' : 'translate-x-0'}`} />
                             </button>

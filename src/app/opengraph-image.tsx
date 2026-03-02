@@ -15,7 +15,7 @@ export const contentType = 'image/png'
 // Image generation
 export default async function Image() {
   // Fetch the Barpel logo (required for Edge Runtime)
-  const logoUrl = new URL('/Brand/1.png', 'https://barpel.ai').toString()
+  const logoUrl = new URL('/images/logos/logo_master_transparent.png', 'https://barpel.ai').toString()
   const logoResponse = await fetch(logoUrl)
   const logoArrayBuffer = await logoResponse.arrayBuffer()
   const logoBase64 = Buffer.from(logoArrayBuffer).toString('base64')
@@ -27,7 +27,7 @@ export default async function Image() {
       <div
         style={{
           fontSize: 60,
-          background: '#020412', // Obsidian background
+          background: '#F0FAF9', // Light teal background
           width: '100%',
           height: '100%',
           display: 'flex',
@@ -38,7 +38,7 @@ export default async function Image() {
           position: 'relative',
         }}
       >
-        {/* Gradient accent (surgical blue) */}
+        {/* Gradient accent (teal) */}
         <div
           style={{
             position: 'absolute',
@@ -46,7 +46,7 @@ export default async function Image() {
             left: 0,
             width: '100%',
             height: '100%',
-            background: 'radial-gradient(circle at 30% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%)',
+            background: 'radial-gradient(circle at 30% 50%, rgba(55, 161, 149, 0.15) 0%, transparent 50%)',
             opacity: 0.6,
           }}
         />
@@ -73,7 +73,7 @@ export default async function Image() {
               background: 'white',
               padding: '30px 60px',
               borderRadius: '16px',
-              boxShadow: '0 8px 32px rgba(59, 130, 246, 0.3)',
+              boxShadow: '0 8px 32px rgba(55, 161, 149, 0.3)',
             }}
           >
             <img
@@ -92,12 +92,12 @@ export default async function Image() {
             style={{
               fontSize: 60,
               fontWeight: 900,
-              color: '#ffffff',
+              color: '#102A33',
               lineHeight: 1.2,
               marginBottom: '28px',
               maxWidth: '1000px',
               letterSpacing: '-0.03em',
-              textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)',
+              textShadow: 'none',
             }}
           >
             The #1 AI Receptionist for Clinics & Spas
@@ -108,7 +108,7 @@ export default async function Image() {
             style={{
               fontSize: 32,
               fontWeight: 600,
-              color: '#E2E8F0', // Lighter slate for better visibility
+              color: '#6B7280', // Muted gray for better readability on light bg
               display: 'flex',
               alignItems: 'center',
               gap: '24px',
@@ -116,9 +116,9 @@ export default async function Image() {
             }}
           >
             <span>24/7 Call Answering</span>
-            <span style={{ color: '#3B82F6', fontSize: '36px' }}>•</span>
+            <span style={{ color: '#37A195', fontSize: '36px' }}>•</span>
             <span>Appointment Booking</span>
-            <span style={{ color: '#3B82F6', fontSize: '36px' }}>•</span>
+            <span style={{ color: '#37A195', fontSize: '36px' }}>•</span>
             <span>HIPAA Compliant</span>
           </div>
 
@@ -128,9 +128,9 @@ export default async function Image() {
               marginTop: '50px',
               width: '300px',
               height: '6px',
-              background: 'linear-gradient(90deg, transparent 0%, #3B82F6 50%, transparent 100%)',
+              background: 'linear-gradient(90deg, transparent 0%, #37A195 50%, transparent 100%)',
               borderRadius: '3px',
-              boxShadow: '0 0 20px rgba(59, 130, 246, 0.6)',
+              boxShadow: '0 0 20px rgba(55, 161, 149, 0.6)',
             }}
           />
         </div>

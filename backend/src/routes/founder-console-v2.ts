@@ -2312,12 +2312,14 @@ router.post(
         // @ai-invariant DO NOT REMOVE this vapi_phone_number_id write.
         // Without it, the outbound call-back endpoint in contacts.ts will fail because
         // agents.vapi_phone_number_id will be null. This is the primary write path.
-        if (agentRole === 'outbound' && config.vapiPhoneNumberId !== undefined) {
+        // Extended to BOTH directions (inbound + outbound) so the onboarding wizard
+        // can link phone numbers to inbound agents during Step 5 (Sync & Go Live).
+        if (config.vapiPhoneNumberId !== undefined) {
           payload.vapi_phone_number_id = config.vapiPhoneNumberId || null;
-          logger.info('Outbound phone number ID included in payload', {
-            vapiPhoneNumberId: config.vapiPhoneNumberId
+          logger.info('Phone number ID included in payload', {
+            vapiPhoneNumberId: config.vapiPhoneNumberId,
+            agentRole,
           });
-
         }
 
         // Voice quality parameters — ElevenLabs only (silently ignored by Vapi for other providers)

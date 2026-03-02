@@ -390,7 +390,7 @@ export default function PhoneSettingsPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-surgical-600 mx-auto" />
+          <Loader2 className="w-8 h-8 animate-spin text-barpel-teal mx-auto" />
           {recovering && (
             <p className="text-sm text-barpel-slate/60 mt-3">Checking pending verification...</p>
           )}
@@ -403,8 +403,8 @@ export default function PhoneSettingsPage() {
     <div className="max-w-5xl mx-auto space-y-8">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <div className="w-12 h-12 rounded-xl bg-surgical-50 flex items-center justify-center border border-surgical-200">
-          <Phone className="w-6 h-6 text-surgical-600" />
+        <div className="w-12 h-12 rounded-xl bg-barpel-teal/5 flex items-center justify-center border border-barpel-slate/10">
+          <Phone className="w-6 h-6 text-barpel-teal" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-barpel-slate">
@@ -438,12 +438,12 @@ export default function PhoneSettingsPage() {
       {/* Two-Lane Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* LANE 1: INBOUND - AI Phone Number */}
-        <div className="bg-white border border-surgical-200 rounded-xl p-6">
+        <div className="bg-white border border-barpel-slate/10 rounded-xl p-6">
           {/* PROMINENT INBOUND HEADER */}
-          <div className="mb-6 pb-4 border-b border-surgical-200">
+          <div className="mb-6 pb-4 border-b border-barpel-slate/10">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-lg bg-surgical-100 flex items-center justify-center">
-                <Smartphone className="w-5 h-5 text-surgical-600" />
+              <div className="w-10 h-10 rounded-lg bg-barpel-teal/10 flex items-center justify-center">
+                <Smartphone className="w-5 h-5 text-barpel-teal" />
               </div>
               <div className="flex-1">
                 <h2 className="text-lg font-semibold text-barpel-slate">
@@ -465,22 +465,22 @@ export default function PhoneSettingsPage() {
           {status?.inbound.hasManagedNumber ? (
             // Active managed number
             <div className="space-y-4">
-              <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4">
+              <div className="bg-barpel-teal/5 border border-barpel-slate/10 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-2xl font-mono font-bold text-surgical-600">
+                  <p className="text-2xl font-mono font-bold text-barpel-teal">
                     {status.inbound.managedNumber}
                   </p>
                   <div className="flex items-center gap-2">
                     {status.inbound.forwardingConfig ? (
                       <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                         status.inbound.forwardingConfig.forwardingType === 'total_ai'
-                          ? 'bg-surgical-100 text-surgical-700 border border-surgical-200'
-                          : 'bg-surgical-50 text-barpel-slate/70 border border-surgical-200'
+                          ? 'bg-barpel-teal/10 text-barpel-teal-dark border border-barpel-slate/10'
+                          : 'bg-barpel-teal/5 text-barpel-slate/70 border border-barpel-slate/10'
                       }`}>
                         {status.inbound.forwardingConfig.forwardingType === 'total_ai' ? 'AI Handles All Calls' : 'AI + Human Backup'}
                       </span>
                     ) : null}
-                    <span className="text-xs bg-surgical-100 text-surgical-600 px-2 py-1 rounded-full font-medium">
+                    <span className="text-xs bg-barpel-teal/10 text-barpel-teal px-2 py-1 rounded-full font-medium">
                       Active
                     </span>
                   </div>
@@ -491,7 +491,7 @@ export default function PhoneSettingsPage() {
               </div>
 
               {/* What happens next */}
-              <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-3">
+              <div className="bg-barpel-teal/5 border border-barpel-slate/10 rounded-lg p-3">
                 <p className="text-xs font-medium text-barpel-slate mb-1">✓ Number active and ready</p>
                 <p className="text-xs text-barpel-slate/60">Forward your office calls to this number using the carrier code below</p>
               </div>
@@ -503,17 +503,17 @@ export default function PhoneSettingsPage() {
 
               {/* Agent Linking */}
               {agents.inbound && (
-                <div className="bg-white border border-surgical-200 rounded-lg p-3">
+                <div className="bg-white border border-barpel-slate/10 rounded-lg p-3">
                   <p className="text-xs text-barpel-slate/60 mb-2 font-medium">Linked Agent</p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-surgical-600" />
+                      <User className="w-4 h-4 text-barpel-teal" />
                       <p className="text-sm font-medium text-barpel-slate">{agents.inbound.name}</p>
                     </div>
                     <button
                       onClick={() => handleLinkAgent('inbound')}
                       disabled={assigningAgent === 'inbound'}
-                      className="text-xs px-3 py-1.5 border border-surgical-200 text-surgical-600 rounded-lg hover:bg-surgical-50 transition-colors font-medium disabled:opacity-50 flex items-center gap-1.5"
+                      className="text-xs px-3 py-1.5 border border-barpel-slate/10 text-barpel-teal rounded-lg hover:bg-barpel-teal/5 transition-colors font-medium disabled:opacity-50 flex items-center gap-1.5"
                     >
                       {assigningAgent === 'inbound' ? (
                         <><Loader2 className="w-3 h-3 animate-spin" />Syncing...</>
@@ -536,8 +536,8 @@ export default function PhoneSettingsPage() {
           ) : (
             // Empty state - buy number
             <div className="text-center py-8">
-              <div className="w-16 h-16 rounded-full bg-surgical-50 mx-auto flex items-center justify-center mb-4 border border-surgical-200">
-                <Smartphone className="w-8 h-8 text-surgical-400" />
+              <div className="w-16 h-16 rounded-full bg-barpel-teal/5 mx-auto flex items-center justify-center mb-4 border border-barpel-slate/10">
+                <Smartphone className="w-8 h-8 text-barpel-teal/40" />
               </div>
               <h3 className="text-lg font-semibold text-barpel-slate mb-2">
                 Get Your AI Phone Number
@@ -560,12 +560,12 @@ export default function PhoneSettingsPage() {
         </div>
 
         {/* LANE 2: OUTBOUND - Verified Caller ID */}
-        <div className="bg-white border border-surgical-200 rounded-xl p-6">
+        <div className="bg-white border border-barpel-slate/10 rounded-xl p-6">
           {/* PROMINENT OUTBOUND HEADER */}
-          <div className="mb-6 pb-4 border-b border-surgical-200">
+          <div className="mb-6 pb-4 border-b border-barpel-slate/10">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-lg bg-surgical-100 flex items-center justify-center">
-                <Phone className="w-5 h-5 text-surgical-600" />
+              <div className="w-10 h-10 rounded-lg bg-barpel-teal/10 flex items-center justify-center">
+                <Phone className="w-5 h-5 text-barpel-teal" />
               </div>
               <div className="flex-1">
                 <h2 className="text-lg font-semibold text-barpel-slate">
@@ -582,12 +582,12 @@ export default function PhoneSettingsPage() {
           {status?.outbound.hasManagedOutboundNumber ? (
             <div className="mb-6 space-y-3">
               <h3 className="text-base font-semibold text-barpel-slate">Outbound Number</h3>
-              <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4">
+              <div className="bg-barpel-teal/5 border border-barpel-slate/10 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-2xl font-mono font-bold text-surgical-600">
+                  <p className="text-2xl font-mono font-bold text-barpel-teal">
                     {status.outbound.managedOutboundNumber}
                   </p>
-                  <span className="text-xs bg-surgical-100 text-surgical-600 px-2 py-1 rounded-full font-medium">
+                  <span className="text-xs bg-barpel-teal/10 text-barpel-teal px-2 py-1 rounded-full font-medium">
                     Active
                   </span>
                 </div>
@@ -596,16 +596,16 @@ export default function PhoneSettingsPage() {
 
               {/* Agent Linking */}
               {agents.outbound && (
-                <div className="bg-white border border-surgical-200 rounded-lg p-3">
+                <div className="bg-white border border-barpel-slate/10 rounded-lg p-3">
                   <p className="text-xs text-barpel-slate/60 mb-2 font-medium">Linked Agent</p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-surgical-600" />
+                      <User className="w-4 h-4 text-barpel-teal" />
                       <p className="text-sm font-medium text-barpel-slate">{agents.outbound.name}</p>
                       {agents.outbound.vapiPhoneNumberId === status.outbound.managedOutboundVapiPhoneId ? (
-                        <span className="text-xs bg-surgical-100 text-surgical-600 px-2 py-0.5 rounded-full">Active</span>
+                        <span className="text-xs bg-barpel-teal/10 text-barpel-teal px-2 py-0.5 rounded-full">Active</span>
                       ) : (
-                        <span className="text-xs bg-obsidian/10 text-barpel-slate/50 px-2 py-0.5 rounded-full">Not synced</span>
+                        <span className="text-xs bg-gray-100 text-barpel-gray px-2 py-0.5 rounded-full">Not synced</span>
                       )}
                     </div>
                     {agents.outbound.vapiPhoneNumberId !== status.outbound.managedOutboundVapiPhoneId && (
@@ -657,10 +657,10 @@ export default function PhoneSettingsPage() {
           {status?.outbound.hasVerifiedNumber && verificationStep !== 'success' ? (
             // Active verified number
             <div className="space-y-4">
-              <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4">
+              <div className="bg-barpel-teal/5 border border-barpel-slate/10 rounded-lg p-4">
                 <div className="flex items-center gap-3 mb-2">
-                  <CheckCircle className="w-5 h-5 text-surgical-600" />
-                  <p className="text-2xl font-mono font-bold text-surgical-700">
+                  <CheckCircle className="w-5 h-5 text-barpel-teal" />
+                  <p className="text-2xl font-mono font-bold text-barpel-teal-dark">
                     {status.outbound.verifiedNumber}
                   </p>
                 </div>
@@ -669,7 +669,7 @@ export default function PhoneSettingsPage() {
                 </p>
               </div>
 
-              <div className={`border rounded-lg p-4 ${status.outbound.vapiLinked ? 'bg-surgical-50 border-surgical-200' : 'bg-surgical-50 border-surgical-200'}`}>
+              <div className={`border rounded-lg p-4 ${status.outbound.vapiLinked ? 'bg-barpel-teal/5 border-barpel-slate/10' : 'bg-barpel-teal/5 border-barpel-slate/10'}`}>
                 {status.outbound.vapiLinked ? (
                   <p className="text-sm text-barpel-slate">
                     <strong>Ready for outbound calls.</strong> When your AI calls customers, they see <strong>{status.outbound.verifiedNumber}</strong>.
@@ -700,7 +700,7 @@ export default function PhoneSettingsPage() {
                       When your AI calls customers, they'll see this number on their caller ID.
                     </p>
 
-                    <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-3 space-y-2">
+                    <div className="bg-barpel-teal/5 border border-barpel-slate/10 rounded-lg p-3 space-y-2">
                       <p className="text-xs font-medium text-barpel-slate">Why this matters:</p>
                       <ul className="text-xs text-barpel-slate/70 space-y-1">
                         <li>• Customers recognize YOUR number (not "Unknown")</li>
@@ -711,7 +711,7 @@ export default function PhoneSettingsPage() {
                   </div>
 
                   {/* Input field - Progressive disclosure: show detailed steps only when needed (step 2) */}
-                  <div className="border-t border-surgical-200 pt-4">
+                  <div className="border-t border-barpel-slate/10 pt-4">
                     <label className="block text-sm font-medium text-barpel-slate mb-2">
                       Your Business Phone Number
                     </label>
@@ -721,20 +721,20 @@ export default function PhoneSettingsPage() {
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         placeholder="+1234567890"
-                        className={`w-full px-4 py-2 pr-12 border rounded-lg focus:ring-2 focus:ring-surgical-500 outline-none font-mono transition-colors ${
+                        className={`w-full px-4 py-2 pr-12 border rounded-lg focus:ring-2 focus:ring-barpel-teal outline-none font-mono transition-colors ${
                           isValidPhoneFormat
-                            ? 'border-surgical-500 focus:border-surgical-500'
-                            : 'border-surgical-200 focus:border-surgical-500'
+                            ? 'border-barpel-teal/50 focus:border-barpel-teal/50'
+                            : 'border-barpel-slate/10 focus:border-barpel-teal/50'
                         }`}
                       />
                       {isValidPhoneFormat && detectedCountry && (
                         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                          <CheckCircle className="w-5 h-5 text-surgical-600" />
+                          <CheckCircle className="w-5 h-5 text-barpel-teal" />
                         </div>
                       )}
                     </div>
                     {isValidPhoneFormat && detectedCountry ? (
-                      <p className="text-xs text-surgical-600 mt-1 flex items-center gap-1">
+                      <p className="text-xs text-barpel-teal mt-1 flex items-center gap-1">
                         ✓ Valid {getCountryName(detectedCountry)} number detected
                       </p>
                     ) : (
@@ -771,7 +771,7 @@ export default function PhoneSettingsPage() {
               {verificationStep === 'verify' && (
                 <>
                   {/* Status header — different message if recovered from navigation */}
-                  <div className="border border-surgical-200 rounded-lg p-3 bg-surgical-50">
+                  <div className="border border-barpel-slate/10 rounded-lg p-3 bg-barpel-teal/5">
                     {verificationCode ? (
                       <>
                         <p className="text-sm font-medium text-barpel-slate mb-1">
@@ -796,12 +796,12 @@ export default function PhoneSettingsPage() {
 
                   {/* VALIDATION CODE DISPLAY - CRITICAL */}
                   {verificationCode && (
-                    <div className="bg-surgical-50 border-2 border-surgical-500 rounded-lg p-6 text-center">
+                    <div className="bg-barpel-teal/5 border-2 border-barpel-teal/50 rounded-lg p-6 text-center">
                       <p className="text-sm font-medium text-barpel-slate mb-3">
                         🔑 Your Verification Code
                       </p>
-                      <div className="bg-white border-2 border-surgical-400 rounded-lg p-4 mb-3">
-                        <p className="text-4xl font-bold text-surgical-600 tracking-widest font-mono">
+                      <div className="bg-white border-2 border-barpel-teal/40 rounded-lg p-4 mb-3">
+                        <p className="text-4xl font-bold text-barpel-teal tracking-widest font-mono">
                           {verificationCode}
                         </p>
                       </div>
@@ -812,7 +812,7 @@ export default function PhoneSettingsPage() {
                   )}
 
                   {/* Phone will ring notice */}
-                  <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4">
+                  <div className="bg-barpel-teal/5 border border-barpel-slate/10 rounded-lg p-4">
                     <p className="text-sm text-barpel-slate font-medium mb-2">
                       📞 Your phone will ring in ~30 seconds
                     </p>
@@ -822,19 +822,19 @@ export default function PhoneSettingsPage() {
 
                       <div className="space-y-2 text-xs text-barpel-slate/70">
                         <div className="flex gap-2">
-                          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-surgical-100 text-surgical-700 flex items-center justify-center text-xs font-bold">1</span>
+                          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-barpel-teal/10 text-barpel-teal-dark flex items-center justify-center text-xs font-bold">1</span>
                           <p className="pt-0.5">Answer the call from Twilio (+14157234000)</p>
                         </div>
                         <div className="flex gap-2">
-                          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-surgical-100 text-surgical-700 flex items-center justify-center text-xs font-bold">2</span>
+                          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-barpel-teal/10 text-barpel-teal-dark flex items-center justify-center text-xs font-bold">2</span>
                           <p className="pt-0.5">Automated voice will ask: "Please enter your verification code"</p>
                         </div>
                         <div className="flex gap-2">
-                          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-surgical-100 text-surgical-700 flex items-center justify-center text-xs font-bold">3</span>
+                          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-barpel-teal/10 text-barpel-teal-dark flex items-center justify-center text-xs font-bold">3</span>
                           <p className="pt-0.5">Enter the code shown above using your phone's keypad<br/><span className="text-barpel-slate/50">(Enter it on your PHONE, not on this screen)</span></p>
                         </div>
                         <div className="flex gap-2">
-                          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-surgical-100 text-surgical-700 flex items-center justify-center text-xs font-bold">4</span>
+                          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-barpel-teal/10 text-barpel-teal-dark flex items-center justify-center text-xs font-bold">4</span>
                           <p className="pt-0.5">Once you've entered it, click "Verify & Complete Setup" below</p>
                         </div>
                       </div>
@@ -848,7 +848,7 @@ export default function PhoneSettingsPage() {
                     </p>
                     <button
                       onClick={handleSendVerification}
-                      className="text-xs text-surgical-600 hover:text-surgical-700 font-medium mt-1"
+                      className="text-xs text-barpel-teal hover:text-barpel-teal-dark font-medium mt-1"
                     >
                       Resend Verification Call
                     </button>
@@ -863,7 +863,7 @@ export default function PhoneSettingsPage() {
                   <div className="flex gap-2">
                     <button
                       onClick={resetVerification}
-                      className="flex-1 px-4 py-2 border border-surgical-200 text-barpel-slate rounded-lg hover:bg-surgical-50 transition-colors font-medium"
+                      className="flex-1 px-4 py-2 border border-barpel-slate/10 text-barpel-slate rounded-lg hover:bg-barpel-teal/5 transition-colors font-medium"
                     >
                       Cancel
                     </button>
@@ -892,8 +892,8 @@ export default function PhoneSettingsPage() {
                 <div className="space-y-4">
                   {/* Success header */}
                   <div className="text-center py-6">
-                    <div className="w-16 h-16 rounded-full bg-surgical-50 mx-auto flex items-center justify-center mb-3 border border-surgical-200">
-                      <CheckCircle className="w-8 h-8 text-surgical-600" />
+                    <div className="w-16 h-16 rounded-full bg-barpel-teal/5 mx-auto flex items-center justify-center mb-3 border border-barpel-slate/10">
+                      <CheckCircle className="w-8 h-8 text-barpel-teal" />
                     </div>
                     <h3 className="text-lg font-semibold text-barpel-slate mb-2">
                       🎉 Verification Complete!
@@ -904,20 +904,20 @@ export default function PhoneSettingsPage() {
                   </div>
 
                   {/* What this means */}
-                  <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4 space-y-3">
+                  <div className="bg-barpel-teal/5 border border-barpel-slate/10 rounded-lg p-4 space-y-3">
                     <p className="text-xs font-medium text-barpel-slate">What this means:</p>
 
                     <div className="space-y-2 text-xs text-barpel-slate/70">
                       <div className="flex gap-2">
-                        <span className="text-surgical-600">✓</span>
+                        <span className="text-barpel-teal">✓</span>
                         <p>When your AI calls customers, they see YOUR business number</p>
                       </div>
                       <div className="flex gap-2">
-                        <span className="text-surgical-600">✓</span>
+                        <span className="text-barpel-teal">✓</span>
                         <p>No more "Unknown Number" or random phone numbers</p>
                       </div>
                       <div className="flex gap-2">
-                        <span className="text-surgical-600">✓</span>
+                        <span className="text-barpel-teal">✓</span>
                         <p>Higher answer rates = more conversations</p>
                       </div>
                     </div>
@@ -940,10 +940,10 @@ export default function PhoneSettingsPage() {
       </div>
 
       {/* Advanced Section - BYOC */}
-      <div className="border border-surgical-200 rounded-xl overflow-hidden">
+      <div className="border border-barpel-slate/10 rounded-xl overflow-hidden">
         <button
           onClick={() => setShowAdvanced(!showAdvanced)}
-          className="w-full px-6 py-4 bg-white hover:bg-surgical-50 transition-colors flex items-center justify-between"
+          className="w-full px-6 py-4 bg-white hover:bg-barpel-teal/5 transition-colors flex items-center justify-between"
         >
           <div className="text-left">
             <h3 className="text-sm font-semibold text-barpel-slate">
@@ -961,13 +961,13 @@ export default function PhoneSettingsPage() {
         </button>
 
         {showAdvanced && (
-          <div className="px-6 py-4 bg-surgical-50 border-t border-surgical-200">
+          <div className="px-6 py-4 bg-barpel-teal/5 border-t border-barpel-slate/10">
             <p className="text-sm text-barpel-slate/60 mb-4">
               If you already have a Twilio account and phone number, you can configure it manually:
             </p>
             <a
               href="/dashboard/inbound-config"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-surgical-200 text-surgical-600 rounded-lg hover:bg-surgical-50 transition-colors font-medium"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-barpel-slate/10 text-barpel-teal rounded-lg hover:bg-barpel-teal/5 transition-colors font-medium"
             >
               Configure Your Own Provider
               <ExternalLink className="w-4 h-4" />
@@ -1002,7 +1002,7 @@ export default function PhoneSettingsPage() {
               <button
                 onClick={() => setConfirmDeleteManaged(false)}
                 disabled={deleting}
-                className="flex-1 px-4 py-2 border border-surgical-200 text-barpel-slate rounded-lg hover:bg-surgical-50 transition-colors font-medium"
+                className="flex-1 px-4 py-2 border border-barpel-slate/10 text-barpel-slate rounded-lg hover:bg-barpel-teal/5 transition-colors font-medium"
               >
                 Cancel
               </button>
@@ -1032,7 +1032,7 @@ export default function PhoneSettingsPage() {
               <button
                 onClick={() => setConfirmDeleteManagedOutbound(false)}
                 disabled={deleting}
-                className="flex-1 px-4 py-2 border border-surgical-200 text-barpel-slate rounded-lg hover:bg-surgical-50 transition-colors font-medium"
+                className="flex-1 px-4 py-2 border border-barpel-slate/10 text-barpel-slate rounded-lg hover:bg-barpel-teal/5 transition-colors font-medium"
               >
                 Cancel
               </button>
@@ -1062,7 +1062,7 @@ export default function PhoneSettingsPage() {
               <button
                 onClick={() => setConfirmDeleteVerified(false)}
                 disabled={deleting}
-                className="flex-1 px-4 py-2 border border-surgical-200 text-barpel-slate rounded-lg hover:bg-surgical-50 transition-colors font-medium"
+                className="flex-1 px-4 py-2 border border-barpel-slate/10 text-barpel-slate rounded-lg hover:bg-barpel-teal/5 transition-colors font-medium"
               >
                 Cancel
               </button>

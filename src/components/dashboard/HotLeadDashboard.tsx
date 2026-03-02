@@ -50,7 +50,7 @@ export default function HotLeadDashboard() {
 
     if (error) {
         return (
-            <div className="bg-white p-6 rounded-2xl mb-8 border border-obsidian/20 shadow-md">
+            <div className="bg-white p-6 rounded-2xl mb-8 border border-barpel-border shadow-md">
                 <div className="flex items-center gap-2 text-barpel-slate">
                     <AlertCircle className="w-5 h-5" />
                     <p className="font-medium">Error loading leads: {error.message || 'Unknown error'}</p>
@@ -80,7 +80,7 @@ export default function HotLeadDashboard() {
         return (
             <div className="bg-white p-6 rounded-2xl relative overflow-hidden group mb-8 border border-surgical-200 shadow-md">
                 <div className="flex items-center gap-4">
-                    <div className="p-3 bg-surgical-200/20 rounded-full text-surgical-500">
+                    <div className="p-3 bg-barpel-teal/10 rounded-full text-barpel-teal">
                         <Sparkles className="w-6 h-6" />
                     </div>
                     <div>

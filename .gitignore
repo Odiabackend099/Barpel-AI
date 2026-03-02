@@ -56,3 +56,9 @@ testsprite-reports/
 # Render deployment files with credentials
 RENDER_ENV_VARIABLES.txt
 backend/.env.render
+
+# Security: certificates and private keys
+*.pem
+*.key
+*.p12
+*.pfx

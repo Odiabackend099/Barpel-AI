@@ -8,23 +8,23 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Primary Button - Surgical Blue - Highest emphasis
-        default: "bg-surgical-600 text-white shadow-lg shadow-surgical-600/20 hover:shadow-xl hover:shadow-surgical-600/30 hover:scale-105 active:scale-100 focus-visible:ring-surgical-600/50",
+        // Primary Button - Barpel Teal - Highest emphasis
+        default: "bg-barpel-teal text-white shadow-lg shadow-barpel-teal/20 hover:shadow-xl hover:shadow-barpel-teal/30 hover:scale-105 active:scale-100 focus-visible:ring-barpel-teal/50",
 
         // Secondary Button - Medium emphasis
-        secondary: "bg-surgical-500 text-white shadow-md shadow-surgical-500/15 hover:shadow-lg hover:shadow-surgical-500/25 hover:scale-105 active:scale-100 focus-visible:ring-surgical-500/50",
+        secondary: "bg-barpel-teal-dark text-white shadow-md shadow-barpel-teal-dark/15 hover:shadow-lg hover:shadow-barpel-teal-dark/25 hover:scale-105 active:scale-100 focus-visible:ring-barpel-teal-dark/50",
 
         // Outline Button - Low emphasis
-        outline: "bg-white text-surgical-600 border-2 border-surgical-200 shadow-sm hover:shadow-md hover:bg-surgical-50 hover:border-surgical-300 active:bg-surgical-100 focus-visible:ring-surgical-600/50",
+        outline: "bg-white text-barpel-teal border-2 border-barpel-teal/20 shadow-sm hover:shadow-md hover:bg-barpel-teal/5 hover:border-barpel-teal/30 active:bg-barpel-teal/10 focus-visible:ring-barpel-teal/50",
 
         // Ghost Button - Minimal style
-        ghost: "text-surgical-600 hover:bg-surgical-100/50 active:bg-surgical-100 focus-visible:ring-surgical-600/30",
+        ghost: "text-barpel-teal hover:bg-barpel-teal/10 active:bg-barpel-teal/15 focus-visible:ring-barpel-teal/30",
 
-        // Destructive Button - Deep Obsidian - For delete/danger actions
-        destructive: "bg-obsidian text-white shadow-md shadow-obsidian/20 hover:shadow-lg hover:shadow-obsidian/30 hover:scale-105 active:scale-100 focus-visible:ring-obsidian/50",
+        // Destructive Button - Deep Slate - For delete/danger actions
+        destructive: "bg-barpel-slate text-white shadow-md shadow-barpel-slate/20 hover:shadow-lg hover:shadow-barpel-slate/30 hover:scale-105 active:scale-100 focus-visible:ring-barpel-slate/50",
 
         // Link Button - Text only with underline
-        link: "text-surgical-600 font-medium underline-offset-4 hover:text-surgical-700 hover:underline focus-visible:ring-surgical-600/30",
+        link: "text-barpel-teal font-medium underline-offset-4 hover:text-barpel-teal-dark hover:underline focus-visible:ring-barpel-teal/30",
       },
       size: {
         default: "h-10 px-4 py-2.5",

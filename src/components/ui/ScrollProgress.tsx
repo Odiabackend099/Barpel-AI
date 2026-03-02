@@ -19,7 +19,7 @@ interface ScrollProgressProps {
 }
 
 export default function ScrollProgress({
-    color = brandColors.blueBright,
+    color = brandColors.barpelTeal,
     height = 3,
     position = 'top',
     show = true,
@@ -61,7 +61,7 @@ export default function ScrollProgress({
  * Alternative: Circular scroll progress indicator (top-right corner)
  */
 export function CircularScrollProgress({
-    color = brandColors.blueBright,
+    color = brandColors.barpelTeal,
     size = 60,
     strokeWidth = 4,
     show = true,
@@ -144,7 +144,7 @@ export function CircularScrollProgress({
  */
 export function SectionScrollProgress({
     targetRef,
-    color = brandColors.blueBright,
+    color = brandColors.barpelTeal,
     height = 3,
     position = 'top',
     show = true,

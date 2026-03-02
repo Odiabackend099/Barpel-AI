@@ -1,226 +1,324 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send } from "lucide-react";
-import Image from "next/image";
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MessageCircle, X, Send, Phone, Calendar, FileText, Mail } from 'lucide-react';
+import Image from 'next/image';
 
-export const ChatWidget = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState<{ role: "bot" | "user" | "system"; text: string }[]>([
-        { role: "bot", text: "👋 Hi there! I'm Barpel, your AI front desk assistant for Barpel AI. I'm here to help you 24/7!" },
-        { role: "bot", text: "I can answer questions about our AI receptionist, pricing, features, integrations, security, setup, or anything else you'd like to know. Whether you're a prospect exploring options or an existing customer needing support, I'm here to help!" }
+interface Message {
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
+}
+
+const INITIAL_GREETING = "Hi! I'm here to help you learn about Barpel AI. What brings you here today?";
+
+const QUICK_ACTIONS = [
+  { icon: Calendar, label: 'Schedule a Demo', action: 'demo' },
+  { icon: FileText, label: 'View Pricing', action: 'pricing' },
+  { icon: FileText, label: 'See Case Studies', action: 'cases' },
+  { icon: Mail, label: 'Contact Sales', action: 'contact' },
+];
+
+export default function BarpelChatWidget() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Load messages from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem('barpel-chat-messages');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        setMessages(parsed.map((m: any) => ({ ...m, timestamp: new Date(m.timestamp) })));
+      } catch (e) {
+        console.error('Failed to parse stored messages', e);
+        initializeChat();
+      }
+    } else {
+      initializeChat();
+    }
+  }, []);
+
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem('barpel-chat-messages', JSON.stringify(messages));
+    }
+  }, [messages]);
+
+  // Auto-scroll to bottom when messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const initializeChat = () => {
+    setMessages([
+      {
+        role: 'assistant',
+        content: INITIAL_GREETING,
+        timestamp: new Date(),
+      },
     ]);
-    const [inputValue, setInputValue] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const [hasInteracted, setHasInteracted] = useState(false);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+  };
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const handleQuickAction = async (action: string) => {
+    let userMessage = '';
+    switch (action) {
+      case 'demo':
+        userMessage = 'I want to schedule a demo';
+        break;
+      case 'pricing':
+        userMessage = 'Can you show me the pricing plans?';
+        break;
+      case 'cases':
+        userMessage = 'I want to see case studies and success stories';
+        break;
+      case 'contact':
+        userMessage = 'How can I contact sales?';
+        break;
+      default:
+        return;
+    }
+    await sendMessage(userMessage);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputValue.trim() || isLoading) return;
+    await sendMessage(inputValue);
+    setInputValue('');
+  };
+
+  const sendMessage = async (content: string) => {
+    const userMessage: Message = {
+      role: 'user',
+      content,
+      timestamp: new Date(),
     };
 
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages, isOpen]);
+    setMessages((prev) => [...prev, userMessage]);
+    setIsLoading(true);
 
-    const handleSend = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!inputValue.trim() || isLoading) return;
+    try {
+      const response = await fetch('/api/chat-widget', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [...messages, userMessage].map((m) => ({
+            role: m.role,
+            content: m.content,
+          })),
+        }),
+      });
 
-        const userMessage = inputValue;
-        setInputValue("");
-        setMessages((prev) => [...prev, { role: "user", text: userMessage }]);
-        setHasInteracted(true);
-        setIsLoading(true);
+      if (!response.ok) {
+        throw new Error('Failed to get response');
+      }
 
-        try {
-            const response = await fetch("/api/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    messages: messages
-                        .map(m => ({ role: m.role === "bot" ? "assistant" : m.role, content: m.text }))
-                        .concat({ role: "user", content: userMessage })
-                }),
-            });
+      const data = await response.json();
+      const assistantMessage: Message = {
+        role: 'assistant',
+        content: data.reply || "I'm having trouble right now. Please try again or contact support@barpel.ai",
+        timestamp: new Date(),
+      };
 
-            const data = await response.json();
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error('Chat error:', error);
+      const errorMessage: Message = {
+        role: 'assistant',
+        content: "I'm having trouble connecting. Please try again or reach out to us at support@barpel.ai or call +44 7424 038250.",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-            if (data.reply) {
-                setMessages((prev) => [...prev, { role: "bot", text: data.reply }]);
-            } else {
-                throw new Error("No reply from AI");
-            }
-        } catch (error) {
-            console.error("Chat error:", error);
-            setMessages((prev) => [...prev, { role: "bot", text: "I'm having trouble connecting to my knowledge base right now. Please try again in a moment, or reach out to our team at support@barpel.ai for immediate assistance. We're here to help! 🙏" }]);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+  return (
+    <>
+      {/* Chat Toggle Button */}
+      <AnimatePresence>
+        {!isOpen && (
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            className="fixed bottom-6 right-6 z-50"
+          >
+            {/* Chat Button - White Background with Blue Logo */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsOpen(true)}
+              className="relative w-16 h-16 rounded-full bg-white shadow-2xl shadow-gray-400/40 ring-2 ring-gray-200/80 hover:shadow-surgical-500/50 hover:ring-surgical-400 transition-all duration-300 flex items-center justify-center"
+              aria-label="Chat with Barpel"
+            >
+              <Image
+                src="/Brand/10.png"
+                alt="Chat with Barpel"
+                width={36}
+                height={36}
+                className="w-9 h-9"
+                priority
+              />
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-    const handleQuickAction = (action: string) => {
-        setInputValue(action);
-        setHasInteracted(true);
-    };
-
-    return (
-        <div className="fixed bottom-6 right-6 z-[50] flex flex-col items-end safe-area-bottom">
-            <AnimatePresence>
-                {isOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                        className="mb-4 w-[350px] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
-                    >
-                        {/* Header */}
-                        <div className="bg-gradient-to-r from-cyan-600 to-blue-600 p-4">
-                            <div className="flex items-center justify-between mb-3">
-                                <div className="flex items-center gap-3">
-                                    <div className="relative w-10 h-10 rounded-full bg-white/20 flex items-center justify-center overflow-hidden border-2 border-white/30">
-                                        <Image src="/Brand/3.png" alt="Barpel AI" width={40} height={40} className="object-contain" />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-bold text-white text-sm font-display">Barpel Support</h3>
-                                        <div className="flex items-center gap-1.5">
-                                            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                                            <span className="text-xs text-white/90">Always Available</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button
-                                    onClick={() => setIsOpen(false)}
-                                    className="p-1.5 rounded-full hover:bg-white/20 text-white/80 hover:text-white transition-colors"
-                                >
-                                    <X className="w-5 h-5" />
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Chat Messages */}
-                        <div className="h-[400px] bg-slate-50 dark:bg-slate-950/50 flex flex-col">
-                            <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                                {messages.map((msg, idx) => (
-                                    <div
-                                        key={idx}
-                                        className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-                                    >
-                                        <div
-                                            className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${msg.role === "user"
-                                                    ? "bg-cyan-600 text-white rounded-tr-none"
-                                                    : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-100 dark:border-slate-700 rounded-tl-none shadow-sm"
-                                                }`}
-                                        >
-                                            {msg.text}
-                                        </div>
-                                    </div>
-                                ))}
-                                {!hasInteracted && messages.length === 2 && (
-                                    <div className="space-y-2 mt-4">
-                                        <p className="text-xs text-slate-500 font-semibold">Quick questions:</p>
-                                        <div className="space-y-2">
-                                            <button
-                                                onClick={() => handleQuickAction("What is Barpel AI and how does it work?")}
-                                                className="w-full text-left px-3 py-2 rounded-lg bg-cyan-50 dark:bg-slate-800/50 hover:bg-cyan-100 dark:hover:bg-slate-700 text-xs text-slate-700 dark:text-slate-300 transition-colors border border-cyan-200 dark:border-slate-700"
-                                            >
-                                                📱 How does it work?
-                                            </button>
-                                            <button
-                                                onClick={() => handleQuickAction("What are your pricing plans?")}
-                                                className="w-full text-left px-3 py-2 rounded-lg bg-cyan-50 dark:bg-slate-800/50 hover:bg-cyan-100 dark:hover:bg-slate-700 text-xs text-slate-700 dark:text-slate-300 transition-colors border border-cyan-200 dark:border-slate-700"
-                                            >
-                                                💰 Pricing & Plans
-                                            </button>
-                                            <button
-                                                onClick={() => handleQuickAction("Is it GDPR and HIPAA compliant?")}
-                                                className="w-full text-left px-3 py-2 rounded-lg bg-cyan-50 dark:bg-slate-800/50 hover:bg-cyan-100 dark:hover:bg-slate-700 text-xs text-slate-700 dark:text-slate-300 transition-colors border border-cyan-200 dark:border-slate-700"
-                                            >
-                                                🔒 Security & Compliance
-                                            </button>
-                                            <button
-                                                onClick={() => handleQuickAction("How do I get started?")}
-                                                className="w-full text-left px-3 py-2 rounded-lg bg-cyan-50 dark:bg-slate-800/50 hover:bg-cyan-100 dark:hover:bg-slate-700 text-xs text-slate-700 dark:text-slate-300 transition-colors border border-cyan-200 dark:border-slate-700"
-                                            >
-                                                🚀 Getting Started
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-                                <div ref={messagesEndRef} />
-                            </div>
-
-                            {/* Chat Input */}
-                            <form onSubmit={handleSend} className="p-3 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex gap-2">
-                                <input
-                                    type="text"
-                                    value={inputValue}
-                                    onChange={(e) => setInputValue(e.target.value)}
-                                    placeholder="Type a message..."
-                                    className="flex-1 px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
-                                />
-                                <button
-                                    type="submit"
-                                    disabled={!inputValue.trim() || isLoading}
-                                    className="p-2 rounded-full bg-cyan-600 text-white hover:bg-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors relative"
-                                >
-                                    <Send className={`w-4 h-4 ${isLoading ? "opacity-0" : "opacity-100"}`} />
-                                    {isLoading && (
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                        </div>
-                                    )}
-                                </button>
-                            </form>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* Toggle Button */}
-            <div className="relative">
-                {/* Hover tooltip */}
-                {!isOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 4, scale: 0.92 }}
-                        whileHover={{ opacity: 1, y: 0, scale: 1 }}
-                        className="absolute bottom-full right-0 mb-3 px-3 py-1.5 bg-obsidian text-white text-xs font-medium rounded-lg whitespace-nowrap pointer-events-none"
-                        style={{ transformOrigin: 'bottom right' }}
-                    >
-                        Chat with us ✨
-                        <div className="absolute bottom-[-4px] right-4 w-2 h-2 bg-obsidian rotate-45" />
-                    </motion.div>
-                )}
-
-                <motion.button
-                    animate={!isOpen ? { scale: [1, 1.05, 1] } : {}}
-                    transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                    whileHover={{ scale: 1.08, boxShadow: '0 12px 30px rgba(29,78,216,0.40)' }}
-                    whileTap={{ scale: 0.93 }}
-                    onClick={() => setIsOpen(!isOpen)}
-                    className="relative w-14 h-14 rounded-full bg-gradient-to-br from-surgical-500 to-surgical-700 text-white shadow-lg shadow-surgical-600/35 flex items-center justify-center transition-shadow"
-                >
-                    {/* Notification pulse dot */}
-                    {!isOpen && (
-                        <span className="absolute top-0 right-0 flex h-3.5 w-3.5">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-green-500 border-2 border-white" />
-                        </span>
-                    )}
-                    <AnimatePresence mode="wait" initial={false}>
-                        {isOpen ? (
-                            <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                                <X className="w-6 h-6" />
-                            </motion.div>
-                        ) : (
-                            <motion.div key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                                <MessageCircle className="w-6 h-6 fill-white/20" />
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </motion.button>
+      {/* Chat Window */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="fixed bottom-6 right-6 z-50 w-[95vw] max-w-[400px] h-[90dvh] max-h-[600px] sm:w-[400px] sm:h-[600px] bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-barpel-border flex flex-col overflow-hidden"
+          >
+            {/* Header */}
+            <div className="bg-gradient-to-r from-barpel-teal to-barpel-teal-dark text-white p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Image
+                  src="/Brand/10.png"
+                  alt="Barpel AI"
+                  width={32}
+                  height={32}
+                  className="w-8 h-8"
+                />
+                <div>
+                  <h3 className="font-semibold text-base">Barpel</h3>
+                  <p className="text-xs text-white/80">Always here to help</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="hover:bg-white/20 rounded-lg p-2 transition-colors"
+                aria-label="Close chat"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
-        </div>
-    );
-};
+
+            {/* Messages Area */}
+            <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4 bg-surgical-50/30 overflow-x-hidden">
+              {messages.map((message, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                      message.role === 'user'
+                        ? 'bg-barpel-teal text-white rounded-br-sm'
+                        : 'bg-white border border-surgical-200 text-obsidian rounded-bl-sm'
+                    }`}
+                  >
+                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                    <p
+                      className={`text-xs mt-1 ${
+                        message.role === 'user' ? 'text-white/60' : 'text-obsidian/50'
+                      }`}
+                    >
+                      {message.timestamp.toLocaleTimeString('en-GB', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+
+              {/* Typing Indicator */}
+              {isLoading && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex justify-start"
+                >
+                  <div className="bg-white border border-surgical-200 rounded-2xl rounded-bl-sm px-4 py-3">
+                    <div className="flex gap-1">
+                      <motion.div
+                        animate={{ y: [0, -8, 0] }}
+                        transition={{ repeat: Infinity, duration: 0.6, delay: 0 }}
+                        className="w-2 h-2 bg-barpel-teal rounded-full"
+                      />
+                      <motion.div
+                        animate={{ y: [0, -8, 0] }}
+                        transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }}
+                        className="w-2 h-2 bg-barpel-teal rounded-full"
+                      />
+                      <motion.div
+                        animate={{ y: [0, -8, 0] }}
+                        transition={{ repeat: Infinity, duration: 0.6, delay: 0.4 }}
+                        className="w-2 h-2 bg-barpel-teal rounded-full"
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Quick Actions */}
+            {messages.length === 1 && !isLoading && (
+              <div className="p-4 border-t border-barpel-border bg-white">
+                <p className="text-xs text-obsidian/60 mb-2">Quick actions:</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {QUICK_ACTIONS.map((action) => (
+                    <button
+                      key={action.action}
+                      onClick={() => handleQuickAction(action.action)}
+                      className="flex items-center gap-2 px-3 py-2 text-xs bg-barpel-teal/5 hover:bg-barpel-teal/10 text-barpel-teal rounded-lg transition-colors border border-barpel-teal/20"
+                    >
+                      <action.icon className="w-3.5 h-3.5" />
+                      <span>{action.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Input Area */}
+            <form onSubmit={handleSubmit} className="p-3 sm:p-4 border-t border-barpel-border bg-white">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  placeholder="Type your message..."
+                  disabled={isLoading}
+                  inputMode="text"
+                  autoComplete="off"
+                  autoCapitalize="sentences"
+                  className="flex-1 px-3 py-2 sm:px-4 sm:py-3 text-base sm:text-sm rounded-xl border border-surgical-200 focus:outline-none focus:ring-2 focus:ring-barpel-teal focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+                <button
+                  type="submit"
+                  disabled={!inputValue.trim() || isLoading}
+                  className="px-3 py-2 sm:px-4 sm:py-3 bg-surgical-600 hover:bg-surgical-700 disabled:bg-surgical-300 disabled:cursor-not-allowed text-white rounded-xl transition-colors flex items-center justify-center"
+                  aria-label="Send message"
+                >
+                  <Send className="w-5 h-5" />
+                </button>
+              </div>
+              <p className="text-xs text-obsidian/40 mt-2 text-center">
+                Powered by Groq AI • Always available
+              </p>
+            </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}

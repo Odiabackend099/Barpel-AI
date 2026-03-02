@@ -12,7 +12,7 @@ import { useVoiceAgentContext } from '@/contexts/VoiceAgentContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { authedBackendFetch } from '@/lib/authed-backend-fetch';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8001';
 
 // E.164 phone validation
 const E164_REGEX = /^\+[1-9]\d{1,14}$/;
@@ -815,7 +815,7 @@ const TestAgentPageContent = () => {
                                                 setPhoneValidationError(null);
                                             }}
                                             placeholder="+1 (555) 000-0000"
-                                            className={`w-full px-4 py-3 rounded-xl border bg-white text-barpel-slate placeholder-obsidian/40 focus:ring-2 focus:ring-surgical-500 focus:border-surgical-500 outline-none text-lg transition-all ${phoneValidationError ? 'border-red-500' : 'border-surgical-200'}`}
+                                            className={`w-full px-4 py-3 rounded-xl border bg-white text-barpel-slate placeholder-barpel-gray/60 focus:ring-2 focus:ring-barpel-teal focus:border-barpel-teal outline-none text-lg transition-all ${phoneValidationError ? 'border-red-500' : 'border-surgical-200'}`}
                                         />
                                         {phoneValidationError && (
                                             <p className="text-xs text-red-600 mt-2">{phoneValidationError}</p>
@@ -902,7 +902,7 @@ const TestAgentPageContent = () => {
 
                 {/* Confirmation Dialog */}
                 {showConfirmDialog && (
-                    <div className="fixed inset-0 bg-obsidian/70 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}

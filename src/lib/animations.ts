@@ -380,16 +380,15 @@ export const easings = {
 // ============================================================================
 
 export const brandColors = {
-  primary: '#0000FF',
-  secondary: '#3366FF',
-  obsidian: '#0A0E27',
-  surgical: '#1D4ED8',
-  clinical: '#3B82F6',
-  skyMist: '#BFDBFE',
-  blueBright: '#0000FF',
-  blueMedium: '#3366FF',
-  blueLight: '#BFDBFE',
-  navyDark: '#0A0E27',
+  primary: '#37A195',
+  secondary: '#2F8E88',
+  deepSlate: '#102A33',
+  barpelTeal: '#37A195',
+  barpelTealDark: '#2F8E88',
+  tealLight: '#E8F5F2',
+  borderGray: '#E5E7EB',
+  mutedGray: '#6B7280',
+  pureWhite: '#FFFFFF',
 };
 
 // ============================================================================

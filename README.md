@@ -1,228 +1,159 @@
-# CallWaiting AI - Voxanne
+# Barpel AI — AI Voice Automation Platform
 
-**AI Voice Receptionist Platform for Medical Clinics**
+> Give your business a 24/7 AI receptionist that books appointments, answers questions, and follows up with leads — automatically.
 
 ---
 
-## 🚀 Quick Start
+## Architecture
+
+```
+Barpel/
+├── .agent/               ← AI developer brain (read this first)
+│   ├── prd.md            ← Product requirements document
+│   ├── database-ssot.md  ← Database schema & API reference
+│   ├── NEXT_AI_DEVELOPER_PROMPT.md ← Onboarding prompt for AI devs
+│   ├── Barpel Branding/  ← Logo package (24 assets)
+│   └── workflows/        ← Testing & deployment workflows
+├── src/                  ← Next.js dashboard app → app.barpel.ai
+├── backend/              ← Node.js/Express API → api.barpel.ai
+├── frontend/
+│   └── website/          ← React/Vite marketing site → barpel.ai
+├── supabase/             ← Supabase config & edge functions
+├── migrations/           ← Database migration SQL files
+└── scripts/              ← Utility scripts
+```
+
+### Deployment Targets
+
+| Service | URL | Source |
+|---------|-----|--------|
+| Marketing website | `barpel.ai` | `frontend/website/` |
+| Dashboard app | `app.barpel.ai` | `src/` (Next.js root) |
+| API server | `api.barpel.ai` | `backend/` |
+
+---
+
+## Quick Start
 
 ### Prerequisites
 - Node.js 20+
-- npm or yarn
+- npm or bun
 - Supabase account
-- Vapi API key
-- Twilio account
+- Vapi account
 
-### Installation
+### 1. Clone & install
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd Callwaiting-AI-Voxanne-2026
-   ```
-
-2. **Install dependencies**
-   ```bash
-   # Frontend
-   npm install
-   
-   # Backend
-   cd backend
-   npm install
-   ```
-
-3. **Set up environment variables**
-   - Frontend: Create `.env.local` in root (see `.env.local.example`)
-   - Backend: Create `.env` in `backend/` directory (see `backend/.env.example`)
-
-4. **Start development servers**
-   ```bash
-   # From root directory
-   ./scripts/shared/start-all-servers.sh
-   ```
-   
-   Or manually:
-   ```bash
-   # Terminal 1: Frontend (port 3000)
-   npm run dev
-   
-   # Terminal 2: Backend (port 3001)
-   cd backend && npm run dev
-   
-   # Terminal 3: Ngrok (for Vapi webhooks)
-   ngrok http 3001
-   ```
-
----
-
-## 📁 Repository Structure
-
-```
-callwaiting-ai/
-├── backend/               # Backend source (single source of truth)
-│   ├── src/              # Source code
-│   ├── docs/             # Backend-specific documentation
-│   ├── config/           # Backend configuration files
-│   ├── scripts/          # Backend scripts
-│   └── migrations/       # Database migrations
-│
-├── src/                  # Frontend source (Next.js - single source of truth)
-│   ├── app/             # Next.js app router pages
-│   ├── components/      # React components
-│   ├── lib/             # Frontend utilities
-│   ├── hooks/           # React hooks
-│   └── contexts/        # React contexts
-│
-├── docs/                 # Project-wide documentation
-│   ├── architecture/    # Architecture decisions
-│   ├── deployment/      # Deployment guides
-│   ├── development/     # Development documentation
-│   ├── features/        # Feature documentation
-│   └── api/             # API documentation
-│
-├── infrastructure/       # Infrastructure configuration
-│   ├── render.yaml      # Render deployment config
-│   ├── vercel.json      # Vercel deployment config
-│   └── netlify.toml     # Netlify deployment config
-│
-├── scripts/              # Shared scripts
-│   └── shared/          # Shared utility scripts
-│
-├── .archive/             # Historical documentation & test files
-│   ├── 2026-01-30-production-cleanup/
-│   │   ├── docs/        # Organized by category
-│   │   ├── test-scripts/
-│   │   ├── test-directories/
-│   │   └── MANIFEST.md  # Index of all archived files
-│   └── [older archives] # Previous cleanup archives
-│
-└── public/               # Static assets
-```
-
----
-
-## 📂 Archive & Historical Documentation
-
-This repository maintains a clean root directory by archiving historical documentation and test files.
-
-**Archive Location:** `.archive/MANIFEST.md`
-
-**Structure:**
-```
-.archive/
-├── MANIFEST.md (master index)
-├── 2026-01-30-production-cleanup/
-│   ├── docs/
-│   │   ├── implementation/    (feature completion reports)
-│   │   ├── priorities/        (priority & phase documentation)
-│   │   ├── testing/          (test reports & QA)
-│   │   ├── deployment/       (deployment guides)
-│   │   ├── fixes/            (bug fixes & improvements)
-│   │   ├── quick-reference/  (quick guides)
-│   │   ├── sessions/         (session summaries)
-│   │   └── misc/             (other documentation)
-│   ├── test-scripts/         (archived test scripts)
-│   ├── test-directories/     (archived test directories)
-│   └── configs/              (legacy configurations)
-├── 2026-01-26-operation-lean-ship/ (previous cleanup)
-└── archived-directory/       (historical files)
-```
-
-**To find archived documentation:**
 ```bash
-# Search in archive
-grep -r "keyword" .archive/
-
-# List by category
-ls .archive/2026-01-30-production-cleanup/docs/implementation/
-
-# Restore a file
-cp .archive/2026-01-30-production-cleanup/docs/[category]/[file].md .
+git clone https://github.com/your-org/barpel.git
+cd barpel
+npm install          # installs dashboard app deps
+cd backend && npm install && cd ..
+cd frontend/website && npm install && cd ../..
 ```
 
-**Note:** Archive directory is not deployed to production. It's preserved locally for reference and historical tracking.
+### 2. Environment setup
 
----
-
-## 📚 Documentation
-
-- **[Main Documentation Hub](./docs/README.md)** - Comprehensive documentation index
-- **[Architecture](./docs/architecture/)** - System design and architecture
-- **[Deployment Guide](./docs/deployment/)** - Deployment instructions
-- **[Development Guide](./docs/development/)** - Developer setup and guidelines
-- **[Features](./docs/features/)** - Feature documentation
-- **[API Documentation](./docs/api/)** - API endpoints and integration
-
----
-
-## 🛠️ Technology Stack
-
-### Frontend
-- Next.js 14 (App Router)
-- React 18
-- TypeScript
-- TailwindCSS
-- Framer Motion
-
-### Backend
-- Node.js 20
-- Express.js
-- TypeScript
-- Supabase (PostgreSQL)
-- WebSocket (ws)
-
-### Integrations
-- Vapi (AI Voice Agent)
-- Twilio (Telephony)
-- Supabase (Database, Auth, Storage)
-
----
-
-## 🔧 Development
-
-### Backend Development
 ```bash
-cd backend
-npm run dev          # Start development server
-npm run build        # Build for production
-npm test             # Run tests
+cp .env.example .env.local
+# Fill in your Supabase, Vapi, Twilio, and Stripe keys
 ```
 
-### Frontend Development
 ```bash
-npm run dev          # Start Next.js dev server
-npm run build        # Build for production
-npm run lint         # Run ESLint
+cd frontend/website
+cp .env.local.example .env.local
+# Set VITE_APP_URL=http://localhost:3000 for local dev
+```
+
+### 3. Run locally
+
+```bash
+# Terminal 1 — Dashboard app (Next.js)
+npm run dev                    # → http://localhost:3000
+
+# Terminal 2 — API server
+cd backend && npm run dev      # → http://localhost:4000
+
+# Terminal 3 — Marketing website (Vite)
+cd frontend/website && npm run dev  # → http://localhost:5173
 ```
 
 ---
 
-## 📝 Contributing
+## .agent/ — AI Developer Context
 
-1. Create a feature branch
-2. Make your changes
-3. Test thoroughly
-4. Submit a pull request
+The `.agent/` folder is the brain of this project. Any AI developer (Claude, Cursor, Copilot) should **read these files first** before making changes:
 
----
-
-## 📄 License
-
-[Your License Here]
-
----
-
-## 🆘 Support
-
-For issues and questions:
-- Check [Documentation](./docs/)
-- Open an issue on GitHub
-- Contact the development team
+| File | Purpose |
+|------|---------|
+| `prd.md` | Full product requirements and feature specs |
+| `database-ssot.md` | Database schema, tables, RLS policies |
+| `NEXT_AI_DEVELOPER_PROMPT.md` | Context prompt for AI developers |
+| `ARCHITECTURE_DECISIONS.md` | Why things are built the way they are |
+| `skill.md` | Core engineering principles and patterns |
+| `workflows/` | Testing, deployment, and debugging workflows |
 
 ---
 
-## 🔗 Links
+## Design System
 
-- **Website:** https://callwaitingai.dev
-- **Dashboard:** https://callwaitingai.dev/dashboard
-- **Documentation:** [./docs/README.md](./docs/README.md)
+**Canonical brand colors** are defined in `src/lib/brand-colors.ts`:
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `barpelTeal` | `#37A195` | Primary CTA, active states |
+| `barpelTealDark` | `#2F8E88` | Hover states |
+| `deepSlate` | `#102A33` | Headings, primary text |
+| `mutedGray` | `#6B7280` | Body text, subtitles |
+| `borderGray` | `#E5E7EB` | Borders, dividers |
+
+Both `tailwind.config.ts` (dashboard) and `frontend/website/tailwind.config.js` mirror these values.
+
+---
+
+## White-Label Customization
+
+To deploy this platform for a new client/niche:
+
+1. **Update brand identity** in `src/lib/brand.config.ts` and `frontend/website/src/lib/brand.config.ts`
+2. **Replace logo assets** in `public/` and `frontend/website/public/` using the `.agent/Barpel Branding/logo_package/` as your template
+3. **Update colors** in `tailwind.config.ts` and `frontend/website/tailwind.config.js`
+4. **Set environment variables** in `.env.local` with new domain, Supabase project, and API keys
+5. **Update `.agent/prd.md`** with the new niche's use case and requirements
+6. Run `npm run build` in both `src/` and `frontend/website/` to verify clean build
+
+---
+
+## Key Invariants
+
+**Never break these — they protect the outbound calling pipeline:**
+
+- `backend/src/routes/agent-sync.ts` — always writes `vapi_phone_number_id`
+- `backend/src/routes/contacts.ts` — uses `.maybeSingle()` not `.single()` on agent queries
+- `backend/src/services/vapi-client.ts` — always calls `assertOutboundCallReady()` before dialing
+
+See `.agent/CONFIGURATION_CRITICAL_INVARIANTS.md` for full details.
+
+---
+
+## Running Tests
+
+```bash
+# Unit tests (backend)
+cd backend && npm run test:unit
+
+# E2E tests (dashboard)
+npx playwright test
+
+# Marketing site lint
+cd frontend/website && npm run lint
+```
+
+---
+
+## Deployment
+
+- **Dashboard + Marketing:** Vercel (auto-deploys from `main` branch)
+- **API:** Render (see `render.yaml`)
+- **Database:** Supabase (managed)
+
+See `.agent/DEPLOYMENT_CHECKLIST.md` for full production deployment guide.

@@ -435,7 +435,7 @@ const LeadsDashboardContent = () => {
                                         >
                                             {callingLeadId === lead.id ? (
                                                 <>
-                                                    <div className="w-3.5 h-3.5 border-2 border-obsidian/30 border-t-surgical-600 rounded-full animate-spin" />
+                                                    <div className="w-3.5 h-3.5 border-2 border-gray-300 border-t-barpel-teal rounded-full animate-spin" />
                                                     Calling...
                                                 </>
                                             ) : (
@@ -729,7 +729,7 @@ const LeadsDashboardContent = () => {
                                     value={smsMessage}
                                     onChange={(e) => setSMSMessage(e.target.value)}
                                     placeholder="Enter your SMS message..."
-                                    className="w-full px-3 py-2 border border-surgical-200 rounded-lg bg-white text-barpel-slate placeholder-obsidian/40 focus:outline-none focus:ring-2 focus:ring-surgical-500"
+                                    className="w-full px-3 py-2 border border-surgical-200 rounded-lg bg-white text-barpel-slate placeholder-barpel-gray/60 focus:outline-none focus:ring-2 focus:ring-barpel-teal"
                                     rows={4}
                                 />
                                 <p className="text-xs text-barpel-slate/60 mt-2">
@@ -751,7 +751,7 @@ const LeadsDashboardContent = () => {
                             <button
                                 onClick={handleSubmitSMS}
                                 disabled={!smsMessage.trim()}
-                                className="px-4 py-2 bg-barpel-teal hover:bg-barpel-teal-dark disabled:bg-obsidian/30 text-white rounded-lg transition-colors text-sm font-medium"
+                                className="px-4 py-2 bg-barpel-teal hover:bg-barpel-teal-dark disabled:bg-gray-300 text-white rounded-lg transition-colors text-sm font-medium"
                             >
                                 Send
                             </button>

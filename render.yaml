@@ -1,71 +1,60 @@
 services:
-  # Backend Service (Frontend deploys to Vercel separately)
+  # Backend API (frontend deploys to Vercel separately)
   - type: web
-    name: voxanne-backend
+    name: barpel-backend
     env: node
     plan: standard
-    buildCommand: cd backend && npm install && npm run build
+    region: oregon
+    buildCommand: cd backend && npm install --omit=dev
     startCommand: cd backend && npm run start
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: "3001"
+      # PORT intentionally omitted — Render injects its own PORT env var
+      # The server already uses process.env.PORT || 6001
       - key: BACKEND_URL
-        value: https://api.voxanne.ai
+        value: https://api.barpel.ai
       - key: FRONTEND_URL
-        value: https://voxanne.ai
+        value: https://app.barpel.ai
       - key: CORS_ORIGIN
-        value: https://voxanne.ai
-      - key: SUPABASE_URL
-        fromDatabase:
-          name: callwaiting-ai-db
-          property: supabaseUrl
-      - key: SUPABASE_SERVICE_ROLE_KEY
-        fromDatabase:
-          name: callwaiting-ai-db
-          property: supabaseServiceRoleKey
-      - key: SUPABASE_ANON_KEY
-        fromDatabase:
-          name: callwaiting-ai-db
-          property: supabaseAnonKey
-      - key: GOOGLE_CLIENT_ID
-        fromDatabase:
-          name: callwaiting-ai-db
-          property: googleClientId
-      - key: GOOGLE_CLIENT_SECRET
-        fromDatabase:
-          name: callwaiting-ai-db
-          property: googleClientSecret
+        value: https://app.barpel.ai,https://barpel.ai
       - key: GOOGLE_REDIRECT_URI
-        value: https://api.voxanne.ai/api/google-oauth/callback
+        value: https://api.barpel.ai/api/google-oauth/callback
+      # ── Secrets: set manually in Render dashboard ──────────────────────────
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
       - key: VAPI_PRIVATE_KEY
-        fromDatabase:
-          name: callwaiting-ai-db
-          property: vapiApiKey
-      - key: TWILIO_ACCOUNT_SID
-        fromDatabase:
-          name: callwaiting-ai-db
-          property: twilioAccountSid
-      - key: TWILIO_AUTH_TOKEN
-        fromDatabase:
-          name: callwaiting-ai-db
-          property: twilioAuthToken
+        sync: false
       - key: ENCRYPTION_KEY
-        fromDatabase:
-          name: callwaiting-ai-db
-          property: encryptionKey
-      - key: JWT_SECRET
-        fromDatabase:
-          name: callwaiting-ai-db
-          property: jwtSecret
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_ENCRYPTION_KEY
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: FROM_EMAIL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
     routes:
-      - path: /api
+      - path: /
         matchType: prefix
-
-databases:
-  - name: callwaiting-ai-db
-    databaseName: callwaiting_ai_prod
-    user: postgres
-    region: us-east  # Change based on your preference
+# Note: No `databases:` section — project uses external Supabase (not Render-managed DB)

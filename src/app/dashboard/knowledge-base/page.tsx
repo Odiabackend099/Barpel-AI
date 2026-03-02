@@ -266,8 +266,8 @@ export default function KnowledgeBasePage() {
 
   if (loading || isLoading) {
     return (
-      <div className="min-h-screen bg-surgical-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-surgical-500 animate-spin" />
+      <div className="min-h-screen bg-barpel-teal/5 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-barpel-teal animate-spin" />
       </div>
     );
   }
@@ -280,7 +280,7 @@ export default function KnowledgeBasePage() {
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold text-barpel-slate flex items-center gap-3">
-            <BookOpen className="w-8 h-8 text-surgical-600" />
+            <BookOpen className="w-8 h-8 text-barpel-teal" />
             Knowledge Base
           </h1>
           <p className="text-barpel-slate/60 mt-2">Upload documents that your AI assistant will use to answer customer questions.</p>
@@ -295,7 +295,7 @@ export default function KnowledgeBasePage() {
         )}
 
         {success && (
-          <div className="p-4 bg-surgical-50 border border-surgical-200 rounded-lg text-surgical-600 flex items-center gap-3">
+          <div className="p-4 bg-barpel-teal/5 border border-barpel-slate/10 rounded-lg text-barpel-teal flex items-center gap-3">
             <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
             <span>{success}</span>
           </div>
@@ -306,10 +306,10 @@ export default function KnowledgeBasePage() {
           <button
             onClick={seedBeverly}
             disabled={isSaving}
-            className="p-4 bg-white border border-surgical-200 rounded-lg hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition text-left"
+            className="p-4 bg-white border border-barpel-slate/10 rounded-lg hover:bg-barpel-teal/5 disabled:opacity-50 disabled:cursor-not-allowed transition text-left"
           >
             <div className="flex items-center gap-3">
-              {isSaving ? <Loader2 className="w-6 h-6 text-surgical-600 flex-shrink-0 animate-spin" /> : <Sparkles className="w-6 h-6 text-surgical-600 flex-shrink-0" />}
+              {isSaving ? <Loader2 className="w-6 h-6 text-barpel-teal flex-shrink-0 animate-spin" /> : <Sparkles className="w-6 h-6 text-barpel-teal flex-shrink-0" />}
               <div>
                 <div className="font-semibold text-barpel-slate">Load Sample KB</div>
                 <div className="text-sm text-barpel-slate/60">Get started with examples</div>
@@ -320,10 +320,10 @@ export default function KnowledgeBasePage() {
           <button
             onClick={syncToBoth}
             disabled={isSaving || items.length === 0}
-            className="p-4 bg-white border border-surgical-200 rounded-lg hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition text-left"
+            className="p-4 bg-white border border-barpel-slate/10 rounded-lg hover:bg-barpel-teal/5 disabled:opacity-50 disabled:cursor-not-allowed transition text-left"
           >
             <div className="flex items-center gap-3">
-              {isSaving ? <Loader2 className="w-6 h-6 text-surgical-600 flex-shrink-0 animate-spin" /> : <CloudUpload className="w-6 h-6 text-surgical-600 flex-shrink-0" />}
+              {isSaving ? <Loader2 className="w-6 h-6 text-barpel-teal flex-shrink-0 animate-spin" /> : <CloudUpload className="w-6 h-6 text-barpel-teal flex-shrink-0" />}
               <div>
                 <div className="font-semibold text-barpel-slate">Sync to AI</div>
                 <div className="text-sm text-barpel-slate/60">Send to your assistants</div>
@@ -334,10 +334,10 @@ export default function KnowledgeBasePage() {
           <button
             onClick={loadItems}
             disabled={isSaving}
-            className="p-4 bg-white border border-surgical-200 rounded-lg hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition text-left"
+            className="p-4 bg-white border border-barpel-slate/10 rounded-lg hover:bg-barpel-teal/5 disabled:opacity-50 disabled:cursor-not-allowed transition text-left"
           >
             <div className="flex items-center gap-3">
-              {isSaving ? <Loader2 className="w-6 h-6 text-surgical-600 flex-shrink-0 animate-spin" /> : <RefreshCw className="w-6 h-6 text-surgical-600 flex-shrink-0" />}
+              {isSaving ? <Loader2 className="w-6 h-6 text-barpel-teal flex-shrink-0 animate-spin" /> : <RefreshCw className="w-6 h-6 text-barpel-teal flex-shrink-0" />}
               <div>
                 <div className="font-semibold text-barpel-slate">Refresh</div>
                 <div className="text-sm text-barpel-slate/60">Reload documents</div>
@@ -349,8 +349,8 @@ export default function KnowledgeBasePage() {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Documents List */}
-          <div className="lg:col-span-1 bg-white border border-surgical-200 rounded-xl shadow-sm">
-            <div className="p-6 border-b border-surgical-200">
+          <div className="lg:col-span-1 bg-white border border-barpel-slate/10 rounded-xl shadow-sm">
+            <div className="p-6 border-b border-barpel-slate/10">
               <div className="flex items-center justify-between">
                 <h2 className="font-semibold text-barpel-slate">Your Documents</h2>
                 <button
@@ -363,7 +363,7 @@ export default function KnowledgeBasePage() {
               </div>
               <p className="text-sm text-barpel-slate/60 mt-1">{items.length} document{items.length !== 1 ? 's' : ''}</p>
             </div>
-            <div className="divide-y divide-surgical-200 max-h-[500px] overflow-y-auto">
+            <div className="divide-y divide-barpel-slate/10 max-h-[500px] overflow-y-auto">
               {items.length === 0 ? (
                 <div className="p-6 text-center text-barpel-slate/60">
                   <p>No documents yet.</p>
@@ -371,12 +371,12 @@ export default function KnowledgeBasePage() {
                 </div>
               ) : (
                 items.map((item) => (
-                  <div key={item.id} className="p-4 hover:bg-surgical-50 transition">
+                  <div key={item.id} className="p-4 hover:bg-barpel-teal/5 transition">
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0 flex-1">
                         <button
                           onClick={() => beginEdit(item)}
-                          className="font-medium text-barpel-slate hover:text-surgical-600 truncate text-left"
+                          className="font-medium text-barpel-slate hover:text-barpel-teal truncate text-left"
                         >
                           {item.filename}
                         </button>
@@ -399,8 +399,8 @@ export default function KnowledgeBasePage() {
           </div>
 
           {/* Editor */}
-          <div className="lg:col-span-2 bg-white border border-surgical-200 rounded-xl shadow-sm flex flex-col h-fit">
-            <div className="p-6 border-b border-surgical-200 flex-shrink-0">
+          <div className="lg:col-span-2 bg-white border border-barpel-slate/10 rounded-xl shadow-sm flex flex-col h-fit">
+            <div className="p-6 border-b border-barpel-slate/10 flex-shrink-0">
               <h2 className="font-semibold text-barpel-slate">
                 {draft.id ? `Edit: ${draft.filename || 'Untitled'}` : 'Add New Document'}
               </h2>
@@ -412,7 +412,7 @@ export default function KnowledgeBasePage() {
                   <button
                     onClick={() => fileInputRef.current?.click()}
                     disabled={isSaving}
-                    className="flex-1 px-4 py-2 border-2 border-dashed border-surgical-300 bg-surgical-50 rounded-lg hover:bg-surgical-100 disabled:opacity-50 text-surgical-600 font-medium flex items-center justify-center gap-2 transition"
+                    className="flex-1 px-4 py-2 border-2 border-dashed border-barpel-teal/30 bg-barpel-teal/5 rounded-lg hover:bg-barpel-teal/10 disabled:opacity-50 text-barpel-teal font-medium flex items-center justify-center gap-2 transition"
                   >
                     <Upload className="w-4 h-4" />
                     {uploadProgress > 0 ? `${uploadProgress}%` : 'Upload File'}
@@ -436,7 +436,7 @@ export default function KnowledgeBasePage() {
                   value={draft.filename}
                   onChange={(e) => setDraft((p) => ({ ...p, filename: e.target.value }))}
                   placeholder="e.g., pricing.md"
-                  className="w-full px-4 py-2 rounded-lg border border-surgical-200 bg-white text-barpel-slate placeholder-obsidian/40 focus:ring-2 focus:ring-surgical-500 focus:border-transparent outline-none"
+                  className="w-full px-4 py-2 rounded-lg border border-barpel-slate/10 bg-white text-barpel-slate placeholder-barpel-gray/60 focus:ring-2 focus:ring-barpel-teal focus:border-transparent outline-none"
                 />
                 <p className="text-xs text-barpel-slate/60 mt-1">Auto-filled from uploaded file</p>
               </div>
@@ -447,7 +447,7 @@ export default function KnowledgeBasePage() {
                   id="kb-category"
                   value={draft.category}
                   onChange={(e) => setDraft((p) => ({ ...p, category: e.target.value }))}
-                  className="w-full px-4 py-2 rounded-lg border border-surgical-200 bg-white text-barpel-slate focus:ring-2 focus:ring-surgical-500 focus:border-transparent outline-none"
+                  className="w-full px-4 py-2 rounded-lg border border-barpel-slate/10 bg-white text-barpel-slate focus:ring-2 focus:ring-barpel-teal focus:border-transparent outline-none"
                 >
                   <option value="products_services">Products & Services</option>
                   <option value="operations">Operations</option>
@@ -463,19 +463,19 @@ export default function KnowledgeBasePage() {
                   value={draft.content}
                   onChange={(e) => setDraft((p) => ({ ...p, content: e.target.value }))}
                   placeholder="Paste your content here. Markdown is supported."
-                  className="w-full h-40 px-4 py-2 rounded-lg border border-surgical-200 bg-white text-barpel-slate placeholder-obsidian/40 font-mono text-sm focus:ring-2 focus:ring-surgical-500 focus:border-transparent resize-none outline-none"
+                  className="w-full h-40 px-4 py-2 rounded-lg border border-barpel-slate/10 bg-white text-barpel-slate placeholder-barpel-gray/60 font-mono text-sm focus:ring-2 focus:ring-barpel-teal focus:border-transparent resize-none outline-none"
                 />
                 <p className="text-xs text-barpel-slate/60 mt-1">Max 300KB per document</p>
               </div>
             </div>
 
-            <div className="p-6 border-t border-surgical-200 flex items-center justify-between gap-4 flex-shrink-0 bg-white rounded-b-xl">
+            <div className="p-6 border-t border-barpel-slate/10 flex items-center justify-between gap-4 flex-shrink-0 bg-white rounded-b-xl">
               <label className="flex items-center gap-2 text-sm text-barpel-slate/60">
                 <input
                   type="checkbox"
                   checked={draft.active}
                   onChange={(e) => setDraft((p) => ({ ...p, active: e.target.checked }))}
-                  className="w-4 h-4 rounded border-surgical-200 bg-white"
+                  className="w-4 h-4 rounded border-barpel-slate/10 bg-white"
                 />
                 <span>Active (AI can use this)</span>
               </label>

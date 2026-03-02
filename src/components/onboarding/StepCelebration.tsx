@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { PartyPopper } from 'lucide-react';
 import { useOnboardingStore } from '@/lib/store/onboardingStore';
@@ -19,6 +19,8 @@ export default function StepCelebration() {
 
   const [showButton, setShowButton] = useState(false);
   const [provisionError, setProvisionError] = useState<string | null>(null);
+  // Ref-based flag prevents re-trigger when provisioningInProgress state flips
+  const hasAttempted = useRef(false);
 
   // Show "Continue" button after confetti
   useEffect(() => {
@@ -26,36 +28,52 @@ export default function StepCelebration() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Auto-provision phone number
+  // Auto-provision phone number — runs at most once per mount
   useEffect(() => {
-    if (phoneNumber || provisioningInProgress) return;
+    // Already have a number or already attempted this mount — do nothing
+    if (phoneNumber || hasAttempted.current) return;
+    hasAttempted.current = true;
 
     const provision = async () => {
       setProvisioningInProgress(true);
-      try {
-        const result = await authedBackendFetch<{
-          success: boolean;
-          phoneNumber?: string;
-          error?: string;
-        }>('/api/onboarding/provision-number', {
-          method: 'POST',
-          body: JSON.stringify({ area_code: areaCode || undefined }),
-        });
 
-        if (result?.phoneNumber) {
-          setPhoneNumber(result.phoneNumber);
-        } else {
-          setProvisionError(result?.error || 'Could not provision a number.');
+      // Allow 2s for Stripe webhook to credit the wallet before first attempt
+      await new Promise(r => setTimeout(r, 2000));
+
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+          const result = await authedBackendFetch<{
+            success: boolean;
+            phoneNumber?: string;
+            error?: string;
+          }>('/api/onboarding/provision-number', {
+            method: 'POST',
+            body: JSON.stringify({ area_code: areaCode || undefined }),
+          });
+
+          if (result?.phoneNumber) {
+            setPhoneNumber(result.phoneNumber);
+            setProvisioningInProgress(false);
+            return;
+          }
+
+          // Got a response but no number (e.g. 402 balance not credited yet)
+          if (attempt < 3) await new Promise(r => setTimeout(r, 3000));
+        } catch (err: any) {
+          if (attempt < 3) {
+            await new Promise(r => setTimeout(r, 3000));
+          } else {
+            setProvisionError('Could not provision automatically. Set up your number from the dashboard.');
+          }
         }
-      } catch (err: any) {
-        setProvisionError(err.message || 'Failed to provision number.');
-      } finally {
-        setProvisioningInProgress(false);
       }
+
+      setProvisioningInProgress(false);
     };
 
     provision();
-  }, [areaCode, phoneNumber, provisioningInProgress, setPhoneNumber, setProvisioningInProgress]);
+    // provisioningInProgress intentionally excluded — it must not re-trigger this effect
+  }, [areaCode, phoneNumber, setPhoneNumber, setProvisioningInProgress]);
 
   return (
     <>

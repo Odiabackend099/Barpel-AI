@@ -10,7 +10,7 @@ interface GradientOrbProps {
     /** Position of the orb relative to its container */
     position: 'top-left' | 'top-right' | 'center' | 'bottom-left' | 'bottom-right';
     /** Brand color scheme for the gradient orb */
-    color: 'blue-bright' | 'blue-medium' | 'blue-light' | 'navy-dark';
+    color: 'teal' | 'teal-dark' | 'teal-light' | 'deep-slate';
     /** Gaussian blur intensity in pixels (default: 120px) */
     blur?: number;
     /** Orb diameter in pixels (default: 400px) */
@@ -25,10 +25,10 @@ interface GradientOrbProps {
  * Map color prop to brand color hex values
  */
 const colorMap: Record<GradientOrbProps['color'], string> = {
-    'blue-bright': brandColors.blueBright,  // #0015ff - Primary CTA blue
-    'blue-medium': brandColors.blueMedium,  // #4169ff - Secondary accent
-    'blue-light': brandColors.blueLight,    // #87ceeb - Subtle highlights
-    'navy-dark': brandColors.navyDark,      // #0a0e27 - Dark backgrounds
+    'teal': brandColors.barpelTeal,          // #37A195 - Primary teal
+    'teal-dark': brandColors.barpelTealDark, // #2F8E88 - Dark teal accent
+    'teal-light': brandColors.tealLight,     // #E8F5F2 - Subtle highlights
+    'deep-slate': brandColors.deepSlate,     // #102A33 - Dark backgrounds
 };
 
 /**

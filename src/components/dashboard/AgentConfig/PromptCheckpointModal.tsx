@@ -86,7 +86,7 @@ export const PromptCheckpointModal: React.FC<PromptCheckpointModalProps> = ({
                 expandedPrompt ? 'max-h-96' : 'max-h-24'
               }`}
             >
-              <div className="bg-obsidian/5 rounded-lg p-4 border border-surgical-200 font-mono text-sm text-barpel-slate/80 leading-relaxed break-words whitespace-pre-wrap">
+              <div className="bg-gray-50 rounded-lg p-4 border border-surgical-200 font-mono text-sm text-barpel-slate/80 leading-relaxed break-words whitespace-pre-wrap">
                 {systemPrompt || '(No system prompt set)'}
               </div>
             </div>
@@ -120,7 +120,7 @@ export const PromptCheckpointModal: React.FC<PromptCheckpointModalProps> = ({
                 expandedFirstMessage ? 'max-h-32' : 'max-h-16'
               }`}
             >
-              <div className="bg-obsidian/5 rounded-lg p-4 border border-surgical-200 font-mono text-sm text-barpel-slate/80 leading-relaxed break-words whitespace-pre-wrap">
+              <div className="bg-gray-50 rounded-lg p-4 border border-surgical-200 font-mono text-sm text-barpel-slate/80 leading-relaxed break-words whitespace-pre-wrap">
                 {firstMessage || '(No first message set)'}
               </div>
             </div>

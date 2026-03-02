@@ -297,19 +297,19 @@ const CallsPageContent = () => {
 
     const getSentimentColor = (label?: string) => {
         const n = label?.toLowerCase() || '';
-        if (n === 'positive' || n === 'reassured' || n === 'decisive') return 'text-surgical-600 bg-surgical-50';
+        if (n === 'positive' || n === 'reassured' || n === 'decisive') return 'text-barpel-teal bg-barpel-teal/5';
         if (n === 'negative' || n === 'frustrated') return 'text-red-600 bg-red-50';
-        if (n === 'anxious') return 'text-barpel-slate/70 bg-surgical-50';
-        return 'text-barpel-slate/60 bg-surgical-50';
+        if (n === 'anxious') return 'text-barpel-slate/70 bg-barpel-teal/5';
+        return 'text-barpel-slate/60 bg-barpel-teal/5';
     };
 
     const getStatusColor = (status: string) => {
         switch (status?.toLowerCase()) {
-            case 'completed': return 'bg-surgical-50 text-surgical-600 border-surgical-200';
+            case 'completed': return 'bg-barpel-teal/5 text-barpel-teal border-barpel-slate/10';
             case 'missed': return 'bg-red-50 text-red-700 border-red-200';
-            case 'transferred': return 'bg-surgical-50 text-surgical-500 border-surgical-200';
+            case 'transferred': return 'bg-barpel-teal/5 text-barpel-teal border-barpel-slate/10';
             case 'failed': return 'bg-red-50 text-red-700 border-red-200';
-            default: return 'bg-surgical-50 text-barpel-slate/60 border-surgical-200';
+            default: return 'bg-barpel-teal/5 text-barpel-slate/60 border-barpel-slate/10';
         }
     };
 
@@ -336,31 +336,31 @@ const CallsPageContent = () => {
                 {/* Analytics Summary */}
                 {analytics && (
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                        <div className="bg-white border border-surgical-200 rounded-xl p-4 hover:shadow-md transition-shadow">
+                        <div className="bg-white border border-barpel-slate/10 rounded-xl p-4 hover:shadow-md transition-shadow">
                             <p className="text-2xl font-bold text-barpel-slate">{analytics.total_calls}</p>
                             <p className="text-xs text-barpel-slate/60 font-medium">Total Calls</p>
                         </div>
-                        <div className="bg-white border border-surgical-200 rounded-xl p-4 hover:shadow-md transition-shadow">
-                            <p className="text-2xl font-bold text-surgical-600">{analytics.completed_calls}</p>
+                        <div className="bg-white border border-barpel-slate/10 rounded-xl p-4 hover:shadow-md transition-shadow">
+                            <p className="text-2xl font-bold text-barpel-teal">{analytics.completed_calls}</p>
                             <p className="text-xs text-barpel-slate/60 font-medium">Completed</p>
                         </div>
-                        <div className="bg-white border border-surgical-200 rounded-xl p-4 hover:shadow-md transition-shadow">
+                        <div className="bg-white border border-barpel-slate/10 rounded-xl p-4 hover:shadow-md transition-shadow">
                             <p className="text-2xl font-bold text-barpel-slate">{analytics.average_duration}s</p>
                             <p className="text-xs text-barpel-slate/60 font-medium">Avg Duration</p>
                         </div>
-                        <div className="bg-white border border-surgical-200 rounded-xl p-4 hover:shadow-md transition-shadow">
-                            <p className="text-2xl font-bold text-surgical-600">{(analytics.average_sentiment * 100).toFixed(0)}%</p>
+                        <div className="bg-white border border-barpel-slate/10 rounded-xl p-4 hover:shadow-md transition-shadow">
+                            <p className="text-2xl font-bold text-barpel-teal">{(analytics.average_sentiment * 100).toFixed(0)}%</p>
                             <p className="text-xs text-barpel-slate/60 font-medium">Avg Sentiment</p>
                         </div>
                     </div>
                 )}
 
                 {/* Tabs */}
-                <div className="mb-6 flex gap-2 border-b border-surgical-200">
+                <div className="mb-6 flex gap-2 border-b border-barpel-slate/10">
                     <button
                         onClick={() => { setActiveTab('inbound'); setCurrentPage(1); }}
                         className={`px-6 py-3 font-medium text-sm border-b-2 transition-colors ${activeTab === 'inbound'
-                            ? 'border-barpel-teal text-surgical-600'
+                            ? 'border-barpel-teal text-barpel-teal'
                             : 'border-transparent text-barpel-slate/60 hover:text-barpel-slate'}`}
                     >
                         Inbound Calls
@@ -368,7 +368,7 @@ const CallsPageContent = () => {
                     <button
                         onClick={() => { setActiveTab('outbound'); setCurrentPage(1); }}
                         className={`px-6 py-3 font-medium text-sm border-b-2 transition-colors ${activeTab === 'outbound'
-                            ? 'border-barpel-teal text-surgical-600'
+                            ? 'border-barpel-teal text-barpel-teal'
                             : 'border-transparent text-barpel-slate/60 hover:text-barpel-slate'}`}
                     >
                         Outbound Calls
@@ -385,7 +385,7 @@ const CallsPageContent = () => {
                             value={searchQuery}
                             onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
                             onKeyDown={(e) => { if (e.key === 'Escape') { setSearchQuery(''); setCurrentPage(1); } }}
-                            className="w-full px-4 py-2 pr-9 border border-surgical-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-surgical-500"
+                            className="w-full px-4 py-2 pr-9 border border-barpel-slate/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-barpel-teal"
                         />
                         {searchQuery && (
                             <button
@@ -401,7 +401,7 @@ const CallsPageContent = () => {
                     <select
                         value={filterStatus}
                         onChange={(e) => { setFilterStatus(e.target.value); setCurrentPage(1); }}
-                        className="px-3 py-2 border border-surgical-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-surgical-500"
+                        className="px-3 py-2 border border-barpel-slate/10 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-barpel-teal"
                     >
                         <option value="all">All Status</option>
                         <option value="completed">Completed</option>
@@ -413,7 +413,7 @@ const CallsPageContent = () => {
                     <select
                         value={filterDateRange}
                         onChange={(e) => { setFilterDateRange(e.target.value); setCurrentPage(1); }}
-                        className="px-3 py-2 border border-surgical-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-surgical-500"
+                        className="px-3 py-2 border border-barpel-slate/10 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-barpel-teal"
                     >
                         <option value="all">All Time</option>
                         <option value="today">Today</option>
@@ -423,10 +423,10 @@ const CallsPageContent = () => {
                 </div>
 
                 {/* Calls Table */}
-                <div className="bg-white border border-surgical-200 rounded-2xl overflow-hidden shadow-sm">
+                <div className="bg-white border border-barpel-slate/10 rounded-2xl overflow-hidden shadow-sm">
                     <div className="overflow-x-auto">
                         <table className="w-full">
-                            <thead className="bg-surgical-50 border-b border-surgical-200">
+                            <thead className="bg-barpel-teal/5 border-b border-barpel-slate/10">
                                 <tr>
                                     <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/70 uppercase">Date & Time</th>
                                     <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/70 uppercase">Caller</th>
@@ -437,12 +437,12 @@ const CallsPageContent = () => {
                                     <th className="px-6 py-4 text-left text-xs font-bold text-barpel-slate/70 uppercase">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-surgical-200">
+                            <tbody className="divide-y divide-barpel-slate/10">
                                 {isLoading ? (
                                     <tr>
                                         <td colSpan={7} className="px-6 py-12 text-center">
                                             <div className="flex flex-col items-center gap-3">
-                                                <div className="w-8 h-8 border-4 border-surgical-200 border-t-surgical-600 rounded-full animate-spin" />
+                                                <div className="w-8 h-8 border-4 border-barpel-slate/10 border-t-barpel-teal rounded-full animate-spin" />
                                                 <p className="text-barpel-slate/60">Loading calls...</p>
                                             </div>
                                         </td>
@@ -457,7 +457,7 @@ const CallsPageContent = () => {
                                     calls.map((call) => (
                                         <tr
                                             key={call.id}
-                                            className="hover:bg-surgical-50 transition-colors cursor-pointer"
+                                            className="hover:bg-barpel-teal/5 transition-colors cursor-pointer"
                                             onClick={() => fetchCallDetail(call.id)}
                                         >
                                             <td className="px-6 py-4 whitespace-nowrap">
@@ -511,10 +511,10 @@ const CallsPageContent = () => {
                                                     {call.has_recording ? (
                                                         <button
                                                             onClick={(e) => { e.stopPropagation(); fetchCallDetail(call.id); }}
-                                                            className="p-2 hover:bg-surgical-50 rounded-lg transition-colors"
+                                                            className="p-2 hover:bg-barpel-teal/5 rounded-lg transition-colors"
                                                             title="Play recording"
                                                         >
-                                                            <Play className="w-4 h-4 text-surgical-600" />
+                                                            <Play className="w-4 h-4 text-barpel-teal" />
                                                         </button>
                                                     ) : (
                                                         <span className="text-xs text-barpel-slate/40 px-2">&mdash;</span>
@@ -527,10 +527,10 @@ const CallsPageContent = () => {
                                                                 setSmsCallId(call.id);
                                                                 setShowSmsModal(true);
                                                             }}
-                                                            className="p-2 hover:bg-surgical-50 rounded-lg transition-colors"
+                                                            className="p-2 hover:bg-barpel-teal/5 rounded-lg transition-colors"
                                                             title="Send follow-up SMS"
                                                         >
-                                                            <Mail className="w-4 h-4 text-surgical-600" />
+                                                            <Mail className="w-4 h-4 text-barpel-teal" />
                                                         </button>
                                                     ) : (
                                                         <button disabled className="p-2 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed" title="No phone number">
@@ -556,7 +556,7 @@ const CallsPageContent = () => {
 
                     {/* Pagination */}
                     {totalPages > 1 && (
-                        <div className="px-6 py-4 border-t border-surgical-200 flex items-center justify-between">
+                        <div className="px-6 py-4 border-t border-barpel-slate/10 flex items-center justify-between">
                             <div className="text-sm text-barpel-slate/70">
                                 Showing {(currentPage - 1) * callsPerPage + 1} to {Math.min(currentPage * callsPerPage, totalCalls)} of {totalCalls} calls
                             </div>
@@ -564,7 +564,7 @@ const CallsPageContent = () => {
                                 <button
                                     onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                                     disabled={currentPage === 1}
-                                    className="px-3 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/70 hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+                                    className="px-3 py-2 rounded-lg border border-barpel-slate/10 text-sm font-medium text-barpel-slate/70 hover:bg-barpel-teal/5 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
                                 >
                                     <ChevronLeft className="w-4 h-4" /> Previous
                                 </button>
@@ -572,7 +572,7 @@ const CallsPageContent = () => {
                                 <button
                                     onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                                     disabled={currentPage === totalPages}
-                                    className="px-3 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/70 hover:bg-surgical-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+                                    className="px-3 py-2 rounded-lg border border-barpel-slate/10 text-sm font-medium text-barpel-slate/70 hover:bg-barpel-teal/5 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
                                 >
                                     Next <ChevronRight className="w-4 h-4" />
                                 </button>
@@ -587,7 +587,7 @@ const CallsPageContent = () => {
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-xl">
                         {/* Header */}
-                        <div className="sticky top-0 bg-white border-b border-surgical-200 px-6 py-4 flex items-center justify-between">
+                        <div className="sticky top-0 bg-white border-b border-barpel-slate/10 px-6 py-4 flex items-center justify-between">
                             <div>
                                 <h2 className="text-2xl font-bold text-barpel-slate">
                                     {selectedCall.caller_name}
@@ -601,7 +601,7 @@ const CallsPageContent = () => {
                                     {selectedCall.call_type === 'outbound' ? '📞 Outbound' : '📲 Inbound'} &bull; {formatDateTime(selectedCall.call_date)}
                                 </p>
                             </div>
-                            <button onClick={() => setShowDetailModal(false)} className="p-2 hover:bg-surgical-50 rounded-lg transition-colors">
+                            <button onClick={() => setShowDetailModal(false)} className="p-2 hover:bg-barpel-teal/5 rounded-lg transition-colors">
                                 <X className="w-6 h-6 text-barpel-slate/60" />
                             </button>
                         </div>
@@ -667,7 +667,7 @@ const CallsPageContent = () => {
 
                             {/* Outcome Summary (Vapi Primary Source) */}
                             {selectedCall.outcome_summary && (
-                                <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4">
+                                <div className="bg-barpel-teal/5 border border-barpel-slate/10 rounded-lg p-4">
                                     <p className="text-sm font-bold text-barpel-slate mb-2">📋 Outcome Summary</p>
                                     <p className="text-sm text-barpel-slate/70 leading-relaxed">{selectedCall.outcome_summary}</p>
                                 </div>
@@ -675,7 +675,7 @@ const CallsPageContent = () => {
 
                             {/* Sentiment Analysis (if different from outcome) */}
                             {selectedCall.sentiment_summary && selectedCall.sentiment_summary !== selectedCall.outcome_summary && (
-                                <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4">
+                                <div className="bg-barpel-teal/5 border border-barpel-slate/10 rounded-lg p-4">
                                     <p className="text-sm font-bold text-barpel-slate mb-2">💭 Sentiment Analysis</p>
                                     <p className="text-sm text-barpel-slate/70 leading-relaxed">{selectedCall.sentiment_summary}</p>
                                 </div>
@@ -683,7 +683,7 @@ const CallsPageContent = () => {
 
                             {/* Recording Player */}
                             {selectedCall.has_recording && selectedCall.recording_status === 'completed' && (
-                                <div className="bg-surgical-50 rounded-lg p-4">
+                                <div className="bg-barpel-teal/5 rounded-lg p-4">
                                     <p className="text-sm font-bold text-barpel-slate mb-3">Recording</p>
                                     <RecordingPlayer callId={selectedCall.id} recordingUrl={selectedCall.recording_url} />
                                 </div>
@@ -691,14 +691,14 @@ const CallsPageContent = () => {
 
                             {/* Transcript */}
                             {selectedCall.transcript && selectedCall.transcript.length > 0 && (
-                                <div className="bg-surgical-50 rounded-lg p-4">
+                                <div className="bg-barpel-teal/5 rounded-lg p-4">
                                     <p className="text-sm font-bold text-barpel-slate mb-4">Transcript</p>
                                     <div className="space-y-3 max-h-96 overflow-y-auto">
                                         {selectedCall.transcript.map((segment, idx) => {
                                             const isAgent = segment.speaker === 'barpel';
                                             return (
-                                                <div key={idx} className={`rounded-lg p-4 border-l-4 ${isAgent ? 'bg-surgical-50 border-surgical-500' : 'bg-white border-obsidian/20'}`}>
-                                                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold mb-2 ${isAgent ? 'bg-surgical-100 text-surgical-600' : 'bg-surgical-50 text-barpel-slate/70'}`}>
+                                                <div key={idx} className={`rounded-lg p-4 border-l-4 ${isAgent ? 'bg-barpel-teal/5 border-barpel-teal/50' : 'bg-white border-barpel-border'}`}>
+                                                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold mb-2 ${isAgent ? 'bg-barpel-teal/10 text-barpel-teal' : 'bg-barpel-teal/5 text-barpel-slate/70'}`}>
                                                         {isAgent ? 'Barpel (Agent)' : 'Caller'}
                                                     </span>
                                                     <p className="text-sm text-barpel-slate break-words leading-relaxed">{segment.text}</p>
@@ -711,12 +711,12 @@ const CallsPageContent = () => {
 
                             {/* Action Items */}
                             {selectedCall.action_items && selectedCall.action_items.length > 0 && (
-                                <div className="bg-surgical-50 rounded-lg p-4">
+                                <div className="bg-barpel-teal/5 rounded-lg p-4">
                                     <p className="text-sm font-bold text-barpel-slate mb-3">Action Items</p>
                                     <ul className="space-y-2">
                                         {selectedCall.action_items.map((item, idx) => (
                                             <li key={idx} className="flex items-start gap-2 text-sm text-barpel-slate">
-                                                <span className="text-surgical-600 font-bold">&bull;</span>
+                                                <span className="text-barpel-teal font-bold">&bull;</span>
                                                 {item}
                                             </li>
                                         ))}
@@ -726,15 +726,15 @@ const CallsPageContent = () => {
                         </div>
 
                         {/* Actions */}
-                        <div className="px-6 py-6 border-t border-surgical-200">
+                        <div className="px-6 py-6 border-t border-barpel-slate/10">
                             <div className="flex flex-wrap gap-3">
                                 <button
                                     onClick={() => handleDownloadRecording(selectedCall)}
                                     disabled={!selectedCall.has_recording || selectedCall.recording_status !== 'completed'}
                                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                                         selectedCall.has_recording && selectedCall.recording_status === 'completed'
-                                            ? 'bg-surgical-50 text-surgical-600 hover:bg-surgical-100 border border-surgical-200'
-                                            : 'bg-surgical-50 text-barpel-slate/30 cursor-not-allowed opacity-60'}`}
+                                            ? 'bg-barpel-teal/5 text-barpel-teal hover:bg-barpel-teal/10 border border-barpel-slate/10'
+                                            : 'bg-barpel-teal/5 text-barpel-slate/30 cursor-not-allowed opacity-60'}`}
                                 >
                                     <Download className="w-4 h-4" /> Download
                                 </button>
@@ -746,16 +746,16 @@ const CallsPageContent = () => {
                                     disabled={!selectedCall.phone_number}
                                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                                         selectedCall.phone_number
-                                            ? 'bg-surgical-50 text-surgical-600 hover:bg-surgical-100 border border-surgical-200'
-                                            : 'bg-surgical-50 text-barpel-slate/30 cursor-not-allowed opacity-60'}`}
+                                            ? 'bg-barpel-teal/5 text-barpel-teal hover:bg-barpel-teal/10 border border-barpel-slate/10'
+                                            : 'bg-barpel-teal/5 text-barpel-slate/30 cursor-not-allowed opacity-60'}`}
                                 >
                                     <Mail className="w-4 h-4" /> Follow-up
                                 </button>
                             </div>
                         </div>
 
-                        <div className="border-t border-surgical-200 px-6 py-4 flex items-center justify-end">
-                            <button onClick={() => setShowDetailModal(false)} className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/70 hover:bg-surgical-50 transition-colors">
+                        <div className="border-t border-barpel-slate/10 px-6 py-4 flex items-center justify-end">
+                            <button onClick={() => setShowDetailModal(false)} className="px-4 py-2 rounded-lg border border-barpel-slate/10 text-sm font-medium text-barpel-slate/70 hover:bg-barpel-teal/5 transition-colors">
                                 Close
                             </button>
                         </div>
@@ -767,9 +767,9 @@ const CallsPageContent = () => {
             {showFollowupModal && selectedCall && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-2xl max-w-xl w-full shadow-xl">
-                        <div className="border-b border-surgical-200 px-6 py-4 flex items-center justify-between">
+                        <div className="border-b border-barpel-slate/10 px-6 py-4 flex items-center justify-between">
                             <h2 className="text-2xl font-bold text-barpel-slate">Send Follow-up</h2>
-                            <button onClick={() => { setShowFollowupModal(false); setFollowupMessage(''); }} className="p-2 hover:bg-surgical-50 rounded-lg transition-colors">
+                            <button onClick={() => { setShowFollowupModal(false); setFollowupMessage(''); }} className="p-2 hover:bg-barpel-teal/5 rounded-lg transition-colors">
                                 <X className="w-6 h-6 text-barpel-slate/60" />
                             </button>
                         </div>
@@ -786,13 +786,13 @@ const CallsPageContent = () => {
                                     onChange={(e) => setFollowupMessage(e.target.value)}
                                     placeholder="Enter your follow-up message..."
                                     rows={5}
-                                    className="w-full px-4 py-2 border border-surgical-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-surgical-500"
+                                    className="w-full px-4 py-2 border border-barpel-slate/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-barpel-teal"
                                 />
                             </div>
                             <p className="text-xs text-barpel-slate/60">SMS will be sent to {selectedCall.phone_number}</p>
                         </div>
-                        <div className="border-t border-surgical-200 px-6 py-4 flex items-center justify-end gap-3">
-                            <button onClick={() => { setShowFollowupModal(false); setFollowupMessage(''); }} className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/70 hover:bg-surgical-50 transition-colors">
+                        <div className="border-t border-barpel-slate/10 px-6 py-4 flex items-center justify-end gap-3">
+                            <button onClick={() => { setShowFollowupModal(false); setFollowupMessage(''); }} className="px-4 py-2 rounded-lg border border-barpel-slate/10 text-sm font-medium text-barpel-slate/70 hover:bg-barpel-teal/5 transition-colors">
                                 Cancel
                             </button>
                             <button
@@ -820,7 +820,7 @@ const CallsPageContent = () => {
                             value={smsMessage}
                             onChange={(e) => setSmsMessage(e.target.value.slice(0, 160))}
                             placeholder="Enter message (max 160 characters)"
-                            className="w-full border border-surgical-200 rounded-lg p-3 mb-2 focus:outline-none focus:ring-2 focus:ring-surgical-500"
+                            className="w-full border border-barpel-slate/10 rounded-lg p-3 mb-2 focus:outline-none focus:ring-2 focus:ring-barpel-teal"
                             rows={4}
                             autoFocus
                         />
@@ -832,7 +832,7 @@ const CallsPageContent = () => {
                                     setSmsMessage('');
                                     setSmsCallId(null);
                                 }}
-                                className="px-4 py-2 rounded-lg border border-surgical-200 text-sm font-medium text-barpel-slate/70 hover:bg-surgical-50 transition-colors"
+                                className="px-4 py-2 rounded-lg border border-barpel-slate/10 text-sm font-medium text-barpel-slate/70 hover:bg-barpel-teal/5 transition-colors"
                             >
                                 Cancel
                             </button>
@@ -866,9 +866,9 @@ const CallsPageContent = () => {
 export default function CallsPage() {
     return (
         <React.Suspense fallback={
-            <div className="min-h-screen bg-surgical-50 flex items-center justify-center">
+            <div className="min-h-screen bg-barpel-teal/5 flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
-                    <div className="w-8 h-8 border-4 border-surgical-200 border-t-surgical-600 rounded-full animate-spin" />
+                    <div className="w-8 h-8 border-4 border-barpel-slate/10 border-t-barpel-teal rounded-full animate-spin" />
                     <p className="text-barpel-slate/60">Loading...</p>
                 </div>
             </div>

@@ -25,7 +25,7 @@ const SPECIALTIES = [
 ] as const;
 
 export default function StepSpecialty() {
-  const { setSpecialty, nextStep } = useOnboardingStore();
+  const { nextStep } = useOnboardingStore();
   const { track } = useOnboardingTelemetry();
   const [selected, setSelected] = useState<string | null>(null);
   // Ref prevents calling nextStep() on an already-unmounted component
@@ -37,7 +37,6 @@ export default function StepSpecialty() {
 
   const handleSelect = (specialtyId: string) => {
     setSelected(specialtyId);
-    setSpecialty(specialtyId);
     track('specialty_chosen', 1, { specialty: specialtyId });
 
     // Auto-advance after a brief delay for visual feedback

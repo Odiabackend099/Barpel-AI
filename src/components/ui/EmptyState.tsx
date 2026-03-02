@@ -33,12 +33,12 @@ export function EmptyState({ icon: Icon, title, description, actionLabel, onActi
             </div>
 
             {/* Title */}
-            <h3 className="text-lg font-semibold text-obsidian tracking-tight mb-2">
+            <h3 className="text-lg font-semibold text-barpel-slate tracking-tight mb-2">
                 {title}
             </h3>
 
             {/* Description */}
-            <p className="text-sm text-obsidian/60 max-w-sm leading-relaxed mb-6">
+            <p className="text-sm text-barpel-slate/60 max-w-sm leading-relaxed mb-6">
                 {description}
             </p>
 

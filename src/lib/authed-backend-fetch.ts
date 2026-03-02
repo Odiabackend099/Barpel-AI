@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import { DEFAULT_BACKEND_URL } from '@/lib/constants';
 
 function getApiBaseUrl(): string {
   const configured = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -8,7 +9,7 @@ function getApiBaseUrl(): string {
   if (typeof window !== 'undefined') {
     const host = window.location.hostname;
     if (host === 'localhost' || host === '127.0.0.1') {
-      return 'http://127.0.0.1:3001';
+      return configured || DEFAULT_BACKEND_URL;
     }
   }
 
@@ -17,7 +18,7 @@ function getApiBaseUrl(): string {
     if (isProduction) {
       throw new Error('NEXT_PUBLIC_BACKEND_URL is not configured in production');
     }
-    return 'http://localhost:3001';
+    return DEFAULT_BACKEND_URL;
   }
   return configured;
 }

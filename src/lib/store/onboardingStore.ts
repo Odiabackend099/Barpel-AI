@@ -3,36 +3,62 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
+export type CallDirection = 'inbound' | 'outbound';
+
 export interface OnboardingState {
   // Wizard navigation
   currentStep: number;
-  direction: 1 | -1;
+  animDirection: 1 | -1; // Animation slide direction (renamed from 'direction')
 
-  // User data
-  businessName: string;
-  specialty: string | null;
+  // Step 1: Number Selection
+  direction: CallDirection;
+  selectedCountry: string;       // 'US' | 'GB' | 'CA'
   areaCode: string;
+  selectedNumber: string | null; // E.164 from search results
+  selectedLocality: string | null; // City for display
 
-  // Payment state
+  // Step 2: Payment & Provisioning
+  businessName: string;
   paymentComplete: boolean;
-
-  // Provisioned number
-  phoneNumber: string | null;
+  phoneNumber: string | null;       // Provisioned E.164
+  vapiPhoneId: string | null;       // Vapi phone UUID
   provisioningInProgress: boolean;
 
-  // Session tracking (groups telemetry events)
+  // Step 3: Telecom Routing
+  routingConfigured: boolean;
+
+  // Step 4: Agent Personality
+  agentName: string;
+  agentId: string | null;           // DB agent UUID
+  vapiAssistantId: string | null;   // Vapi assistant UUID
+
+  // Step 5: Sync
+  syncComplete: boolean;
+
+  // Shared / Pre-fetched
+  voiceList: Array<{ id: string; name: string }>;
   sessionId: string;
 
   // Actions
-  setBusinessName: (name: string) => void;
-  setSpecialty: (specialty: string) => void;
+  setDirection: (d: CallDirection) => void;
+  setSelectedCountry: (country: string) => void;
   setAreaCode: (code: string) => void;
+  setSelectedNumber: (number: string | null, locality?: string | null) => void;
+  setBusinessName: (name: string) => void;
+  setPaymentComplete: (complete: boolean) => void;
+  setPhoneNumber: (number: string) => void;
+  setVapiPhoneId: (id: string) => void;
+  setProvisioningInProgress: (inProgress: boolean) => void;
+  setRoutingConfigured: (configured: boolean) => void;
+  setAgentName: (name: string) => void;
+  setAgentId: (id: string) => void;
+  setVapiAssistantId: (id: string) => void;
+  setSyncComplete: (complete: boolean) => void;
+  setVoiceList: (voices: Array<{ id: string; name: string }>) => void;
   nextStep: () => void;
   prevStep: () => void;
   goToStep: (step: number) => void;
-  setPaymentComplete: (complete: boolean) => void;
-  setPhoneNumber: (number: string) => void;
-  setProvisioningInProgress: (inProgress: boolean) => void;
+  resetFromStep: (step: number) => void;
   reset: () => void;
 }
 
@@ -46,68 +72,141 @@ export const useOnboardingStore = create<OnboardingState>()(
   persist(
     (set) => ({
       currentStep: 0,
-      direction: 1 as 1 | -1,
-      businessName: '',
-      specialty: null,
+      animDirection: 1 as 1 | -1,
+
+      // Step 1
+      direction: 'inbound' as CallDirection,
+      selectedCountry: 'US',
       areaCode: '',
+      selectedNumber: null,
+      selectedLocality: null,
+
+      // Step 2
+      businessName: '',
       paymentComplete: false,
       phoneNumber: null,
+      vapiPhoneId: null,
       provisioningInProgress: false,
+
+      // Step 3
+      routingConfigured: false,
+
+      // Step 4
+      agentName: '',
+      agentId: null,
+      vapiAssistantId: null,
+
+      // Step 5
+      syncComplete: false,
+
+      // Shared
+      voiceList: [],
       sessionId: generateSessionId(),
 
-      setBusinessName: (name) => set({ businessName: name }),
-      setSpecialty: (specialty) => set({ specialty }),
+      // Actions
+      setDirection: (d) => set({ direction: d }),
+      setSelectedCountry: (country) => set({ selectedCountry: country }),
       setAreaCode: (code) => set({ areaCode: code.replace(/\D/g, '').slice(0, 3) }),
+      setSelectedNumber: (number, locality) =>
+        set({ selectedNumber: number, selectedLocality: locality ?? null }),
+      setBusinessName: (name) => set({ businessName: name }),
+      setPaymentComplete: (complete) => set({ paymentComplete: complete }),
+      setPhoneNumber: (number) => set({ phoneNumber: number }),
+      setVapiPhoneId: (id) => set({ vapiPhoneId: id }),
+      setProvisioningInProgress: (inProgress) => set({ provisioningInProgress: inProgress }),
+      setRoutingConfigured: (configured) => set({ routingConfigured: configured }),
+      setAgentName: (name) => set({ agentName: name }),
+      setAgentId: (id) => set({ agentId: id }),
+      setVapiAssistantId: (id) => set({ vapiAssistantId: id }),
+      setSyncComplete: (complete) => set({ syncComplete: complete }),
+      setVoiceList: (voices) => set({ voiceList: voices }),
 
       nextStep: () =>
         set((state) => ({
           currentStep: Math.min(state.currentStep + 1, TOTAL_STEPS - 1),
-          direction: 1,
+          animDirection: 1,
         })),
 
       prevStep: () =>
         set((state) => ({
           currentStep: Math.max(state.currentStep - 1, 0),
-          direction: -1,
+          animDirection: -1,
         })),
 
       goToStep: (step) =>
         set((state) => ({
           currentStep: Math.max(0, Math.min(step, TOTAL_STEPS - 1)),
-          direction: step > state.currentStep ? 1 : -1,
+          animDirection: step > state.currentStep ? 1 : -1,
         })),
 
-      setPaymentComplete: (complete) => set({ paymentComplete: complete }),
-      setPhoneNumber: (number) => set({ phoneNumber: number }),
-      setProvisioningInProgress: (inProgress) => set({ provisioningInProgress: inProgress }),
+      // Clears all state from step N onward (prevents stale data when user navigates back)
+      resetFromStep: (step) =>
+        set((state) => {
+          const cleared: Partial<OnboardingState> = {};
+          if (step <= 1) {
+            // Reset Step 2+ state
+            cleared.paymentComplete = false;
+            cleared.phoneNumber = null;
+            cleared.vapiPhoneId = null;
+            cleared.provisioningInProgress = false;
+          }
+          if (step <= 2) {
+            cleared.routingConfigured = false;
+          }
+          if (step <= 3) {
+            cleared.agentName = '';
+            cleared.agentId = null;
+            cleared.vapiAssistantId = null;
+          }
+          if (step <= 4) {
+            cleared.syncComplete = false;
+          }
+          return cleared;
+        }),
 
       reset: () =>
         set({
           currentStep: 0,
-          direction: 1,
-          businessName: '',
-          specialty: null,
+          animDirection: 1,
+          direction: 'inbound',
+          selectedCountry: 'US',
           areaCode: '',
+          selectedNumber: null,
+          selectedLocality: null,
+          businessName: '',
           paymentComplete: false,
           phoneNumber: null,
+          vapiPhoneId: null,
           provisioningInProgress: false,
+          routingConfigured: false,
+          agentName: '',
+          agentId: null,
+          vapiAssistantId: null,
+          syncComplete: false,
+          voiceList: [],
           sessionId: generateSessionId(),
         }),
     }),
     {
       name: 'barpel-onboarding',
-      // sessionStorage clears when the browser tab closes — appropriate for a one-time wizard.
-      // This persists businessName/specialty/areaCode across the Stripe redirect so step 4
-      // can personalise the Aha Moment screen with the correct business name.
       storage: createJSONStorage(() => sessionStorage),
-      // Partialize excludes function references and provisioningInProgress (ephemeral UI state)
       partialize: (state) => ({
         currentStep: state.currentStep,
-        businessName: state.businessName,
-        specialty: state.specialty,
+        direction: state.direction,
+        selectedCountry: state.selectedCountry,
         areaCode: state.areaCode,
+        selectedNumber: state.selectedNumber,
+        selectedLocality: state.selectedLocality,
+        businessName: state.businessName,
         paymentComplete: state.paymentComplete,
         phoneNumber: state.phoneNumber,
+        vapiPhoneId: state.vapiPhoneId,
+        routingConfigured: state.routingConfigured,
+        agentName: state.agentName,
+        agentId: state.agentId,
+        vapiAssistantId: state.vapiAssistantId,
+        syncComplete: state.syncComplete,
+        voiceList: state.voiceList,
         sessionId: state.sessionId,
       }),
     }

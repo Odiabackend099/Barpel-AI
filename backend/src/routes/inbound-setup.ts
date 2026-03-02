@@ -391,14 +391,20 @@ router.get('/status', requireAuthOrDev, async (req: Request, res: Response): Pro
     }
 
     // Compare to current key (if present) to help UI guide key-rotation cases.
-    const { data: vapiRow } = await supabase
-      .from('integrations')
-      .select('config')
-      .eq('org_id', orgId)
-      .eq('provider', 'vapi')
-      .maybeSingle();
-
-    const vapiKey = vapiRow?.config?.vapi_api_key || process.env.VAPI_PRIVATE_KEY;
+    let vapiKey = process.env.VAPI_PRIVATE_KEY;
+    try {
+      const { data: vapiRow, error: vapiQueryErr } = await supabase
+        .from('integrations')
+        .select('config')
+        .eq('org_id', orgId)
+        .eq('provider', 'vapi')
+        .maybeSingle();
+      if (!vapiQueryErr) {
+        vapiKey = vapiRow?.config?.vapi_api_key || vapiKey;
+      }
+    } catch {
+      // Fallback to env key if Vapi config query fails
+    }
     const currentLast4 = typeof vapiKey === 'string' ? keyLast4(vapiKey) : null;
     const storedLast4 = typeof cfg.vapiApiKeyLast4Used === 'string' ? cfg.vapiApiKeyLast4Used : null;
     const workspaceMismatch = !!(cfg.phoneNumber && currentLast4 && storedLast4 && currentLast4 !== storedLast4);

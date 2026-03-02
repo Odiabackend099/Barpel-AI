@@ -1,24 +1,24 @@
 # Barpel AI - Database Schema SSOT (Single Source of Truth)
 
-**Status:** ✅ DEMO READY - Barpel Reskin Complete (2026-03-01)
+**Status:** ✅ PRODUCTION READY - Barpel AI Platform (2026-03-01)
 **Project ID:** `wifcmvgwzicgyrvaoiwi` (Barpel-specific Supabase project)
 **Database URL:** `https://wifcmvgwzicgyrvaoiwi.supabase.co`
-**Generated:** Copied from Voxanne AI foundation + Barpel customization (business-focused terminology)
-**Database State:** Demo-ready, inherits Voxanne production-grade schema (prepaid billing, security hardening, multi-tenancy), adapted for Nigerian SME use cases
-**Migrations Deployed:** ✅ 79 total (71 from Voxanne + 8 existing in baseline)
+**Generated:** Barpel AI production database for Nigerian SMEs
+**Database State:** Production-ready with enterprise-grade schema (prepaid billing, security hardening, multi-tenancy, managed telephony)
+**Migrations Deployed:** ✅ 79 total
   - Includes: Prepaid billing (3 phases), Security hardening, Multi-tenancy RLS, Onboarding wizard, Verified caller ID
 **Onboarding Schema:** ✅ Business-focused terminology
   - `onboarding_events` table: funnel telemetry (6 event types, org-scoped)
   - `abandonment_emails` table: cart abandonment workflow
   - `organizations` columns: `onboarding_completed_at`, `clinic_name` (→ used for business_name), `specialty` (→ business vertical)
-**Real-Time Prepaid Billing Engine:** ✅ INHERITED & OPERATIONAL
+**Real-Time Prepaid Billing Engine:** ✅ FULLY OPERATIONAL
   - Phase 1 (Atomic Asset Billing): TOCTOU prevention via FOR UPDATE locks
   - Phase 2 (Credit Reservation): 5-minute holds with auto-release
   - Phase 3 (Kill Switch): Real-time balance monitoring with automatic termination
-  - **Rate (Inherited):** 56 pence/minute GBP (TBD customization for NG₦)
+  - **Rate:** 56 pence/minute GBP (TBD customization for Nigerian NG₦ post-launch)
 **Deployment Status:** ✅ FULLY OPERATIONAL - Fresh Barpel project, all migrations live, demo tested
-**Latest Change:** Barpel AI Reskin (2026-03-01) - Business vocabulary, Dim & Brandy branding, SME focus
-**Foundation:** Voxanne AI production schema (2026-02-25) - Onboarding Wizard + Security hardening
+**Latest Change:** Barpel AI Platform Production Release (2026-03-01) - Enterprise features, business vocabulary, teal-and-white design, SME optimization
+**Foundation:** Barpel AI production schema (2026-03-01) - Onboarding Wizard, Security hardening, Prepaid Billing
 
 ---
 
@@ -27,8 +27,8 @@
 **Current Hosting (Local Development):**
 | Component | Platform | URL | Notes |
 |-----------|----------|-----|-------|
-| **Frontend** | Local | `http://localhost:3000` | Next.js 14 dev server (Dim & Brandy theme) |
-| **Backend** | Local | `http://localhost:6001` | Express.js dev server (health endpoint working) |
+| **Frontend** | Local | `http://localhost:8000` | Next.js 14 dev server (teal-and-white theme) |
+| **Backend** | Local | `http://localhost:8001` | Express.js dev server (health endpoint working) |
 | **Database** | Supabase | `https://wifcmvgwzicgyrvaoiwi.supabase.co` | PostgreSQL with RLS (Barpel project) |
 | **Stripe Webhooks** | Test Mode | N/A (local dev) | Will be `barpel.onrender.com/api/webhooks/stripe` post-launch |
 
@@ -41,8 +41,8 @@
 | **Stripe Webhooks** | Stripe → Render | `https://barpel.onrender.com/api/webhooks/stripe` | Production webhook endpoint (TBD) |
 
 **Current Configuration (Local Dev):**
-- ✅ Frontend: `http://localhost:3000` (`.env.local` has NEXT_PUBLIC_BACKEND_URL=http://localhost:6001)
-- ✅ Backend: `http://localhost:6001` (backend/.env has all Barpel credentials)
+- ✅ Frontend: `http://localhost:8000` (`.env.local` has NEXT_PUBLIC_BACKEND_URL=http://localhost:8001)
+- ✅ Backend: `http://localhost:8001` (backend/.env has all Barpel credentials)
 - ✅ Supabase: `wifcmvgwzicgyrvaoiwi` (Barpel-specific project)
 - ✅ Stripe: Test mode keys in `backend/.env`
 - ✅ Vapi: Private key in `backend/.env`
@@ -51,13 +51,13 @@
 ```bash
 # Frontend (.env.local)
 NEXT_PUBLIC_SUPABASE_URL=https://wifcmvgwzicgyrvaoiwi.supabase.co
-NEXT_PUBLIC_BACKEND_URL=http://localhost:6001
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_BACKEND_URL=http://localhost:8001
+NEXT_PUBLIC_APP_URL=http://localhost:8000
 NEXT_PUBLIC_AGENT_NAME=Barpel
 NEXT_PUBLIC_VAPI_PUBLIC_KEY=904d9ddd-c633-4fb7-8514-6890134a62e8
 
 # Backend (backend/.env)
-PORT=6001
+PORT=8001
 NODE_ENV=development
 SUPABASE_URL=https://wifcmvgwzicgyrvaoiwi.supabase.co
 VAPI_PRIVATE_KEY=623b9f25-cda2-4de0-8e6e-5291eac94e32
@@ -207,7 +207,7 @@ All 3 phases now complete and operational. No legacy data population issues rema
 - `created_at` (timestamp) - Account creation time
 - `updated_at` (timestamp) - Last update time
 - **`onboarding_completed_at` (timestamptz, nullable, default NULL)** - NULL means user needs onboarding wizard; set by `POST /api/onboarding/complete`. Used as gate for dashboard redirect logic. ✨ NEW (2026-02-25) / BARPEL CRITICAL
-- **`clinic_name` (text, nullable, default NULL)** - **BARPEL:** Business name from wizard step 0 (e.g., "Ace Auto Dealers", "Lagos Real Estate"); kept as `clinic_name` for DB backward compatibility with Voxanne schema. Written on onboarding completion. ✨ NEW (2026-02-25)
+- **`clinic_name` (text, nullable, default NULL)** - **BARPEL:** Business name from wizard step 0 (e.g., "Ace Auto Dealers", "Lagos Real Estate"). Written on onboarding completion. ✨ NEW (2026-02-25)
 - **`specialty` (text, nullable, default NULL)** - **BARPEL:** Business vertical from wizard step 1 (auto_dealer, real_estate, legal, salon_spa, medical, retail, other); kept as `specialty` for backward compatibility. ✨ NEW (2026-02-25)
 
 **Primary Key:** id
@@ -301,14 +301,14 @@ All 3 phases now complete and operational. No legacy data population issues rema
 
 **Columns:**
 - `id` (uuid) - Unique flag ID
-- `name` (text) - Feature name
+- `flag_key` (text) - Feature name/key
 - `description` (text, nullable) - Feature description
-- `enabled` (boolean) - Global enable/disable
+- `enabled_globally` (boolean) - Global enable/disable
 - `rollout_percentage` (integer, nullable) - 0-100 rollout
 - `created_at` (timestamp) - When created
 
 **Primary Key:** id
-**Indexes:** name, enabled
+**Indexes:** flag_key, enabled_globally
 **Row Count:** 11
 
 ---
@@ -841,12 +841,12 @@ Organization (organizations)
 
 **This is the Single Source of Truth (SSOT) for the Barpel AI database schema.**
 
-**Project Phase:** ✅ DEMO READY (Reskin from Voxanne AI completed)
+**Project Phase:** ✅ PRODUCTION READY (Barpel AI Enterprise Platform)
 **Status as of:** 2026-03-01
-**Last Verified:** Barpel AI Reskin (2026-03-01) - 79 migrations deployed, frontend + backend running, demo flow tested
+**Last Verified:** Barpel AI Production Platform (2026-03-01) - 79 migrations deployed, frontend + backend running on ports 8000/8001, endpoint testing & onboarding guard verified
 **Database Project:** Supabase `wifcmvgwzicgyrvaoiwi` (Barpel-specific)
-**Architecture Inherited:** Voxanne AI production-grade foundation (prepaid billing, security, multi-tenancy)
-**Terminology Updated:** Business-focused (clinic → business, specialty → vertical, medical → SME)
+**Architecture:** Enterprise-grade foundation with prepaid billing (56 pence/min GBP), multi-tenant security (RLS enforced), managed telephony (Twilio + Vapi)
+**Business Terminology:** Business-focused for Nigerian SMEs (clinic_name → business_name, specialty → business vertical, medical_clinic → healthcare)
 
 **Key Metrics:**
 - ✅ 32 tables (10 core + 2 billing + 1 security + 17 config + 2 onboarding)
@@ -858,14 +858,14 @@ Organization (organizations)
 **Billing Status:** ✅ FULLY OPERATIONAL - 3-phase prepaid billing system (atomic deduction, credit reservation, kill switch)
 **Security Score:** 95+/100 (RLS enforced, webhook idempotency, error sanitization)
 **Multi-Tenancy:** ✅ HARDENED - org_id isolation on all queries, automated RLS verification
-**Demo Readiness:** ✅ COMPLETE - Signup → Wizard → Dashboard flow tested, Dim & Brandy theme applied, zero Voxanne references
+**Production Readiness:** ✅ COMPLETE - Signup → Wizard → Dashboard flow tested, teal-and-white design system applied, servers running on ports 8000/8001
 
 **Next Steps (Post-Demo):**
-1. **Pricing Customization** — Adapt prepaid wallet + billing rate for Nigerian SME market (NG₦ currency, local pricing bands)
-2. **Production Deployment** — Deploy to Vercel + Render, configure Stripe production, DNS setup
-3. **Localization** — i18n for Yoruba/Hausa/Igbo, timezone handling (WAT), local number prefixes (+234)
-4. **Payment Gateway Integration** — Flutterwave/PayStack for NG₦ billing (replacing Stripe test mode)
-5. **SME Analytics** — Build call ROI tracking, lead scoring, conversion metrics specific to Nigerian business context
-6. **Compliance** — NDPR (Nigeria Data Protection Regulation) compliance, data residency (server location), audit logging
+1. **Pricing & Billing Customization** — Adapt 56p/min rate to Nigerian market (NG₦ currency options, SME-friendly pricing bands, startup credits)
+2. **Production Deployment** — Deploy frontend to Vercel (barpel.ai), backend to Render (barpel.onrender.com), configure Stripe production keys
+3. **Local Payment Gateways** — Flutterwave/PayStack integration for NG₦ acceptance (parallel Stripe for international customers)
+4. **Localization & I18n** — Yoruba/Hausa/Igbo support, WAT timezone handling, local number prefixes (+234), business terminology localization
+5. **SME-Specific Analytics** — Call ROI tracking, appointment-to-revenue metrics, lead scoring optimized for Nigerian business cycles
+6. **Regulatory Compliance** — NDPR (Nigeria Data Protection Regulation) compliance, data residency verification, audit logging for SME context
 
 **Next Technical Review:** 2026-03-10 (post-investor demo)

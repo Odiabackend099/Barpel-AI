@@ -65,7 +65,7 @@ export default function SignUpPage() {
         setLoading(false);
         return;
       }
-      const resolvedBackendUrl = backendUrl || 'http://localhost:3001';
+      const resolvedBackendUrl = backendUrl || 'http://localhost:8001';
 
       let csrfToken: string | null = null;
       try {

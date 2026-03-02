@@ -153,7 +153,7 @@ export function OrgSettings() {
               onChange={(e) => setFormData({ name: e.target.value })}
               placeholder="Enter organization name"
               disabled={saving}
-              className="w-full px-4 py-2 rounded-lg bg-surgical-50 border border-surgical-200 text-barpel-slate placeholder-obsidian/40 text-sm tracking-tight focus:outline-none focus:border-surgical-500 focus:ring-1 focus:ring-surgical-500 transition-all duration-200 disabled:opacity-50"
+              className="w-full px-4 py-2 rounded-lg bg-surgical-50 border border-surgical-200 text-barpel-slate placeholder-barpel-gray/60 text-sm tracking-tight focus:outline-none focus:border-barpel-teal focus:ring-1 focus:ring-barpel-teal transition-all duration-200 disabled:opacity-50"
             />
             <p className="text-xs text-barpel-slate/60 mt-2 tracking-tight">
               {formData.name.length}/100 characters

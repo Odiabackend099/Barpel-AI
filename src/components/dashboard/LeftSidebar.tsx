@@ -125,16 +125,16 @@ export default function LeftSidebar() {
         <>
             <div className="p-6">
                 <div className="flex items-center gap-2 mb-6">
-                    <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0">
+                    <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
                         <Image
-                            src="/barpel-logo.jpeg"
+                            src="/images/logos/logo_master_transparent.png"
                             alt="Barpel AI"
-                            width={32}
-                            height={32}
-                            className="object-cover w-full h-full"
+                            width={40}
+                            height={40}
+                            className="object-contain w-full h-full"
                         />
                     </div>
-                    <span className="font-semibold text-[#F3F4F6]">Barpel AI</span>
+                    <span className="font-bold text-lg text-barpel-slate">Barpel AI</span>
                 </div>
             </div>
 
@@ -157,7 +157,7 @@ export default function LeftSidebar() {
                                         href={item.href}
                                         onClick={(e) => handleLinkClick(e, item.href)}
                                         className={`group relative w-full px-3 py-1.5 rounded-lg flex items-center gap-3 transition-all duration-200 font-semibold text-sm text-left ${isActive
-                                            ? 'text-barpel-teal bg-gradient-to-r from-surgical-600/10 to-transparent border-l-4 border-barpel-teal shadow-sm'
+                                            ? 'text-barpel-teal bg-gradient-to-r from-barpel-teal/10 to-transparent border-l-4 border-barpel-teal shadow-sm'
                                             : 'text-barpel-gray hover:text-barpel-slate hover:bg-barpel-teal/5'
                                             }`}
                                     >
@@ -189,7 +189,7 @@ export default function LeftSidebar() {
                                     href={item.href}
                                     onClick={(e) => handleLinkClick(e, item.href)}
                                     className={`group relative w-full px-3 py-1.5 rounded-lg flex items-center gap-3 transition-all duration-200 font-semibold text-sm text-left ${isActive
-                                        ? 'text-barpel-teal bg-gradient-to-r from-surgical-600/10 to-transparent border-l-4 border-barpel-teal shadow-sm'
+                                        ? 'text-barpel-teal bg-gradient-to-r from-barpel-teal/10 to-transparent border-l-4 border-barpel-teal shadow-sm'
                                         : 'text-barpel-gray hover:text-barpel-slate hover:bg-barpel-teal/5'
                                         }`}
                                 >
@@ -216,7 +216,7 @@ export default function LeftSidebar() {
                 {/* Balance Indicator - Circular Ring (Real-time, shared with wallet page) */}
                 <Link
                     href="/dashboard/wallet"
-                    className="w-full px-3 py-2 rounded-lg border border-barpel-border bg-white mb-1.5 shadow-sm hover:border-surgical-300 hover:shadow transition-all flex items-center justify-between gap-3 group"
+                    className="w-full px-3 py-2 rounded-lg border border-barpel-border bg-white mb-1.5 shadow-sm hover:border-barpel-teal/30 hover:shadow transition-all flex items-center justify-between gap-3 group"
                 >
                     <div className="flex-1 min-w-0">
                         <p className="text-[10px] text-barpel-gray uppercase tracking-wider font-medium mb-0.5">Balance</p>
@@ -238,7 +238,7 @@ export default function LeftSidebar() {
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="2.5"
-                                className="text-surgical-100"
+                                className="text-barpel-teal/10"
                             />
                             {/* Progress circle */}
                             <circle
@@ -251,7 +251,7 @@ export default function LeftSidebar() {
                                 strokeLinecap="round"
                                 className={
                                     walletData?.balance_pence == null
-                                        ? 'text-surgical-200'
+                                        ? 'text-barpel-teal/20'
                                         : walletData.balance_pence < 79
                                         ? 'text-red-500'
                                         : walletData.balance_pence < 500
@@ -269,7 +269,7 @@ export default function LeftSidebar() {
                         <div className="absolute inset-0 flex items-center justify-center">
                             <Wallet className={`w-4 h-4 ${
                                 walletData?.balance_pence == null
-                                    ? 'text-surgical-300'
+                                    ? 'text-barpel-teal/30'
                                     : walletData.balance_pence < 79
                                     ? 'text-red-500'
                                     : walletData.balance_pence < 500
@@ -282,7 +282,7 @@ export default function LeftSidebar() {
 
                 <button
                     onClick={handleLogoutClick}
-                    className="w-full px-3 py-2 rounded-lg text-xs font-medium text-barpel-gray hover:text-barpel-slate hover:bg-obsidian/5 transition-all flex items-center justify-center gap-2"
+                    className="w-full px-3 py-2 rounded-lg text-xs font-medium text-barpel-gray hover:text-barpel-slate hover:bg-gray-100 transition-all flex items-center justify-center gap-2"
                 >
                     <LogOut className="w-3.5 h-3.5" />
                     Logout
@@ -319,7 +319,7 @@ export default function LeftSidebar() {
             {/* Mobile Drawer */}
             {mobileOpen && (
                 <div className="md:hidden fixed inset-0 z-30">
-                    <div className="absolute inset-0 bg-obsidian/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
                     <div className="absolute left-0 top-0 h-full w-72 bg-white border-r border-barpel-border flex flex-col shadow-2xl">
                         <div className="p-4 flex items-center justify-between border-b border-barpel-border/50">
                             <span className="text-lg font-bold text-barpel-slate tracking-tight">Barpel</span>

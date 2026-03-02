@@ -45,7 +45,7 @@ router.post('/provision', async (req: Request, res: Response): Promise<void> => 
       return;
     }
 
-    const { country = 'US', numberType = 'local', areaCode, direction = 'inbound' } = req.body;
+    const { country = 'US', numberType = 'local', areaCode, phoneNumber, direction = 'inbound' } = req.body;
 
     // Validate direction
     if (!['inbound', 'outbound', 'unassigned'].includes(direction)) {
@@ -189,6 +189,7 @@ router.post('/provision', async (req: Request, res: Response): Promise<void> => 
       country,
       numberType,
       areaCode,
+      phoneNumber,
       direction,
     });
 
@@ -444,8 +445,27 @@ router.get('/available-numbers', async (req: Request, res: Response): Promise<vo
 
     res.json({ numbers });
   } catch (err: any) {
-    logger.error('Available-numbers endpoint error', { error: err.message });
-    res.status(500).json({ error: 'Operation failed. Please try again.' });
+    const twilioCode = err.code || err.status;
+    logger.error('Available-numbers endpoint error', {
+      error: err.message,
+      twilioCode,
+      twilioMoreInfo: err.moreInfo,
+      stack: err.stack,
+    });
+
+    // Twilio SDK errors have a numeric `code` property
+    if (twilioCode === 20003) {
+      // Auth failure — permanent config issue, don't let frontend retry
+      res.status(424).json({ error: 'Phone service configuration error. Please contact support.' });
+    } else if (twilioCode === 21452 || twilioCode === 21614) {
+      // No numbers available for the requested criteria — not an error
+      res.json({ numbers: [] });
+    } else if (typeof twilioCode === 'number' && twilioCode >= 20000) {
+      // Other Twilio API errors — transient, frontend may retry
+      res.status(502).json({ error: 'Phone service temporarily unavailable. Please try again.' });
+    } else {
+      res.status(500).json({ error: 'Operation failed. Please try again.' });
+    }
   }
 });
 

@@ -14,7 +14,7 @@ export default function GradientOrbExample() {
             {/* Background gradient orbs for depth */}
             <GradientOrb
                 position="top-right"
-                color="blue-bright"
+                color="teal"
                 opacity={0.3}
                 size={500}
                 blur={150}
@@ -22,7 +22,7 @@ export default function GradientOrbExample() {
 
             <GradientOrb
                 position="bottom-left"
-                color="blue-medium"
+                color="teal-dark"
                 opacity={0.2}
                 size={400}
                 blur={120}
@@ -31,7 +31,7 @@ export default function GradientOrbExample() {
 
             <GradientOrb
                 position="center"
-                color="blue-light"
+                color="teal-light"
                 opacity={0.15}
                 size={600}
                 blur={180}

@@ -206,7 +206,7 @@ export default function InboundConfigPage() {
                             value={config.accountSid}
                             onChange={(e) => setConfig({ ...config, accountSid: e.target.value })}
                             placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-                            className="w-full px-4 py-2 border border-surgical-200 rounded-lg focus:ring-2 focus:ring-surgical-500 focus:border-surgical-500 outline-none transition-all font-mono text-sm text-barpel-slate bg-white placeholder-obsidian/40"
+                            className="w-full px-4 py-2 border border-surgical-200 rounded-lg focus:ring-2 focus:ring-surgical-500 focus:border-surgical-500 outline-none transition-all font-mono text-sm text-barpel-slate bg-white placeholder-barpel-gray/60"
                         />
                     </div>
 
@@ -219,7 +219,7 @@ export default function InboundConfigPage() {
                             value={config.authToken}
                             onChange={(e) => setConfig({ ...config, authToken: e.target.value })}
                             placeholder="••••••••••••••••••••••••••••••••"
-                            className="w-full px-4 py-2 border border-surgical-200 rounded-lg focus:ring-2 focus:ring-surgical-500 focus:border-surgical-500 outline-none transition-all font-mono text-sm text-barpel-slate bg-white placeholder-obsidian/40"
+                            className="w-full px-4 py-2 border border-surgical-200 rounded-lg focus:ring-2 focus:ring-surgical-500 focus:border-surgical-500 outline-none transition-all font-mono text-sm text-barpel-slate bg-white placeholder-barpel-gray/60"
                         />
                     </div>
 
@@ -232,7 +232,7 @@ export default function InboundConfigPage() {
                             value={config.phoneNumber}
                             onChange={(e) => setConfig({ ...config, phoneNumber: e.target.value })}
                             placeholder="+442012345678"
-                            className="w-full px-4 py-2 border border-surgical-200 rounded-lg focus:ring-2 focus:ring-surgical-500 focus:border-surgical-500 outline-none transition-all font-mono text-sm text-barpel-slate bg-white placeholder-obsidian/40"
+                            className="w-full px-4 py-2 border border-surgical-200 rounded-lg focus:ring-2 focus:ring-surgical-500 focus:border-surgical-500 outline-none transition-all font-mono text-sm text-barpel-slate bg-white placeholder-barpel-gray/60"
                         />
                         <p className="text-xs text-barpel-slate/60 mt-1">Must be E.164 format (e.g. +44...)</p>
                     </div>

@@ -127,7 +127,7 @@ export default function CallWaitingAIDashboard() {
                     </div>
                     <button
                         onClick={() => router.push('/dashboard/calls')}
-                        className="text-sm font-semibold text-surgical-600 bg-surgical-50 px-4 py-2.5 rounded-xl border border-surgical-200 shadow-sm hover:shadow-md hover:bg-surgical-100 hover:scale-105 hover:-translate-y-0.5 active:scale-100 focus:outline-none focus:ring-2 focus:ring-barpel-teal/30 transition-all duration-200"
+                        className="text-sm font-semibold text-barpel-teal bg-barpel-teal/5 px-4 py-2.5 rounded-xl border border-barpel-teal/20 shadow-sm hover:shadow-md hover:bg-barpel-teal/10 hover:scale-105 hover:-translate-y-0.5 active:scale-100 focus:outline-none focus:ring-2 focus:ring-barpel-teal/30 transition-all duration-200"
                     >
                         View All Activity
                     </button>
@@ -177,7 +177,7 @@ export default function CallWaitingAIDashboard() {
                                     <div className="flex items-start justify-between gap-4">
                                         <div className="flex items-start gap-4 flex-1">
                                             {/* Event Type Icon */}
-                                            <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-barpel-teal/10 text-surgical-600 border border-surgical-200 font-bold">
+                                            <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-barpel-teal/10 text-barpel-teal border border-barpel-teal/20 font-bold">
                                                 {event.type === 'call_completed' ? '📞' :
                                                     event.type === 'hot_lead_detected' ? '🔥' :
                                                         '📅'}

@@ -22,7 +22,7 @@ interface AmbientOrbsProps {
 export function AmbientOrbs({
   className,
   count = 3,
-  colors = ['clinical-blue', 'surgical-blue', 'sky-mist'],
+  colors = ['barpel-teal', 'barpel-teal-dark', 'barpel-teal-light'],
   animated = true,
 }: AmbientOrbsProps) {
   // Generate orbs with unique properties
@@ -89,7 +89,7 @@ interface GradientOrbProps {
 
 export function GradientOrb({
   size = 200,
-  color = 'clinical-blue',
+  color = 'barpel-teal',
   duration = 20,
   delay = 0,
   opacity = 0.2,
@@ -143,7 +143,7 @@ export function FloatingParticles({ count = 20, className }: FloatingParticlesPr
       {particles.map((particle) => (
         <motion.div
           key={particle.id}
-          className="absolute rounded-full bg-surgical-blue"
+          className="absolute rounded-full bg-barpel-teal"
           style={{
             width: particle.size,
             height: particle.size,

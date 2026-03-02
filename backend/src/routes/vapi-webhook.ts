@@ -14,6 +14,7 @@ import { OutcomeSummaryService } from '../services/outcome-summary';
 import { RAG_CONFIG } from '../config/rag-config';
 import { hasEnoughBalance, checkBalance, reserveCallCredits, commitReservedCredits, getActiveReservation } from '../services/wallet-service';
 import { processCallBilling } from '../services/billing-manager';
+import { uploadCallRecording } from '../services/call-recording-storage';
 
 const vapiWebhookRouter = Router();
 
@@ -1181,40 +1182,23 @@ vapiWebhookRouter.post('/webhook', webhookLimiter, async (req: Request, res: Res
           || (typeof message?.recordingUrl === 'string' ? message.recordingUrl : null);
 
         if (recordingUrl && call?.id) {
-          try {
-            const { error: queueError } = await supabase
-              .from('recording_upload_queue')
-              .insert({
-                call_id: call.id,
-                vapi_call_id: call.id,
-                org_id: orgId,
-                recording_url: recordingUrl,
-                call_type: callDirection || 'inbound',
-                priority: 'normal',
-                status: 'pending',
-                attempt_count: 0,
-                max_attempts: 3
-              });
-
-            if (queueError) {
-              log.error('Vapi-Webhook', 'Failed to queue recording upload', {
-                callId: call.id,
-                orgId,
-                error: queueError.message
-              });
+          // Fire-and-forget: upload recording directly to Supabase Storage
+          // (recording_upload_queue table was deleted — use direct upload instead)
+          uploadCallRecording({
+            orgId,
+            callId: call.id,
+            callType: (callDirection as 'inbound' | 'outbound') || 'inbound',
+            recordingUrl,
+            vapiCallId: call.id,
+          }).then(result => {
+            if (result.success) {
+              log.info('Vapi-Webhook', 'Recording uploaded to storage', { callId: call.id, storagePath: result.storagePath });
             } else {
-              log.info('Vapi-Webhook', '🎵 Recording upload queued', {
-                callId: call.id,
-                orgId,
-                url: recordingUrl
-              });
+              log.warn('Vapi-Webhook', 'Recording upload failed (non-blocking)', { callId: call.id, error: result.error });
             }
-          } catch (recordingQueueError: any) {
-            log.error('Vapi-Webhook', 'Recording queue insertion exception', {
-              error: recordingQueueError.message,
-              callId: call?.id
-            });
-          }
+          }).catch(err => {
+            log.warn('Vapi-Webhook', 'Recording upload exception (non-blocking)', { error: err.message, callId: call?.id });
+          });
         }
 
         // Broadcast to dashboard via WebSocket

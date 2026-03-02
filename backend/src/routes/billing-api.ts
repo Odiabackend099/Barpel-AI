@@ -358,7 +358,17 @@ router.get('/wallet', requireAuth, async (req: Request, res: Response) => {
 
     const balance = await checkBalance(orgId);
     if (!balance) {
-      return res.status(404).json({ error: 'Organization not found' });
+      // New org with no transaction history — return zero balance (not 404)
+      return res.json({
+        balance_pence: 0,
+        balance_formatted: '£0.00',
+        currency: 'gbp',
+        low_balance_pence: 500,
+        is_low_balance: true,
+        auto_recharge_enabled: false,
+        has_payment_method: false,
+        summary: null,
+      });
     }
 
     const summary = await getWalletSummary(orgId);
