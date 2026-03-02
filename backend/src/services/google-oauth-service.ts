@@ -212,22 +212,51 @@ export async function exchangeCodeForTokens(
         email: userEmail
       });
 
-      const { error: upsertError } = await supabase
+      // Check if credentials already exist
+      const { data: existing, error: selectError } = await supabase
         .from('org_credentials')
-        .upsert({
-          org_id: orgId,
-          provider: 'google_calendar',
-          is_active: true,
-          encrypted_config: encryptedConfig,
-          metadata: userEmail ? { email: userEmail } : null,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'org_id,provider'
-        });
+        .select('id')
+        .eq('org_id', orgId)
+        .eq('provider', 'google_calendar')
+        .maybeSingle();
 
-      if (upsertError) {
-        throw new Error(`Failed to store credentials: ${upsertError.message}`);
+      if (selectError) {
+        throw new Error(`Failed to check existing credentials: ${selectError.message}`);
+      }
+
+      if (existing?.id) {
+        // Update existing credentials (preserve created_at timestamp)
+        const { error: updateError } = await supabase
+          .from('org_credentials')
+          .update({
+            is_active: true,
+            encrypted_config: encryptedConfig,
+            metadata: userEmail ? { email: userEmail } : null,
+            updated_at: new Date().toISOString()
+            // created_at intentionally omitted to preserve original connection timestamp
+          })
+          .eq('id', existing.id);
+
+        if (updateError) {
+          throw new Error(`Failed to update credentials: ${updateError.message}`);
+        }
+      } else {
+        // Create new credentials
+        const { error: insertError } = await supabase
+          .from('org_credentials')
+          .insert({
+            org_id: orgId,
+            provider: 'google_calendar',
+            is_active: true,
+            encrypted_config: encryptedConfig,
+            metadata: userEmail ? { email: userEmail } : null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          });
+
+        if (insertError) {
+          throw new Error(`Failed to store credentials: ${insertError.message}`);
+        }
       }
 
       console.log('[GoogleOAuth] Credentials stored successfully to org_credentials');

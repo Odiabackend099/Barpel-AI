@@ -43,6 +43,7 @@ router.get('/settings', async (req: Request, res: Response): Promise<void> => {
       .from('integration_settings')
       .select('vapi_api_key, twilio_account_sid, last_verified_at')
       .eq('org_id', orgId)
+      .is('provider', null)
       .maybeSingle();
 
     if (error && error.code !== 'PGRST116') {
@@ -111,6 +112,7 @@ router.post('/settings', async (req: Request, res: Response): Promise<void> => {
       .from('integration_settings')
       .select('id')
       .eq('org_id', orgId)
+      .is('provider', null)
       .maybeSingle();
 
     const updateData: any = {
@@ -131,7 +133,8 @@ router.post('/settings', async (req: Request, res: Response): Promise<void> => {
       const result = await supabase
         .from('integration_settings')
         .update(updateData)
-        .eq('org_id', orgId);
+        .eq('org_id', orgId)
+        .is('provider', null);
       error = result.error;
     } else {
       // Create new settings
@@ -565,6 +568,7 @@ export async function getIntegrationSettings(orgId: string = 'founder-console'):
       .from('integration_settings')
       .select('vapi_api_key, vapi_webhook_secret, twilio_account_sid, twilio_auth_token, twilio_from_number')
       .eq('org_id', orgId)
+      .is('provider', null)
       .maybeSingle();
 
     if (error) {
