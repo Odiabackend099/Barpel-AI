@@ -4,8 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import useSWR from 'swr';
 import { authedBackendFetch } from '@/lib/authed-backend-fetch';
-import { Plus, Trash2, AlertCircle, CheckCircle, Loader, Shield, User } from 'lucide-react';
-import { InviteForm } from './InviteForm';
+import { Trash2, AlertCircle, CheckCircle, Loader, Shield, User } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 
 interface TeamMember {
@@ -20,7 +19,6 @@ const fetcher = (url: string) => authedBackendFetch<any>(url);
 
 export const TeamMembersList: React.FC = () => {
   const { user } = useAuth();
-  const [showInviteForm, setShowInviteForm] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [removingMemberId, setRemovingMemberId] = useState<string | null>(null);
@@ -121,19 +119,9 @@ export const TeamMembersList: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-start">
-        <div>
-          <h2 className="text-2xl font-bold text-barpel-slate">Team Members</h2>
-          <p className="text-barpel-slate/60 mt-1">Manage your team and assign roles</p>
-        </div>
-        <button
-          type="button"
-          onClick={() => setShowInviteForm(true)}
-          className="bg-barpel-teal text-white px-4 py-2 rounded-lg hover:bg-barpel-teal-dark flex items-center gap-2"
-        >
-          <Plus className="w-5 h-5" />
-          Invite Member
-        </button>
+      <div>
+        <h2 className="text-2xl font-bold text-barpel-slate">Team Members</h2>
+        <p className="text-barpel-slate/60 mt-1">Manage your team and assign roles</p>
       </div>
 
       {/* Alert Messages */}
@@ -169,14 +157,7 @@ export const TeamMembersList: React.FC = () => {
           </div>
         ) : members.length === 0 ? (
           <div className="p-8 text-center">
-            <p className="text-barpel-slate/60 mb-4">No team members yet</p>
-            <button
-              type="button"
-              onClick={() => setShowInviteForm(true)}
-              className="text-surgical-600 hover:text-surgical-500 font-medium"
-            >
-              Invite your first team member
-            </button>
+            <p className="text-barpel-slate/60">No team members yet</p>
           </div>
         ) : (
           <table className="w-full divide-y divide-surgical-200">
@@ -246,22 +227,6 @@ export const TeamMembersList: React.FC = () => {
           </table>
         )}
       </div>
-
-      {/* Invite Form Modal */}
-      {showInviteForm && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 border border-surgical-200">
-            <h2 className="text-2xl font-bold mb-4 text-barpel-slate">Invite Team Member</h2>
-            <InviteForm
-              onClose={() => setShowInviteForm(false)}
-              onSuccess={() => {
-                setShowInviteForm(false);
-                mutateMembers();
-              }}
-            />
-          </div>
-        </div>
-      )}
 
       {/* Remove Member Confirmation Dialog */}
       <ConfirmDialog

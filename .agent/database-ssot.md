@@ -826,6 +826,57 @@ ALTER TABLE integration_settings ADD COLUMN IF NOT EXISTS transfer_departments J
 2. Never remove `vapi_phone_number_id` from agent-sync writes — if NULL, outbound calls fail silently.
 3. The `is_active` column gates which agent the test endpoints query. Always use `is_active`, never `active`.
 4. Role fallback prompt in `ensureAssistantSynced()`: outbound agents use SDR template; inbound agents use generic receptionist prompt. If an agent has `system_prompt = null`, this fallback is used — it is role-aware.
+5. **PHONE NUMBER PROVISIONING (2026-03-02 FIX):** Inbound and outbound phone numbers MUST be strictly separated. `phone-number-resolver.ts` Step 1 now requires `routing_direction='outbound'` with zero fallback to inbound numbers. Attempting outbound calls without an explicitly provisioned outbound number returns clear error message (no silent failures). See `backend/src/services/phone-number-resolver.ts` lines 72-110 for enforcement.
+
+---
+
+### Table: `managed_phone_numbers` (Phone Number Provisioning)
+
+**Purpose:** Stores phone numbers managed by Barpel (purchased/provisioned via Twilio). Each row has a `routing_direction` that strictly governs whether the number can be used for inbound calls, outbound calls, or both.
+
+**Critical Architecture (2026-03-02 Fix):**
+- **Inbound-only numbers** (`routing_direction='inbound'`): Can ONLY be used for receiving calls. Cannot be used for outbound calling.
+- **Outbound-only numbers** (`routing_direction='outbound'`): Can ONLY be used for making calls. Cannot be used for receiving calls.
+- **Bidirectional numbers** (`routing_direction='both'`): Can be used for both inbound and outbound (rare, requires explicit configuration).
+- **No Cross-Use Allowed:** The phone number resolver (`backend/src/services/phone-number-resolver.ts`) strictly enforces this separation. There is NO fallback that accepts any random active number for outbound calling.
+
+**Key Columns:**
+- `id` (uuid) - Unique phone number record ID
+- `org_id` (uuid) - Organization owner
+- `phone_number` (text) - E.164 formatted phone number (e.g., `+2348012345678`)
+- `vapi_phone_id` (text, nullable) - Vapi phone number UUID (required for Vapi calls)
+- `routing_direction` (text) - **CRITICAL:** `'inbound'`, `'outbound'`, or `'both'`. Phone resolution strictly filters by this field.
+- `provider` (text) - Provider type: `'twilio'`, `'vonage'`, etc.
+- `status` (text) - Status: `'active'`, `'suspended'`, `'released'`
+- `created_at` (timestamptz)
+- `updated_at` (timestamptz)
+
+**Phone Number Resolution Algorithm (2026-03-02):**
+```
+resolveOrgPhoneNumberId(orgId, direction='outbound'):
+  Step 1: Query managed_phone_numbers WHERE org_id=orgId AND routing_direction=direction AND status='active'
+          ↳ If found: Return vapi_phone_id (success)
+          ↳ If NOT found: Continue to Step 2 (NO FALLBACK TO ANY ACTIVE NUMBER)
+  Step 2: Check BYOC (Bring Your Own Carrier) credentials
+  Step 3-5: Fallback strategies for BYOC
+  Final: Return null if NO phone number provisioned (user must configure outbound number)
+```
+
+**Before Fix (Bug - Commit 34d2c19):**
+- Step 1 fallback query had NO `routing_direction` filter
+- Accepted ANY active managed number regardless of direction
+- Inbound numbers were incorrectly used for outbound calls ❌
+
+**After Fix (Correct - Commit 34d2c19):**
+- Step 1 strictly filters `routing_direction='outbound'`
+- Removed permissive fallback entirely
+- Returns NULL if no outbound number provisioned
+- Returns clear error message: "No outbound phone number provisioned. Inbound numbers cannot be used for outbound calls." ✅
+
+**Related Code Files:**
+- `backend/src/services/phone-number-resolver.ts` (lines 72-110): Phone number resolution with strict outbound filtering
+- `backend/src/routes/founder-console-v2.ts` (lines 3841-3857): Enhanced error message for missing outbound number
+- `backend/src/routes/managed-telephony.ts`: Provisioning endpoints that set `routing_direction`
 
 ---
 

@@ -513,6 +513,34 @@ const TestAgentPageContent = () => {
         };
     }, [activeTab, outboundTrackingId]);
 
+    // Keyboard shortcuts for accessibility - ACCESSIBLE: Common call control shortcuts
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            // Only handle shortcuts when in the test interface
+            if (!user) return;
+
+            // Escape: End call
+            if (event.key === 'Escape' && isConnected) {
+                event.preventDefault();
+                handleToggleWebCall();
+            }
+
+            // M key: Toggle mute (when focused on call area)
+            if (event.key === 'm' || event.key === 'M') {
+                // Check if not typing in an input field
+                const target = event.target as HTMLElement;
+                if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA') {
+                    event.preventDefault();
+                    if (isConnected) {
+                        handleToggleMute();
+                    }
+                }
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isConnected, user]);
 
     if (!user && !loading) return null;
 
@@ -548,11 +576,11 @@ const TestAgentPageContent = () => {
 
                 {/* --- Web Test Interface --- */}
                 {activeTab === 'web' && (
-                    <div className="flex-1 flex flex-col h-full relative">
-                        {/* Transcript Area - Paper Style */}
+                    <div className="flex-1 flex flex-col h-full relative min-h-0">
+                        {/* Transcript Area - Paper Style - FIXED: min-h-0 prevents flex overflow */}
                         <div
                             ref={transcriptContainerRef}
-                            className="flex-1 p-6 overflow-y-auto space-y-4 bg-white overscroll-contain relative"
+                            className="flex-1 min-h-0 p-6 pb-8 overflow-y-auto space-y-4 bg-white overscroll-contain relative"
                             role="log"
                             aria-live="polite"
                             aria-label="Conversation transcript"
@@ -591,7 +619,7 @@ const TestAgentPageContent = () => {
                             )}
                         </div>
 
-                        {/* Scroll to bottom button (ChatGPT-style) */}
+                        {/* Scroll to bottom button (ChatGPT-style) - FIXED: Positioned above controls */}
                         <AnimatePresence>
                             {showScrollButton && displayTranscripts.length > 0 && (
                                 <motion.button
@@ -602,11 +630,12 @@ const TestAgentPageContent = () => {
                                     onClick={() => {
                                         transcriptEndRef.current?.scrollIntoView({ behavior: 'smooth' });
                                     }}
-                                    className="absolute bottom-24 right-6 z-20 bg-barpel-teal text-white px-4 py-2 rounded-full shadow-lg hover:bg-barpel-teal-dark transition-colors flex items-center gap-2"
+                                    className="absolute right-6 z-15 bg-barpel-teal text-white px-3 py-2 rounded-full shadow-lg hover:bg-barpel-teal-dark transition-colors flex items-center gap-2 text-sm"
+                                    style={{ bottom: 'calc(100% + 88px)' }}
                                     aria-label="Scroll to latest message"
                                 >
                                     <ArrowDown className="w-4 h-4" />
-                                    <span className="text-sm font-medium">Latest</span>
+                                    <span className="font-medium">Latest</span>
                                 </motion.button>
                             )}
                         </AnimatePresence>
@@ -618,12 +647,12 @@ const TestAgentPageContent = () => {
                             </div>
                         )}
 
-                        {/* Fixed Control Bar */}
-                        <div className="sticky bottom-0 z-10 px-4 sm:px-6 py-4 sm:py-5 border-t border-surgical-200 bg-white/95 backdrop-blur-sm shadow-lg flex items-center justify-center gap-4 sm:gap-6">
+                        {/* Fixed Control Bar - ACCESSIBILITY: Always visible with sticky positioning */}
+                        <div className="sticky bottom-0 z-20 px-4 sm:px-6 py-4 sm:py-5 border-t border-surgical-200 bg-white shadow-2xl flex items-center justify-center gap-4 sm:gap-6 flex-none">
                             {/* Subtle accent line at top */}
                             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-surgical-500/30 to-transparent" />
 
-                            {/* Mute Button */}
+                            {/* Mute Button - ACCESSIBLE: Large touch targets (min 44x44px) */}
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
@@ -631,8 +660,8 @@ const TestAgentPageContent = () => {
                                 disabled={!isConnected}
                                 aria-label={isMuted ? 'Unmute microphone' : 'Mute microphone'}
                                 aria-pressed={isMuted}
-                                title={isMuted ? 'Unmute' : 'Mute'}
-                                className={`group relative w-11 h-11 sm:w-14 sm:h-14 rounded-full transition-all duration-300 flex items-center justify-center ${isMuted
+                                title={isMuted ? 'Unmute microphone' : 'Mute microphone'}
+                                className={`group relative w-12 h-12 sm:w-14 sm:h-14 rounded-full transition-all duration-300 flex items-center justify-center ${isMuted
                                     ? 'bg-red-50 text-red-700 border-2 border-red-200 hover:bg-red-100 shadow-lg shadow-red-500/10'
                                     : 'bg-surgical-50 text-barpel-slate/60 hover:text-barpel-slate hover:bg-surgical-100 border border-surgical-200'
                                     } disabled:opacity-40 disabled:cursor-not-allowed`}
@@ -662,18 +691,18 @@ const TestAgentPageContent = () => {
                                     onClick={handleToggleWebCall}
                                     disabled={callInitiating}
                                     aria-label={isConnected ? 'End call' : 'Start call'}
-                                    title={isConnected ? 'End session' : 'Start session'}
-                                    className={`w-12 h-12 rounded-full transition-all flex items-center justify-center relative z-10 ${isConnected
-                                        ? 'bg-red-600 hover:bg-red-700 text-white'
-                                        : 'bg-barpel-teal hover:bg-barpel-teal-dark text-white'
-                                        } disabled:opacity-50 disabled:cursor-not-allowed shadow-sm`}
+                                    title={isConnected ? 'End call (Escape)' : 'Start call'}
+                                    className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full transition-all flex items-center justify-center relative z-10 ${isConnected
+                                        ? 'bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-600/30'
+                                        : 'bg-barpel-teal hover:bg-barpel-teal-dark text-white shadow-lg shadow-barpel-teal/30'
+                                        } disabled:opacity-50 disabled:cursor-not-allowed`}
                                 >
                                     {callInitiating ? (
-                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                        <Loader2 className="w-6 h-6 animate-spin" />
                                     ) : isConnected ? (
-                                        <StopCircle className="w-5 h-5" />
+                                        <StopCircle className="w-6 h-6" />
                                     ) : (
-                                        <Phone className="w-5 h-5" />
+                                        <Phone className="w-6 h-6" />
                                     )}
                                 </motion.button>
                             </div>

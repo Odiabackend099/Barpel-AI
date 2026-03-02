@@ -7,12 +7,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Settings, Users, Building2 } from 'lucide-react';
 import { TeamMembersList } from './components/TeamMembersList';
 import { OrgSettings } from './components/OrgSettings';
-import PreFlightChecklist from '@/components/dashboard/PreFlightChecklist';
 
 
 export default function SettingsPage() {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'general' | 'organization' | 'team'>('general');
+  const [activeTab, setActiveTab] = useState<'organization' | 'team'>('organization');
 
 
   return (
@@ -28,18 +27,6 @@ export default function SettingsPage() {
 
       {/* Tabs */}
       <div className="mb-8 flex gap-4 border-b border-surgical-200">
-        <button
-          onClick={() => setActiveTab('general')}
-          className={`px-4 py-3 font-medium border-b-2 transition ${activeTab === 'general'
-            ? 'border-barpel-teal text-surgical-600'
-            : 'border-transparent text-barpel-slate/60 hover:text-barpel-slate'
-            }`}
-        >
-          <div className="flex items-center gap-2">
-            <Settings className="w-4 h-4" />
-            General Settings
-          </div>
-        </button>
         <button
           onClick={() => setActiveTab('organization')}
           className={`px-4 py-3 font-medium border-b-2 transition ${activeTab === 'organization'
@@ -66,15 +53,7 @@ export default function SettingsPage() {
         </button>
       </div>
 
-      {activeTab === 'general' ? (
-        <div className="space-y-6">
-          <PreFlightChecklist />
-
-          <div className="bg-surgical-50 border border-surgical-200 rounded-lg p-4 text-barpel-slate text-sm">
-            <p><strong>Note:</strong> Integrations configuration has moved to the <a href="/dashboard/integrations" className="underline font-medium hover:text-surgical-600">Integrations</a> page. Please use that page to configure Vapi, Twilio, and other providers.</p>
-          </div>
-        </div>
-      ) : activeTab === 'organization' ? (
+      {activeTab === 'organization' ? (
         <OrgSettings />
       ) : (
         <TeamMembersList />

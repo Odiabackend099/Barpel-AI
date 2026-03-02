@@ -4,7 +4,7 @@ import React, { useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Activity, Phone, Bot, Zap, LogOut, Key, BookOpen, Menu, X, Users, Settings, Bell, Target, Smartphone, Wallet, CheckCircle } from 'lucide-react';
+import { Activity, Phone, Bot, Zap, LogOut, Key, BookOpen, Menu, X, Users, Settings, Target, Smartphone, Wallet, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import useSWR from 'swr';
@@ -69,9 +69,6 @@ export default function LeftSidebar() {
         },
     ]), []);
 
-    const footerItems = useMemo(() => ([
-        { label: 'Notifications', href: '/dashboard/notifications', icon: Bell },
-    ]), []);
 
     const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
         try {
@@ -173,36 +170,6 @@ export default function LeftSidebar() {
                     </div>
                 ))}
 
-                {/* Divider before footer items */}
-                <div className="pt-4 mt-2 border-t border-barpel-border/50">
-                    <h3 className="px-3 py-2 text-xs font-semibold text-barpel-slate/60 uppercase tracking-wider">
-                        QUICK ACCESS
-                    </h3>
-                    <div className="space-y-0.5">
-                        {footerItems.map((item) => {
-                            const Icon = item.icon;
-                            const isActive = pathname?.startsWith(item.href);
-
-                            return (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    onClick={(e) => handleLinkClick(e, item.href)}
-                                    className={`group relative w-full px-3 py-1.5 rounded-lg flex items-center gap-3 transition-all duration-200 font-semibold text-sm text-left ${isActive
-                                        ? 'text-barpel-teal bg-gradient-to-r from-barpel-teal/10 to-transparent border-l-4 border-barpel-teal shadow-sm'
-                                        : 'text-barpel-gray hover:text-barpel-slate hover:bg-barpel-teal/5'
-                                        }`}
-                                >
-                                    <Icon className={`w-5 h-5 transition-colors ${isActive
-                                        ? 'text-barpel-teal'
-                                        : 'text-barpel-slate/40 group-hover:text-barpel-slate/70'
-                                        }`} />
-                                    <span className="tracking-tight">{item.label}</span>
-                                </Link>
-                            );
-                        })}
-                    </div>
-                </div>
             </nav>
 
             <div className="p-4 space-y-1">
