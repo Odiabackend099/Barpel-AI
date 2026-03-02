@@ -580,7 +580,7 @@ export default function PhoneSettingsPage() {
               <p className="text-sm text-red-700 mt-1">{error}</p>
             </div>
             <button
-              onClick={fetchPhoneSettings}
+              onClick={() => fetchPhoneSettings()}
               className="text-sm text-red-600 hover:text-red-700 font-medium"
             >
               Retry
