@@ -1,10 +1,10 @@
 # Barpel AI – Product Requirements Document (PRD)
 
-**Version:** 2026.03.03
-**Last Updated:** 2026-03-03 UTC
-**Status:** 🚀 PRODUCTION DEPLOYED - Barpel AI Platform Live (Console errors resolved, Redis crash loop fixed)
+**Version:** 2026.03.04-a
+**Last Updated:** 2026-03-04 UTC
+**Status:** 🚀 PRODUCTION DEPLOYED - Full Platform Live (Marketing site complete: all pages live, pricing correct, skill documented)
 **Project Foundation:** Enterprise voice receptionist platform for Nigerian SMEs/Small Businesses
-**Verification Status:** ✅ FULL STACK OPERATIONAL - Frontend (Next.js on port 8000) + Backend (Express on port 8001) + Supabase (wifcmvgwzicgyrvaoiwi) + Teal-and-white branding + 5-step onboarding wizard (business verticals)
+**Verification Status:** ✅ FULL STACK OPERATIONAL - Frontend (Next.js port 8000) + Backend (Express port 8001) + Supabase (wifcmvgwzicgyrvaoiwi) + Teal-and-white branding + 5-step onboarding wizard + Google OAuth sign-in + Marketing site all 6 pages live
 
 ---
 
@@ -54,33 +54,33 @@ These rules NEVER change and are enforced by the database and RLS policies:
    - ONE Vapi API key in backend `.env`
    - ALL organizations share single Vapi credential (NO per-org Vapi credentials)
    - Tools registered globally, linked to each org's assistants
-   - Reference: SSOT.md Section 2.1
+   - Reference: database-ssot.md Section 2.1
 
 2. **Multi-Tenant Isolation via org_id**
    - JWT `app_metadata.org_id` = single source of truth for org
    - Every query filters by `org_id` FIRST
    - RLS policies enforce at database level (CHECK org_id = auth.uid()... via jwt_extract_org_id)
-   - Reference: SSOT.md Section 2.2
+   - Reference: database-ssot.md Section 2.2
 
 3. **Wallet Balance Must Be Enforced**
    - Check balance BEFORE deducting
    - Deduct ATOMICALLY (use RPC with row locks, never separate SELECT + UPDATE)
    - Negative balances trigger kill switch (automatic call termination)
-   - Reference: SSOT.md Section 5 + Real-Time Prepaid Billing Engine (Section 2.5 below)
+   - Reference: database-ssot.md Section 5 + Real-Time Prepaid Billing Engine (Section 2.5 below)
 
 4. **Multi-Number Support: 1 Inbound + 1 Outbound per Org** ✅ NEW (2026-02-24)
    - `org_credentials` constraint: `UNIQUE(org_id, provider, type)` — not `UNIQUE(org_id, provider)`
    - Each direction (inbound/outbound) stored separately with independent `vapi_phone_id`
    - RPC parameter: `p_routing_direction` (not `p_type`) determines column for insertion
    - Service ALWAYS writes org_credentials (no skip logic for 2nd number)
-   - Reference: SSOT.md Section 9 + PRD_UPDATE_2026_02_24.md
+   - Reference: database-ssot.md Section 9 + PRD_UPDATE_2026_02_24.md
 
 ---
 
 ## How to Use This Document
 
 **If you're fixing a bug:** Read Section 1 (Critical Rules) + relevant section in Section 2
-**If you're adding a feature:** Read Section 2 (how the system works) + check SSOT.md for database details
+**If you're adding a feature:** Read Section 2 (how the system works) + check database-ssot.md for database details
 **If you're deploying:** Read Section 3 (Operations) + Section 7 (Runbooks)
 **If you're debugging:** Read the Release History appendix (what changed when)
 
@@ -98,45 +98,45 @@ These rules NEVER change and are enforced by the database and RLS policies:
    - Inbound → receives calls via phone_number_mapping
    - Outbound → agent uses vapi_phone_id for caller ID on outbound calls
    - Cannot exceed 1 active number per direction per org (DB unique index enforces)
-   - Reference: SSOT.md Section 9 (Managed Phone Numbers — Lifecycle & Dual-Write)
+   - Reference: database-ssot.md Section 9 (Managed Phone Numbers — Lifecycle & Dual-Write)
 
 2. **Real-Time Prepaid Billing Engine** — Phase 1-3 Deployed & Verified
    - Atomic asset billing (RPC with FOR UPDATE locks, prevents TOCTOU)
    - Credit reservation during calls (5-min default hold, auto-release when call ends)
    - Kill switch: auto-terminate calls when balance ≤ 0 (checked every 60s)
    - Fixed rate: 56 pence/min GBP (TBD customization for Nigerian NG₦ post-launch)
-   - Reference: SSOT.md Section 5 + Section 2.5 (below) for business impact
+   - Reference: database-ssot.md Section 5 + Section 2.5 (below) for business impact
 
 3. **Dashboard & Analytics** — Golden Record SSOT
    - All call data (cost, appointment linkage, tools used, ended reason) in `calls` table
    - Sentiment analysis, lead scoring, pipeline value tracking
    - Multi-tenant isolation (every query filters org_id via JWT)
-   - Reference: SSOT.md Section 7 (Dashboard & Call Analytics) for schema details
+   - Reference: database-ssot.md Section 7 (Dashboard & Call Analytics) for schema details
 
 4. **Webhook Architecture** — Single Production Endpoint
    - `/api/vapi/webhook` (vapi-webhook.ts) = production endpoint
    - `/api/webhooks/vapi` (webhooks.ts) = unused legacy (do not modify)
    - Retries via BullMQ queue, idempotency via processed_webhook_events table
-   - Reference: SSOT.md Section 11 (Webhook Architecture) for full details
+   - Reference: database-ssot.md Section 11 (Webhook Architecture) for full details
 
 5. **Security & Compliance** — RLS Enforced on All Tables
    - JWT `org_id` extraction from `app_metadata`
    - RLS policies on 20+ tables
    - Error sanitization: 132+ info disclosure fixes applied
-   - Reference: SSOT.md Section 2 (Authentication & Multi-Tenancy) for detailed policies
+   - Reference: database-ssot.md Section 2 (Authentication & Multi-Tenancy) for detailed policies
 
 ### Technical Reference
 
-**All technical details (schema, RPCs, webhooks) are in SSOT.md. Don't duplicate here:**
+**All technical details (schema, RPCs, webhooks) are in database-ssot.md. Don't duplicate here:**
 | Topic | Location |
 |-------|----------|
-| Database schema | SSOT.md Section 3-6 (tables, columns, constraints, indexes) |
-| RPC functions | SSOT.md Section 8 (function signatures, error handling) |
-| Multi-number architecture | SSOT.md Section 9 + PRD_UPDATE_2026_02_24.md Section 1-4 |
-| Webhook delivery | SSOT.md Section 11 (delivery log, retry logic, idempotency) |
-| Critical invariants | SSOT.md Section 13 (rules that must never break) |
-| Phone number handling | SSOT.md Section 9 + Invariant 9 (dual-write, deletion cleanup) |
-| Compliance logging | SSOT.md Section 12 (audit logs, retention, HIPAA compliance) |
+| Database schema | database-ssot.md Section 3-6 (tables, columns, constraints, indexes) |
+| RPC functions | database-ssot.md Section 8 (function signatures, error handling) |
+| Multi-number architecture | database-ssot.md Section 9 + PRD_UPDATE_2026_02_24.md Section 1-4 |
+| Webhook delivery | database-ssot.md Section 11 (delivery log, retry logic, idempotency) |
+| Critical invariants | database-ssot.md Section 13 (rules that must never break) |
+| Phone number handling | database-ssot.md Section 9 + Invariant 9 (dual-write, deletion cleanup) |
+| Compliance logging | database-ssot.md Section 12 (audit logs, retention, HIPAA compliance) |
 
 ---
 
@@ -145,7 +145,7 @@ These rules NEVER change and are enforced by the database and RLS policies:
 |------|-------------|
 | Target user | Nigerian SMEs & small businesses (auto dealers, real estate, legal, salon/spa, retail, medical clinics) needing an AI assistant to qualify leads, book appointments, and route calls |
 | Core value prop | End-to-end automation from inbound call → appointment → billing, with auditable Golden Record data. Local numbers, intelligent lead routing, 24/7 availability. |
-| Deployment | Frontend (Next.js on port 3000) + Backend (Node/Express on port 6001) + Supabase (Postgres + Auth, project: wifcmvgwzicgyrvaoiwi) + Stripe + Twilio + Vapi |
+| Deployment | Frontend (Next.js on port 8000) + Backend (Node/Express on port 8001) + Supabase (Postgres + Auth, project: wifcmvgwzicgyrvaoiwi) + Stripe + Twilio + Vapi |
 | Pricing model | Pay-as-you-go wallet model (56 pence/min GBP, TBD customization for Nigerian NG₦). Calls billed at fixed rate per minute. |
 
 ### Deployment Configuration (2026-03-02 - PRODUCTION LIVE)
@@ -167,18 +167,30 @@ These rules NEVER change and are enforced by the database and RLS policies:
 
 **Render Infrastructure:**
 - Backend service: `barpel-backend` at `barpel-ai.onrender.com`
-- Redis: Render-managed `barpel-redis` (free, oregon). Auto-injected via `fromDatabase` in `render.yaml` — Blueprint sync provisions it automatically. No manual `REDIS_URL` entry needed.
+- Redis: **Upstash** (cloud-managed, TLS). `REDIS_URL` set manually in Render dashboard env vars. **Do NOT use Render internal Redis** — Render private networking only works within the same workspace; the backend (odiadev workspace) and original Redis (Austyn's workspace) were in different workspaces, causing ENOTFOUND crash loops.
 - Render env reference file: `render/renderenv` (local only, gitignored)
 - Build fix: eslint downgraded `^9` → `^8` (commit `05e72ca`), `.npmrc` `legacy-peer-deps=true`
 - **Render Dashboard required:** Set Root Directory = `backend`, enter all secrets from `render/renderenv`
 
-**Production Fixes Applied (2026-03-03 — commit `beebf9a`):**
-- ✅ **Redis crash loop eliminated:** `vapi-reconciliation-worker.ts` completely rewritten to lazy-init pattern using `createRedisConnection()` with null guard — matches the pattern of all other queue files (wallet-queue, webhook-queue). Previously created `new Redis()` / `new Queue()` / `new Worker()` at module load, bypassing the circuit-breaker and causing ENOTFOUND flood every ~100ms.
-- ✅ **`billing-reconciliation.ts` null guards:** `/history` and `/health` endpoints now return graceful empty responses when `vapiReconcileQueue === null` instead of throwing `TypeError`.
-- ✅ **CSP fixed:** `next.config.mjs` `connect-src` now includes `wss://api.barpel.ai`, `wss://api.vapi.ai`, correct `https://barpel-ai.onrender.com` (was `https://barpel.onrender.com`). Eliminates all browser console CSP violations.
-- ✅ **`NEXT_PUBLIC_BACKEND_URL` fixed in Vercel:** Was incorrectly set to `https://api.barpel.ai` (domain not owned). Updated via Vercel CLI to `https://barpel-ai.onrender.com`. Redeployed — 69 pages compiled successfully.
-- ✅ **CORS_ORIGIN expanded:** `render.yaml` now includes all 6 origins (odia.dev + future barpel.ai domains).
-- ✅ **Wrong DNS record deleted:** `barpel-ai.onrender.com` CNAME that was incorrectly pointing to Vercel has been removed from DNS provider (2026-03-03).
+**Production Fixes Applied (2026-03-03 — commits `beebf9a`, `190a445`, `7e2bf40`, `723b329`):**
+
+**commit `beebf9a` — Backend stability:**
+- ✅ **Redis crash loop eliminated:** `vapi-reconciliation-worker.ts` rewritten to lazy-init pattern using `createRedisConnection()` with null guard — matches all other queue files. Previously instantiated `new Redis()` at module load, causing ENOTFOUND flood every ~100ms.
+- ✅ **`billing-reconciliation.ts` null guards:** `/history` and `/health` now return graceful empty responses when `vapiReconcileQueue === null`.
+- ✅ **`NEXT_PUBLIC_BACKEND_URL` fixed in Vercel:** Was `https://api.barpel.ai` (domain not owned). Updated to `https://barpel-ai.onrender.com`.
+- ✅ **CORS_ORIGIN expanded:** Includes all 6 origins (odia.dev + future barpel.ai domains).
+- ✅ **Wrong DNS record deleted:** Stale CNAME pointing `barpel-ai.onrender.com` to Vercel removed.
+
+**commits `190a445`, `7e2bf40` — CSP violations & dead domain cleanup:**
+- ✅ **CSP root cause fixed:** `vercel.json` `/(.*)`  headers block was overriding `next.config.mjs` for same-key headers (Vercel-level headers always win). Removed stale headers block from `vercel.json` — `next.config.mjs` is now the sole CSP authority.
+- ✅ **Dead domain `api.barpel.ai` removed** from all 5 source files: `next.config.mjs`, `vercel.json`, `brand.config.ts`, `telephony-provisioning.ts`, `api-reference/page.tsx`. Canonical backend is `https://barpel-ai.onrender.com`.
+- ✅ **PWA service worker stale cache cleared:** Bumped runtimeCaching cache names to `api-cache-v2` / `pages-cache-v2` — forces old service workers serving CSP-blocked pages to discard cached HTML.
+- ✅ **Redis switched to Upstash:** Render private networking doesn't cross workspace boundaries. Old Redis was in a different workspace than the backend. Upstash (`rediss://` TLS) resolves the ENOTFOUND.
+- ✅ **HSTS added** to `next.config.mjs` (was only in the now-removed `vercel.json` block).
+
+**commit `723b329` — Google Sign-In fixed:**
+- ✅ **Google OAuth redirecting to `localhost:8000` fixed:** Root cause was Supabase Dashboard Site URL still set to `http://localhost:8000`. Supabase validates `redirectTo` against its allowlist — if not found, falls back to Site URL. Fixed by: (1) setting Supabase Site URL to `https://app-barpelai.odia.dev`, (2) adding `https://app-barpelai.odia.dev/**` to Supabase redirect allowlist, (3) fixing Google Cloud Console Calendar OAuth URI (was missing `/api/google-oauth/callback` path), (4) fixing SSR fallback in `src/lib/auth-redirect.ts` (was hardcoded `localhost:3000`).
+- ✅ **Verified end-to-end:** Google Sign-Up → Google consent → redirects to `https://app-barpelai.odia.dev/dashboard` → onboarding wizard launches correctly.
 
 **Stripe Webhook Configuration (Production):**
 - Endpoint: `https://barpel-ai.onrender.com/api/webhooks/stripe`
@@ -201,7 +213,7 @@ These rules NEVER change and are enforced by the database and RLS policies:
 
 **Status:** ✅ All phases deployed, 100% test coverage, schema fixed (2026-02-16), rate aligned (56p/min)
 
-**Technical Details:** See SSOT.md Sections 5-6 (database tables) + Section 8 (RPC functions)
+**Technical Details:** See database-ssot.md Sections 5-6 (database tables) + Section 8 (RPC functions)
 
 ---
 
@@ -244,7 +256,16 @@ Supporting services: wallet auto-recharge processor, webhook verification API, a
 
 ## 5. Recent Releases & Verification
 
-**Latest (2026-03-03 — commit `beebf9a`):** Production stability fixes. Eliminated Render backend Redis crash loop (VapiReconciliationWorker ENOTFOUND flood). Fixed all browser console errors: CSP violations (`wss://` missing, wrong Render URL), ERR_FAILED API calls (wrong `NEXT_PUBLIC_BACKEND_URL`). Vercel env updated and redeployed (69 pages, ✓ compiled).
+**Latest (2026-03-04 — commits `dbcafc8`, `5415a07`):** Marketing website fully completed.
+- ✅ **6 missing pages created** (were all "Section coming soon" placeholders in App.tsx): Careers, Demo, Features, Security, Terms of Service, Cookie Policy
+- ✅ **Pricing.tsx corrected** — rates now sourced from `backend/src/config/index.ts`: $0.70/min (RATE_PER_MINUTE_USD_CENTS=70), ~155 min for $99 bundle (141 raw + 10% bonus), £25 minimum top-up. Previous rates ($0.14/min, 750 min) were wrong by 5×.
+- ✅ **App.tsx cleaned** — `PlaceholderSection` component and all 6 inline placeholder page definitions removed; replaced with proper imports.
+- ✅ **`barpel-marketing-pages` skill created** at `.claude/skills/barpel-marketing-pages/SKILL.md` — encodes design system, all product knowledge, correct pricing, CTA wiring, TypeScript safety rules, and per-page content templates for future marketing page work.
+- ✅ **Deployed** to `barpelai.odia.dev` (Vercel, commit `5415a07`)
+
+**Previous (2026-03-03 — commits `190a445`, `7e2bf40`, `723b329`):** CSP violations eliminated (root cause: `vercel.json` overriding `next.config.mjs`; dead `api.barpel.ai` domain purged from all files). Redis switched from Render internal to Upstash (workspace boundary issue). Google Sign-In with Google fully working end-to-end — Supabase Dashboard Site URL corrected from `localhost:8000` to `https://app-barpelai.odia.dev`. PWA stale cache busted. HSTS added.
+
+**Previous (2026-03-03 — commit `beebf9a`):** Backend Redis crash loop fixed (`vapi-reconciliation-worker.ts` lazy-init). `NEXT_PUBLIC_BACKEND_URL` corrected in Vercel. CORS origins expanded. Stale DNS record deleted.
 
 **Previous (2026-03-01):** Barpel AI Production Platform fully operational. 5-step post-signup onboarding wizard, real-time prepaid billing, managed telephony, and teal-and-white design system.
 
@@ -254,7 +275,7 @@ Supporting services: wallet auto-recharge processor, webhook verification API, a
 
 ## 6. Functional Requirements
 
-**Note:** Technical details (schema, RPCs, webhooks) are in SSOT.md. This section covers business-level requirements.
+**Note:** Technical details (schema, RPCs, webhooks) are in database-ssot.md. This section covers business-level requirements.
 ### 6.1 AI Call Handling
 - Voice agent must execute tools in order: `checkAvailability` → `bookClinicAppointment` → `transferCall`/`endCall`.  
 - `queryKnowledgeBase` is mandatory for answering content questions (no hallucinated answers).  
@@ -275,7 +296,7 @@ Supporting services: wallet auto-recharge processor, webhook verification API, a
 - Inbound numbers receive calls via `phone_number_mapping` table
 - Outbound numbers linked to agents' `vapi_phone_number_id` for caller ID on outbound calls
 - AI Forwarding wizard generates GSM codes for supported carriers and verifies Twilio caller ID ownership before enabling
-- **Reference:** SSOT.md Section 9 (Managed Phone Numbers) + PRD_UPDATE_2026_02_24.md (detailed multi-number architecture)
+- **Reference:** database-ssot.md Section 9 (Managed Phone Numbers) + PRD_UPDATE_2026_02_24.md (detailed multi-number architecture)
 
 ### 6.5 Pre-Sales Lead Intake Form (Marketing — `/start`)
 
@@ -413,6 +434,9 @@ Form for unauthenticated prospects. Stores to `onboarding_submissions` table (di
    - Features: Inbound/outbound call handling, appointment booking, lead scoring, call tracking, AI voice agents
    - Demo Status: ✅ LIVE — both servers running on ports 8000/8001, signup → wizard → dashboard flow operational
 
+**Completed (2026-03-04):**
+- ✅ **Marketing website all pages live** – All 6 previously-placeholder pages now fully built and deployed: `/careers`, `/demo`, `/features`, `/security`, `/legal/terms`, `/legal/cookies`. Pricing correct ($0.70/min, $99 bundle = ~155 min). `barpel-marketing-pages` skill documented for future page work.
+
 **Upcoming (Post-Demo, Investor Phase):**
 1. **Customize Pricing for Nigerian Market** – Current prepaid wallet system (56p/min GBP). Adapt for Nigerian SMEs with NG₦ rates, local pricing bands, and startup credits.
 2. ✅ **Production Deployment (Temp Domains Live)** – Deployed to Vercel (`app-barpelai.odia.dev` dashboard, `barpelai.odia.dev` marketing) and Render (`barpel-ai.onrender.com`). Pending: purchase `barpel.ai`, update DNS/CORS/redirect URIs to final domains.
@@ -434,7 +458,7 @@ Form for unauthenticated prospects. Stores to `onboarding_submissions` table (di
 - ✅ Core Capabilities: Current system features and recent releases
 - ✅ Test accounts and verification checklists
 
-**For Technical Details (database, RPCs, webhooks), refer to SSOT.md:**
+**For Technical Details (database, RPCs, webhooks), refer to database-ssot.md:**
 - Database schema, columns, constraints, indexes
 - RPC function signatures, error handling, transaction logic
 - Webhook delivery patterns, retry logic, idempotency
@@ -445,21 +469,21 @@ Form for unauthenticated prospects. Stores to `onboarding_submissions` table (di
 **Quick Links:**
 | Document | Purpose |
 |----------|---------|
-| **SSOT.md** | Technical authority for database, RPCs, webhooks, compliance |
+| **database-ssot.md** | Technical authority for database, RPCs, webhooks, compliance |
 | **PRD_UPDATE_2026_02_24.md** | Detailed explanation of Bug 3 fix (multi-number support) |
 | **PRD_CURRENT_STATE_2026_02_24.md** | High-level guide to PRD structure and tier system |
 | **This PRD (.agent/prd.md)** | Business capabilities, releases, operational procedures |
 
 **For New Developers (Ramp-Up Guide):**
 1. Read Critical Rules above (understand immutable rules, 5 mins)
-2. Read SSOT.md Sections 1-2 (auth & multi-tenancy, 15 mins)
+2. Read database-ssot.md Sections 1-2 (auth & multi-tenancy, 15 mins)
 3. Read Core Capabilities above (system overview, 10 mins)
-4. Read SSOT.md Section 9 (managed phone numbers, 20 mins)
-5. Read relevant sections of SSOT.md for your task
+4. Read database-ssot.md Section 9 (managed phone numbers, 20 mins)
+5. Read relevant sections of database-ssot.md for your task
 6. Reference this PRD for business context
 
 **For Contributors (Before Modifying Code):**
-- Always reference SSOT.md Section 13 (Critical Invariants) first
+- Always reference database-ssot.md Section 13 (Critical Invariants) first
 - Check if your change affects: org_id filtering, multi-tenant isolation, wallet enforcement, phone number handling
 - When modifying managed_phone_numbers or org_credentials, ensure dual-write/dual-delete
 - When adding endpoints, apply error sanitization pattern (use `error-sanitizer.ts`)
@@ -468,6 +492,25 @@ Form for unauthenticated prospects. Stores to `onboarding_submissions` table (di
 ---
 
 ## APPENDIX: Release History
+
+### 2026-03-04: Marketing Website — All Pages Live ✅ COMPLETE
+- **Scope:** Complete the Barpel AI marketing site at `barpelai.odia.dev`
+- **Skill created:** `.claude/skills/barpel-marketing-pages/SKILL.md` — reusable skill encoding design system, product knowledge, correct pricing, CTA wiring, TypeScript rules, and per-page templates
+- **6 pages built** (all were inline `PlaceholderSection` placeholders in App.tsx before this release):
+  - `/careers` — Culture, open positions (hello@barpel.ai), perks grid (Remote-first, Equity, Learning Budget, Health Coverage)
+  - `/demo` — "See Barpel AI In Action", 3-step what-to-expect, Request a Demo CTA (→ sign-up), sales@barpel.ai
+  - `/features` — 16 features across 4 groups (Call Handling, Appointment Booking, Analytics & Insights, Integrations & Security), lucide-react icons, teal design system
+  - `/security` — AES-256 / TLS 1.3 encryption, 99.9% uptime SLA, GDPR & NDPR compliance, row-level security, vendor chain (Twilio/Vapi/Supabase/Stripe), security@barpel.ai
+  - `/legal/terms` — 11-section Terms of Service (Acceptance, Description, Registration, Acceptable Use, Billing/Credits, IP, Privacy, Liability, Termination, UK Governing Law, Contact), legal@barpel.ai
+  - `/legal/cookies` — Essential cookies (Supabase auth tokens, Stripe fraud), Analytics section, browser guides with external links, privacy@barpel.ai
+- **Pricing corrected** — `frontend/website/src/sections/Pricing.tsx` rates now match `backend/src/config/index.ts`:
+  - PAYG: `$0.70/min` (RATE_PER_MINUTE_USD_CENTS=70)
+  - Growth Bundle: `$99 → ~155 minutes` ($99 ÷ $0.70 = 141 raw + 10% bonus)
+  - Minimum top-up: `£25` (WALLET_MIN_TOPUP_PENCE=2500)
+  - Previous wrong rates ($0.14/min, 750 min) removed and documented as incorrect in skill file
+- **App.tsx cleaned** — removed `PlaceholderSection` component + all 6 inline placeholder definitions; added proper imports
+- **Commits:** `dbcafc8` (pages + initial pricing), `5415a07` (pricing correction + skill update)
+- **Deploy:** `barpelai.odia.dev` — `vercel deploy --prod`, build ✅ 1739 modules, 0 TypeScript errors
 
 ### 2026-03-01: Barpel AI Production Platform ✅ COMPLETE
 - **Scope:** Enterprise voice receptionist platform for Nigerian SMEs, fully operational
