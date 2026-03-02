@@ -22,32 +22,37 @@
 
 ---
 
-## 🌐 Deployment Architecture (2026-03-01 - DEMO READY)
+## 🌐 Deployment Architecture (2026-03-02 - PRODUCTION LIVE)
 
-**Current Hosting (Local Development):**
-| Component | Platform | URL | Notes |
-|-----------|----------|-----|-------|
-| **Frontend** | Local | `http://localhost:8000` | Next.js 14 dev server (teal-and-white theme) |
-| **Backend** | Local | `http://localhost:8001` | Express.js dev server (health endpoint working) |
-| **Database** | Supabase | `https://wifcmvgwzicgyrvaoiwi.supabase.co` | PostgreSQL with RLS (Barpel project) |
-| **Stripe Webhooks** | Test Mode | N/A (local dev) | Will be `barpel.onrender.com/api/webhooks/stripe` post-launch |
+**Active Production Hosting (Temporary Domains — pending barpel.ai purchase):**
+| Component | Platform | URL | Status |
+|-----------|----------|-----|--------|
+| **Dashboard (Frontend)** | Vercel | `https://app-barpelai.odia.dev` | ✅ LIVE |
+| **Marketing Site** | Vercel | `https://barpelai.odia.dev` | ✅ LIVE |
+| **Backend API** | Render | `https://barpel-ai.onrender.com` | ✅ LIVE |
+| **Database** | Supabase | `https://wifcmvgwzicgyrvaoiwi.supabase.co` | ✅ LIVE |
+| **Redis** | Render | `redis://red-d636tj7pm1nc73efjljg:6379` | ✅ LIVE (Render internal) |
+| **Stripe Webhooks** | Stripe → Render | `https://barpel-ai.onrender.com/api/webhooks/stripe` | ✅ LIVE |
 
-**Planned Production Hosting (TBD - Post-Demo):**
-| Component | Platform | URL | Notes |
-|-----------|----------|-----|-------|
-| **Frontend** | Vercel | `https://barpel.ai` | Next.js app with Edge Network (TBD) |
-| **Backend** | Render | `https://barpel.onrender.com` | Node/Express on port 6001 (TBD) |
-| **Database** | Supabase | `wifcmvgwzicgyrvaoiwi.supabase.co` | PostgreSQL with RLS (current project) |
-| **Stripe Webhooks** | Stripe → Render | `https://barpel.onrender.com/api/webhooks/stripe` | Production webhook endpoint (TBD) |
+**Render Service Details:**
+- Service name: `barpel-backend`
+- Build fix: eslint downgraded `^9` → `^8` + `.npmrc` `legacy-peer-deps=true` (commit `05e72ca`)
+- Root Directory in Render dashboard must be set to `backend`
+- All secrets entered manually via Render Dashboard (reference: `render/renderenv` — local only, gitignored)
 
-**Current Configuration (Local Dev):**
-- ✅ Frontend: `http://localhost:8000` (`.env.local` has NEXT_PUBLIC_BACKEND_URL=http://localhost:8001)
-- ✅ Backend: `http://localhost:8001` (backend/.env has all Barpel credentials)
+**Permanent Domain Target (once barpel.ai is purchased):**
+- `barpel.ai` → marketing, `app.barpel.ai` → dashboard, `api.barpel.ai` → backend
+- When switching: update CORS_ORIGIN, FRONTEND_URL, BACKEND_URL, GOOGLE_REDIRECT_URI in Render + Vercel env vars
+
+**Local Development:**
+- ✅ Frontend: `http://localhost:8000` (`.env.local`: `NEXT_PUBLIC_BACKEND_URL=http://localhost:8001`)
+- ✅ Backend: `http://localhost:8001` (`backend/.env` has all Barpel credentials)
 - ✅ Supabase: `wifcmvgwzicgyrvaoiwi` (Barpel-specific project)
 - ✅ Stripe: Test mode keys in `backend/.env`
 - ✅ Vapi: Private key in `backend/.env`
+- ✅ Redis: `redis://localhost:6379` (local) → `redis://red-d636tj7pm1nc73efjljg:6379` (Render)
 
-**Environment Variables (Current - Local Dev):**
+**Environment Variables (Local Dev):**
 ```bash
 # Frontend (.env.local)
 NEXT_PUBLIC_SUPABASE_URL=https://wifcmvgwzicgyrvaoiwi.supabase.co
@@ -63,16 +68,22 @@ SUPABASE_URL=https://wifcmvgwzicgyrvaoiwi.supabase.co
 VAPI_PRIVATE_KEY=623b9f25-cda2-4de0-8e6e-5291eac94e32
 COMPANY_NAME=Barpel AI
 CLINIC_NAME=Barpel
+REDIS_URL=redis://localhost:6379
 STRIPE_PUBLISHABLE_KEY=pk_test_...
 STRIPE_SECRET_KEY=sk_test_...
 ```
 
-**Post-Demo Production Steps:**
-1. Deploy frontend to Vercel (domain: `barpel.ai`)
-2. Deploy backend to Render (domain: `barpel.onrender.com`)
-3. Configure production Stripe webhook (endpoint: `https://barpel.onrender.com/api/webhooks/stripe`)
-4. Update DNS records for `barpel.ai`
-5. Consider local payment gateways (Flutterwave, PayStack) for Nigerian NG₦ billing
+**Production Deployment Checklist (completed 2026-03-02):**
+- ✅ Dashboard deployed to Vercel (`app-barpelai.odia.dev`)
+- ✅ Marketing site deployed to Vercel (`barpelai.odia.dev`)
+- ✅ Backend deployed to Render (`barpel-ai.onrender.com`)
+- ✅ Render Redis instance provisioned (`redis://red-d636tj7pm1nc73efjljg:6379`)
+- ✅ Render build failure fixed (eslint peer dep, commit `05e72ca`)
+- ⏳ Render secrets: enter all vars from `render/renderenv` into Render dashboard
+- ⏳ `GOOGLE_ENCRYPTION_KEY`: generate with `openssl rand -hex 32`, enter in Render
+- ⏳ Purchase `barpel.ai`, update all URLs to final domains
+- ⏳ Stripe production keys (currently test mode)
+- ⏳ Local payment gateways (Flutterwave/PayStack for NG₦)
 
 ---
 
@@ -779,8 +790,8 @@ Organization (organizations)
 
 ## 📝 Status & Last Updated
 
-**Current:** February 25, 2026
-**Latest:** Onboarding Wizard Schema (2 tables + 3 org columns)
+**Current:** March 2, 2026
+**Latest:** Production deployment live — temp domains, Redis confirmed, Render build fixed (commit `05e72ca`)
 **Key Metrics:** ✅ 32 tables, 183 indexes, 23 RLS policies, 56p/min billing enforced
 
 **For what changed recently, see APPENDIX: Release History**
@@ -860,9 +871,9 @@ Organization (organizations)
 **Multi-Tenancy:** ✅ HARDENED - org_id isolation on all queries, automated RLS verification
 **Production Readiness:** ✅ COMPLETE - Signup → Wizard → Dashboard flow tested, teal-and-white design system applied, servers running on ports 8000/8001
 
-**Next Steps (Post-Demo):**
+**Next Steps:**
 1. **Pricing & Billing Customization** — Adapt 56p/min rate to Nigerian market (NG₦ currency options, SME-friendly pricing bands, startup credits)
-2. **Production Deployment** — Deploy frontend to Vercel (barpel.ai), backend to Render (barpel.onrender.com), configure Stripe production keys
+2. ✅ **Production Deployment (Temp Domains Live 2026-03-02)** — `app-barpelai.odia.dev` (dashboard), `barpelai.odia.dev` (marketing), `barpel-ai.onrender.com` (backend). Pending: purchase `barpel.ai`, update all URLs to final domains, enter Render secrets, Stripe production keys
 3. **Local Payment Gateways** — Flutterwave/PayStack integration for NG₦ acceptance (parallel Stripe for international customers)
 4. **Localization & I18n** — Yoruba/Hausa/Igbo support, WAT timezone handling, local number prefixes (+234), business terminology localization
 5. **SME-Specific Analytics** — Call ROI tracking, appointment-to-revenue metrics, lead scoring optimized for Nigerian business cycles

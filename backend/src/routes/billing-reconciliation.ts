@@ -174,6 +174,14 @@ router.get('/history', requireAuth, async (req, res) => {
   try {
     const limit = parseInt(req.query.limit as string) || 10;
 
+    if (!vapiReconcileQueue) {
+      return res.json({
+        success: true,
+        history: [],
+        message: 'Queue not available (Redis not connected)'
+      });
+    }
+
     const [completed, failed] = await Promise.all([
       vapiReconcileQueue.getCompleted(0, limit - 1),
       vapiReconcileQueue.getFailed(0, limit - 1)
@@ -222,12 +230,22 @@ router.get('/health', async (req, res) => {
   try {
     const status = await getReconciliationStatus();
 
+    if (!status.available) {
+      return res.json({
+        success: true,
+        healthy: false,
+        message: 'Reconciliation queue not available (Redis not connected)',
+        status: { available: false }
+      });
+    }
+
     const isHealthy = status.active < 5 && status.failed === 0;
 
     res.json({
       success: true,
       healthy: isHealthy,
       status: {
+        available: true,
         active: status.active,
         waiting: status.waiting,
         completed: status.completed,

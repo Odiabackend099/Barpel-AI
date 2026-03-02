@@ -75,7 +75,7 @@ import { scheduleVapiCallPoller } from './jobs/vapi-call-poller';
 // import { scheduleRecordingMetricsMonitor } from './jobs/recording-metrics-monitor'; // DISABLED: recording_upload_metrics table deleted
 // import { scheduleRecordingQueueWorker } from './jobs/recording-queue-worker'; // DISABLED: recording_upload_queue table deleted
 import gdprCleanupModule from './jobs/gdpr-cleanup';
-import { scheduleVapiReconciliation, shutdownReconciliationWorker } from './jobs/vapi-reconciliation-worker';
+import { initializeVapiReconciliationWorker, scheduleVapiReconciliation, shutdownReconciliationWorker } from './jobs/vapi-reconciliation-worker';
 import escalationRulesRouter from './routes/escalation-rules'; // default export
 import teamRouter from './routes/team'; // default export
 import agentsRouter from './routes/agents'; // default export
@@ -162,6 +162,7 @@ initializeWalletWorker(processAutoRecharge); // Start wallet worker
 initializeBillingQueue(); // P0-1: Initialize billing webhook queue
 initializeBillingWorker(processStripeWebhook); // P0-1: Start billing worker
 initializeSmsQueue(); // Initialize SMS queue after Redis is ready
+initializeVapiReconciliationWorker(); // Initialize Vapi reconciliation queue and worker
 
 declare global {
   namespace Express {

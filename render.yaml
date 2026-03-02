@@ -18,7 +18,7 @@ services:
       - key: FRONTEND_URL
         value: https://app-barpelai.odia.dev
       - key: CORS_ORIGIN
-        value: https://app-barpelai.odia.dev,https://barpelai.odia.dev,https://barpel-ai.onrender.com
+        value: https://app.barpel.ai,https://barpel.ai,https://www.barpel.ai,https://app-barpelai.odia.dev,https://barpelai.odia.dev,https://barpel-ai.onrender.com
       - key: GOOGLE_REDIRECT_URI
         value: https://barpel-ai.onrender.com/api/google-oauth/callback
       # ── Secrets: set manually in Render dashboard ──────────────────────────
@@ -51,10 +51,19 @@ services:
       - key: OPENAI_API_KEY
         sync: false
       - key: REDIS_URL
-        sync: false
+        fromDatabase:
+          name: barpel-redis
+          property: connectionString
       - key: SENTRY_DSN
         sync: false
     routes:
       - path: /
         matchType: prefix
-# Note: No `databases:` section — project uses external Supabase (not Render-managed DB)
+
+databases:
+  - type: redis
+    name: barpel-redis
+    plan: free
+    region: oregon
+    maxmemoryPolicy: noeviction
+# Note: Supabase is external (not Render-managed). barpel-redis is Render-managed Redis.

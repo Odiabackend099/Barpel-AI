@@ -148,32 +148,38 @@ These rules NEVER change and are enforced by the database and RLS policies:
 | Deployment | Frontend (Next.js on port 3000) + Backend (Node/Express on port 6001) + Supabase (Postgres + Auth, project: wifcmvgwzicgyrvaoiwi) + Stripe + Twilio + Vapi |
 | Pricing model | Pay-as-you-go wallet model (56 pence/min GBP, TBD customization for Nigerian NG₦). Calls billed at fixed rate per minute. |
 
-### Deployment Configuration (2026-03-01 - DEMO READY)
+### Deployment Configuration (2026-03-02 - PRODUCTION LIVE)
 
-**Frontend (Local Dev):**
-- Development URL: `http://localhost:8000` (port 8000)
-- Framework: Next.js 14 (App Router)
-- Vercel deployment: TBD (post-demo, will be `https://barpel.ai`)
+**Production URLs (temporary domains — pending barpel.ai purchase):**
+- Dashboard (Frontend): `https://app-barpelai.odia.dev` (Vercel, Next.js 14)
+- Marketing Site: `https://barpelai.odia.dev` (Vercel, Vite/React)
+- Backend API: `https://barpel-ai.onrender.com` (Render, Express/Node)
 
-**Backend (Local Dev):**
-- Development URL: `http://localhost:8001` (port 8001)
-- Framework: Express.js on Node.js
-- Render deployment: TBD (post-demo, will be `https://barpel.onrender.com`)
+**Local Development:**
+- Dashboard: `http://localhost:8000` (port 8000)
+- Backend: `http://localhost:8001` (port 8001)
+- Marketing: `http://localhost:8002` (port 8002)
 
 **Database:**
 - Supabase Project ID: `wifcmvgwzicgyrvaoiwi`
 - Connection: SUPABASE_URL = `https://wifcmvgwzicgyrvaoiwi.supabase.co`
 - Auth: Service role key for backend, anon key for frontend
 
-**Stripe Webhook Configuration (TBD for Production):**
-- Will be: `https://barpel.onrender.com/api/webhooks/stripe`
-- Events listened: `checkout.session.completed`, `payment_intent.succeeded`, `customer.created`
-- Secret storage: Backend environment variable `STRIPE_WEBHOOK_SECRET`
+**Render Infrastructure:**
+- Backend service: `barpel-backend` at `barpel-ai.onrender.com`
+- Redis: `redis://red-d636tj7pm1nc73efjljg:6379` (Render internal URL — only resolvable within Render's private network)
+- Render env reference file: `render/renderenv` (local only, gitignored)
+- Build fix: eslint downgraded `^9` → `^8` (commit `05e72ca`), `.npmrc` `legacy-peer-deps=true`
+- **Render Dashboard required:** Set Root Directory = `backend`, enter all secrets from `render/renderenv`
 
-**Environment Variables (Current - Local Dev):**
-- See `/Users/mac/Desktop/Barpel/.env.local` (frontend)
-- See `/Users/mac/Desktop/Barpel/backend/.env` (backend)
-- **Note:** Credentials are Barpel-specific (Vapi key, Supabase project, Twilio account, Stripe test keys)
+**Stripe Webhook Configuration (Production):**
+- Endpoint: `https://barpel-ai.onrender.com/api/webhooks/stripe`
+- Events: `checkout.session.completed`, `payment_intent.succeeded`, `customer.created`
+- Secret: `STRIPE_WEBHOOK_SECRET` in Render dashboard env vars
+
+**Environment Variables:**
+- Local dev: `backend/.env` (backend), `.env.local` (frontend)
+- Production: Render dashboard env vars (copy from `render/renderenv`)
 
 ---
 
@@ -399,7 +405,7 @@ Form for unauthenticated prospects. Stores to `onboarding_submissions` table (di
 
 **Upcoming (Post-Demo, Investor Phase):**
 1. **Customize Pricing for Nigerian Market** – Current prepaid wallet system (56p/min GBP). Adapt for Nigerian SMEs with NG₦ rates, local pricing bands, and startup credits.
-2. **Production Deployment** – Deploy to Vercel (frontend: `barpel.ai`) and Render (backend: `barpel.onrender.com`). Update DNS, SSL, CDN configuration.
+2. ✅ **Production Deployment (Temp Domains Live)** – Deployed to Vercel (`app-barpelai.odia.dev` dashboard, `barpelai.odia.dev` marketing) and Render (`barpel-ai.onrender.com`). Pending: purchase `barpel.ai`, update DNS/CORS/redirect URIs to final domains.
 3. **Local Payment Gateway Integration** – Stripe test mode → production. Consider Flutterwave or PayStack for Nigerian NG₦ payment acceptance.
 4. **SMS/USSD Support** – Extend Twilio integration for SMS notifications and USSD callback feature (common in Nigeria).
 5. **Localization** – i18n for Yoruba/Hausa/Igbo. Local number prefixes (+234). Timezone handling (WAT).

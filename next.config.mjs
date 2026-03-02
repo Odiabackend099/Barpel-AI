@@ -218,7 +218,7 @@ const nextConfig = {
                     },
                     {
                         key: 'Content-Security-Policy',
-                        value: `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.vapi.ai https://*.sentry.io https://barpel.onrender.com${localSources}; frame-ancestors 'none';`,
+                        value: `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://api.barpel.ai wss://api.barpel.ai https://barpel-ai.onrender.com https://*.supabase.co wss://*.supabase.co https://api.vapi.ai wss://api.vapi.ai https://*.sentry.io${localSources}; frame-ancestors 'none';`,
                     },
                 ],
             },
