@@ -154,14 +154,14 @@ const endpoints = [
 
 const codeExamples = {
   authentication: `// Using API key in headers
-fetch('https://api.barpel.ai/api/agents', {
+fetch('https://barpel-ai.onrender.com/api/agents', {
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',
     'Content-Type': 'application/json'
   }
 })`,
   createAgent: `// Create a new AI agent
-const response = await fetch('https://api.barpel.ai/api/agents', {
+const response = await fetch('https://barpel-ai.onrender.com/api/agents', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',
@@ -179,7 +179,7 @@ const response = await fetch('https://api.barpel.ai/api/agents', {
 const agent = await response.json();
 console.log('Agent created:', agent.id);`,
   listCalls: `// List recent calls with filtering
-const response = await fetch('https://api.barpel.ai/api/calls?limit=20&status=completed', {
+const response = await fetch('https://barpel-ai.onrender.com/api/calls?limit=20&status=completed', {
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY'
   }
@@ -239,7 +239,7 @@ export default function APIReferencePage() {
               <Code className="w-8 h-8 text-surgical-600 mb-3" />
               <h3 className="font-semibold text-navy-900 mb-2">Base URL</h3>
               <code className="text-sm text-slate-700 bg-white px-3 py-1 rounded border border-slate-200">
-                https://api.barpel.ai
+                https://barpel-ai.onrender.com
               </code>
             </div>
             <div className="p-6 rounded-2xl border border-slate-200 bg-slate-50">

@@ -192,7 +192,7 @@ export class TelephonyProvisioningService {
       });
 
       // Step 4: Purchase the number with webhook configuration
-      const backendUrl = process.env.BACKEND_URL || 'https://api.barpel.ai';
+      const backendUrl = process.env.BACKEND_URL || 'https://barpel-ai.onrender.com';
       const webhookUrl = `${backendUrl}/api/vapi/webhook`;
 
       const purchaseResult = await safeCall<any>(

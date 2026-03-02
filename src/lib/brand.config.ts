@@ -21,7 +21,7 @@ export const brand = {
   domain: 'barpel.ai',
   marketingUrl: process.env.NEXT_PUBLIC_MARKETING_URL ?? 'https://barpel.ai',
   appUrl: process.env.NEXT_PUBLIC_APP_URL ?? 'https://app.barpel.ai',
-  apiUrl: process.env.NEXT_PUBLIC_API_URL ?? 'https://api.barpel.ai',
+  apiUrl: process.env.NEXT_PUBLIC_API_URL ?? 'https://barpel-ai.onrender.com',
   supportEmail: 'support@barpel.ai',
 
   // Social

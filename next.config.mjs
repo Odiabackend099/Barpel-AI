@@ -217,8 +217,16 @@ const nextConfig = {
                         value: 'camera=(), microphone=(self), geolocation=()',
                     },
                     {
+                        key: 'Strict-Transport-Security',
+                        value: 'max-age=63072000; includeSubDomains; preload',
+                    },
+                    {
+                        key: 'X-DNS-Prefetch-Control',
+                        value: 'on',
+                    },
+                    {
                         key: 'Content-Security-Policy',
-                        value: `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://api.barpel.ai wss://api.barpel.ai https://barpel-ai.onrender.com wss://barpel-ai.onrender.com https://*.supabase.co wss://*.supabase.co https://api.vapi.ai wss://api.vapi.ai https://*.sentry.io${localSources}; frame-ancestors 'none';`,
+                        value: `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://barpel-ai.onrender.com wss://barpel-ai.onrender.com https://*.supabase.co wss://*.supabase.co https://api.vapi.ai wss://api.vapi.ai https://*.sentry.io${localSources}; frame-src https://js.stripe.com; frame-ancestors 'none';`,
                     },
                 ],
             },
