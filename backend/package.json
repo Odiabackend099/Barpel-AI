@@ -31,6 +31,7 @@
     "setup:stripe-webhooks": "ts-node src/scripts/setup-stripe-webhooks.ts",
     "test:webhook-delivery": "ts-node src/scripts/test-stripe-webhook-delivery.ts",
     "test:stripe-e2e": "npm run test:integration -- stripe-webhook-e2e.test.ts",
+    "stripe:listen": "stripe listen --forward-to localhost:8001/api/webhooks/stripe --events checkout.session.completed,payment_intent.succeeded,customer.created",
     "agent:test": "ts-node scripts/run-testing-agent.ts",
     "agent:deploy": "ts-node scripts/run-deployment-agent.ts",
     "agent:monitor": "ts-node scripts/run-monitoring-agent.ts",

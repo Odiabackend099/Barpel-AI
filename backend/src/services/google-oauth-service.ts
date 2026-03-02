@@ -218,7 +218,6 @@ export async function exchangeCodeForTokens(
           org_id: orgId,
           provider: 'google_calendar',
           is_active: true,
-          connected_email: userEmail,
           encrypted_config: encryptedConfig,
           metadata: userEmail ? { email: userEmail } : null,
           created_at: new Date().toISOString(),

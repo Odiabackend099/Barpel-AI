@@ -21,7 +21,7 @@ import * as crypto from 'crypto';
 import { VapiClient } from './vapi-client';
 import { IntegrationDecryptor } from './integration-decryptor';
 import { getUnifiedBookingTool } from '../config/unified-booking-tool';
-import { getTransferCallTool, getLookupCallerTool, getEndCallTool, getCheckAvailabilityTool, getQueryKnowledgeBaseTool } from '../config/phase1-tools';
+import { getTransferCallTool, getLookupCallerTool, getEndCallTool, getCheckAvailabilityTool, getQueryKnowledgeBaseTool, getSendSmsTool } from '../config/phase1-tools';
 import { supabase } from './supabase-client';
 import { log } from './logger';
 import { resolveBackendUrl } from '../utils/resolve-backend-url';
@@ -237,6 +237,9 @@ export class ToolSyncService {
       case 'queryKnowledgeBase':
         toolDef = getQueryKnowledgeBaseTool(backendUrl);
         break;
+      case 'sendSms':
+        toolDef = getSendSmsTool(backendUrl);
+        break;
       default:
         throw new Error(`Unsupported tool: ${toolBlueprint.name}`);
     }
@@ -434,9 +437,22 @@ export class ToolSyncService {
         toolIds: toolIds.slice(0, 3)  // Log first 3 for brevity
       });
 
-      // Call Vapi API to update assistant with toolIds
+      // Vapi requires model.provider + model.model whenever model is patched.
+      // Fetch existing assistant first so we can preserve those required fields.
+      let existingProvider = 'openai';
+      let existingModel = 'gpt-4';
+      try {
+        const existing = await vapi.getAssistant(assistantId);
+        existingProvider = existing?.model?.provider || existingProvider;
+        existingModel = existing?.model?.model || existingModel;
+      } catch {
+        // use defaults — PATCH will still succeed with provider + model set
+      }
+
       const updatePayload = {
         model: {
+          provider: existingProvider,
+          model: existingModel,
           toolIds: toolIds
         }
       };
@@ -507,6 +523,12 @@ export class ToolSyncService {
       {
         name: 'queryKnowledgeBase',
         description: 'Search organization knowledge base for services, pricing, policies, and business information',
+        enabled: true
+      },
+      // Phase 3: Mid-Call SMS
+      {
+        name: 'sendSms',
+        description: 'Send SMS to caller during call (directions, links, appointment details)',
         enabled: true
       }
     ];

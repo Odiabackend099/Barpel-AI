@@ -81,6 +81,14 @@ notificationsRouter.get('/', async (req: Request, res: Response) => {
     const { data, error, count } = await query;
 
     if (error) {
+      // Table may not exist in this environment — return empty payload instead of 500.
+      if (error.code === '42P01' || (error.message && error.message.includes('relation') && error.message.includes('does not exist'))) {
+        console.warn('[Notifications] notifications table not found — returning empty', { code: error.code });
+        return res.json({
+          notifications: [],
+          pagination: { page: parsed.page, limit: parsed.limit, total: 0, pages: 0 }
+        });
+      }
       const userMessage = handleDatabaseError(res, error, 'Notifications - GET / - Database error', 'Failed to fetch notifications');
       return;
     }
@@ -118,6 +126,10 @@ notificationsRouter.get('/unread', async (req: Request, res: Response) => {
       .eq('is_read', false);
 
     if (countError) {
+      if (countError.code === '42P01' || (countError.message && countError.message.includes('relation') && countError.message.includes('does not exist'))) {
+        console.warn('[Notifications] notifications table not found — returning empty unread', { code: countError.code });
+        return res.json({ unreadCount: 0, recentUnread: [] });
+      }
       const userMessage = handleDatabaseError(res, countError, 'Notifications - GET /unread - Count error', 'Failed to fetch unread count');
       return;
     }

@@ -63,6 +63,7 @@ import { scheduleVapiCallPoller } from './jobs/vapi-call-poller';
 import gdprCleanupModule from './jobs/gdpr-cleanup';
 import { initializeVapiReconciliationWorker, scheduleVapiReconciliation, shutdownReconciliationWorker } from './jobs/vapi-reconciliation-worker';
 import escalationRulesRouter from './routes/escalation-rules'; // default export
+import transferSettingsRouter from './routes/transfer-settings';
 import teamRouter from './routes/team'; // default export
 import agentsRouter from './routes/agents'; // default export
 import { contactsRouter } from './routes/contacts';
@@ -313,6 +314,7 @@ app.use('/api/dashboard', dashboardLeadsRouter);
 app.use('/api/dashboard-mvp', dashboardMvpRouter);
 app.use('/api/book-demo', bookDemoRouter);
 app.use('/api/escalation-rules', escalationRulesRouter);
+app.use('/api/transfer-settings', transferSettingsRouter);
 app.use('/api/team', teamRouter);
 app.use('/api/agents', agentsRouter);
 app.use('/api/agent-diagnostics', agentDiagnosticsRouter); // Agent configuration debugging

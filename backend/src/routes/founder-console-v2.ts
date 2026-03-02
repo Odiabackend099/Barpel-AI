@@ -84,6 +84,7 @@ import { withTimeout } from '../utils/timeout-helper';
 import { validateE164Format } from '../utils/phone-validation';
 import { phoneNumbersRouter } from './phone-numbers';
 import { createWebVoiceSession, endWebVoiceSession } from '../services/web-voice-bridge';
+import { hasEnoughBalance } from '../services/wallet-service';
 import { getVoiceById, isValidVoice, getActiveVoices, toVapiProvider, VALID_VOICE_PROVIDERS } from '../config/voice-registry';
 import { config } from '../config/index';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -786,17 +787,13 @@ async function verifyVapiAssistant(
  */
 async function ensureAssistantSynced(agentId: string, vapiApiKey: string, importedPhoneNumberId?: string): Promise<{ assistantId: string; toolsSynced: boolean }> {
   const startTime = Date.now();
-  const timerId = `ensureAssistantSynced-${agentId}`;
-  console.time(timerId);
-  console.log(`[ensureAssistantSynced] Starting sync for agent ${agentId}`);
+  logger.info('Starting assistant sync', { agentId });
 
   // 1. Get agent from DB (source of truth) - SELECT ONLY NEEDED COLUMNS
-  console.time(`${timerId}-db-fetch`);
   const { data: agents, error: agentError } = await supabase
     .from('agents')
-    .select('id, name, system_prompt, voice, voice_provider, language, first_message, max_call_duration, vapi_assistant_id, voice_stability, voice_similarity_boost')
+    .select('id, name, role, system_prompt, voice, voice_provider, language, first_message, max_call_duration, vapi_assistant_id, voice_stability, voice_similarity_boost')
     .eq('id', agentId);
-  console.timeEnd(`${timerId}-db-fetch`);
 
   if (agentError) {
     throw new Error(
@@ -819,7 +816,13 @@ async function ensureAssistantSynced(agentId: string, vapiApiKey: string, import
   // Set server.url to webhook endpoint for programmatic event delivery
   const webhookUrl = `${resolveBackendUrl()}/api/vapi/webhook`;
 
-  const resolvedSystemPrompt = agent.system_prompt || buildOutboundSystemPrompt(getDefaultPromptConfig());
+  // Role-aware fallback: only use outbound SDR template for outbound agents.
+  // Inbound agents get a safe generic receptionist prompt instead of the wrong persona.
+  const resolvedSystemPrompt = agent.system_prompt || (
+    agent.role === AGENT_ROLES.OUTBOUND
+      ? buildOutboundSystemPrompt(getDefaultPromptConfig())
+      : 'You are a helpful AI receptionist. Answer questions, help with scheduling appointments, and provide excellent customer service.'
+  );
   const resolvedVoiceId = agent.voice || DEFAULT_VOICE;
   // Use voice registry to get provider; for custom voices not in the registry,
   // fall back to the DB-stored voice_provider before defaulting to 'vapi'.
@@ -879,9 +882,7 @@ async function ensureAssistantSynced(agentId: string, vapiApiKey: string, import
   if (agent.vapi_assistant_id) {
     try {
       // Validate assistant still exists in Vapi
-      console.time(`${timerId}-vapi-get`);
       const existingAssistant = await withRetry(() => vapiClient.getAssistant(agent.vapi_assistant_id!));
-      console.timeEnd(`${timerId}-vapi-get`);
 
       // CRITICAL: Preserve existing tools by ID (especially KB query tools) when updating
       // Matches manual-sync-assistant.ts logic
@@ -928,17 +929,12 @@ async function ensureAssistantSynced(agentId: string, vapiApiKey: string, import
         }
       };
 
-      // CRITICAL DEBUG: Log the update payload before sending to VAPI
-      console.log('[SYSTEM_PROMPT_DEBUG] UPDATE payload being sent to VAPI', {
+      logger.debug('Sending assistant update to Vapi', {
         assistantId: agent.vapi_assistant_id,
-        modelMessages: updatePayload.model.messages,
-        systemPromptLength: updatePayload.model.messages[0]?.content?.length || 0,
-        systemPromptPreview: updatePayload.model.messages[0]?.content ? `"${updatePayload.model.messages[0].content.substring(0, 80)}..."` : 'NULL'
+        systemPromptLength: updatePayload.model.messages[0]?.content?.length || 0
       });
 
-      console.time(`${timerId}-vapi-update`);
       await withRetry(() => vapiClient.updateAssistant(agent.vapi_assistant_id!, updatePayload));
-      console.timeEnd(`${timerId}-vapi-update`);
 
       // Read-back verification: confirm Vapi actually applied the voice
       try {
@@ -1030,27 +1026,15 @@ async function ensureAssistantSynced(agentId: string, vapiApiKey: string, import
 
   let assistant;
   try {
-    // CRITICAL DEBUG: Log the create payload before sending to VAPI
-    console.log('[SYSTEM_PROMPT_DEBUG] CREATE payload being sent to VAPI', {
+    logger.debug('Creating Vapi assistant', {
       agentId,
       name: assistantCreatePayload.name,
-      modelMessages: assistantCreatePayload.model.messages,
       systemPromptLength: assistantCreatePayload.model.messages[0]?.content?.length || 0,
-      systemPromptPreview: assistantCreatePayload.model.messages[0]?.content ? `"${assistantCreatePayload.model.messages[0].content.substring(0, 80)}..."` : 'NULL',
-      voice: assistantCreatePayload.voice,
-      firstMessage: assistantCreatePayload.firstMessage
+      voiceProvider: assistantCreatePayload.voice?.provider,
+      voiceId: assistantCreatePayload.voice?.voiceId
     });
 
-    console.log('[VOICE_DEBUG] About to send to Vapi:', JSON.stringify({
-      voiceProvider: assistantCreatePayload.voice?.provider,
-      voiceId: assistantCreatePayload.voice?.voiceId,
-      voiceIdType: typeof assistantCreatePayload.voice?.voiceId,
-      fullVoice: assistantCreatePayload.voice
-    }, null, 2));
-    
-    console.time(`${timerId}-vapi-create`);
     assistant = await withRetry(() => vapiClient.createAssistant(assistantCreatePayload));
-    console.timeEnd(`${timerId}-vapi-create`);
   } catch (createErr: any) {
     const status: number | undefined = createErr?.response?.status;
     const details = createErr?.response?.data?.message || createErr?.response?.data || createErr?.message;
@@ -1078,13 +1062,11 @@ async function ensureAssistantSynced(agentId: string, vapiApiKey: string, import
 
   // 6. Save assistant ID to DB with race condition protection
   // Use a simple update without select to avoid confusion about return values
-  console.time(`${timerId}-db-save`);
   const { error: updateError } = await supabase
     .from('agents')
     .update({ vapi_assistant_id: assistant.id })
     .eq('id', agentId)
     .eq('vapi_assistant_id', null); // Only update if still null
-  console.timeEnd(`${timerId}-db-save`);
 
   if (updateError) {
     logger.error('Failed to save Vapi assistant ID to database', {
@@ -1096,19 +1078,15 @@ async function ensureAssistantSynced(agentId: string, vapiApiKey: string, import
   }
 
   // Verify the update actually saved by querying the row
-  console.time(`${timerId}-db-verify`);
   const { data: verifyRow, error: verifyError } = await supabase
     .from('agents')
     .select('vapi_assistant_id')
     .eq('id', agentId)
     .maybeSingle();
-  console.timeEnd(`${timerId}-db-verify`);
 
   if (!verifyError && verifyRow?.vapi_assistant_id === assistant.id) {
     // Successfully saved
-    console.timeEnd(timerId);
     const totalDuration = Date.now() - startTime;
-    console.log(`[ensureAssistantSynced] Completed for agent ${agentId} in ${totalDuration}ms`);
 
     logger.info('Vapi assistant ID saved to database and verified', {
       agentId,
@@ -2200,10 +2178,6 @@ router.post(
   async (req: Request, res: Response): Promise<void> => {
     const requestId = req.requestId || generateRequestId();
     const user = req.user;
-    const endpointTimer = `POST /agent/behavior - ${requestId}`;
-    console.time(endpointTimer);
-    console.log(`[/agent/behavior] Request started: ${requestId}`);
-
     // SECURITY: Do NOT log full req.body as it contains system prompts
     logger.info('POST /agent/behavior received', {
       requestId,
@@ -2427,12 +2401,7 @@ router.post(
 
       // Get the stored Vapi API key (OPTIONAL for browser-only agents)
       const envKey = config.VAPI_PRIVATE_KEY;
-      console.log('DEBUG: Resolving Vapi Key. Env Key exists:', !!envKey, 'Length:', envKey?.length);
-      console.log('DEBUG: vapiIntegration config:', vapiIntegration?.config);
-
       let vapiApiKey: string | undefined = vapiIntegration?.config?.vapi_api_key || vapiIntegration?.config?.vapi_secret_key || config.VAPI_PRIVATE_KEY;
-
-      console.log('DEBUG: Resolved vapiApiKey:', vapiApiKey ? 'FOUND' : 'MISSING (browser-only mode)');
 
       // Sanitize Vapi key if present (no longer a blocking error)
       if (vapiApiKey) {
@@ -2455,11 +2424,7 @@ router.post(
       const agentMap: Record<string, string> = {}; // role -> agentId
       const creationErrors: string[] = [];
 
-      console.log('\n=== AGENT CREATION LOOP ===');
-      console.log('Processing roles:', [AGENT_ROLES.OUTBOUND, AGENT_ROLES.INBOUND]);
-
       for (const role of [AGENT_ROLES.OUTBOUND, AGENT_ROLES.INBOUND]) {
-        console.log(`\n--- Processing role: ${role} ---`);
         const { data: existingAgent, error: existingError } = await supabase
           .from('agents')
           .select('id')
@@ -2468,12 +2433,6 @@ router.post(
           .order('created_at', { ascending: false })
           .limit(1)
           .maybeSingle();
-
-        console.log(`Existing agent query result for ${role}:`, {
-          found: existingAgent ? 'YES' : 'NO',
-          agentId: existingAgent?.id || 'NULL',
-          error: existingError?.message || 'NONE'
-        });
 
         if (existingError) {
           const errorMsg = `Failed to fetch ${role} agent: ${existingError.message}`;
@@ -2485,7 +2444,6 @@ router.post(
         let agentId = existingAgent?.id;
 
         if (!agentId) {
-          console.log(`No existing agent for ${role}, creating new one...`);
           const name = role === AGENT_ROLES.OUTBOUND ? 'Barpel AI Outbound' : 'Barpel AI Inbound';
           const defaultSystemPrompt = role === AGENT_ROLES.OUTBOUND
             ? 'You are a helpful assistant making outbound calls on behalf of the business.'
@@ -2502,12 +2460,6 @@ router.post(
             .select('id')
             .single();
 
-          console.log(`Insert result for ${role}:`, {
-            created: newAgent ? 'YES' : 'NO',
-            agentId: newAgent?.id || 'NULL',
-            error: insertError?.message || 'NONE'
-          });
-
           if (insertError) {
             const errorMsg = `Failed to create ${role} agent: ${insertError.message}`;
             logger.error(errorMsg, { requestId });
@@ -2523,18 +2475,13 @@ router.post(
           }
 
           agentId = newAgent.id;
-          console.log(`Successfully created ${role} agent with ID: ${agentId}`);
         }
 
         if (agentId) {
           agentMap[role] = agentId;
-          console.log(`Added to agentMap: ${role} -> ${agentId}`);
           logger.info(`Agent found/created for ${role}`, { agentId, requestId });
         }
       }
-
-      console.log('\nFinal agentMap:', agentMap);
-      console.log('=== END CREATION LOOP ===\n');
 
       // CRITICAL: Validate that both agents were created/found
       if (Object.keys(agentMap).length === 0) {
@@ -2550,14 +2497,8 @@ router.post(
       //
       // Pattern: Sync to Vapi FIRST (before any DB changes), then update DB if Vapi succeeds.
 
-      console.log('\n=== TRANSACTIONAL AGENT UPDATE (Vapi First Pattern) ===');
-      console.log('agentMap:', agentMap);
-      console.log('inboundPayload exists:', Boolean(inboundPayload));
-      console.log('outboundPayload exists:', Boolean(outboundPayload));
-
       // Check if there are any updates to make
       if (!inboundPayload && !outboundPayload) {
-        console.log('No changes requested for agents - returning success');
         const existingAgents = Object.values(agentMap).filter(Boolean);
         if (existingAgents.length > 0) {
           res.json({
@@ -2594,9 +2535,6 @@ router.post(
 
       // Execute transactional update: Vapi first, then DB
       if (vapiApiKey) {
-        console.time(`${endpointTimer}-transactional-sync`);
-        console.log(`[/agent/behavior] Starting transactional update for agents: ${transactionalUpdates.map(u => u.agentId).join(',')}`);
-
         logger.info('Starting transactional agent update', {
           agentCount: transactionalUpdates.length,
           requestId,
@@ -2605,22 +2543,21 @@ router.post(
         });
 
         const transactionResults = await executeTransactionalAgentUpdate(supabase, transactionalUpdates, vapiApiKey!);
-        console.timeEnd(`${endpointTimer}-transactional-sync`);
 
         const successfulUpdates = transactionResults.filter(r => r.success);
         const failedUpdates = transactionResults.filter(r => !r.success);
 
-        // Log transaction results
-        console.log('\n=== TRANSACTION RESULTS ===');
-        console.log('successfulUpdates:', successfulUpdates.length);
-        console.log('failedUpdates:', failedUpdates.length);
-        transactionResults.forEach(result => {
-          console.log(`${result.agentId} (${result.role}): ${result.success ? 'SUCCESS' : 'FAILED'} (db=${result.dbUpdated}, vapi=${result.vapiSynced})`);
-          if (result.error) {
-            console.log(`  Error: ${result.error}`);
-          }
+        logger.info('Transaction results', {
+          requestId,
+          successful: successfulUpdates.length,
+          failed: failedUpdates.length,
+          details: transactionResults.map(r => ({
+            agentId: r.agentId,
+            role: r.role,
+            success: r.success,
+            ...(r.error ? { error: r.error } : {})
+          }))
         });
-        console.log('=== END TRANSACTION RESULTS ===\n');
 
         // If ANY transaction failed, return error (all-or-nothing semantics)
         if (failedUpdates.length > 0) {
@@ -2656,9 +2593,6 @@ router.post(
         }
 
         // All transactions succeeded - return success
-        console.timeEnd(endpointTimer);
-        console.log(`[/agent/behavior] Transactional update completed successfully: ${requestId}`);
-
         logger.info('All agents updated transactionally (Vapi + DB)', {
           count: successfulUpdates.length,
           requestId,
@@ -2687,9 +2621,6 @@ router.post(
       } else {
         // Browser-only mode: Agent saved without Vapi sync
         // Still use transactional pattern but with empty Vapi key for consistency
-        console.timeEnd(endpointTimer);
-        console.log(`[/agent/behavior] Request completed in browser-only mode (no Vapi sync): ${requestId}`);
-
         logger.info('Agent configuration saved in browser-only mode (no Vapi key)', {
           agentIds: transactionalUpdates.map(u => u.agentId),
           requestId,
@@ -2709,9 +2640,6 @@ router.post(
       }
 
     } catch (error: any) {
-      console.timeEnd(endpointTimer);
-      console.log(`[/agent/behavior] Request FAILED: ${requestId}`);
-
       logger.error('Failed to save agent behavior', {
         errorMessage: error?.message,
         requestId
@@ -2843,6 +2771,17 @@ router.post(
       }
       if (!validateE164Format(destination)) {
         res.status(400).json({ error: 'Test Destination Number must be E.164 format (e.g. +234...)', requestId });
+        return;
+      }
+
+      // PREPAID BALANCE GATE: Block test calls if insufficient wallet credits
+      const hasFunds = await hasEnoughBalance(orgId);
+      if (!hasFunds) {
+        logger.warn('Test call blocked — insufficient wallet balance', { orgId, requestId });
+        res.status(402).json({
+          error: 'Insufficient wallet balance. Please top up your wallet before making test calls.',
+          requestId
+        });
         return;
       }
 
@@ -3120,7 +3059,6 @@ router.post(
   callRateLimiter,
   async (req: Request, res: Response): Promise<void> => {
     const requestId = req.requestId || generateRequestId();
-    let trackingId: string | null = null;
 
     try {
       const userId = req.user?.id;
@@ -3144,19 +3082,29 @@ router.post(
         return;
       }
 
+      // PREPAID BALANCE GATE: Block browser test calls if insufficient wallet credits
+      const hasFunds = await hasEnoughBalance(orgId);
+      if (!hasFunds) {
+        logger.warn('Web test blocked — insufficient wallet balance', { orgId, requestId });
+        res.status(402).json({
+          error: 'Insufficient wallet balance. Please top up your wallet before testing.',
+          requestId
+        });
+        return;
+      }
+
       // FIX: Use same selection logic as the save route (most recent by created_at DESC)
       // Previously this preferred active=true agents, but the save route always updates
       // the most recent agent without setting active=true, causing a mismatch where
       // the browser test would use a stale older agent instead of the one just saved.
-      const { data: agents } = await supabase
+      const { data: agent } = await supabase
         .from('agents')
-        .select('id, system_prompt, first_message, voice, language, max_call_duration, vapi_assistant_id, voice_provider, active, created_at')
+        .select('id, system_prompt, first_message, voice, language, max_call_duration, vapi_assistant_id, voice_provider, is_active, created_at')
         .eq('role', AGENT_ROLES.INBOUND)
         .eq('org_id', orgId)
         .order('created_at', { ascending: false })
-        .limit(1);
-
-      const agent = agents?.[0];
+        .limit(1)
+        .maybeSingle();
 
       // ADD: Detailed diagnostic logging
       logger.info('[Browser Test] Inbound agent query result', {
@@ -3169,8 +3117,8 @@ router.post(
         voice_provider: agent?.voice_provider,
         system_prompt_length: agent?.system_prompt?.length || 0,
         first_message_preview: agent?.first_message?.substring(0, 50) || 'N/A',
-        is_active: agent?.active,
-        total_agents: agents?.length || 0,
+        is_active: agent?.is_active,
+        total_agents: 1,
         selection_reason: 'most recent by created_at (aligned with save route)',
         request_id: requestId
       });
@@ -3307,13 +3255,33 @@ router.post(
       const voiceDataForCall = getVoiceById(resolvedVoiceId) || { provider: 'vapi' };
       const resolvedVoiceProvider = toVapiProvider(voiceDataForCall.provider || agent.voice_provider || 'vapi');
 
+      // Fetch tool IDs from the synced Vapi assistant so browser test has full tool access
+      let syncedToolIds: string[] = [];
+      try {
+        const vapiClientForTools = new VapiClient(vapiApiKey);
+        const syncedAssistant = await vapiClientForTools.getAssistant(assistantId);
+        syncedToolIds = syncedAssistant?.model?.toolIds || [];
+        logger.info('[Browser Test] Fetched tool IDs from synced assistant', {
+          assistantId,
+          toolCount: syncedToolIds.length,
+          request_id: requestId
+        });
+      } catch (toolFetchError: any) {
+        logger.warn('[Browser Test] Could not fetch tool IDs — browser test will proceed without tools', {
+          assistantId,
+          error: toolFetchError.message,
+          request_id: requestId
+        });
+      }
+
       const inlineAssistant: Record<string, any> = {
         name: agent.name || 'Browser Test Agent',
         firstMessage: agent.first_message || VAPI_DEFAULTS.DEFAULT_FIRST_MESSAGE,
         model: {
           provider: VAPI_DEFAULTS.MODEL_PROVIDER,
           model: VAPI_DEFAULTS.MODEL_NAME,
-          messages: [{ role: 'system', content: agent.system_prompt || '' }]
+          messages: [{ role: 'system', content: agent.system_prompt || '' }],
+          ...(syncedToolIds.length > 0 ? { toolIds: syncedToolIds } : {})
         },
         voice: {
           provider: resolvedVoiceProvider,
@@ -3591,7 +3559,7 @@ router.post(
       // Previously this preferred active=true agents, causing mismatch with save route.
       const { data: agents } = await supabase
         .from('agents')
-        .select('id, system_prompt, first_message, voice, language, max_call_duration, vapi_assistant_id, vapi_phone_number_id, voice_provider, active, created_at')
+        .select('id, system_prompt, first_message, voice, language, max_call_duration, vapi_assistant_id, vapi_phone_number_id, voice_provider, is_active, created_at')
         .eq('role', AGENT_ROLES.OUTBOUND)
         .eq('org_id', orgId)
         .order('created_at', { ascending: false })
@@ -3611,8 +3579,8 @@ router.post(
         voice_provider: agent?.voice_provider,
         system_prompt_length: agent?.system_prompt?.length || 0,
         first_message_preview: agent?.first_message?.substring(0, 50) || 'N/A',
-        is_active: agent?.active,
-        total_agents: agents?.length || 0,
+        is_active: agent?.is_active,
+        total_agents: 1,
         selection_reason: 'most recent by created_at (aligned with save route)',
         request_id: requestId
       });

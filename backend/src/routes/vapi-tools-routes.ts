@@ -1320,10 +1320,13 @@ router.post('/tools/transferCall', async (req, res) => {
         }
 
         // Fetch transfer configuration from integration_settings
+        // provider = 'transfer' isolates the transfer settings row
+        // (table has UNIQUE(org_id, provider) — must filter by provider to avoid multi-row error)
         const { data: settings, error: settingsError } = await supabaseService
             .from('integration_settings')
             .select('transfer_phone_number, transfer_sip_uri, transfer_departments')
             .eq('org_id', orgId)
+            .eq('provider', 'transfer')
             .maybeSingle();
 
         if (settingsError || !settings) {
@@ -1872,6 +1875,140 @@ router.post('/tools/knowledge-base', async (req, res) => {
                 })
             },
             speech: 'I\'m having trouble accessing our information right now. Let me try to help you another way.'
+        });
+    }
+});
+
+// ============================================
+// SEND SMS TOOL
+// Allows the AI agent to send arbitrary SMS mid-call
+// ============================================
+
+// Per-call SMS rate tracking (callId → count). Prevents abuse.
+const smsCallCounters = new Map<string, number>();
+const SMS_PER_CALL_LIMIT = 3;
+
+// Clean up stale counters every 30 minutes
+setInterval(() => smsCallCounters.clear(), 30 * 60 * 1000);
+
+router.post('/tools/sendSms', async (req, res) => {
+    try {
+        // Extract arguments from Vapi payload
+        const toolCalls = req.body.message?.toolCalls || [];
+        const args = toolCalls.length > 0
+            ? toolCalls[0]?.function?.arguments || {}
+            : extractArgs(req);
+
+        const { message: smsMessage, phoneNumber: explicitPhone } = args;
+
+        // Extract org + caller context from Vapi call metadata
+        const call = req.body.message?.call || {};
+        const orgId = call.metadata?.org_id || call.orgId;
+        const callId = call.id || 'unknown';
+        const callerPhone = call.customer?.number;
+
+        // Determine recipient: explicit phone or caller's number
+        const recipientPhone = explicitPhone || callerPhone;
+
+        log.info('VapiTools', 'sendSms tool invoked', {
+            orgId,
+            callId,
+            hasExplicitPhone: !!explicitPhone,
+            hasCallerPhone: !!callerPhone,
+            messageLength: smsMessage?.length || 0
+        });
+
+        // Validate required fields
+        if (!orgId) {
+            return res.json({
+                results: [{
+                    toolCallId: toolCalls[0]?.id || 'sendSms',
+                    result: JSON.stringify({ success: false, error: 'Organization context missing' })
+                }]
+            });
+        }
+
+        if (!smsMessage) {
+            return res.json({
+                results: [{
+                    toolCallId: toolCalls[0]?.id || 'sendSms',
+                    result: JSON.stringify({ success: false, error: 'Message content is required' })
+                }]
+            });
+        }
+
+        if (!recipientPhone) {
+            return res.json({
+                results: [{
+                    toolCallId: toolCalls[0]?.id || 'sendSms',
+                    result: JSON.stringify({ success: false, error: 'No phone number available. Ask the caller for their number.' })
+                }]
+            });
+        }
+
+        // Per-call rate limit (max 3 SMS per call to prevent abuse)
+        const currentCount = smsCallCounters.get(callId) || 0;
+        if (currentCount >= SMS_PER_CALL_LIMIT) {
+            log.warn('VapiTools', 'sendSms rate limit hit', { orgId, callId, count: currentCount });
+            return res.json({
+                results: [{
+                    toolCallId: toolCalls[0]?.id || 'sendSms',
+                    result: JSON.stringify({ success: false, error: 'SMS limit reached for this call. Maximum 3 text messages per call.' })
+                }]
+            });
+        }
+
+        // Get Twilio credentials for this org
+        const credentials = await IntegrationDecryptor.getTwilioCredentials(orgId);
+        if (!credentials) {
+            log.error('VapiTools', 'sendSms: No Twilio credentials', { orgId });
+            return res.json({
+                results: [{
+                    toolCallId: toolCalls[0]?.id || 'sendSms',
+                    result: JSON.stringify({ success: false, error: 'SMS not configured for this organization' })
+                }]
+            });
+        }
+
+        // Send SMS via existing Twilio infrastructure
+        const { sendSmsTwilio } = await import('../services/twilio-service');
+        const result = await sendSmsTwilio(
+            { to: recipientPhone, body: smsMessage },
+            credentials
+        );
+
+        // Increment per-call counter
+        smsCallCounters.set(callId, currentCount + 1);
+
+        if (result.success) {
+            log.info('VapiTools', 'sendSms delivered', {
+                orgId,
+                callId,
+                messageSid: result.message_sid,
+                smsCount: currentCount + 1
+            });
+            return res.json({
+                results: [{
+                    toolCallId: toolCalls[0]?.id || 'sendSms',
+                    result: JSON.stringify({ success: true, message: 'Text message sent successfully' })
+                }]
+            });
+        } else {
+            log.error('VapiTools', 'sendSms failed', { orgId, callId, error: result.error });
+            return res.json({
+                results: [{
+                    toolCallId: toolCalls[0]?.id || 'sendSms',
+                    result: JSON.stringify({ success: false, error: 'Failed to send text message. Please try again.' })
+                }]
+            });
+        }
+    } catch (error: any) {
+        log.error('VapiTools', 'Error in sendSms tool', { error: error.message });
+        return res.json({
+            results: [{
+                toolCallId: 'sendSms',
+                result: JSON.stringify({ success: false, error: 'Unable to send text message right now' })
+            }]
         });
     }
 });

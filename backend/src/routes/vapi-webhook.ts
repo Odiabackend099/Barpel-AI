@@ -1478,8 +1478,11 @@ vapiWebhookRouter.post('/webhook', webhookLimiter, async (req: Request, res: Res
 
     // ... (Existing RAG Logic) ...
 
-    // OPTIMIZATION: Parallel execute
-    const [retrievalOrgId, embedding] = await Promise.all([
+    // OPTIMIZATION: Parallel execute (embedding failure is non-fatal — degrade to time-only context)
+    let retrievalOrgId: string | null = null;
+    let embedding: number[] | null = null;
+
+    const [orgResult, embeddingResult] = await Promise.allSettled([
       (async () => {
         if (!assistantId) return null;
         const { data: agent } = await supabase.from('agents').select('org_id').eq('vapi_assistant_id', assistantId).maybeSingle();
@@ -1488,8 +1491,20 @@ vapiWebhookRouter.post('/webhook', webhookLimiter, async (req: Request, res: Res
       generateEmbedding(userQuery)
     ]);
 
-    if (!retrievalOrgId) {
-      return res.json({ success: true, context: '', chunks: [] });
+    if (orgResult.status === 'fulfilled') retrievalOrgId = orgResult.value;
+    if (embeddingResult.status === 'fulfilled') {
+      embedding = embeddingResult.value;
+    } else {
+      log.warn('Vapi-Webhook', 'Embedding failed — returning time context only', { error: embeddingResult.reason?.message });
+    }
+
+    // Inject fresh time context per-call (avoids stale timestamps from assistant sync)
+    const now = new Date();
+    const timeBlock = `CURRENT TIME CONTEXT:\nToday is ${now.toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}.\nCurrent time: ${now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Africa/Lagos' })} (WAT, UTC+1).\n\n`;
+
+    // If no org or no embedding, return time context only (don't 500)
+    if (!retrievalOrgId || !embedding) {
+      return res.json({ success: true, context: timeBlock, chunks: [] });
     }
 
     // Search Chunks
@@ -1501,12 +1516,12 @@ vapiWebhookRouter.post('/webhook', webhookLimiter, async (req: Request, res: Res
     });
 
     // Format Context
-    let contextStr = '';
+    let contextStr = timeBlock;
     if (similarChunks && similarChunks.length > 0) {
-      contextStr = 'RELEVANT KNOWLEDGE BASE INFORMATION:\n\n' +
+      contextStr += 'RELEVANT KNOWLEDGE BASE INFORMATION:\n\n' +
         similarChunks.map((c: any) => c.content).join('\n\n');
 
-      // Truncate to limit
+      // Truncate to limit (account for time block length)
       if (contextStr.length > MAX_CONTEXT_LENGTH) {
         contextStr = contextStr.substring(0, MAX_CONTEXT_LENGTH) + '...';
       }

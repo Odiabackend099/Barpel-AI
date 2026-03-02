@@ -30,7 +30,7 @@ export const TRANSFER_CALL_TOOL = {
       required: ['summary', 'department']
     }
   },
-  async: true // Allows Vapi to process the transfer logic on your server
+  async: false // MUST be false — Vapi must wait for the server response to get the transfer.destination object
 };
 
 export const LOOKUP_CALLER_TOOL = {
@@ -194,6 +194,48 @@ export function getQueryKnowledgeBaseTool(backendUrl: string) {
     ...QUERY_KNOWLEDGE_BASE_TOOL,
     server: {
       url: `${backendUrl}/api/vapi/tools/knowledge-base`
+    }
+  };
+}
+
+/**
+ * Send SMS Tool
+ *
+ * Allows the AI agent to send arbitrary text messages mid-call.
+ * Use cases: directions, links, appointment details, booking confirmations.
+ *
+ * SECURITY: async: false ensures Vapi waits for the result before the agent
+ * confirms to the caller. Prevents false "I've texted you" confirmations if
+ * Twilio fails.
+ */
+export const SEND_SMS_TOOL = {
+  type: 'function',
+  function: {
+    name: 'sendSms',
+    description: 'Send a text message (SMS) to the caller or a specified phone number. Use when the caller asks for information via text, directions, links, appointment details, or any content that is easier to read than hear.',
+    parameters: {
+      type: 'object',
+      properties: {
+        phoneNumber: {
+          type: 'string',
+          description: 'The phone number to send the SMS to in E.164 format (e.g., +2341234567890). If not provided, defaults to the caller\'s number.'
+        },
+        message: {
+          type: 'string',
+          description: 'The text message content to send. Keep it concise and useful.'
+        }
+      },
+      required: ['message']
+    }
+  },
+  async: false // Synchronous — wait for Twilio result before agent confirms to caller
+};
+
+export function getSendSmsTool(backendUrl: string) {
+  return {
+    ...SEND_SMS_TOOL,
+    server: {
+      url: `${backendUrl}/api/vapi/tools/sendSms`
     }
   };
 }
