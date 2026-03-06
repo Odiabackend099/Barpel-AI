@@ -308,6 +308,16 @@ function validateRedisConfiguration(): void {
     return;
   }
 
+  // Use regex pre-check: cloud Redis URLs (e.g. Upstash) may have base64 passwords
+  // with +, =, / that cause new URL() to throw, but are valid for ioredis.
+  const redisScheme = /^rediss?:\/\//i;
+  if (!redisScheme.test(redisUrl)) {
+    // Redis is Optional — downgrade to warning, not critical failure
+    logWarning('REDIS_URL: Unrecognized scheme (expected redis:// or rediss://)');
+    logInfo('Webhook queue and Redis-backed rate limiting will be disabled');
+    return;
+  }
+
   try {
     const url = new URL(redisUrl);
     logSuccess(`REDIS_URL: Valid format (${url.host})`);
@@ -318,7 +328,10 @@ function validateRedisConfiguration(): void {
       logInfo('Redis: Remote instance (cloud service)');
     }
   } catch {
-    logError('REDIS_URL: Invalid URL format');
+    // Passwords with base64 characters (+, =, /) are valid for ioredis but
+    // rejected by the WHATWG URL parser. Redis is Optional — warn, don't fail.
+    logWarning('REDIS_URL: URL contains special characters (normal for cloud providers)');
+    logInfo('Redis will be initialized at runtime; queue features enabled if connection succeeds');
   }
 }
 
