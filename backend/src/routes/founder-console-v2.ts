@@ -2455,7 +2455,11 @@ router.post(
               role: role,
               name: name,
               org_id: orgId,
-              system_prompt: defaultSystemPrompt
+              system_prompt: defaultSystemPrompt,
+              first_message: VAPI_DEFAULTS.DEFAULT_FIRST_MESSAGE,
+              voice: DEFAULT_VOICE,
+              language: VAPI_DEFAULTS.DEFAULT_LANGUAGE,
+              max_call_duration: VAPI_DEFAULTS.DEFAULT_MAX_DURATION
             })
             .select('id')
             .single();
@@ -3083,7 +3087,16 @@ router.post(
       }
 
       // PREPAID BALANCE GATE: Block browser test calls if insufficient wallet credits
-      const hasFunds = await hasEnoughBalance(orgId);
+      let hasFunds = true;
+      try {
+        hasFunds = await hasEnoughBalance(orgId);
+      } catch (balanceErr) {
+        logger.warn('[Browser Test] Balance check failed, proceeding with test', {
+          org_id: orgId,
+          error: (balanceErr as Error).message,
+          request_id: requestId
+        });
+      }
       if (!hasFunds) {
         logger.warn('Web test blocked — insufficient wallet balance', { orgId, requestId });
         res.status(402).json({
@@ -3133,20 +3146,13 @@ router.post(
         return;
       }
 
-      // Validate agent has all required behavior fields for voice testing
-      if (!agent.system_prompt || !agent.first_message || !agent.voice || !agent.language || !agent.max_call_duration) {
-        const missingFields = [
-          { missing: !agent.system_prompt, name: 'System Prompt', hint: 'Set in Agent Behavior tab' },
-          { missing: !agent.first_message, name: 'First Message', hint: 'Opening greeting for calls' },
-          { missing: !agent.voice, name: 'Voice', hint: 'Select from Voice dropdown' },
-          { missing: !agent.language, name: 'Language', hint: 'e.g., en-US (defaults if empty)' },
-          { missing: !agent.max_call_duration, name: 'Max Call Duration', hint: 'Seconds (60-3600)' }
-        ].filter(f => f.missing);
-
+      // Only system_prompt is truly required — all other fields (voice, language,
+      // max_call_duration, first_message) have safe defaults applied downstream in
+      // ensureAssistantSynced and the inline assistant build, so we don't gate on them here.
+      if (!agent.system_prompt || agent.system_prompt.trim() === '') {
         res.status(400).json({
-          error: 'Agent configuration incomplete for voice testing',
-          missing_fields: missingFields.map(f => `${f.name} (${f.hint})`),
-          action: 'Go to Agent Configuration page and fill all required fields',
+          error: 'Agent configuration incomplete: System Prompt is required for voice testing.',
+          action: 'Go to Agent Configuration page and set the System Prompt',
           help_url: '/dashboard/agent-config',
           requestId
         });
@@ -3636,18 +3642,13 @@ router.post(
         vapi_phone_number_id: agent.vapi_phone_number_id
       };
 
-      // CRITICAL FIX: Complete validation of all required outbound config fields
-      const missingFields = [
-        !activeConfig.system_prompt?.trim() && 'System Prompt',
-        !activeConfig.first_message?.trim() && 'First Message',
-        !activeConfig.voice?.trim() && 'Voice',
-        !activeConfig.language?.trim() && 'Language',
-        !activeConfig.max_call_duration && 'Max Call Duration'
-      ].filter(Boolean);
-
-      if (missingFields.length > 0) {
+      // Only system_prompt is truly required — voice, language, max_call_duration,
+      // first_message all have safe defaults applied in ensureAssistantSynced.
+      if (!activeConfig.system_prompt?.trim()) {
         res.status(400).json({
-          error: `Outbound agent configuration incomplete. Missing: ${missingFields.join(', ')}. Please save the Outbound Configuration in the dashboard first.`,
+          error: 'Outbound agent configuration incomplete: System Prompt is required.',
+          action: 'Go to Agent Configuration page and set the Outbound System Prompt',
+          help_url: '/dashboard/agent-config',
           requestId
         });
         return;
@@ -3755,7 +3756,7 @@ router.post(
             maxDurationSeconds: activeConfig.max_call_duration || VAPI_DEFAULTS.DEFAULT_MAX_DURATION,
             language: activeConfig.language || VAPI_DEFAULTS.DEFAULT_LANGUAGE,
             // Ensure we receive async failure reports
-            serverMessages: ['function-call', 'hangup', 'status-update', 'end-of-call-report', 'transcript'],
+            serverMessages: ['function-call', 'hang', 'status-update', 'end-of-call-report', 'transcript'],
             analysisPlan: {
               summaryPrompt: 'You are a clinical call analyst for a healthcare AI receptionist. Summarize this call in 2-3 sentences, focusing on: what the caller wanted, what actions were taken (appointment booked, information provided, etc.), and the outcome. Be specific about services discussed and any scheduling details.',
               structuredDataPrompt: 'Extract the following from the call transcript. For sentiment, consider the caller\'s tone, satisfaction level, and emotional state throughout the conversation.',
@@ -3923,7 +3924,8 @@ router.post(
         await supabase.from('call_tracking').delete().eq('id', trackingId);
 
         logger.exception('Failed to create Vapi outbound call', vapiError);
-        const errorMsg = vapiError?.response?.data?.message || vapiError?.message || 'Unknown error';
+        const rawMsg = vapiError?.response?.data?.message || vapiError?.message || 'Unknown error';
+        const errorMsg = Array.isArray(rawMsg) ? rawMsg.join(', ') : String(rawMsg);
 
         // Detect Vapi billing errors
         if (/wallet balance|purchase more credits|upgrade your plan/i.test(errorMsg)) {

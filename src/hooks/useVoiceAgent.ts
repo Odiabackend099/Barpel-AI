@@ -305,7 +305,8 @@ export function useVoiceAgent(options: UseVoiceAgentOptions = {}) {
                     throw new Error('Not authenticated. Please log in first.');
                 }
                 if (err?.status === 400) {
-                    throw new Error(err?.message || 'Agent not configured. Please configure agent settings first.');
+                    const detail = err?.response?.action ? ` ${err.response.action}` : '';
+                    throw new Error((err?.message || 'Agent not configured. Please configure agent settings first.') + detail);
                 }
                 if (err?.status === 402) {
                     throw new Error(err?.message || 'Voice provider billing limit reached. Please contact support.');

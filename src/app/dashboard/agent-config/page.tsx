@@ -519,8 +519,8 @@ export default function AgentConfigPage() {
                 setError(`Insufficient balance (${formatPence(wallet?.balance_pence || 0)}). Minimum £0.79 required for test calls. Please top up your wallet first.`);
                 return;
             }
-        } catch {
-            // Non-blocking: if wallet check fails, let the webhook handle it
+        } catch (e) {
+            console.warn('[agent-config] Wallet check failed, proceeding:', e);
         }
 
         const inboundError = validateAgentConfig(inboundConfig, 'inbound');
@@ -584,8 +584,8 @@ export default function AgentConfigPage() {
                     setError(`Insufficient balance (${formatPence(wallet?.balance_pence || 0)}). Minimum £0.79 required for test calls. Please top up your wallet first.`);
                     return;
                 }
-            } catch {
-                // Non-blocking: if wallet check fails, let the webhook handle it
+            } catch (e) {
+                console.warn('[agent-config] Wallet check failed, proceeding:', e);
             }
 
             const outboundError = validateAgentConfig(outboundConfig, 'outbound');
