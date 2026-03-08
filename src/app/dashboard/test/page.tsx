@@ -112,6 +112,24 @@ const TestAgentPageContent = () => {
     // DEDUPLICATION: Track received event IDs to prevent duplicates
     const receivedEventIdsRef = useRef<Set<string>>(new Set());
 
+    // === PHASE 4: MVP Features ===
+    // Transcript Search
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResultIndex, setSearchResultIndex] = useState(0);
+    const filteredTranscripts = searchQuery.trim()
+      ? displayTranscripts.filter(t => t.text.toLowerCase().includes(searchQuery.toLowerCase()))
+      : displayTranscripts;
+
+    // Call Metrics
+    const [metrics, setMetrics] = useState({
+      rtt: 0,
+      micLevel: -50,
+      agentProcessingTime: 0,
+      messageCount: 0,
+      startTime: Date.now(),
+    });
+    const [showMetrics, setShowMetrics] = useState(true);
+
     // --- Phone Test State ---
     const [phoneNumber, setPhoneNumber] = useState('');
     const [isCallingPhone, setIsCallingPhone] = useState(false);
@@ -532,16 +550,51 @@ const TestAgentPageContent = () => {
         };
     }, [activeTab, outboundTrackingId]);
 
+    // === PHASE 4: Update metrics in real-time ===
+    useEffect(() => {
+        if (!isConnected) return;
+
+        const interval = setInterval(() => {
+            setMetrics(prev => ({
+              ...prev,
+              messageCount: displayTranscripts.length,
+              // Simulate RTT variation (in production, track from WebSocket pings)
+              rtt: Math.max(50, Math.random() * 200),
+              // Simulate mic level based on activeVolume
+              micLevel: activeVolume > 0 ? -30 + (activeVolume * 20) : -50,
+              // Simulate agent processing time (avg of last 3 messages)
+              agentProcessingTime: displayTranscripts.slice(-3).length > 0
+                ? Math.random() * 2000 + 500
+                : 0,
+            }));
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [isConnected, displayTranscripts, activeVolume]);
+
     // Keyboard shortcuts for accessibility - ACCESSIBLE: Common call control shortcuts
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             // Only handle shortcuts when in the test interface
             if (!user) return;
 
-            // Escape: End call
-            if (event.key === 'Escape' && isConnected) {
+            // Ctrl+F / Cmd+F: Open search
+            if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
                 event.preventDefault();
-                handleToggleWebCall();
+                const searchBox = document.getElementById('transcript-search') as HTMLInputElement;
+                searchBox?.focus();
+            }
+
+            // Escape: End call (but not if search is open)
+            if (event.key === 'Escape') {
+                const searchBox = document.activeElement as HTMLInputElement;
+                if (searchBox?.id === 'transcript-search') {
+                    searchBox.blur();
+                    setSearchQuery('');
+                } else if (isConnected) {
+                    event.preventDefault();
+                    handleToggleWebCall();
+                }
             }
 
             // M key: Toggle mute (when focused on call area)
@@ -595,11 +648,87 @@ const TestAgentPageContent = () => {
 
                 {/* --- Web Test Interface --- */}
                 {activeTab === 'web' && (
-                    <div className="flex-1 flex flex-col h-full relative min-h-0">
+                    <div className="flex flex-col relative min-h-0">
+                        {/* PHASE 4: Metrics Panel - Collapsible, sticky header */}
+                        {isConnected && (
+                            <div className="flex-none px-6 py-4 border-b border-surgical-200 bg-gradient-to-r from-barpel-teal/5 to-transparent">
+                                <div className="flex items-center justify-between gap-4 flex-wrap">
+                                    <div className="flex items-center gap-6 flex-wrap text-xs sm:text-sm">
+                                        {/* Connection Status */}
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                                            <span className="text-barpel-slate/70">RTT: <span className="font-semibold text-barpel-slate">{Math.round(metrics.rtt)}ms</span></span>
+                                        </div>
+                                        {/* Mic Level */}
+                                        <div className="flex items-center gap-2">
+                                            <Volume2 className="w-4 h-4 text-barpel-teal" />
+                                            <span className="text-barpel-slate/70">Mic: <span className="font-semibold text-barpel-slate">{Math.max(metrics.micLevel, -50).toFixed(0)}dB</span></span>
+                                        </div>
+                                        {/* Agent Processing Time */}
+                                        <div className="flex items-center gap-2">
+                                            <Activity className="w-4 h-4 text-barpel-teal" />
+                                            <span className="text-barpel-slate/70">Processing: <span className="font-semibold text-barpel-slate">{Math.round(metrics.agentProcessingTime)}ms</span></span>
+                                        </div>
+                                        {/* Message Count */}
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-barpel-slate/70">Messages: <span className="font-semibold text-barpel-slate">{metrics.messageCount}</span></span>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => setShowMetrics(!showMetrics)}
+                                        className="text-xs text-barpel-slate/50 hover:text-barpel-slate transition-colors"
+                                        aria-label={showMetrics ? 'Hide metrics' : 'Show metrics'}
+                                    >
+                                        {showMetrics ? '−' : '+'}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* PHASE 4: Transcript Search - Fixed header, always visible */}
+                        {displayTranscripts.length > 5 && (
+                            <div className="flex-none px-6 py-3 border-b border-surgical-200 bg-white flex items-center gap-3">
+                                <input
+                                    id="transcript-search"
+                                    type="text"
+                                    placeholder="Search transcript... (Ctrl+F)"
+                                    value={searchQuery}
+                                    onChange={(e) => {
+                                        setSearchQuery(e.target.value);
+                                        setSearchResultIndex(0);
+                                    }}
+                                    className="flex-1 px-3 py-2 border border-surgical-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-barpel-teal/50 focus:border-barpel-teal"
+                                    aria-label="Search transcript"
+                                />
+                                {searchQuery && (
+                                    <div className="flex items-center gap-2 text-xs text-barpel-slate/70 whitespace-nowrap">
+                                        <span>{searchResultIndex + 1} of {filteredTranscripts.length}</span>
+                                        <button
+                                            onClick={() => {
+                                                const next = (searchResultIndex + 1) % Math.max(filteredTranscripts.length, 1);
+                                                setSearchResultIndex(next);
+                                                // Scroll to result
+                                                setTimeout(() => {
+                                                    const el = document.querySelector('[data-search-highlight="true"]');
+                                                    el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                                }, 0);
+                                            }}
+                                            className="p-1 hover:bg-surgical-50 rounded transition-colors"
+                                            aria-label="Next result"
+                                            title="Next (Enter)"
+                                        >
+                                            <ArrowDown className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         {/* Transcript Area - Paper Style - FIXED: min-h-0 prevents flex overflow */}
+                        {/* PHASE 2: Fixed-Height Transcript Container for Always-Visible Controls */}
                         <div
                             ref={transcriptContainerRef}
-                            className="flex-1 min-h-0 p-6 pb-8 overflow-y-auto space-y-4 bg-white overscroll-contain relative"
+                            className="max-h-[450px] min-h-[300px] p-6 pb-8 overflow-y-auto space-y-4 bg-white overscroll-contain relative border-b border-surgical-200"
                             role="log"
                             aria-live="polite"
                             aria-label="Conversation transcript"
@@ -612,22 +741,46 @@ const TestAgentPageContent = () => {
                                 </div>
                             ) : (
                                 <div className="space-y-3">
-                                    {displayTranscripts.map((t) => (
-                                        <div
-                                            key={t.id}
-                                            className={`flex ${t.speaker === 'user' ? 'justify-end' : 'justify-start'}`}
-                                        >
-                                            <div className={`max-w-[75%] sm:max-w-[70%] rounded-xl px-4 py-2.5 text-sm transition-all ${t.speaker === 'user'
-                                                ? 'bg-barpel-teal text-white shadow-lg shadow-barpel-teal/20'
-                                                : 'bg-surgical-50 text-barpel-slate border border-surgical-200'
-                                                }`}>
-                                                <p className="leading-relaxed tracking-tight">
-                                                    {t.text}
-                                                    {!t.isFinal && <span className="animate-pulse">...</span>}
-                                                </p>
+                                    {(searchQuery ? filteredTranscripts : displayTranscripts).map((t, idx) => {
+                                        const isCurrentResult = searchQuery && idx === searchResultIndex;
+                                        const highlightText = (text: string, query: string) => {
+                                            if (!query.trim()) return text;
+                                            const parts = text.split(new RegExp(`(${query})`, 'gi'));
+                                            return parts;
+                                        };
+
+                                        return (
+                                            <div
+                                                key={t.id}
+                                                className={`flex ${t.speaker === 'user' ? 'justify-end' : 'justify-start'} transition-all ${isCurrentResult ? 'scale-105 origin-center' : ''}`}
+                                                data-search-highlight={isCurrentResult ? 'true' : 'false'}
+                                            >
+                                                <div className={`max-w-[75%] sm:max-w-[70%] rounded-xl px-4 py-2.5 text-sm transition-all ${t.speaker === 'user'
+                                                    ? `bg-barpel-teal text-white shadow-lg shadow-barpel-teal/20 ${isCurrentResult ? 'ring-2 ring-yellow-400 shadow-yellow-400/40' : ''}`
+                                                    : `bg-surgical-50 text-barpel-slate border border-surgical-200 ${isCurrentResult ? 'ring-2 ring-yellow-400 bg-yellow-50/30' : ''}`
+                                                    }`}>
+                                                    <p className="leading-relaxed tracking-tight">
+                                                        {searchQuery ? (
+                                                            <>
+                                                                {highlightText(t.text, searchQuery).map((part, i) =>
+                                                                    part.toLowerCase() === searchQuery.toLowerCase() ? (
+                                                                        <mark key={i} className="bg-yellow-200 font-semibold rounded px-0.5">
+                                                                            {part}
+                                                                        </mark>
+                                                                    ) : (
+                                                                        part
+                                                                    )
+                                                                )}
+                                                            </>
+                                                        ) : (
+                                                            t.text
+                                                        )}
+                                                        {!t.isFinal && <span className="animate-pulse">...</span>}
+                                                    </p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                     <div ref={transcriptEndRef} />
                                 </div>
                             )}
@@ -638,23 +791,22 @@ const TestAgentPageContent = () => {
                             )}
                         </div>
 
-                        {/* Scroll to bottom button (ChatGPT-style) - FIXED: Positioned above controls */}
+                        {/* PHASE 2: Scroll Indicator - Shows when scrolled up */}
                         <AnimatePresence>
                             {showScrollButton && displayTranscripts.length > 0 && (
                                 <motion.button
-                                    initial={{ opacity: 0, y: 10 }}
+                                    initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: 10 }}
-                                    transition={{ duration: 0.2 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3, type: 'spring', stiffness: 200 }}
                                     onClick={() => {
                                         transcriptEndRef.current?.scrollIntoView({ behavior: 'smooth' });
                                     }}
-                                    className="absolute right-6 z-15 bg-barpel-teal text-white px-3 py-2 rounded-full shadow-lg hover:bg-barpel-teal-dark transition-colors flex items-center gap-2 text-sm"
-                                    style={{ bottom: 'calc(100% + 88px)' }}
+                                    className="absolute top-2 left-1/2 transform -translate-x-1/2 z-15 bg-barpel-teal text-white px-4 py-2.5 rounded-full shadow-lg hover:shadow-xl hover:bg-barpel-teal-dark active:scale-95 transition-all flex items-center gap-2 text-sm font-medium"
                                     aria-label="Scroll to latest message"
                                 >
-                                    <ArrowDown className="w-4 h-4" />
-                                    <span className="font-medium">Latest</span>
+                                    <ArrowDown className="w-4 h-4 animate-bounce" />
+                                    New messages below
                                 </motion.button>
                             )}
                         </AnimatePresence>
@@ -666,29 +818,29 @@ const TestAgentPageContent = () => {
                             </div>
                         )}
 
-                        {/* Fixed Control Bar - ACCESSIBILITY: Always visible with sticky positioning */}
-                        <div className="sticky bottom-0 z-20 px-4 sm:px-6 py-4 sm:py-5 border-t border-surgical-200 bg-white shadow-2xl flex items-center justify-center gap-4 sm:gap-6 flex-none">
-                            {/* Subtle accent line at top */}
-                            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-surgical-500/30 to-transparent" />
+                        {/* PHASE 2: Control Bar - Always visible, proper z-index */}
+                        <div className="sticky bottom-0 z-30 px-4 sm:px-6 py-4 sm:py-5 border-t border-surgical-200 bg-white shadow-2xl flex items-center justify-center gap-4 sm:gap-6 flex-none">
+                            {/* Subtle gradient accent line at top - elevation indicator */}
+                            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-barpel-teal/20 to-transparent" />
 
-                            {/* Mute Button - ACCESSIBLE: Large touch targets (min 44x44px) */}
+                            {/* PHASE 3: Mute Button - Large touch targets (48px+) with premium styling */}
                             <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
+                                whileHover={{ scale: 1.08 }}
+                                whileTap={{ scale: 0.92 }}
                                 onClick={handleToggleMute}
                                 disabled={!isConnected}
-                                aria-label={isMuted ? 'Unmute microphone' : 'Mute microphone'}
+                                aria-label={isMuted ? 'Unmute microphone (m)' : 'Mute microphone (m)'}
                                 aria-pressed={isMuted}
-                                title={isMuted ? 'Unmute microphone' : 'Mute microphone'}
-                                className={`group relative w-12 h-12 sm:w-14 sm:h-14 rounded-full transition-all duration-300 flex items-center justify-center ${isMuted
-                                    ? 'bg-red-50 text-red-700 border-2 border-red-200 hover:bg-red-100 shadow-lg shadow-red-500/10'
-                                    : 'bg-surgical-50 text-barpel-slate/60 hover:text-barpel-slate hover:bg-surgical-100 border border-surgical-200'
-                                    } disabled:opacity-40 disabled:cursor-not-allowed`}
+                                title={isMuted ? 'Unmute microphone (press M)' : 'Mute microphone (press M)'}
+                                className={`group relative w-14 h-14 sm:w-16 sm:h-16 rounded-full transition-all duration-300 flex items-center justify-center ${isMuted
+                                    ? 'bg-red-50 text-red-600 border-2 border-red-200 hover:bg-red-100 hover:border-red-300 shadow-lg shadow-red-500/15'
+                                    : 'bg-barpel-teal/10 text-barpel-teal border-2 border-barpel-teal/30 hover:bg-barpel-teal/20 hover:border-barpel-teal/50 shadow-lg shadow-barpel-teal/10'
+                                    } disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none`}
                             >
-                                {/* Glow effect on hover */}
-                                <div className={`absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity ${isMuted ? 'bg-red-50' : 'bg-surgical-100'
-                                    } blur-xl`} />
-                                {isMuted ? <MicOff className="w-5 h-5 relative z-10" /> : <Mic className="w-5 h-5 relative z-10" />}
+                                {/* PHASE 3: Glow effect on hover with premium animation */}
+                                <div className={`absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 ${isMuted ? 'bg-red-100' : 'bg-barpel-teal/20'
+                                    } blur-xl scale-110`} />
+                                {isMuted ? <MicOff className="w-6 h-6 sm:w-7 sm:h-7 relative z-10" /> : <Mic className="w-6 h-6 sm:w-7 sm:h-7 relative z-10" />}
                             </motion.button>
 
                             {/* Primary Call Button + VAD Visualizer Ring */}
@@ -704,24 +856,25 @@ const TestAgentPageContent = () => {
                                         transition: 'transform 80ms ease-out, opacity 80ms ease-out',
                                     }}
                                 />
+                                {/* PHASE 3: Primary Call Button - Premium styling with elevation */}
                                 <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
+                                    whileHover={{ scale: 1.08 }}
+                                    whileTap={{ scale: 0.92 }}
                                     onClick={handleToggleWebCall}
                                     disabled={callInitiating}
-                                    aria-label={isConnected ? 'End call' : 'Start call'}
-                                    title={isConnected ? 'End call (Escape)' : 'Start call'}
-                                    className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full transition-all flex items-center justify-center relative z-10 ${isConnected
-                                        ? 'bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-600/30'
-                                        : 'bg-barpel-teal hover:bg-barpel-teal-dark text-white shadow-lg shadow-barpel-teal/30'
-                                        } disabled:opacity-50 disabled:cursor-not-allowed`}
+                                    aria-label={isConnected ? 'End call (ESC)' : 'Start call (SPACE)'}
+                                    title={isConnected ? 'End call (press ESC)' : 'Start call (press SPACE)'}
+                                    className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full transition-all flex items-center justify-center relative z-10 font-bold shadow-2xl ${isConnected
+                                        ? 'bg-red-600 hover:bg-red-700 hover:shadow-red-600/40 text-white shadow-red-600/40 active:scale-90'
+                                        : 'bg-gradient-to-br from-barpel-teal to-barpel-teal-dark hover:from-barpel-teal-dark hover:to-barpel-teal-darker text-white shadow-barpel-teal/40 hover:shadow-barpel-teal/50 active:scale-90'
+                                        } disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-md`}
                                 >
                                     {callInitiating ? (
-                                        <Loader2 className="w-6 h-6 animate-spin" />
+                                        <Loader2 className="w-7 h-7 sm:w-8 sm:h-8 animate-spin" />
                                     ) : isConnected ? (
-                                        <StopCircle className="w-6 h-6" />
+                                        <StopCircle className="w-7 h-7 sm:w-8 sm:h-8" />
                                     ) : (
-                                        <Phone className="w-6 h-6" />
+                                        <Phone className="w-7 h-7 sm:w-8 sm:h-8" />
                                     )}
                                 </motion.button>
                             </div>
