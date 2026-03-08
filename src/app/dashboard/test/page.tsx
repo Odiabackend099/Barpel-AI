@@ -109,6 +109,8 @@ const TestAgentPageContent = () => {
     const [showScrollButton, setShowScrollButton] = useState(false);
     const transcriptEndRef = useRef<HTMLDivElement>(null);
     const transcriptContainerRef = useRef<HTMLDivElement>(null);
+    // DEDUPLICATION: Track received event IDs to prevent duplicates
+    const receivedEventIdsRef = useRef<Set<string>>(new Set());
 
     // --- Phone Test State ---
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -139,11 +141,13 @@ const TestAgentPageContent = () => {
     }, [autostartParam, user, loading, activeTab, isConnected, callInitiating]);
 
     // --- Web Test Effects ---
+    // DEDUPLICATION: Map transcripts with stable IDs (speaker + text + timestamp)
     useEffect(() => {
         if (transcripts && transcripts.length > 0) {
             setDisplayTranscripts(
                 transcripts.map((t: any, idx: number) => ({
-                    id: `${idx}-${t.timestamp.getTime()}`,
+                    // Use stable ID: speaker + text + timestamp (prevents duplicate display)
+                    id: `${t.speaker}_${t.text}_${t.timestamp.getTime()}`,
                     speaker: t.speaker,
                     text: t.text,
                     isFinal: t.isFinal,
@@ -367,6 +371,8 @@ const TestAgentPageContent = () => {
 
         setIsCallingPhone(true);
         setCallSummary(null);
+        // DEDUPLICATION: Clear previous event tracking for new call
+        receivedEventIdsRef.current.clear();
         try {
             const data = await authedBackendFetch<any>('/api/founder-console/agent/web-test-outbound', {
                 method: 'POST',
@@ -413,6 +419,8 @@ const TestAgentPageContent = () => {
             setOutboundTranscripts([]);
             setOutboundConnected(false);
             setWsConnectionStatus('disconnected');
+            // DEDUPLICATION: Clear event tracking for next call
+            receivedEventIdsRef.current.clear();
         }
     };
 
@@ -452,15 +460,27 @@ const TestAgentPageContent = () => {
                         if (data.trackingId !== outboundTrackingId) return;
 
                         if (data.type === 'transcript') {
+                            // DEDUPLICATION: Create a stable event ID from transcript content
+                            // Uses trackingId + speaker + text to prevent duplicate messages
+                            const eventId = `${outboundTrackingId}_${data.speaker}_${data.text}_${data.ts || 0}`;
+
+                            // Check if we've already processed this exact event
+                            if (receivedEventIdsRef.current.has(eventId)) {
+                                return; // Skip duplicate
+                            }
+
+                            // Mark as received to prevent future duplicates
+                            receivedEventIdsRef.current.add(eventId);
+
                             const speaker = data.speaker === 'agent' ? 'agent' : 'user';
                             const isFinal = data.is_final === true;
                             const newTranscript = {
-                                id: `${outboundTrackingId}_${Date.now()}_${Math.random()}`,
+                                id: eventId, // Use stable event ID instead of random
                                 speaker,
                                 text: data.text,
                                 isFinal,
                                 confidence: data.confidence || 0.95,
-                                timestamp: new Date()
+                                timestamp: new Date(data.ts || Date.now())
                             };
 
                             setOutboundTranscripts(prev => {
@@ -471,7 +491,8 @@ const TestAgentPageContent = () => {
                                     updated[updated.length - 1] = { ...last, text: data.text };
                                     return updated;
                                 }
-                                return [...prev, newTranscript].slice(-100);
+                                // Never truncate — keep all transcripts for call history
+                                return [...prev, newTranscript];
                             });
                             // Auto-scroll with requestAnimationFrame for smooth scrolling
                             requestAnimationFrame(() => {

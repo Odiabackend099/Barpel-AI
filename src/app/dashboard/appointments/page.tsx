@@ -80,6 +80,8 @@ const AppointmentsDashboardContent = () => {
             const params = new URLSearchParams({
                 page: currentPage.toString(),
                 limit: appointmentsPerPage.toString(),
+                // Empty string = no param = backend defaults to active-only (pending/confirmed/in_progress)
+                // 'all' = explicit override to return every status
                 ...(filterStatus && { status: filterStatus }),
                 ...(filterDate && { dateRange: filterDate }),
                 ...(searchQuery && { search: searchQuery })
@@ -313,7 +315,8 @@ const AppointmentsDashboardContent = () => {
                         }}
                         className="px-4 py-2 border border-barpel-slate/10 rounded-lg text-sm bg-white text-barpel-slate focus:outline-none focus:ring-2 focus:ring-barpel-teal"
                     >
-                        <option value="">All Status</option>
+                        <option value="">Active (Default)</option>
+                        <option value="all">All Statuses</option>
                         <option value="pending">Pending</option>
                         <option value="confirmed">Confirmed</option>
                         <option value="in_progress">In Progress</option>

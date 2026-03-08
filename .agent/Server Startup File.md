@@ -294,7 +294,7 @@ grep -E "^(SUPABASE_URL|VAPI_PRIVATE_KEY|ENCRYPTION_KEY|PORT|COMPANY_NAME)" .env
 # SUPABASE_URL=https://wifcmvgwzicgyrvaoiwi.supabase.co
 # VAPI_PRIVATE_KEY=623b9f25-cda2-4de0-8e6e-5291eac94e32
 # ENCRYPTION_KEY=bbaf521...
-# PORT=6001
+# PORT=8001
 # COMPANY_NAME=Barpel AI
 ```
 
@@ -330,7 +330,7 @@ npm run dev 2>&1 | head -30
 - SUPABASE_SERVICE_ROLE_KEY
 - VAPI_PRIVATE_KEY
 - ENCRYPTION_KEY
-- PORT=6001
+- PORT=8001
 - COMPANY_NAME=Barpel AI
 
 **Verify directory exists:**
@@ -390,19 +390,14 @@ tail -50 /tmp/ngrok.log
 
 After startup, verify:
 
-- [ ] Frontend running on port 5001
-  - [ ] `lsof -i :5001` shows Node.js process
-  - [ ] http://localhost:5001 displays BARPEL homepage
+- [ ] Frontend running on port 8000
+  - [ ] `lsof -i :8000` shows Node.js process
+  - [ ] http://localhost:8000 displays BARPEL dashboard
   - [ ] No React errors in browser console
 
-- [ ] Backend running on port 6001
-  - [ ] `lsof -i :6001` shows Node.js process
-  - [ ] `curl http://localhost:6001/api/vapi/webhook/health` returns JSON
-
-- [ ] ngrok running on port 4040
-  - [ ] `lsof -i :4040` shows ngrok process
-  - [ ] `curl http://localhost:4040/api/tunnels` returns JSON with public_url
-  - [ ] Public webhook URL accessible from internet
+- [ ] Backend running on port 8001
+  - [ ] `lsof -i :8001` shows Node.js process
+  - [ ] `curl http://localhost:8001/health` returns JSON
 
 ---
 
@@ -523,7 +518,7 @@ Restart servers when:
 **Project Status:**
 - ✅ Barpel AI Reskin: COMPLETE (2026-03-01)
 - ✅ Frontend: Dim & Brandy theme, business onboarding wizard
-- ✅ Backend: Barpel credentials, port 6001
+- ✅ Backend: Barpel credentials, port 8001
 - ✅ Database: 79 migrations deployed
 - ✅ Demo Ready: Signup → Wizard → Dashboard flow tested
 

@@ -39,6 +39,9 @@ export interface OnboardingState {
   voiceList: Array<{ id: string; name: string }>;
   sessionId: string;
 
+  // Pricing plan selected from marketing site ('starter' | 'business' | 'enterprise' | null)
+  plan: string | null;
+
   // Actions
   setDirection: (d: CallDirection) => void;
   setSelectedCountry: (country: string) => void;
@@ -55,6 +58,7 @@ export interface OnboardingState {
   setVapiAssistantId: (id: string) => void;
   setSyncComplete: (complete: boolean) => void;
   setVoiceList: (voices: Array<{ id: string; name: string }>) => void;
+  setPlan: (plan: string | null) => void;
   nextStep: () => void;
   prevStep: () => void;
   goToStep: (step: number) => void;
@@ -103,6 +107,9 @@ export const useOnboardingStore = create<OnboardingState>()(
       voiceList: [],
       sessionId: generateSessionId(),
 
+      // Pricing plan from marketing site
+      plan: null,
+
       // Actions
       setDirection: (d) => set({ direction: d }),
       setSelectedCountry: (country) => set({ selectedCountry: country }),
@@ -120,6 +127,7 @@ export const useOnboardingStore = create<OnboardingState>()(
       setVapiAssistantId: (id) => set({ vapiAssistantId: id }),
       setSyncComplete: (complete) => set({ syncComplete: complete }),
       setVoiceList: (voices) => set({ voiceList: voices }),
+      setPlan: (plan) => set({ plan }),
 
       nextStep: () =>
         set((state) => ({
@@ -185,6 +193,7 @@ export const useOnboardingStore = create<OnboardingState>()(
           syncComplete: false,
           voiceList: [],
           sessionId: generateSessionId(),
+          plan: null,
         }),
     }),
     {
@@ -208,6 +217,7 @@ export const useOnboardingStore = create<OnboardingState>()(
         syncComplete: state.syncComplete,
         voiceList: state.voiceList,
         sessionId: state.sessionId,
+        plan: state.plan,
       }),
     }
   )

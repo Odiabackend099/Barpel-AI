@@ -3086,25 +3086,8 @@ router.post(
         return;
       }
 
-      // PREPAID BALANCE GATE: Block browser test calls if insufficient wallet credits
-      let hasFunds = true;
-      try {
-        hasFunds = await hasEnoughBalance(orgId);
-      } catch (balanceErr) {
-        logger.warn('[Browser Test] Balance check failed, proceeding with test', {
-          org_id: orgId,
-          error: (balanceErr as Error).message,
-          request_id: requestId
-        });
-      }
-      if (!hasFunds) {
-        logger.warn('Web test blocked — insufficient wallet balance', { orgId, requestId });
-        res.status(402).json({
-          error: 'Insufficient wallet balance. Please top up your wallet before testing.',
-          requestId
-        });
-        return;
-      }
+      // Browser test calls are FREE — no balance gate. The webhook will skip billing
+      // for webCall type calls (industry standard: Retell AI, ElevenLabs both exempt test calls).
 
       // FIX: Use same selection logic as the save route (most recent by created_at DESC)
       // Previously this preferred active=true agents, but the save route always updates

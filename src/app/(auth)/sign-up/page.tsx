@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Eye, EyeOff, Loader2, Check } from 'lucide-react';
 import Logo from '@/components/Logo';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import FadeIn from '@/components/ui/FadeIn';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
@@ -29,8 +29,10 @@ function getPasswordStrength(p: string): { score: number; label: string; color: 
   return levels[score - 1];
 }
 
-export default function SignUpPage() {
+function SignUpForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const plan = searchParams.get('plan');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -127,7 +129,7 @@ export default function SignUpPage() {
       }
 
       reset();
-      router.push('/dashboard/onboarding');
+      router.push('/dashboard/onboarding' + (plan ? `?plan=${encodeURIComponent(plan)}` : ''));
     } catch {
       setError('An unexpected error occurred. Please try again.');
       setErrorLink(null);
@@ -481,5 +483,17 @@ export default function SignUpPage() {
         </FadeIn>
       </div>
     </div>
+  );
+}
+
+/**
+ * Suspense boundary required by Next.js for useSearchParams() in App Router.
+ * Ensures the page is statically renderable without blocking.
+ */
+export default function SignUpPage() {
+  return (
+    <Suspense fallback={null}>
+      <SignUpForm />
+    </Suspense>
   );
 }

@@ -403,6 +403,12 @@ callsRouter.get('/analytics/summary', async (req: Request, res: Response) => {
     const orgId = req.user?.orgId;
     if (!orgId) return errorResponse(res, 401, 'Unauthorized', 'AUTH_REQUIRED');
 
+    // Optional direction filter: 'inbound' | 'outbound' — undefined means both (combined)
+    const rawDirection = req.query.call_direction as string | undefined;
+    const callDirection = (rawDirection === 'inbound' || rawDirection === 'outbound')
+      ? rawDirection
+      : undefined;
+
     // PERFORMANCE OPTIMIZATION: Fetch only needed columns and use smart filtering
     // Instead of 4 separate queries (all, today, week, month), fetch once and filter in JavaScript
     const now = new Date();
@@ -415,21 +421,28 @@ callsRouter.get('/analytics/summary', async (req: Request, res: Response) => {
     // should be served via a dedicated warehouse RPC, not a full table scan.
     const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
 
+    // Build base queries and apply direction filter at DB level (not in JS) for performance
+    let allCallsQuery = supabase
+      .from('calls')
+      .select('id, created_at, status, duration_seconds, sentiment_score')
+      .eq('org_id', orgId)
+      .gte('created_at', ninetyDaysAgo.toISOString());
+
+    let monthCallsQuery = supabase
+      .from('calls')
+      .select('id, created_at')
+      .eq('org_id', orgId)
+      .gte('created_at', monthAgo.toISOString());
+
+    if (callDirection) {
+      allCallsQuery = allCallsQuery.eq('call_direction', callDirection);
+      monthCallsQuery = monthCallsQuery.eq('call_direction', callDirection);
+    }
+
     // Parallel queries: Get 90-day calls for aggregate stats + month's calls for time-based stats
     const [allCallsResult, monthCallsResult] = await Promise.all([
-      // 90-day window — only columns needed for aggregate stats (no large text fields)
-      supabase
-        .from('calls')
-        .select('id, created_at, status, duration_seconds, sentiment_score')
-        .eq('org_id', orgId)
-        .gte('created_at', ninetyDaysAgo.toISOString()),
-
-      // Month's calls - includes today and week (smart fetch eliminates 2 redundant queries)
-      supabase
-        .from('calls')
-        .select('id, created_at')
-        .eq('org_id', orgId)
-        .gte('created_at', monthAgo.toISOString())
+      allCallsQuery,
+      monthCallsQuery
     ]);
 
     const calls = allCallsResult.data || [];

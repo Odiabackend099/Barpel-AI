@@ -82,16 +82,24 @@ appointmentsRouter.get('/', async (req: Request, res: Response) => {
     const orgId = req.user?.orgId;
     if (!orgId) return res.status(401).json({ error: 'Unauthorized' });
 
+    // 'all' returns every status (power-user override); omitting returns active appointments only
+    const ACTIVE_STATUSES = ['pending', 'confirmed', 'in_progress'];
+
     const schema = z.object({
       page: z.coerce.number().int().positive().default(1),
       limit: z.coerce.number().int().min(1).max(100).default(20),
-      status: z.enum(['pending', 'confirmed', 'in_progress', 'completed', 'cancelled', 'no_show']).optional(),
+      status: z.enum(['pending', 'confirmed', 'in_progress', 'completed', 'cancelled', 'no_show', 'all']).optional(),
       contact_id: z.string().uuid().optional(),
-      startDate: z.string().optional(),
-      endDate: z.string().optional()
+      // Use z.coerce.date() so malformed dates (e.g. "2026-13-45") are caught by Zod, not thrown by Date
+      startDate: z.coerce.date().optional(),
+      endDate: z.coerce.date().optional()
     });
 
-    const parsed = schema.parse(req.query);
+    const parseResult = schema.safeParse(req.query);
+    if (!parseResult.success) {
+      return res.status(400).json({ error: 'Invalid query parameters', issues: parseResult.error.issues });
+    }
+    const parsed = parseResult.data;
     const offset = (parsed.page - 1) * parsed.limit;
 
     let query = supabase
@@ -101,19 +109,28 @@ appointmentsRouter.get('/', async (req: Request, res: Response) => {
         contacts(id, name, phone, email, lead_status)`,
         { count: 'exact' }
       )
-      .eq('org_id', orgId);
+      .eq('org_id', orgId)
+      // Never surface soft-deleted appointments
+      .is('deleted_at', null);
 
-    if (parsed.status) {
+    if (!parsed.status || parsed.status === 'all') {
+      // No filter → default to active statuses (industry standard: show upcoming, not cancelled)
+      // 'all' explicitly overrides this to show every status
+      if (!parsed.status) {
+        query = query.in('status', ACTIVE_STATUSES);
+      }
+      // else: parsed.status === 'all' → no status filter, all statuses returned
+    } else {
       query = query.eq('status', parsed.status);
     }
     if (parsed.contact_id) {
       query = query.eq('contact_id', parsed.contact_id);
     }
     if (parsed.startDate) {
-      query = query.gte('scheduled_at', new Date(parsed.startDate).toISOString());
+      query = query.gte('scheduled_at', parsed.startDate.toISOString());
     }
     if (parsed.endDate) {
-      query = query.lte('scheduled_at', new Date(parsed.endDate).toISOString());
+      query = query.lte('scheduled_at', parsed.endDate.toISOString());
     }
 
     query = query.order('scheduled_at', { ascending: true }).range(offset, offset + parsed.limit - 1);
@@ -167,6 +184,9 @@ appointmentsRouter.get('/', async (req: Request, res: Response) => {
       }
     });
   } catch (e: any) {
+    if (e instanceof z.ZodError) {
+      return res.status(400).json({ error: 'Invalid query parameters', issues: e.errors });
+    }
     const userMessage = sanitizeError(
       e,
       'Appointments - GET / - Unexpected error',

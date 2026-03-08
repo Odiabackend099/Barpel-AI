@@ -46,7 +46,7 @@ const TOTAL_STEPS = STEP_COMPONENTS.length;
 function OnboardingPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { currentStep, animDirection, goToStep, setPaymentComplete, prevStep, reset } = useOnboardingStore();
+  const { currentStep, animDirection, goToStep, setPaymentComplete, prevStep, reset, setPlan } = useOnboardingStore();
   const { track } = useOnboardingTelemetry();
   const hasTrackedStart = useRef(false);
   const hasHandledReturn = useRef(false);
@@ -67,13 +67,20 @@ function OnboardingPageInner() {
   }, [onboardingStatus, router]);
 
   // Reset stale sessionStorage state for new sessions (prevents jumping to wrong step)
-  // BUT preserve state if returning from Stripe redirect (?topup=success)
+  // BUT preserve state if returning from Stripe redirect (?topup=success).
+  // Also capture ?plan= param from marketing site pricing CTAs and persist in the store
+  // (survives Stripe redirect since the store is persisted to sessionStorage).
   useEffect(() => {
     if (hasResetStale.current) return;
     hasResetStale.current = true;
     const topup = searchParams.get('topup');
+    const plan = searchParams.get('plan');
     if (!topup) {
       reset();
+    }
+    // Always capture plan if present (even on Stripe return, plan is already in store)
+    if (plan) {
+      setPlan(plan);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

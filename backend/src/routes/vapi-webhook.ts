@@ -455,7 +455,7 @@ vapiWebhookRouter.post('/webhook', webhookLimiter, async (req: Request, res: Res
           start_time: call.startedAt ? new Date(call.startedAt) : new Date(),
           created_at: call.startedAt ? new Date(call.startedAt) : new Date(),
           updated_at: new Date(),
-          is_test_call: call.type === 'webCall' || !!(call.metadata?.is_test_call) || false,
+          is_test_call: call.type === 'webCall',
           metadata: {
             source: 'call.started webhook',
             vapi_type: call.type,
@@ -1277,8 +1277,19 @@ vapiWebhookRouter.post('/webhook', webhookLimiter, async (req: Request, res: Res
       AnalyticsService.processEndOfCall(message);
 
       // ===== PHASE 2: COMMIT RESERVED CREDITS (Authorize-then-Capture) =====
+      // Skip billing entirely for test calls (browser webCall type). Vapi's cost is still
+      // written to the calls table above for visibility, but wallet is not debited.
+      const isTestCall = call?.type === 'webCall';
+      if (isTestCall) {
+        log.info('Vapi-Webhook', '🧪 BILLING SKIPPED: Test call (webCall type)', {
+          billingTraceId,
+          callId: call?.id,
+          orgId
+        });
+      }
+
       // Try to commit the reservation first; fall back to direct billing if no reservation exists
-      if (orgId && call?.id) {
+      if (!isTestCall && orgId && call?.id) {
         try {
           const duration = Math.round(message.durationSeconds || call?.duration || 0);
           log.info('Vapi-Webhook', '📊 Call duration extracted for billing', {
@@ -1375,11 +1386,18 @@ vapiWebhookRouter.post('/webhook', webhookLimiter, async (req: Request, res: Res
 
     // ===== PHASE 2: BILLING GATE + CREDIT RESERVATION =====
     // Reserve credits for estimated call duration (authorize phase).
+    // Test calls (webCall type) bypass the billing gate — wallet is never debited.
     // If reservation fails, fall back to simple balance check.
     if (message && message.type === 'assistant-request') {
       const gateAssistantId = body.assistantId || message.call?.assistantId;
       const gateCallId = message.call?.id || body.call?.id;
-      if (gateAssistantId) {
+      const isWebCallType = message.call?.type === 'webCall';
+
+      if (isWebCallType) {
+        log.info('Vapi-Webhook', '🧪 BILLING GATE SKIPPED: webCall test call', {
+          callId: gateCallId
+        });
+      } else if (gateAssistantId) {
         try {
           const { data: gateAgent } = await supabase
             .from('agents')

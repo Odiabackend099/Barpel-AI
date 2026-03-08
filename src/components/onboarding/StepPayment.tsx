@@ -9,6 +9,17 @@ import { authedBackendFetch } from '@/lib/authed-backend-fetch';
 import { formatPence } from '@/utils/currency';
 import AmountSelector from './AmountSelector';
 
+/**
+ * Maps marketing plan slugs to the closest preset top-up amount in pence.
+ * Values MUST match the presets passed to AmountSelector [2500, 5000, 10000, 50000]
+ * so the corresponding button appears pre-selected in the UI.
+ */
+const PLAN_AMOUNT_MAP: Record<string, number> = {
+  starter: 2500,    // £25 — minimum top-up, matches PAYG plan
+  business: 10000,  // £100 — closest preset to the £99 Growth Bundle price
+  enterprise: 50000, // £500 — large credit block for high-volume enterprise users
+};
+
 export default function StepPayment() {
   const {
     selectedNumber, areaCode, direction,
@@ -17,12 +28,16 @@ export default function StepPayment() {
     phoneNumber, setPhoneNumber,
     vapiPhoneId, setVapiPhoneId,
     provisioningInProgress, setProvisioningInProgress,
+    plan,
     nextStep,
   } = useOnboardingStore();
   const { track } = useOnboardingTelemetry();
 
   const [localName, setLocalName] = useState(businessName);
-  const [selectedAmountPence, setSelectedAmountPence] = useState(2500);
+  // Pre-select the amount based on the plan param from the marketing site, defaulting to £25.
+  const [selectedAmountPence, setSelectedAmountPence] = useState(
+    plan ? (PLAN_AMOUNT_MAP[plan] ?? 2500) : 2500
+  );
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [provisionError, setProvisionError] = useState<string | null>(null);
@@ -103,6 +118,10 @@ export default function StepPayment() {
         method: 'POST',
         body: JSON.stringify({
           amount_pence: selectedAmountPence,
+          // The plan is persisted to sessionStorage via the Zustand store before
+          // this redirect, so it survives the Stripe round-trip without needing
+          // to be encoded in the return URL (which is validated against an allowlist
+          // in billing-api.ts and must be an exact match of '/dashboard/onboarding').
           return_url: '/dashboard/onboarding',
         }),
       });

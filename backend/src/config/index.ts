@@ -83,7 +83,7 @@ export const config = {
   // CORE APPLICATION SETTINGS
   // ========================================================================
   NODE_ENV: getOptional('NODE_ENV', 'development'),
-  PORT: getNumber('PORT', 6001),
+  PORT: getNumber('PORT', 8001),
   LOG_LEVEL: getOptional('LOG_LEVEL', 'info'),
   COMPANY_NAME: getOptional('COMPANY_NAME', 'Barpel AI'),
   CLINIC_NAME: getOptional('CLINIC_NAME', 'Barpel'),

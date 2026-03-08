@@ -159,11 +159,20 @@ const CallsPageContent = () => {
     const totalCalls = callsData?.pagination?.total || 0;
     const isLoading = isCallsLoading;
 
-    // SWR for Analytics
+    // Sync active tab to URL (preserves tab on refresh, back/forward navigation)
+    useEffect(() => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('tab', activeTab);
+        router.replace(`?${params.toString()}`, { scroll: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activeTab]);
+
+    // SWR for Analytics — keyed by activeTab so cards re-fetch when direction changes
+    const analyticsUrl = `/api/calls-dashboard/analytics/summary?call_direction=${activeTab}`;
     const { data: analytics, mutate: mutateAnalytics } = useSWR(
-        user ? '/api/calls-dashboard/analytics/summary' : null,
+        user ? analyticsUrl : null,
         fetcher,
-        { revalidateOnMount: true }
+        { revalidateOnMount: true, keepPreviousData: false }
     );
 
     useEffect(() => {
@@ -333,12 +342,14 @@ const CallsPageContent = () => {
                     </div>
                 )}
 
-                {/* Analytics Summary */}
+                {/* Analytics Summary — labels update based on active tab */}
                 {analytics && (
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
                         <div className="bg-white border border-barpel-slate/10 rounded-xl p-4 hover:shadow-md transition-shadow">
                             <p className="text-2xl font-bold text-barpel-slate">{analytics.total_calls}</p>
-                            <p className="text-xs text-barpel-slate/60 font-medium">Total Calls</p>
+                            <p className="text-xs text-barpel-slate/60 font-medium">
+                                {activeTab === 'inbound' ? 'Total Inbound' : 'Total Outbound'}
+                            </p>
                         </div>
                         <div className="bg-white border border-barpel-slate/10 rounded-xl p-4 hover:shadow-md transition-shadow">
                             <p className="text-2xl font-bold text-barpel-teal">{analytics.completed_calls}</p>

@@ -1,10 +1,10 @@
 # Barpel AI – Product Requirements Document (PRD)
 
-**Version:** 2026.03.05
-**Last Updated:** 2026-03-05 UTC
-**Status:** 🚀 PRODUCTION DEPLOYED - Full Platform Live (Call Transfer feature live: transferCall Vapi tool end-to-end fixed, Escalation Rules UI replaced with simple Call Transfer settings page)
+**Version:** 2026.03.08
+**Last Updated:** 2026-03-08 UTC
+**Status:** 🚀 PRODUCTION DEPLOYED - Full Platform Live (2026-03-08: Sign-up flow fixed end-to-end, analytics 500 fixed, WebSocket graceful degradation, BYOC delete data integrity, test calls free, call direction tab filtering, appointments active-only default)
 **Project Foundation:** Enterprise voice receptionist platform for Nigerian SMEs/Small Businesses
-**Verification Status:** ✅ FULL STACK OPERATIONAL - Frontend (Next.js port 8000) + Backend (Express port 8001) + Supabase (wifcmvgwzicgyrvaoiwi) + Teal-and-white branding + 5-step onboarding wizard + Google OAuth sign-in + Marketing site all 6 pages live + 7 Vapi tools linked + Wallet gating enforced + Call Transfer end-to-end verified
+**Verification Status:** ✅ FULL STACK OPERATIONAL - Frontend (Next.js port 8000) + Backend (Express port 8001) + Supabase (wifcmvgwzicgyrvaoiwi) + Teal-and-white branding + 5-step onboarding wizard + Google OAuth sign-in + Marketing site all 6 pages live + 7 Vapi tools linked + Wallet gating enforced + Call Transfer end-to-end verified + Sign-up plan flow + 16/16 QnA tests passing locally
 
 ---
 
@@ -257,7 +257,41 @@ Supporting services: wallet auto-recharge processor, webhook verification API, a
 
 ## 5. Recent Releases & Verification
 
-**Latest (2026-03-02 — Phone Number Provisioning Fix):** ✅ CRITICAL BUG FIXED — Inbound numbers were being used for outbound calls due to permissive fallback in phone number resolver. **Issue:** When user had inbound number provisioned but NO outbound number, the system would incorrectly use the inbound number for outbound test calls. **Root Cause:** `phone-number-resolver.ts` Step 1 fallback query had NO `routing_direction` filter, allowing any active managed number to be returned. **Fix:** Removed permissive fallback, now strictly requires `routing_direction='outbound'`. Returns `null` if no outbound number found. **Error Message Enhanced:** Clear message "No outbound phone number provisioned. Inbound numbers cannot be used for outbound calls." with action "Go to Settings > Telephony". **Commit:** `34d2c19`. **Files Changed:** `phone-number-resolver.ts` (6 lines), `founder-console-v2.ts` (8 lines, error msg). **Deployed to production:** ✅ Live on Vercel + Render.
+**Latest (2026-03-08 — UX Production Readiness Sprint):** ✅ 9 files fixed, 16/16 QnA tests passing locally (backend `localhost:8001`).
+
+**S1 — Sign-Up Flow (Marketing → Dashboard):**
+- ✅ `src/middleware.ts` — Authenticated users visiting `/sign-up` now redirect to `/dashboard` (was only checking `/login`)
+- ✅ `frontend/website/src/sections/Pricing.tsx` — CTA buttons now carry `?plan=starter` / `?plan=business` (were using generic `signUp` link)
+- ✅ `src/app/(auth)/sign-up/page.tsx` — Reads `?plan=` via `useSearchParams()` + passes it to onboarding URL on redirect; wrapped in `<Suspense>` (required by Next.js App Router)
+- ✅ `src/lib/store/onboardingStore.ts` — Added `plan: string | null` field + `setPlan()` action, persisted to `sessionStorage` (survives Stripe redirect)
+- ✅ `src/app/dashboard/onboarding/page.tsx` — Reads `?plan=` on mount, calls `setPlan()` to persist before Stripe redirect
+- ✅ `src/components/onboarding/StepPayment.tsx` — Pre-selects payment preset from plan (`starter→£25`, `business→£100`, `enterprise→£500`)
+
+**S2 — Analytics, WebSocket, Wallet, Voice:**
+- ✅ `backend/src/routes/analytics.ts` — Fixed `/api/analytics/leads` 500 error: column typo `service_interest` → `service_interests` (plural) in fallback query; added `nullsFirst: false` on lead_score ordering
+- ✅ `src/contexts/DashboardWebSocketContext.tsx` — Removed `console.error` on WS connection failure (was flooding browser console on every dashboard load); capped exponential backoff at 30s (was unbounded — could reach 4.5 hours)
+- ✅ `src/app/dashboard/test/page.tsx` — Removed production debug `console.log`/`console.error` from WebSocket handlers
+- Voice params (`voiceStability`, `voiceSimilarityBoost`) verified persisting correctly — no code change needed
+
+**S3 — Telephony BYOC & Managed Numbers:**
+- ✅ `backend/src/routes/inbound-setup.ts` — BYOC delete now also removes stale `org_credentials` row (was leaving ghost credentials detectable by phone-number-resolver Step 2); outbound delete also clears `agents.vapi_phone_number_id`
+- ✅ `backend/src/services/credential-service.ts` — Fixed PGRST116 crash: `.maybeSingle()` → `.limit(1)` with `ORDER BY type DESC NULLS FIRST` for orgs with dual BYOC (inbound+outbound)
+
+**Additional Fixes (same sprint):**
+- ✅ `backend/src/routes/calls-dashboard.ts` — `/api/calls-dashboard/analytics/summary` accepts `?call_direction=inbound|outbound` filter at DB query level
+- ✅ `src/app/dashboard/calls/page.tsx` — SWR key now includes `activeTab` so analytics re-fetches on tab switch; tab state synced to URL (`?tab=...`) for refresh resilience; stat card labels update per tab
+- ✅ `backend/src/routes/appointments.ts` — Default list returns active statuses only (`pending`, `confirmed`, `in_progress`); `?status=all` override available; soft-deleted records guarded with `.is('deleted_at', null)`; `startDate`/`endDate` params use `z.coerce.date()` with `safeParse` — malformed dates return 400 not 500 (GET handler was missing ZodError guard that all POST handlers had)
+- ✅ `src/app/dashboard/appointments/page.tsx` — Dropdown "All Status" relabelled to "Active (Default)" / "All Statuses"
+- ✅ `backend/src/routes/vapi-webhook.ts` — `is_test_call` now derived from `call.type === 'webCall'` only (metadata check removed — spoofable); billing gates (`reserveCallCredits`, `commitReservedCredits`, `processCallBilling`) skipped for webCall type; Vapi cost still written to `calls.cost_cents` for visibility
+- ✅ `backend/src/routes/founder-console-v2.ts` — Removed no-op wallet balance gate from web-test (was bypassable; irrelevant now that test calls are free)
+
+**Known deferred gap (documented, not blocking):** `phone-number-resolver.ts` Step 2 doesn't prefer outbound BYOC specifically — in practice blocked because `setup-outbound` backfills `agents.vapi_phone_number_id` directly. Needs dedicated PR.
+
+**QnA verification:** All 16/16 local tests passing. Production Render backend was returning 500 on all endpoints (Redis/DB connection exhaustion) — restart Render service to restore.
+
+---
+
+**Previous (2026-03-02 — Phone Number Provisioning Fix):** ✅ CRITICAL BUG FIXED — Inbound numbers were being used for outbound calls due to permissive fallback in phone number resolver. **Issue:** When user had inbound number provisioned but NO outbound number, the system would incorrectly use the inbound number for outbound test calls. **Root Cause:** `phone-number-resolver.ts` Step 1 fallback query had NO `routing_direction` filter, allowing any active managed number to be returned. **Fix:** Removed permissive fallback, now strictly requires `routing_direction='outbound'`. Returns `null` if no outbound number found. **Error Message Enhanced:** Clear message "No outbound phone number provisioned. Inbound numbers cannot be used for outbound calls." with action "Go to Settings > Telephony". **Commit:** `34d2c19`. **Files Changed:** `phone-number-resolver.ts` (6 lines), `founder-console-v2.ts` (8 lines, error msg). **Deployed to production:** ✅ Live on Vercel + Render.
 
 **Previous (2026-03-05 — Call Transfer):** End-to-end call transfer feature fixed and verified. Escalation Rules UI replaced with a simple one-field Call Transfer settings page. 3 new API endpoints live. Root cause: `integration_settings` table existed but was missing `transfer_phone_number` column, so the `transferCall` Vapi tool always got `null` and calls never transferred. See APPENDIX for full details.
 
