@@ -744,7 +744,7 @@ const TestAgentPageContent = () => {
                                     {(searchQuery ? filteredTranscripts : displayTranscripts).map((t, idx) => {
                                         const isCurrentResult = searchQuery && idx === searchResultIndex;
                                         const highlightText = (text: string, query: string) => {
-                                            if (!query.trim()) return text;
+                                            if (!query.trim()) return [text];
                                             const parts = text.split(new RegExp(`(${query})`, 'gi'));
                                             return parts;
                                         };
