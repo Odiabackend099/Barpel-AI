@@ -818,6 +818,24 @@ router.delete('/setup', requireAuthOrDev, async (req: Request, res: Response): P
       return;
     }
 
+    // Also remove from org_credentials so phone-number-resolver Step 2 does not
+    // find stale credentials after deletion.  Failure here is non-fatal (log + continue).
+    const { error: orgCredsDeleteError } = await supabase
+      .from('org_credentials')
+      .delete()
+      .eq('org_id', orgId)
+      .eq('provider', 'twilio')
+      .eq('type', 'inbound');
+
+    if (orgCredsDeleteError) {
+      console.warn('[InboundSetup][delete] Could not remove org_credentials twilio/inbound row', {
+        requestId,
+        error: orgCredsDeleteError.message
+      });
+    } else {
+      console.log('[InboundSetup][delete] ✅ org_credentials twilio/inbound removed', { requestId });
+    }
+
     console.log('[InboundSetup][delete] ✅ Inbound BYOC deleted', { requestId });
     res.status(200).json({ success: true, requestId });
   } catch (error: any) {
@@ -881,6 +899,34 @@ router.delete('/setup-outbound', requireAuthOrDev, async (req: Request, res: Res
       console.error('[OutboundSetup][delete] Failed to delete from DB', { requestId, error: deleteError.message });
       res.status(500).json({ error: 'Failed to delete outbound configuration', requestId });
       return;
+    }
+
+    // Also remove from org_credentials so phone-number-resolver Step 2 does not
+    // find stale credentials after deletion.  Failure here is non-fatal (log + continue).
+    const { error: orgCredsDeleteError } = await supabase
+      .from('org_credentials')
+      .delete()
+      .eq('org_id', orgId)
+      .eq('provider', 'twilio')
+      .eq('type', 'outbound');
+
+    if (orgCredsDeleteError) {
+      console.warn('[OutboundSetup][delete] Could not remove org_credentials twilio/outbound row', {
+        requestId,
+        error: orgCredsDeleteError.message
+      });
+    } else {
+      console.log('[OutboundSetup][delete] ✅ org_credentials twilio/outbound removed', { requestId });
+    }
+
+    // Clear vapi_phone_number_id on outbound agent so next resolver run starts fresh
+    if (integration?.config?.agentId) {
+      await supabase
+        .from('agents')
+        .update({ vapi_phone_number_id: null })
+        .eq('id', integration.config.agentId)
+        .eq('org_id', orgId);
+      console.log('[OutboundSetup][delete] ✅ agents.vapi_phone_number_id cleared', { requestId });
     }
 
     console.log('[OutboundSetup][delete] ✅ Outbound BYOC deleted', { requestId });

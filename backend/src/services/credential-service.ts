@@ -63,12 +63,21 @@ export class CredentialService {
 
     // ===== STEP 2: Query org_credentials table =====
     // NOTE: Using .from('org_credentials') - NOT integrations or integration_settings
-    const { data, error } = await supabase
+    //
+    // IMPORTANT: org_credentials uses UNIQUE(org_id, provider, type).
+    // A provider like 'twilio' can have multiple rows with different `type` values
+    // (e.g. type='inbound' and type='outbound' for BYOC dual-number setups).
+    // We use .limit(1) instead of .maybeSingle() to avoid PGRST116 when >1 row exists.
+    // Rows with type IS NULL (legacy, untyped) are prioritised via ORDER BY NULLS LAST
+    // so that existing integrations continue to work without migration.
+    const { data: rows, error } = await supabase
       .from('org_credentials')
       .select('encrypted_config, is_active, last_verified_at, verification_error')
       .eq('org_id', orgId)
       .eq('provider', provider)  // Type-safe: TypeScript ensures valid provider value
-      .maybeSingle();
+      .order('type', { ascending: false, nullsFirst: true })  // NULL type first (legacy), then 'outbound' before 'inbound'
+      .limit(1);
+    const data = rows && rows.length > 0 ? rows[0] : null;
 
     // ===== STEP 3: Handle database errors =====
     if (error) {
@@ -155,15 +164,15 @@ export class CredentialService {
     try {
       log.debug('CredentialService', 'Checking if credentials exist', { orgId, provider });
 
-      const { data } = await supabase
+      const { data: existsRows } = await supabase
         .from('org_credentials')
         .select('id')
         .eq('org_id', orgId)
         .eq('provider', provider)
         .eq('is_active', true)
-        .maybeSingle();
+        .limit(1);
 
-      const exists = !!data;
+      const exists = !!(existsRows && existsRows.length > 0);
       log.debug('CredentialService', `Credentials exist: ${exists}`, { orgId, provider });
       return exists;
     } catch (error: any) {
@@ -186,14 +195,14 @@ export class CredentialService {
    */
   static async getLastError(orgId: string, provider: ProviderType): Promise<string | null> {
     try {
-      const { data } = await supabase
+      const { data: errRows } = await supabase
         .from('org_credentials')
         .select('verification_error')
         .eq('org_id', orgId)
         .eq('provider', provider)
-        .maybeSingle();
+        .limit(1);
 
-      return data?.verification_error || null;
+      return (errRows && errRows.length > 0 ? errRows[0].verification_error : null) || null;
     } catch (error) {
       return null;
     }
