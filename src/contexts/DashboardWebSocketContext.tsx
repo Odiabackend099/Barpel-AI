@@ -91,7 +91,7 @@ export function DashboardWebSocketProvider({ children }: { children: React.React
             };
 
             ws.onerror = () => {
-                // onclose will handle reconnection
+                // onclose will handle reconnection — suppress browser-level WS error logs
             };
 
             ws.onclose = () => {
@@ -99,17 +99,22 @@ export function DashboardWebSocketProvider({ children }: { children: React.React
                 setIsConnected(false);
                 wsRef.current = null;
 
-                // Reconnect with exponential backoff
+                // Reconnect with exponential backoff; cap delay at 30 s
                 if (reconnectAttemptsRef.current < MAX_RECONNECT_ATTEMPTS) {
-                    const delay = BASE_RECONNECT_DELAY * Math.pow(2, reconnectAttemptsRef.current);
+                    const delay = Math.min(
+                        BASE_RECONNECT_DELAY * Math.pow(2, reconnectAttemptsRef.current),
+                        30_000
+                    );
                     reconnectAttemptsRef.current++;
                     reconnectTimerRef.current = setTimeout(connect, delay);
                 } else {
+                    // All reconnect attempts exhausted — mark backend unavailable silently
                     setBackendAvailable(false);
                 }
             };
-        } catch (err) {
-            console.error('Failed to create WebSocket:', err);
+        } catch {
+            // WebSocket constructor can throw in SSR or when the URL is malformed.
+            // Fail silently — live-call updates are non-essential to the dashboard.
         }
     }, [dispatch]);
 

@@ -441,7 +441,6 @@ const TestAgentPageContent = () => {
                 outboundWsRef.current = ws;
 
                 ws.onopen = () => {
-                    console.log('[LiveCall] WebSocket connected');
                     setWsConnectionStatus('connected');
                     setOutboundConnected(true);
                     ws.send(JSON.stringify({ type: 'subscribe', token }));
@@ -486,19 +485,18 @@ const TestAgentPageContent = () => {
                     }
                 };
 
-                ws.onerror = (error) => {
-                    console.error('[LiveCall] WebSocket error:', error);
+                ws.onerror = () => {
+                    // onclose fires immediately after onerror — handle reconnection there
                     setWsConnectionStatus('disconnected');
                 };
 
                 ws.onclose = () => {
-                    console.log('[LiveCall] WebSocket closed');
                     setWsConnectionStatus('disconnected');
                     setOutboundConnected(false);
                 };
 
-            } catch (err) {
-                console.error('WebSocket connection failed', err);
+            } catch {
+                // WebSocket constructor failed (SSR, bad URL, etc.) — fail silently
                 setWsConnectionStatus('disconnected');
             }
         };

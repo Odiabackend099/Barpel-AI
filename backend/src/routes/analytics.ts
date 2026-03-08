@@ -149,10 +149,10 @@ analyticsRouter.get('/leads', requireAuth, async (req: Request, res: Response) =
 
             const { data: fallbackLeads, error: fallbackError } = await supabase
                 .from('contacts')
-                .select('id, name, phone, email, lead_status, lead_score, service_interest, created_at, updated_at')
+                .select('id, first_name, last_name, name, phone, email, lead_status, lead_score, service_interests, notes, last_contacted_at, created_at, updated_at')
                 .eq('org_id', orgId)
                 .in('lead_status', ['hot', 'warm'])
-                .order('lead_score', { ascending: false })
+                .order('lead_score', { ascending: false, nullsFirst: false })
                 .limit(50);
 
             if (fallbackError) {
