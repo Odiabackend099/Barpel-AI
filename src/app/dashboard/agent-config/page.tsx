@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Bot, AlertCircle, Loader2, Volume2, Globe, MessageSquare, Clock, Phone, Sparkles, LayoutTemplate, Play, ArrowRight, ChevronDown, Info, ExternalLink } from 'lucide-react';
+import { Bot, AlertCircle, Loader2, Volume2, Globe, MessageSquare, Clock, Phone, Sparkles, LayoutTemplate, Play, ArrowRight, ChevronDown, Info, ExternalLink, Save, Trash2, Check } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/useToast';
 import { authedBackendFetch } from '@/lib/authed-backend-fetch';
@@ -923,6 +923,39 @@ export default function AgentConfigPage() {
                         </div>
 
                         <div className="flex items-center gap-3">
+                            {/* Delete button */}
+                            <button
+                                onClick={() => setShowDeleteModal(true)}
+                                disabled={isDeleting || isSaving}
+                                className="px-4 py-2 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 font-medium transition-colors flex items-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isDeleting ? (
+                                    <><Loader2 className="w-4 h-4 animate-spin" /> Deleting...</>
+                                ) : (
+                                    <><Trash2 className="w-4 h-4" /> Delete</>
+                                )}
+                            </button>
+
+                            {/* Save button */}
+                            <button
+                                onClick={handleSave}
+                                disabled={!hasActiveTabChanges() || isSaving}
+                                className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed ${
+                                    saveSuccess && savingAgent === activeTab
+                                        ? 'bg-green-600 text-white'
+                                        : 'bg-barpel-teal text-white hover:bg-barpel-teal/90'
+                                }`}
+                            >
+                                {isSaving && savingAgent === activeTab ? (
+                                    <><Loader2 className="w-4 h-4 animate-spin" /> Saving...</>
+                                ) : saveSuccess && savingAgent === activeTab ? (
+                                    <><Check className="w-4 h-4" /> Saved</>
+                                ) : (
+                                    <><Save className="w-4 h-4" /> Save Agent</>
+                                )}
+                            </button>
+
+                            {/* Test button */}
                             {activeTab === 'inbound' ? (
                                 <button
                                     onClick={handleTestInbound}
@@ -940,7 +973,6 @@ export default function AgentConfigPage() {
                                     Test Call
                                 </button>
                             )}
-
                         </div>
                     </div>
 
