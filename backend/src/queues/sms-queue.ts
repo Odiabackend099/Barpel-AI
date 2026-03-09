@@ -183,7 +183,7 @@ export function initializeSmsQueue(): void {
     {
       connection: workerConnection,
       concurrency: 5, // Process up to 5 SMS concurrently
-      drainDelay: 5,  // Wait 5 seconds between polls when queue is empty (saves Redis commands)
+      drainDelay: 30, // Wait 30 seconds between polls when queue is empty (saves ~80% idle Redis commands)
       limiter: {
         max: 10, // Max 10 jobs
         duration: 1000 // Per second (10 SMS/sec to avoid Twilio rate limits)

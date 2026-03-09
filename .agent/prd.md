@@ -1,10 +1,11 @@
 # Barpel AI – Product Requirements Document (PRD)
 
 **Version:** 2026.03.08
-**Last Updated:** 2026-03-08 UTC
-**Status:** 🚀 PRODUCTION DEPLOYED - Full Platform Live (2026-03-08: Sign-up flow fixed end-to-end, analytics 500 fixed, WebSocket graceful degradation, BYOC delete data integrity, test calls free, call direction tab filtering, appointments active-only default)
+**Last Updated:** 2026-03-08 UTC (Redis Authentication Fix)
+**Status:** 🚀 PRODUCTION DEPLOYED - Partial Issue (2026-03-08: Redis auth failure cascading to all job queues — CRITICAL FIX REQUIRED)
 **Project Foundation:** Enterprise voice receptionist platform for Nigerian SMEs/Small Businesses
-**Verification Status:** ✅ FULL STACK OPERATIONAL - Frontend (Next.js port 8000) + Backend (Express port 8001) + Supabase (wifcmvgwzicgyrvaoiwi) + Teal-and-white branding + 5-step onboarding wizard + Google OAuth sign-in + Marketing site all 6 pages live + 7 Vapi tools linked + Wallet gating enforced + Call Transfer end-to-end verified + Sign-up plan flow + 16/16 QnA tests passing locally
+**Verification Status:** ⚠️ PARTIAL OPERATIONAL - Frontend ✅ + Backend ✅ + Database ✅ + Background Jobs ❌ (Redis authentication failed: `WRONGPASS invalid username-password pair`)
+**Critical Issue:** All background job queues (WebhookQueue, BillingQueue, WalletQueue, VapiReconciliationWorker) failing due to malformed or incorrect `REDIS_URL` environment variable in Render dashboard
 
 ---
 
@@ -43,6 +44,103 @@
 - `FRONTEND_URL` → `https://app-barpelai.odia.dev`
 - `CORS_ORIGIN` → `https://app.barpel.ai,https://barpel.ai,https://www.barpel.ai,https://app-barpelai.odia.dev,https://barpelai.odia.dev,https://barpel-ai.onrender.com`
 - `GOOGLE_REDIRECT_URI` → `https://barpel-ai.onrender.com/api/google-oauth/callback`
+
+---
+
+## 🔴 CRITICAL PRODUCTION ISSUE (2026-03-08 17:34:17 UTC)
+
+### Redis Authentication Failure - All Job Queues Down
+
+**Issue:** `WRONGPASS invalid username-password pair` on all Redis-dependent services
+**Affected Services:** WebhookQueue, BillingQueue, WalletQueue, VapiReconciliationWorker
+**Root Cause:** `REDIS_URL` environment variable in Render dashboard is malformed or has incorrect credentials
+**Current Host:** `rapid-macaque-66085.upstash.io` (differs from documented `hip-flounder-31845.upstash.io`)
+**Business Impact:** 🔴 CRITICAL
+- Webhooks from Vapi not processing (call logs not saved)
+- Billing deductions failing (wallet charges not applied)
+- Appointment confirmations not sending
+- Platform functions without persistent state
+
+**Diagnosis:**
+```
+Error: ReplyError: WRONGPASS invalid username-password pair
+  at parseError (/redis-parser/lib/parser.js:179:12)
+  command: { name: 'auth', args: [ 'default', '...' ] }
+```
+
+The Redis connection is attempting AUTH with username `default` but the password from the URL is incorrect or the URL is malformed.
+
+**Root Cause Analysis:**
+1. **Hypothesis A (Malformed URL):** The REDIS_URL contains embedded CLI flags from redis-cli command
+   - Malformed: `redis-cli --tls -u redis://default:PASSWORD@host:6379`
+   - Correct: `rediss://default:PASSWORD@host:6379`
+
+2. **Hypothesis B (Wrong Credentials):** The password in REDIS_URL doesn't match current Upstash credentials
+   - Previous instance: `hip-flounder-31845.upstash.io` (documented in MEMORY.md)
+   - Current instance: `rapid-macaque-66085.upstash.io` (in logs)
+   - Credentials may be from old instance
+
+3. **Hypothesis C (TLS Mismatch):** Using `redis://` instead of `rediss://` (TLS)
+   - Upstash requires TLS connections
+   - Protocol must be `rediss://` (double-s) not `redis://`
+
+**Immediate Fix (Choose One):**
+
+**Option 1: Reset Redis URL in Render Dashboard (Most Likely)**
+1. Go to Render Dashboard → barpel-backend service → Environment
+2. Find `REDIS_URL` variable
+3. Delete current value
+4. Go to Upstash dashboard → rapid-macaque-66085 instance → Details
+5. Copy full connection string (should be in format `rediss://default:PASSWORD@host:6379`)
+6. Paste into Render `REDIS_URL` (verify NO cli flags)
+7. Click "Update" or "Save"
+8. Render automatically restarts → Redis reconnects with correct credentials
+9. Verify health check: `webhookQueue: true`
+
+**Option 2: Use Redis CLI Connection String Format (If Upstash Dashboard Unavailable)**
+- Take the redis-cli command the user provided:
+  ```
+  redis-cli --tls -u redis://default:gQAAAAAAAQIlAAIncDFmY2IzMWNhMDk1ZWQ0ZWQ5YjExNTU2Y2YxYWZiNzUyNHAxNjYwODU@rapid-macaque-66085.upstash.io:6379
+  ```
+- Extract the URL part (change `redis://` to `rediss://`):
+  ```
+  rediss://default:gQAAAAAAAQIlAAIncDFmY2IzMWNhMDk1ZWQ0ZWQ5YjExNTU2Y2YxYWZiNzUyNHAxNjYwODU@rapid-macaque-66085.upstash.io:6379
+  ```
+- Paste this into Render `REDIS_URL`
+
+**Verification After Fix:**
+```bash
+# 1. Check health endpoint (after ~30s for Render restart)
+curl https://barpel-ai.onrender.com/health
+
+# Expected response:
+{
+  "database": true,
+  "supabase": true,
+  "backgroundJobs": true,
+  "webhookQueue": true  # <-- Should be true
+}
+
+# 2. Monitor logs
+# In Render dashboard → Logs → should see "Redis connected" instead of "WRONGPASS"
+
+# 3. Test webhook processing
+# Make a test call → webhook should process within 5s (not error)
+```
+
+**Prevention for Future:**
+1. Store Redis credentials in Upstash → password manager, not hardcoded
+2. Document correct connection string format in Render dashboard
+3. Set up monitoring alert for Redis disconnection
+4. Regular credential rotation (90-day cycle)
+
+**Timeline:**
+- Issue Started: 2026-03-08 17:34:17 UTC
+- Time to Detect: N/A (user provided logs)
+- Time to Fix: <5 minutes (env var update + Render restart)
+- Time to Verify: ~30-60 seconds
+
+---
 
 ---
 

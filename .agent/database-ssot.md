@@ -31,7 +31,7 @@
 | **Marketing Site** | Vercel | `https://barpelai.odia.dev` | ✅ LIVE |
 | **Backend API** | Render | `https://barpel-ai.onrender.com` | ✅ LIVE |
 | **Database** | Supabase | `https://wifcmvgwzicgyrvaoiwi.supabase.co` | ✅ LIVE |
-| **Redis** | Upstash | `rediss://hip-flounder-31845.upstash.io:6379` | ✅ LIVE (Upstash cloud, TLS) |
+| **Redis** | Upstash | `rediss://rapid-macaque-66085.upstash.io:6379` | ⚠️ AUTH FAILED (2026-03-08 17:34 UTC) |
 | **Stripe Webhooks** | Stripe → Render | `https://barpel-ai.onrender.com/api/webhooks/stripe` | ✅ LIVE |
 
 **Render Service Details:**
@@ -109,6 +109,91 @@ STRIPE_SECRET_KEY=sk_test_...
 - ⏳ Purchase `barpel.ai`, update all URLs to final domains
 - ⏳ Stripe production keys (currently test mode)
 - ⏳ Local payment gateways (Flutterwave/PayStack for NG₦)
+
+---
+
+## 🔴 PRODUCTION INCIDENT: Redis Authentication Failure (2026-03-08)
+
+### Issue Summary
+**Status:** ACTIVE INCIDENT
+**Severity:** 🔴 CRITICAL — All background job queues failing
+**Error:** `ReplyError: WRONGPASS invalid username-password pair`
+**Affected Services:**
+- ❌ WebhookQueue (Vapi call webhooks not processing)
+- ❌ BillingQueue (wallet charges not applying)
+- ❌ WalletQueue (credit top-ups not processing)
+- ❌ VapiReconciliationWorker (call reconciliation failing)
+
+### Root Cause
+Redis instance changed from `hip-flounder-31845.upstash.io` to `rapid-macaque-66085.upstash.io`, but `REDIS_URL` in Render dashboard either:
+1. Contains old credentials (from previous instance)
+2. Has embedded CLI flags (`redis-cli --tls -u`) instead of URL format
+3. Uses `redis://` protocol instead of `rediss://` (TLS)
+
+### Resolution Steps (IMMEDIATE)
+
+**Step 1: Get Correct Connection String**
+- Go to Upstash Dashboard → Redis instance `rapid-macaque-66085`
+- Click "Details" button
+- Copy the Redis CLI connection string (looks like: `redis-cli --tls -u redis://default:PASSWORD@rapid-macaque-66085.upstash.io:6379`)
+
+**Step 2: Convert to Environment Variable Format**
+- Change `redis://` to `rediss://` (TLS-enabled protocol)
+- Example transformation:
+  ```
+  FROM: redis-cli --tls -u redis://default:PASSWORD@rapid-macaque-66085.upstash.io:6379
+  TO:   rediss://default:PASSWORD@rapid-macaque-66085.upstash.io:6379
+  ```
+
+**Step 3: Update Render Dashboard**
+- Log into Render → barpel-backend service
+- Settings → Environment
+- Find `REDIS_URL` variable
+- Replace entire value with correct format (from Step 2)
+- Click "Save"
+- Render automatically restarts (5-10 minutes)
+
+**Step 4: Verify Fix**
+- Wait 30 seconds for Render restart
+- Run health check:
+  ```bash
+  curl https://barpel-ai.onrender.com/health
+  ```
+- Look for: `"webhookQueue": true` (indicates Redis connected)
+- Logs should show: "Redis connected successfully"
+
+### Monitoring
+
+**Before Fix (Current State):**
+```json
+{
+  "database": true,
+  "supabase": true,
+  "backgroundJobs": true,
+  "webhookQueue": false  // ❌ Redis disconnected
+}
+```
+
+**After Fix (Expected):**
+```json
+{
+  "database": true,
+  "supabase": true,
+  "backgroundJobs": true,
+  "webhookQueue": true  // ✅ Redis connected
+}
+```
+
+### Documentation Update Required
+- MEMORY.md line referencing `hip-flounder-31845.upstash.io` needs updating to `rapid-macaque-66085.upstash.io` after fix verified
+
+### Critical Requirements for Redis Configuration
+| Requirement | Correct | Incorrect | Impact |
+|-------------|---------|-----------|--------|
+| Protocol | `rediss://` (TLS) | `redis://` (no TLS) | Connection fails on Upstash |
+| Format | URL only | CLI command (`redis-cli --tls -u ...`) | Parser error, auth fails |
+| Credentials | Current instance | Old/rotated instance | WRONGPASS error |
+| Placement | `REDIS_URL` env var | Hardcoded in code | Security & config issues |
 
 ---
 

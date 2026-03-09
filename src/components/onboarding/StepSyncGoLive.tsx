@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { mutate } from 'swr';
 import { motion } from 'framer-motion';
 import { Zap, Loader2, Phone, Bot, Copy, Check } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -53,6 +54,8 @@ export default function StepSyncGoLive() {
       });
 
       setSyncComplete(true);
+      // Invalidate onboarding status cache so dashboard doesn't redirect back
+      mutate('/api/onboarding/status', { needs_onboarding: false }, false);
     } catch (err: any) {
       setError(err.message || 'Sync failed. Please try again.');
     } finally {
@@ -69,7 +72,7 @@ export default function StepSyncGoLive() {
   };
 
   const handleGoDashboard = () => {
-    router.push('/dashboard');
+    router.replace('/dashboard');
   };
 
   // Post-sync: Celebration screen

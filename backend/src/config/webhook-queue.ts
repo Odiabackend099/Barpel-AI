@@ -56,7 +56,7 @@ export function initializeWebhookWorker(processor: (job: any) => Promise<any>): 
     {
       connection,
       concurrency: 5,
-      drainDelay: 5, // Wait 5 seconds between polls when queue is empty (saves Redis commands)
+      drainDelay: 30, // Wait 30 seconds between polls when queue is empty (saves ~80% idle Redis commands)
     }
   );
 

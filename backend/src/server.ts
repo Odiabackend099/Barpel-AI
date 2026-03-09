@@ -135,7 +135,7 @@ import { initializeSmsQueue, shutdownSmsQueue } from './queues/sms-queue';
 // Initialize logger
 initLogger();
 import { setupExceptionHandlers } from './config/exception-handlers';
-import { initializeRedis, closeRedis } from './config/redis';
+import { initializeRedis, closeRedis, getRedisClient } from './config/redis';
 import { sendSlackAlert, incrementErrorCount } from './services/slack-alerts';
 import { reportError, initializeSentry } from './config/sentry';
 initializeSentry(); // Initialize Sentry error monitoring
@@ -432,9 +432,19 @@ app.get('/health', async (req, res) => {
     log.error('Health', 'Health check failed', { error: error?.message });
   }
 
-  // Background jobs check - verify critical jobs are scheduled
-  // (We don't track individual job state, but presence of scheduler indicates jobs are active)
-  health.services.backgroundJobs = true; // Jobs are scheduled in main server startup
+  // Background jobs check — ping Redis to verify actual connectivity (not hardcoded)
+  const redisForHealth = getRedisClient();
+  if (redisForHealth) {
+    try {
+      await redisForHealth.ping();
+      health.services.backgroundJobs = true;
+    } catch {
+      health.services.backgroundJobs = false;
+      if (health.status === 'ok') health.status = 'degraded';
+    }
+  } else {
+    health.services.backgroundJobs = false;
+  }
 
   // Webhook queue check
   const queueMetrics = await getQueueMetrics();

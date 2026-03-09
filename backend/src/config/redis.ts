@@ -1,10 +1,70 @@
-import Redis from 'ioredis';
+import Redis, { RedisOptions } from 'ioredis';
 import { log } from '../services/logger';
 import { isCircuitOpen, recordFailure, recordSuccess } from '../services/safe-call';
 import { sendSlackAlert } from '../services/slack-alerts';
 
 let redisClient: Redis | null = null;
 const connections: Redis[] = [];
+
+function safeHostname(url: string): string {
+  try { return new URL(url).hostname; }
+  catch { return 'unknown'; }
+}
+
+function buildRedisOptions(redisUrl: string): RedisOptions {
+  const useTls = redisUrl.startsWith('rediss://');
+  return {
+    maxRetriesPerRequest: null, // Required by BullMQ
+    enableReadyCheck: false,
+    family: 0, // Allow both IPv4 and IPv6 resolution
+    ...(useTls ? { tls: { rejectUnauthorized: false } } : {}),
+    retryStrategy: (times: number) => {
+      if (times > 10) {
+        log.error('Redis', 'Max connection retries (10) exceeded — giving up. Check REDIS_URL.');
+        return null;
+      }
+      if (isCircuitOpen('Redis')) {
+        log.warn('Redis', 'Circuit breaker open — stopping retry attempts');
+        return null;
+      }
+      return Math.min(times * 200, 3000);
+    },
+  };
+}
+
+function attachErrorHandler(conn: Redis, redisUrl: string): void {
+  conn.on('error', (err) => {
+    const isAuthError =
+      err.message.includes('WRONGPASS') ||
+      err.message.includes('NOAUTH') ||
+      err.message.includes('invalid username-password');
+
+    if (isAuthError) {
+      log.error('Redis', 'AUTHENTICATION FAILED — check REDIS_URL credentials', {
+        host: safeHostname(redisUrl),
+        error: err.message,
+        action: 'Update REDIS_URL env var on Render dashboard with correct Upstash credentials',
+      });
+      // Auth errors will never self-resolve — stop reconnecting immediately
+      conn.disconnect(false);
+      return;
+    }
+
+    log.error('Redis', 'Connection error', { error: err.message });
+    recordFailure('Redis');
+
+    if (isCircuitOpen('Redis')) {
+      sendSlackAlert('🔴 Redis Circuit Breaker OPEN', {
+        message: 'Redis connection failed 3 times. Queue operations will fail.',
+        host: safeHostname(redisUrl),
+        action: 'Check Redis health immediately',
+        nextRetryIn: '30 seconds',
+      }).catch((alertErr) => {
+        log.error('Redis', 'Failed to send Slack alert', { error: alertErr.message });
+      });
+    }
+  });
+}
 
 export function initializeRedis(): void {
   const redisUrl = process.env.REDIS_URL;
@@ -14,49 +74,18 @@ export function initializeRedis(): void {
   }
 
   try {
-    redisClient = new Redis(redisUrl, {
-      maxRetriesPerRequest: null, // Required for BullMQ
-      retryStrategy: (times) => {
-        // Stop retrying if circuit breaker is open
-        if (isCircuitOpen('Redis')) {
-          log.warn('Redis', 'Circuit breaker open - stopping retry attempts');
-          return null; // Stop retrying
-        }
-
-        // Exponential backoff with max 2s delay
-        const delay = Math.min(times * 50, 2000);
-        return delay;
-      }
-    });
-
+    redisClient = new Redis(redisUrl, buildRedisOptions(redisUrl));
     connections.push(redisClient);
 
     redisClient.on('connect', () => {
-      log.info('Redis', 'Connected to Redis');
-      // Record success to reset circuit breaker
+      log.info('Redis', 'Connected successfully', { host: safeHostname(redisUrl) });
       recordSuccess('Redis');
     });
 
-    redisClient.on('error', (err) => {
-      log.error('Redis', 'Redis connection error', { error: err.message });
-
-      // Record failure for circuit breaker
-      recordFailure('Redis');
-
-      // Send Slack alert if circuit breaker opens (after 3 failures)
-      if (isCircuitOpen('Redis')) {
-        sendSlackAlert('🔴 Redis Circuit Breaker OPEN', {
-          message: 'Redis connection failed 3 times. Queue operations will fail.',
-          action: 'Check Redis health immediately',
-          nextRetryIn: '30 seconds'
-        }).catch((alertErr) => {
-          log.error('Redis', 'Failed to send Slack alert', { error: alertErr.message });
-        });
-      }
-    });
+    attachErrorHandler(redisClient, redisUrl);
 
     redisClient.on('reconnecting', () => {
-      log.info('Redis', 'Attempting to reconnect to Redis...');
+      log.info('Redis', 'Attempting to reconnect...', { host: safeHostname(redisUrl) });
     });
   } catch (error) {
     log.error('Redis', 'Failed to initialize Redis', { error: (error as Error).message });
@@ -79,27 +108,14 @@ export function createRedisConnection(): Redis | null {
     return null;
   }
 
-  const conn = new Redis(redisUrl, {
-    maxRetriesPerRequest: null,
-    enableReadyCheck: false,
-    retryStrategy: (times) => {
-      // Stop retrying if circuit breaker is open
-      if (isCircuitOpen('Redis')) {
-        log.warn('Redis', 'Circuit breaker open - stopping retry attempts');
-        return null;
-      }
-      return Math.min(times * 50, 2000);
-    },
-  });
+  const conn = new Redis(redisUrl, buildRedisOptions(redisUrl));
 
   conn.on('connect', () => {
+    log.info('Redis', 'Queue connection established', { host: safeHostname(redisUrl) });
     recordSuccess('Redis');
   });
 
-  conn.on('error', (err) => {
-    log.error('Redis', 'Connection error', { error: err.message });
-    recordFailure('Redis');
-  });
+  attachErrorHandler(conn, redisUrl);
 
   connections.push(conn);
   return conn;

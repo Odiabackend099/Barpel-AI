@@ -47,11 +47,11 @@ export function initializeBillingQueue(): void {
         delay: 2000 // 2s, 4s, 8s
       },
       removeOnComplete: {
-        age: 86400,  // Keep completed jobs 24 hours
+        age: 3600,   // Keep completed jobs 1 hour (reduced from 24h — saves Redis storage)
         count: 1000
       },
       removeOnFail: {
-        age: 7 * 86400, // Keep failed jobs 7 days
+        age: 7 * 86400, // Keep failed jobs 7 days — financial audit trail (Stripe billing data)
         count: 100
       }
     }
@@ -85,7 +85,7 @@ export function initializeBillingWorker(
     {
       connection,
       concurrency: 5, // Process up to 5 webhooks in parallel
-      drainDelay: 5, // Wait 5 seconds between polls when queue is empty
+      drainDelay: 30, // Wait 30 seconds between polls when queue is empty (saves ~80% idle Redis commands)
     }
   );
 

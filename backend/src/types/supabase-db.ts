@@ -25,6 +25,9 @@ export interface OrgCredentialsRow {
   id: string;
   org_id: string;
   provider: ProviderType;  // NOT 'service_type' - prevents old typo
+  type: 'inbound' | 'outbound' | null;  // Call direction for BYOC; null for legacy/single-slot rows
+  is_managed: boolean;  // true = platform-provisioned subaccount, false = BYOC
+  metadata: Record<string, unknown> | null;  // Non-sensitive display data (accountSid, phoneNumber)
   encrypted_config: string;  // AES-256-GCM: "iv:authTag:content" (hex-encoded)
   is_active: boolean;
   last_verified_at: string | null;  // ISO timestamp or null

@@ -13,6 +13,7 @@ import { requireAuth } from '../middleware/auth';
 import { ManagedTelephonyService } from '../services/managed-telephony-service';
 import { supabaseAdmin } from '../config/supabase';
 import { createLogger } from '../services/logger';
+import { EncryptionService } from '../services/encryption';
 
 const logger = createLogger('PhoneSettingsRoutes');
 const router = Router();
@@ -46,18 +47,46 @@ router.get('/status', async (req: Request, res: Response): Promise<void> => {
     const inboundNumbers = managedStatus.numbers.filter(n => n.routingDirection === 'inbound');
     const outboundNumbers = managedStatus.numbers.filter(n => n.routingDirection === 'outbound');
 
-    // Get BYOC numbers from integrations table (used when no managed number is provisioned)
-    let byocInboundConfig: any = null;
-    let byocOutboundConfig: any = null;
+    // Get BYOC numbers from org_credentials (SSOT for all credentials)
+    // Written by POST /api/integrations/twilio/byoc with provider='twilio' + type='inbound'|'outbound'
+    let byocInboundConfig: { phoneNumber: string; vapiPhoneNumberId: string; status: string; agentId?: string } | null = null;
+    let byocOutboundConfig: { phoneNumber: string; vapiPhoneNumberId: string; status: string; agentId?: string } | null = null;
     try {
-      const { data: byocIntegrations } = await supabaseAdmin
-        .from('integrations')
-        .select('provider, config')
+      const { data: byocRows } = await supabaseAdmin
+        .from('org_credentials')
+        .select('type, encrypted_config, is_active, metadata')
         .eq('org_id', orgId)
-        .in('provider', ['twilio_inbound', 'twilio_outbound']);
-      if (byocIntegrations) {
-        byocInboundConfig = byocIntegrations.find(i => i.provider === 'twilio_inbound')?.config ?? null;
-        byocOutboundConfig = byocIntegrations.find(i => i.provider === 'twilio_outbound')?.config ?? null;
+        .eq('provider', 'twilio')
+        .eq('is_managed', false)
+        .in('type', ['inbound', 'outbound']);
+
+      if (byocRows) {
+        const inboundRow = byocRows.find(r => r.type === 'inbound');
+        const outboundRow = byocRows.find(r => r.type === 'outbound');
+
+        if (inboundRow?.is_active && inboundRow?.encrypted_config) {
+          try {
+            const dec = EncryptionService.decryptObject<{ phoneNumber: string; vapiPhoneId: string }>(inboundRow.encrypted_config);
+            byocInboundConfig = {
+              phoneNumber: dec.phoneNumber,
+              vapiPhoneNumberId: dec.vapiPhoneId,
+              status: 'active',
+              agentId: (inboundRow.metadata as any)?.agentId ?? undefined,
+            };
+          } catch { /* decryption failure — treat as not configured */ }
+        }
+
+        if (outboundRow?.is_active && outboundRow?.encrypted_config) {
+          try {
+            const dec = EncryptionService.decryptObject<{ phoneNumber: string; vapiPhoneId: string }>(outboundRow.encrypted_config);
+            byocOutboundConfig = {
+              phoneNumber: dec.phoneNumber,
+              vapiPhoneNumberId: dec.vapiPhoneId,
+              status: 'active',
+              agentId: (outboundRow.metadata as any)?.agentId ?? undefined,
+            };
+          } catch { /* decryption failure — treat as not configured */ }
+        }
       }
     } catch {
       // Best-effort — BYOC lookup is non-critical

@@ -76,7 +76,7 @@ function setCachedValidation(orgId: string, userId: string, orgName?: string): v
   }
 }
 
-function clearCachedValidation(): void {
+export function clearCachedValidation(): void {
   if (typeof window === 'undefined') return;
   try {
     sessionStorage.removeItem(ORG_VALIDATION_CACHE_KEY);
@@ -182,10 +182,12 @@ export function useOrgValidation() {
     revalidateOnReconnect: false,
     // Deduplicate requests for 5 minutes
     dedupingInterval: 300000,
-    // Only retry once on failure
-    errorRetryCount: 1,
-    // Don't auto-retry validation errors (they're usually permanent)
-    shouldRetryOnError: false,
+    // Retry up to 3 times for network errors (covers Render cold start)
+    errorRetryCount: 3,
+    // Only retry on network/timeout errors — not HTTP 4xx/5xx (those are permanent)
+    shouldRetryOnError: (err: unknown) => isNetworkOrTimeoutError(err),
+    // 5s between SWR-level retries (on top of authedBackendFetch's own retries)
+    errorRetryInterval: 5000,
     // Cache successful validation in session storage
     onSuccess: (data) => {
       if (data.success && orgId && userId) {

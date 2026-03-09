@@ -46,17 +46,29 @@ function getRedisForRateLimiting(): Redis | null {
   }
 
   try {
+    const useTls = redisUrl.startsWith('rediss://');
     redis = new Redis(redisUrl, {
       maxRetriesPerRequest: null,
       enableReadyCheck: false,
       lazyConnect: true,
+      family: 0, // Allow IPv4 + IPv6 resolution
+      ...(useTls ? { tls: { rejectUnauthorized: false } } : {}),
       retryStrategy: (times) => {
-        if (times > 3) return null; // Stop retrying after 3 attempts
+        if (times > 3) return null;
         return Math.min(times * 100, 2000);
       },
     });
 
     redis.on('error', (err) => {
+      const isAuthError =
+        err.message.includes('WRONGPASS') ||
+        err.message.includes('NOAUTH') ||
+        err.message.includes('invalid username-password');
+      if (isAuthError) {
+        log.error('RateLimiter', 'Redis auth failed — falling back to in-memory', { error: err.message });
+        redis = null;
+        return;
+      }
       log.error('RateLimiter', 'Redis error', { error: err.message });
     });
 

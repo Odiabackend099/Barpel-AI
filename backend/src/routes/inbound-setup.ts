@@ -784,7 +784,27 @@ router.delete('/setup', requireAuthOrDev, async (req: Request, res: Response): P
       console.warn('[InboundSetup][delete] Failed to fetch integration', { requestId, error: fetchError.message });
     }
 
-    const vapiPhoneNumberId = integration?.config?.vapiPhoneNumberId;
+    // Primary source: integrations table (legacy/phone-settings-managed BYOC)
+    let vapiPhoneNumberId: string | undefined = integration?.config?.vapiPhoneNumberId;
+
+    // Fallback: org_credentials (onboarding-wizard BYOC path writes here instead)
+    if (!vapiPhoneNumberId) {
+      const { data: orgCred } = await supabase
+        .from('org_credentials')
+        .select('encrypted_config')
+        .eq('org_id', orgId)
+        .eq('provider', 'twilio')
+        .eq('type', 'inbound')
+        .maybeSingle();
+      if (orgCred?.encrypted_config) {
+        try {
+          const dec = EncryptionService.decryptObject<{ vapiPhoneId: string }>(orgCred.encrypted_config);
+          vapiPhoneNumberId = dec.vapiPhoneId;
+        } catch {
+          console.warn('[InboundSetup][delete] Could not decrypt org_credentials for vapiPhoneId', { requestId });
+        }
+      }
+    }
 
     // Release from Vapi if we have a phone number ID
     if (vapiPhoneNumberId) {
@@ -870,7 +890,27 @@ router.delete('/setup-outbound', requireAuthOrDev, async (req: Request, res: Res
       console.warn('[OutboundSetup][delete] Failed to fetch integration', { requestId, error: fetchError.message });
     }
 
-    const vapiPhoneNumberId = integration?.config?.vapiPhoneNumberId;
+    // Primary source: integrations table (legacy/phone-settings-managed BYOC)
+    let vapiPhoneNumberId: string | undefined = integration?.config?.vapiPhoneNumberId;
+
+    // Fallback: org_credentials (onboarding-wizard BYOC path writes here instead)
+    if (!vapiPhoneNumberId) {
+      const { data: orgCred } = await supabase
+        .from('org_credentials')
+        .select('encrypted_config')
+        .eq('org_id', orgId)
+        .eq('provider', 'twilio')
+        .eq('type', 'outbound')
+        .maybeSingle();
+      if (orgCred?.encrypted_config) {
+        try {
+          const dec = EncryptionService.decryptObject<{ vapiPhoneId: string }>(orgCred.encrypted_config);
+          vapiPhoneNumberId = dec.vapiPhoneId;
+        } catch {
+          console.warn('[OutboundSetup][delete] Could not decrypt org_credentials for vapiPhoneId', { requestId });
+        }
+      }
+    }
 
     if (vapiPhoneNumberId) {
       const vapiApiKey = config.VAPI_PRIVATE_KEY;

@@ -63,7 +63,7 @@ export function initializeWalletWorker(
     {
       connection,
       concurrency: 2,
-      drainDelay: 5,
+      drainDelay: 30, // Wait 30 seconds between polls when queue is empty (saves ~80% idle Redis commands)
     }
   );
 

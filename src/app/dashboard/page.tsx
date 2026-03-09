@@ -41,11 +41,18 @@ export default function CallWaitingAIDashboard() {
     const { user, loading: authLoading } = useAuth();
 
     // Check if user needs onboarding
-    const { data: onboardingStatus } = useSWR(
+    const { data: onboardingStatus, error: onboardingStatusError } = useSWR(
         user ? '/api/onboarding/status' : null,
         fetcher,
         { revalidateOnMount: true }
     );
+    // True while user is logged in but we haven't confirmed onboarding status yet.
+    // NOTE: deliberately does NOT depend on isValidating — SWR's isValidating is false
+    // for one microtask tick after the key becomes non-null (before the fetch starts),
+    // which would cause the dashboard to flash briefly before the skeleton appears.
+    // Using !onboardingStatusError as a fallback so the skeleton never blocks forever
+    // when the backend is unreachable.
+    const onboardingStatusUnknown = !!user && !onboardingStatus && !onboardingStatusError;
 
     // Use SWR for recent activity
     const { data: recentActivityData, isLoading: swrLoading, mutate: mutateActivity } = useSWR(
@@ -65,10 +72,13 @@ export default function CallWaitingAIDashboard() {
         }
     }, [user, authLoading, router]);
 
-    // Redirect new users to onboarding wizard
+    // Redirect new users to onboarding wizard.
+    // router.replace (not push) so /dashboard is NOT added to browser history —
+    // prevents a back-button loop where hitting Back from the wizard returns to
+    // /dashboard which immediately pushes to the wizard again.
     useEffect(() => {
         if (onboardingStatus?.needs_onboarding) {
-            router.push('/dashboard/onboarding');
+            router.replace('/dashboard/onboarding');
         }
     }, [onboardingStatus, router]);
 
@@ -103,6 +113,21 @@ export default function CallWaitingAIDashboard() {
     };
 
     if (!user && !authLoading) return null;
+
+    // Skeleton while onboarding check is in flight — prevents dashboard flash before redirect
+    if (onboardingStatusUnknown) {
+        return (
+            <div className="max-w-7xl mx-auto px-7 py-9 space-y-7">
+                <div className="h-8 w-48 bg-barpel-slate/5 rounded animate-pulse" />
+                <div className="h-4 w-64 bg-barpel-slate/5 rounded animate-pulse" />
+                <div className="grid grid-cols-3 gap-6">
+                    {[1, 2, 3].map(i => (
+                        <div key={i} className="h-32 bg-barpel-slate/5 rounded-2xl animate-pulse" />
+                    ))}
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="max-w-7xl mx-auto px-7 py-9 pb-32 space-y-7">

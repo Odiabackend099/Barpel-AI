@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { CreditCard, Loader2, CheckCircle2 } from 'lucide-react';
+import { CreditCard, Loader2, CheckCircle2, Wallet } from 'lucide-react';
 import { useOnboardingStore } from '@/lib/store/onboardingStore';
 import { useOnboardingTelemetry } from '@/hooks/useOnboardingTelemetry';
 import { authedBackendFetch } from '@/lib/authed-backend-fetch';
@@ -28,22 +28,26 @@ export default function StepPayment() {
     phoneNumber, setPhoneNumber,
     vapiPhoneId, setVapiPhoneId,
     provisioningInProgress, setProvisioningInProgress,
+    numberSource,
     plan,
     nextStep,
   } = useOnboardingStore();
+
+  const isByoc = numberSource === 'byoc';
   const { track } = useOnboardingTelemetry();
 
   const [localName, setLocalName] = useState(businessName);
-  // Pre-select the amount based on the plan param from the marketing site, defaulting to £25.
+  // Pre-select the amount based on the plan param from the marketing site.
+  // BYOC default: £10 (no phone cost to offset). Managed default: £25.
   const [selectedAmountPence, setSelectedAmountPence] = useState(
-    plan ? (PLAN_AMOUNT_MAP[plan] ?? 2500) : 2500
+    plan ? (PLAN_AMOUNT_MAP[plan] ?? (isByoc ? 1000 : 2500)) : (isByoc ? 1000 : 2500)
   );
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [provisionError, setProvisionError] = useState<string | null>(null);
   const hasAttemptedProvision = useRef(false);
 
-  const PHONE_COST_PENCE = 1000;
+  const PHONE_COST_PENCE = isByoc ? 0 : 1000; // BYOC users don't pay for a managed number
   const PENCE_PER_MINUTE = 56;
   const creditsPence = Math.max(0, selectedAmountPence - PHONE_COST_PENCE);
   const estimatedMinutes = Math.floor(creditsPence / PENCE_PER_MINUTE);
@@ -53,9 +57,9 @@ export default function StepPayment() {
     track('payment_viewed', 1);
   }, [track]);
 
-  // Auto-provision after payment return
+  // Auto-provision after payment return — managed path only, never for BYOC
   useEffect(() => {
-    if (!paymentComplete || phoneNumber || hasAttemptedProvision.current) return;
+    if (!paymentComplete || isByoc || phoneNumber || hasAttemptedProvision.current) return;
     hasAttemptedProvision.current = true;
 
     const provision = async () => {
@@ -145,7 +149,36 @@ export default function StepPayment() {
     nextStep();
   };
 
-  // Phase B: Post-payment provisioning view
+  // Phase B (BYOC): Credits added — no phone provisioning
+  if (paymentComplete && isByoc) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+        className="text-center"
+      >
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-barpel-teal/10 border border-barpel-border mb-6">
+          <CheckCircle2 className="w-8 h-8 text-barpel-teal" />
+        </div>
+        <h1 className="text-3xl font-bold text-barpel-slate tracking-tighter mb-3">
+          Credits Added!
+        </h1>
+        <p className="text-base text-barpel-slate/60 mb-6">
+          Your wallet is topped up. Now let&apos;s connect your AI agent to your number.
+        </p>
+        <button
+          type="button"
+          onClick={handleContinue}
+          className="w-full max-w-xs mx-auto block px-6 py-3 rounded-xl bg-barpel-teal text-white font-medium shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-100 transition-all"
+        >
+          Continue Setup
+        </button>
+      </motion.div>
+    );
+  }
+
+  // Phase B (Managed): Post-payment phone provisioning view
   if (paymentComplete) {
     return (
       <motion.div
@@ -213,18 +246,24 @@ export default function StepPayment() {
       className="text-center"
     >
       <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-barpel-teal/10 border border-barpel-border mb-6">
-        <CreditCard className="w-8 h-8 text-barpel-teal" />
+        {isByoc ? (
+          <Wallet className="w-8 h-8 text-barpel-teal" />
+        ) : (
+          <CreditCard className="w-8 h-8 text-barpel-teal" />
+        )}
       </div>
 
       <h1 className="text-3xl font-bold text-barpel-slate tracking-tighter mb-3">
-        Activate Your AI Number
+        {isByoc ? 'Add Call Credits' : 'Activate Your AI Number'}
       </h1>
       <p className="text-base text-barpel-slate/60 mb-6">
-        Get your dedicated AI phone number with call credits included.
+        {isByoc
+          ? 'Top up your wallet to start making and receiving AI calls.'
+          : 'Get your dedicated AI phone number with call credits included.'}
       </p>
 
-      {/* Selected number display */}
-      {selectedNumber && (
+      {/* Selected number display (managed only) */}
+      {!isByoc && selectedNumber && (
         <div className="bg-gray-50 border border-barpel-border rounded-xl p-3 mb-6 max-w-xs mx-auto">
           <p className="text-xs text-barpel-slate/50 mb-0.5">Selected Number</p>
           <p className="text-lg font-mono font-bold text-barpel-slate">{selectedNumber}</p>
@@ -246,11 +285,11 @@ export default function StepPayment() {
         />
       </div>
 
-      {/* Amount selector */}
+      {/* Amount selector — BYOC starts at £10 (no phone cost to offset) */}
       <AmountSelector
         selectedPence={selectedAmountPence}
         onSelect={setSelectedAmountPence}
-        presets={[2500, 5000, 10000, 50000]}
+        presets={isByoc ? [1000, 2500, 5000, 10000] : [2500, 5000, 10000, 50000]}
       />
 
       {/* Pricing breakdown */}
@@ -259,10 +298,12 @@ export default function StepPayment() {
           <span>Your top-up</span>
           <span>{formatPence(selectedAmountPence)}</span>
         </div>
-        <div className="flex justify-between text-sm text-barpel-slate/70 mb-1">
-          <span>AI Phone Number</span>
-          <span className="text-barpel-slate/50">-{formatPence(PHONE_COST_PENCE)}</span>
-        </div>
+        {!isByoc && (
+          <div className="flex justify-between text-sm text-barpel-slate/70 mb-1">
+            <span>AI Phone Number</span>
+            <span className="text-barpel-slate/50">-{formatPence(PHONE_COST_PENCE)}</span>
+          </div>
+        )}
         <div className="flex justify-between text-sm text-barpel-slate/70 mb-2">
           <span>Call Credits</span>
           <span>{formatPence(creditsPence)}</span>
@@ -288,6 +329,8 @@ export default function StepPayment() {
             <Loader2 className="w-5 h-5 animate-spin" />
             Redirecting to checkout...
           </span>
+        ) : isByoc ? (
+          `Add Credits \u2014 ${formatPence(selectedAmountPence)}`
         ) : (
           `Get My AI Number \u2014 ${formatPence(selectedAmountPence)}`
         )}

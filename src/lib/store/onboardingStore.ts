@@ -10,7 +10,14 @@ export interface OnboardingState {
   currentStep: number;
   animDirection: 1 | -1; // Animation slide direction (renamed from 'direction')
 
-  // Step 1: Number Selection
+  // Step 0: Number Selection — managed vs BYOC toggle
+  // NOTE: byocAuthToken is intentionally excluded (never stored — stays in form useState only)
+  numberSource: 'managed' | 'byoc';
+  byocAccountSid: string;
+  byocPhoneNumber: string;
+  byocSaved: boolean;            // True once BYOC creds verified+saved by backend
+
+  // Step 1: Number Selection (managed path)
   direction: CallDirection;
   selectedCountry: string;       // 'US' | 'GB' | 'CA'
   areaCode: string;
@@ -43,6 +50,10 @@ export interface OnboardingState {
   plan: string | null;
 
   // Actions
+  setNumberSource: (source: 'managed' | 'byoc') => void;
+  setByocAccountSid: (sid: string) => void;
+  setByocPhoneNumber: (number: string) => void;
+  setByocSaved: (saved: boolean) => void;
   setDirection: (d: CallDirection) => void;
   setSelectedCountry: (country: string) => void;
   setAreaCode: (code: string) => void;
@@ -78,6 +89,12 @@ export const useOnboardingStore = create<OnboardingState>()(
       currentStep: 0,
       animDirection: 1 as 1 | -1,
 
+      // Step 0 BYOC
+      numberSource: 'managed' as 'managed' | 'byoc',
+      byocAccountSid: '',
+      byocPhoneNumber: '',
+      byocSaved: false,
+
       // Step 1
       direction: 'inbound' as CallDirection,
       selectedCountry: 'US',
@@ -111,6 +128,10 @@ export const useOnboardingStore = create<OnboardingState>()(
       plan: null,
 
       // Actions
+      setNumberSource: (source) => set({ numberSource: source }),
+      setByocAccountSid: (sid) => set({ byocAccountSid: sid }),
+      setByocPhoneNumber: (number) => set({ byocPhoneNumber: number }),
+      setByocSaved: (saved) => set({ byocSaved: saved }),
       setDirection: (d) => set({ direction: d }),
       setSelectedCountry: (country) => set({ selectedCountry: country }),
       setAreaCode: (code) => set({ areaCode: code.replace(/\D/g, '').slice(0, 3) }),
@@ -176,6 +197,10 @@ export const useOnboardingStore = create<OnboardingState>()(
         set({
           currentStep: 0,
           animDirection: 1,
+          numberSource: 'managed',
+          byocAccountSid: '',
+          byocPhoneNumber: '',
+          byocSaved: false,
           direction: 'inbound',
           selectedCountry: 'US',
           areaCode: '',
@@ -201,6 +226,10 @@ export const useOnboardingStore = create<OnboardingState>()(
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
         currentStep: state.currentStep,
+        numberSource: state.numberSource,
+        byocAccountSid: state.byocAccountSid,
+        byocPhoneNumber: state.byocPhoneNumber,
+        byocSaved: state.byocSaved,
         direction: state.direction,
         selectedCountry: state.selectedCountry,
         areaCode: state.areaCode,

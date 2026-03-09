@@ -1,13 +1,15 @@
 'use client';
 
-import { Suspense, useEffect, useRef } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { ChevronLeft, Loader2 } from 'lucide-react';
 import { useOnboardingStore } from '@/lib/store/onboardingStore';
 import { useOnboardingTelemetry } from '@/hooks/useOnboardingTelemetry';
 import { authedBackendFetch } from '@/lib/authed-backend-fetch';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/useToast';
 import OnboardingProgress from '@/components/onboarding/OnboardingProgress';
 import StepNumberSelection from '@/components/onboarding/StepNumberSelection';
 import StepPayment from '@/components/onboarding/StepPayment';
@@ -46,8 +48,11 @@ const TOTAL_STEPS = STEP_COMPONENTS.length;
 function OnboardingPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { user } = useAuth();
   const { currentStep, animDirection, goToStep, setPaymentComplete, prevStep, reset, setPlan } = useOnboardingStore();
   const { track } = useOnboardingTelemetry();
+  const { error: toastError } = useToast();
+  const [skipping, setSkipping] = useState(false);
   const hasTrackedStart = useRef(false);
   const hasHandledReturn = useRef(false);
   const hasResetStale = useRef(false);
@@ -55,7 +60,7 @@ function OnboardingPageInner() {
   // Guard: redirect users who already completed onboarding.
   // Uses onboarding_completed_at (the PRD-defined ONLY gate) — not managed_phone_numbers count.
   const { data: onboardingStatus, isLoading: statusLoading, error: statusError } = useSWR(
-    '/api/onboarding/status',
+    user ? '/api/onboarding/status' : null,
     (url: string) => authedBackendFetch<{ needs_onboarding: boolean }>(url),
     { revalidateOnMount: true }
   );
@@ -113,12 +118,16 @@ function OnboardingPageInner() {
   }, [searchParams, setPaymentComplete, goToStep, track]);
 
   const handleSkip = async () => {
+    if (skipping) return;
+    setSkipping(true);
     try {
       await authedBackendFetch('/api/onboarding/complete', { method: 'POST' });
+      mutate('/api/onboarding/status', { needs_onboarding: false }, false);
+      router.replace('/dashboard');
     } catch {
-      // Ignore — redirect regardless
+      setSkipping(false);
+      toastError('Could not skip onboarding. Please try again.');
     }
-    router.replace('/dashboard');
   };
 
   const StepComponent = STEP_COMPONENTS[currentStep];
@@ -172,9 +181,10 @@ function OnboardingPageInner() {
             <button
               type="button"
               onClick={handleSkip}
-              className="text-sm text-barpel-slate/40 hover:text-barpel-slate/70 transition-colors"
+              disabled={skipping}
+              className="text-sm text-barpel-slate/40 hover:text-barpel-slate/70 transition-colors disabled:opacity-50"
             >
-              Skip
+              {skipping ? 'Skipping...' : 'Skip'}
             </button>
           )}
         </div>

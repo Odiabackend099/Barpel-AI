@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Bot, Save, Check, AlertCircle, Loader2, Volume2, Globe, MessageSquare, Clock, Phone, Sparkles, LayoutTemplate, Play, ArrowRight, ChevronDown, Info, ExternalLink } from 'lucide-react';
+import { Bot, AlertCircle, Loader2, Volume2, Globe, MessageSquare, Clock, Phone, Sparkles, LayoutTemplate, Play, ArrowRight, ChevronDown, Info, ExternalLink } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/useToast';
 import { authedBackendFetch } from '@/lib/authed-backend-fetch';
@@ -941,58 +941,6 @@ export default function AgentConfigPage() {
                                 </button>
                             )}
 
-                            <button
-                                onClick={handleSave}
-                                disabled={!hasActiveTabChanges() || isSaving}
-                                className={`px-6 py-2 rounded-lg font-medium shadow-sm transition-all flex items-center gap-2 text-sm ${saveSuccess
-                                    ? 'bg-barpel-teal/5 text-barpel-teal border border-barpel-slate/10'
-                                    : hasActiveTabChanges()
-                                        ? 'bg-barpel-teal hover:bg-barpel-teal-dark text-white shadow-barpel-teal/20'
-                                        : 'bg-barpel-teal/5 text-barpel-slate/40 cursor-not-allowed border border-barpel-slate/10'
-                                    }`}
-                            >
-                                {isSaving ? (
-                                    <>
-                                        <Loader2 className="w-4 h-4 animate-spin" />
-                                        Saving...
-                                    </>
-                                ) : saveSuccess ? (
-                                    <>
-                                        <Check className="w-4 h-4" />
-                                        Saved
-                                    </>
-                                ) : (
-                                    <>
-                                        <Save className="w-4 h-4" />
-                                        Save Changes
-                                    </>
-                                )}
-                            </button>
-
-                            {/* Delete Button - Show only if agent exists */}
-                            {(activeTab === 'inbound' ? originalInboundConfig : originalOutboundConfig) && (
-                                <button
-                                    onClick={() => setShowDeleteModal(true)}
-                                    disabled={isSaving || isDeleting}
-                                    className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium text-sm shadow-sm"
-                                    title="Delete this agent"
-                                >
-                                    <svg
-                                        className="w-4 h-4"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                        />
-                                    </svg>
-                                    <span className="hidden sm:inline">Delete Agent</span>
-                                </button>
-                            )}
                         </div>
                     </div>
 

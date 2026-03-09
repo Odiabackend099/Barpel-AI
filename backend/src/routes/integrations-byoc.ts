@@ -190,6 +190,149 @@ integrationsRouter.post('/twilio', async (req: express.Request, res: express.Res
 });
 
 // ============================================
+// POST /api/integrations/twilio/byoc
+// BYOC onboarding: validate credentials, import to Vapi, save per-direction row
+// Safe: targeted upsert on (org_id, provider, type) — does NOT touch other direction rows
+// and does NOT call IntegrationDecryptor.saveTwilioCredential() (mutual exclusion risk)
+// ============================================
+
+const BYOC_ACCOUNT_SID_REGEX = /^AC[a-f0-9]{32}$/i;
+const BYOC_AUTH_TOKEN_REGEX = /^[a-f0-9]{32}$/i;
+const BYOC_E164_REGEX = /^\+[1-9]\d{7,14}$/;
+
+integrationsRouter.post('/twilio/byoc', async (req: express.Request, res: express.Response) => {
+  try {
+    const orgId = (req as any).user?.orgId;
+    if (!orgId) {
+      return res.status(401).json({ success: false, error: 'Authentication required' });
+    }
+
+    const { accountSid, authToken, phoneNumber, direction } = req.body;
+
+    // Format validation (synchronous, no network round-trip)
+    if (!BYOC_ACCOUNT_SID_REGEX.test(accountSid ?? '')) {
+      return res.status(400).json({ success: false, error: 'Invalid Account SID. Must start with AC and be 34 characters.' });
+    }
+    if (!BYOC_AUTH_TOKEN_REGEX.test(authToken ?? '')) {
+      return res.status(400).json({ success: false, error: 'Invalid Auth Token. Must be 32 hexadecimal characters.' });
+    }
+    if (!BYOC_E164_REGEX.test(phoneNumber ?? '')) {
+      return res.status(400).json({ success: false, error: 'Invalid phone number. Use E.164 format, e.g. +12025551234.' });
+    }
+    if (direction !== 'inbound' && direction !== 'outbound') {
+      return res.status(400).json({ success: false, error: 'direction must be "inbound" or "outbound".' });
+    }
+
+    log.info('integrations', 'BYOC: validating Twilio credentials', { orgId, direction });
+
+    // 1. Verify credentials against Twilio API
+    try {
+      const twilio = require('twilio');
+      const client = twilio(accountSid, authToken);
+      await client.api.accounts(accountSid).fetch();
+    } catch {
+      return res.status(400).json({ success: false, error: 'Invalid Twilio credentials. Check your Account SID and Auth Token.' });
+    }
+
+    // 2. Import phone number into Vapi — required so StepSyncGoLive can use vapiPhoneId
+    const VAPI_PRIVATE_KEY = config.VAPI_PRIVATE_KEY;
+    if (!VAPI_PRIVATE_KEY) {
+      return res.status(500).json({ success: false, error: 'Platform configuration error. Contact support.' });
+    }
+
+    let vapiPhoneId: string;
+    try {
+      const vapiRes = await fetch('https://api.vapi.ai/phone-number', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${VAPI_PRIVATE_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          provider: 'twilio',
+          number: phoneNumber,
+          twilioAccountSid: accountSid,
+          twilioAuthToken: authToken,
+          name: `BYOC ${direction} — ${orgId.slice(0, 8)}`,
+        }),
+      });
+
+      if (!vapiRes.ok) {
+        const vapiErr = await vapiRes.text().catch(() => 'Unknown error');
+        log.error('integrations', 'Vapi phone import failed', { orgId, status: vapiRes.status, error: vapiErr });
+        return res.status(400).json({ success: false, error: 'Failed to import phone number to Vapi. Ensure the number belongs to this Twilio account.' });
+      }
+
+      const vapiData = await vapiRes.json() as { id?: string };
+      vapiPhoneId = vapiData.id;
+      if (!vapiPhoneId) {
+        return res.status(500).json({ success: false, error: 'Vapi did not return a phone number ID. Please try again.' });
+      }
+    } catch (err: any) {
+      log.error('integrations', 'Vapi phone import network error', { orgId, error: err.message });
+      return res.status(500).json({ success: false, error: 'Failed to reach Vapi. Please try again.' });
+    }
+
+    // 3. Encrypt credentials + vapiPhoneId together (atomic)
+    const encryptedConfig = EncryptionService.encryptObject({
+      accountSid,
+      authToken,
+      phoneNumber,
+      vapiPhoneId,
+    });
+
+    // 4. Targeted upsert — only modifies the (org_id, 'twilio', direction) row
+    // UNIQUE(org_id, provider, type) constraint prevents collisions with other direction
+    const { error: upsertErr } = await supabaseAdmin
+      .from('org_credentials')
+      .upsert(
+        {
+          org_id: orgId,
+          provider: 'twilio',
+          type: direction,
+          is_managed: false,
+          is_active: true,
+          encrypted_config: encryptedConfig,
+          metadata: { accountSid, phoneNumber, direction },
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'org_id,provider,type' }
+      );
+
+    if (upsertErr) {
+      log.error('integrations', 'BYOC: org_credentials upsert failed', { orgId, error: upsertErr.message });
+      return res.status(500).json({ success: false, error: 'Failed to save credentials. Please try again.' });
+    }
+
+    // 5. Update telephony_mode — only switch to 'byoc' if no managed numbers in the OTHER direction
+    const otherDirection = direction === 'inbound' ? 'outbound' : 'inbound';
+    const { count: managedInOtherDir } = await supabaseAdmin
+      .from('managed_phone_numbers')
+      .select('id', { count: 'exact', head: true })
+      .eq('org_id', orgId)
+      .eq('routing_direction', otherDirection)
+      .eq('status', 'active');
+
+    if (!managedInOtherDir) {
+      await supabaseAdmin
+        .from('organizations')
+        .update({ telephony_mode: 'byoc', updated_at: new Date().toISOString() })
+        .eq('id', orgId);
+    }
+    // If managed numbers exist in the other direction, preserve existing telephony_mode (mixed)
+
+    log.info('integrations', 'BYOC Twilio saved', { orgId, direction, vapiPhoneId });
+
+    return res.json({ success: true, phoneNumber, direction, vapiPhoneId });
+
+  } catch (error: any) {
+    log.error('integrations', 'BYOC Twilio unexpected error', { error: error?.message });
+    const userMessage = sanitizeError(error, 'Integrations - POST /twilio/byoc', 'Failed to save BYOC credentials');
+    return res.status(500).json({ success: false, error: userMessage });
+  }
+});
+
+// ============================================
 // GET /api/integrations/vapi/numbers
 // List phone numbers from Vapi
 // ============================================
