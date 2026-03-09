@@ -171,7 +171,7 @@ export default function StepNumberSelection() {
       </p>
 
       {/* Source Toggle: Managed vs BYOC */}
-      <div className="flex gap-1 p-1 bg-gray-100 rounded-xl mb-6">
+      <div className="flex gap-3 mb-6">
         {([
           { value: 'managed', label: 'Get an AI Number' },
           { value: 'byoc', label: 'Use My Own Twilio' },
@@ -185,10 +185,10 @@ export default function StepNumberSelection() {
               setByocSaved(false); // Source switch invalidates prior BYOC verification
               if (value === 'managed') resetFromStep(1);
             }}
-            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${
+            className={`flex-1 py-3 rounded-xl font-medium text-sm transition-all ${
               numberSource === value
-                ? 'bg-white text-barpel-slate shadow-sm'
-                : 'text-barpel-slate/50 hover:text-barpel-slate/70'
+                ? 'bg-barpel-teal text-white shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-100'
+                : 'bg-white text-barpel-slate/60 border-2 border-barpel-border hover:border-barpel-teal/40 hover:text-barpel-slate'
             }`}
           >
             {label}
