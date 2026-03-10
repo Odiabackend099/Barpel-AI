@@ -35,12 +35,12 @@ export function OrgErrorBoundary({ children }: { children: React.ReactNode }) {
   // This persists across re-renders but resets on page refresh
   const hasRenderedChildrenRef = useRef(false);
 
-  // Update ref when validation passes
+  // Update ref when children are rendered (validation passed OR network error with valid JWT)
   useEffect(() => {
-    if (orgValid) {
+    if (orgValid || (isNetworkError && orgId)) {
       hasRenderedChildrenRef.current = true;
     }
-  }, [orgValid]);
+  }, [orgValid, isNetworkError, orgId]);
 
   // Health polling state — only active when isNetworkError is true
   const [pollAttempt, setPollAttempt] = useState(0);
@@ -121,8 +121,9 @@ export function OrgErrorBoundary({ children }: { children: React.ReactNode }) {
   // OPTIMISTIC RENDERING LOGIC:
   // 1. If validation passed (orgValid) -> show children
   // 2. If we rendered before AND have orgId AND no error -> show children (trust cached/JWT state)
-  // 3. Otherwise, check if we should show loader or error
-  const shouldShowChildren = orgValid || (hasRenderedChildrenRef.current && orgId && !orgError);
+  // 3. If backend is unreachable but user has orgId from server-validated JWT -> show children
+  //    with non-blocking BackendStatusBanner (already in dashboard/layout.tsx)
+  const shouldShowChildren = orgValid || (hasRenderedChildrenRef.current && orgId && !orgError) || (isNetworkError && orgId);
 
   // Show loading state ONLY on TRUE cold start:
   // - Still loading

@@ -53,6 +53,9 @@ function LoginContent() {
             }
 
             reset();
+            // Fire-and-forget: start waking up the backend during page navigation
+            const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+            if (backendUrl) fetch(`${backendUrl}/health`, { cache: 'no-store' }).catch(() => {});
             window.location.href = '/dashboard';
         } catch (err) {
             setError("An unexpected error occurred");

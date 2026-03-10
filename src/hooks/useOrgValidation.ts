@@ -30,7 +30,7 @@ import useSWR from 'swr';
 // ============================================================================
 
 const ORG_VALIDATION_CACHE_KEY = 'barpel_org_validation';
-const VALIDATION_CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+const VALIDATION_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours — survives Render spin-downs; sessionStorage clears on tab close
 
 interface CachedValidation {
   orgId: string;
@@ -194,9 +194,11 @@ export function useOrgValidation() {
         setCachedValidation(orgId, userId, data.orgName);
       }
     },
-    onError: () => {
-      // Clear cache on error to force re-validation next time
-      clearCachedValidation();
+    onError: (err: unknown) => {
+      // Only clear cache on definitive auth/org errors (4xx), NOT network errors
+      if (!isNetworkOrTimeoutError(err)) {
+        clearCachedValidation();
+      }
     },
   });
 

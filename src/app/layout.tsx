@@ -7,6 +7,7 @@ import { ToastContainer } from "@/components/ToastContainer";
 import DevSwCleanup from "@/components/DevSwCleanup";
 import { CookieConsentBanner } from "@/components/cookie-consent/CookieConsentBanner";
 import { GoogleAnalyticsLoader } from "@/components/GoogleAnalyticsLoader";
+import SWRProvider from "@/components/SWRProvider";
 
 
 const outfit = Outfit({
@@ -100,7 +101,9 @@ export default function RootLayout({
         <DevSwCleanup />
         <GoogleAnalyticsLoader />
         <AuthProvider>
-          {children}
+          <SWRProvider>
+            {children}
+          </SWRProvider>
           <ToastContainer />
           <CookieConsentBanner />
         </AuthProvider>
