@@ -130,8 +130,7 @@ function SignUpForm() {
 
       reset();
       // Fire-and-forget: start waking up the backend during page navigation
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-      if (backendUrl) fetch(`${backendUrl}/health`, { cache: 'no-store' }).catch(() => {});
+      if (resolvedBackendUrl) fetch(`${resolvedBackendUrl}/health`, { cache: 'no-store' }).catch(() => {});
       router.push('/dashboard/onboarding' + (plan ? `?plan=${encodeURIComponent(plan)}` : ''));
     } catch {
       setError('An unexpected error occurred. Please try again.');
