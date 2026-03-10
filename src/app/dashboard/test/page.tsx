@@ -159,20 +159,35 @@ const TestAgentPageContent = () => {
     }, [autostartParam, user, loading, activeTab, isConnected, callInitiating]);
 
     // --- Web Test Effects ---
-    // DEDUPLICATION: Map transcripts with stable IDs (speaker + text + timestamp)
+    // DEDUPLICATION: Adjacent-entry dedup — skips an entry only when the immediately
+    // preceding deduped entry has the same speaker + text and both are final.
+    // This catches the same utterance arriving via both `transcript` and `response`
+    // WebSocket events without filtering out legitimate repeated phrases (e.g., user
+    // saying "Yes" twice in a conversation).
     useEffect(() => {
         if (transcripts && transcripts.length > 0) {
-            setDisplayTranscripts(
-                transcripts.map((t: any, idx: number) => ({
-                    // Use stable ID: speaker + text + timestamp (prevents duplicate display)
-                    id: `${t.speaker}_${t.text}_${t.timestamp.getTime()}`,
+            const deduped: any[] = [];
+            for (const t of transcripts) {
+                const prev = deduped[deduped.length - 1];
+                if (
+                    prev &&
+                    prev.speaker === t.speaker &&
+                    prev.text.trim() === t.text.trim() &&
+                    prev.isFinal &&
+                    t.isFinal
+                ) {
+                    continue;
+                }
+                deduped.push({
+                    id: t.id || `${t.speaker}_${t.text}_${t.timestamp.getTime()}`,
                     speaker: t.speaker,
                     text: t.text,
                     isFinal: t.isFinal,
                     confidence: t.confidence || 0.95,
                     timestamp: t.timestamp
-                }))
-            );
+                });
+            }
+            setDisplayTranscripts(deduped);
         }
     }, [transcripts]);
 
@@ -617,7 +632,7 @@ const TestAgentPageContent = () => {
     if (!user && !loading) return null;
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col overflow-hidden p-6">
+        <div className="h-full bg-gray-50 flex flex-col p-6">
             <div className="flex-none max-w-5xl mx-auto w-full mb-4">
                 {/* Tab Switcher - TOP POSITION */}
                 <div className="bg-white border border-surgical-200 p-1 rounded-lg inline-flex shadow-sm">
@@ -644,11 +659,11 @@ const TestAgentPageContent = () => {
                 </div>
             </div>
 
-            <div className="flex-1 bg-white border border-surgical-200 rounded-xl shadow-sm overflow-hidden max-w-5xl w-full flex flex-col mx-auto">
+            <div className="flex-1 min-h-0 bg-white border border-surgical-200 rounded-xl shadow-sm overflow-hidden max-w-5xl w-full flex flex-col mx-auto">
 
                 {/* --- Web Test Interface --- */}
                 {activeTab === 'web' && (
-                    <div className="flex flex-col relative min-h-0">
+                    <div className="flex flex-col relative h-full min-h-0">
                         {/* PHASE 4: Metrics Panel - Collapsible, sticky header */}
                         {isConnected && (
                             <div className="flex-none px-6 py-4 border-b border-surgical-200 bg-gradient-to-r from-barpel-teal/5 to-transparent">
@@ -728,7 +743,7 @@ const TestAgentPageContent = () => {
                         {/* PHASE 2: Fixed-Height Transcript Container for Always-Visible Controls */}
                         <div
                             ref={transcriptContainerRef}
-                            className="max-h-[450px] min-h-[300px] p-6 pb-8 overflow-y-auto space-y-4 bg-white overscroll-contain relative border-b border-surgical-200"
+                            className="flex-1 min-h-0 p-6 pb-8 overflow-y-auto space-y-4 bg-white overscroll-contain relative border-b border-surgical-200"
                             role="log"
                             aria-live="polite"
                             aria-label="Conversation transcript"
@@ -785,41 +800,43 @@ const TestAgentPageContent = () => {
                                 </div>
                             )}
 
+                            {/* PHASE 2: Scroll Indicator - Inside scrollable container, sticky to bottom */}
+                            <AnimatePresence>
+                                {showScrollButton && displayTranscripts.length > 0 && (
+                                    <div className="sticky bottom-4 flex justify-center pointer-events-none">
+                                        <motion.button
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: 10 }}
+                                            transition={{ duration: 0.3, type: 'spring', stiffness: 200 }}
+                                            onClick={() => {
+                                                transcriptEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                            }}
+                                            className="pointer-events-auto bg-barpel-teal text-white px-4 py-2.5 rounded-full shadow-lg hover:shadow-xl hover:bg-barpel-teal-dark active:scale-95 transition-all flex items-center gap-2 text-sm font-medium"
+                                            aria-label="Scroll to latest message"
+                                        >
+                                            <ArrowDown className="w-4 h-4 animate-bounce" />
+                                            New messages below
+                                        </motion.button>
+                                    </div>
+                                )}
+                            </AnimatePresence>
+
                             {/* Gradient fade overlay at bottom */}
                             {displayTranscripts.length > 0 && (
                                 <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white to-transparent pointer-events-none z-5" />
                             )}
                         </div>
 
-                        {/* PHASE 2: Scroll Indicator - Shows when scrolled up */}
-                        <AnimatePresence>
-                            {showScrollButton && displayTranscripts.length > 0 && (
-                                <motion.button
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    transition={{ duration: 0.3, type: 'spring', stiffness: 200 }}
-                                    onClick={() => {
-                                        transcriptEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-                                    }}
-                                    className="absolute top-2 left-1/2 transform -translate-x-1/2 z-15 bg-barpel-teal text-white px-4 py-2.5 rounded-full shadow-lg hover:shadow-xl hover:bg-barpel-teal-dark active:scale-95 transition-all flex items-center gap-2 text-sm font-medium"
-                                    aria-label="Scroll to latest message"
-                                >
-                                    <ArrowDown className="w-4 h-4 animate-bounce" />
-                                    New messages below
-                                </motion.button>
-                            )}
-                        </AnimatePresence>
-
                         {/* Voice error banner */}
                         {voiceError && !isConnected && (
-                            <div className="mx-4 sm:mx-6 mb-2 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+                            <div className="flex-none mx-4 sm:mx-6 mb-2 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
                                 {voiceError}
                             </div>
                         )}
 
                         {/* PHASE 2: Control Bar - Always visible, proper z-index */}
-                        <div className="sticky bottom-0 z-30 px-4 sm:px-6 py-4 sm:py-5 border-t border-surgical-200 bg-white shadow-2xl flex items-center justify-center gap-4 sm:gap-6 flex-none">
+                        <div className="flex-none z-30 px-4 sm:px-6 py-4 sm:py-5 border-t border-surgical-200 bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.08)] flex items-center justify-center gap-4 sm:gap-6">
                             {/* Subtle gradient accent line at top - elevation indicator */}
                             <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-barpel-teal/20 to-transparent" />
 
